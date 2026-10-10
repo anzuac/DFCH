@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#10181c" />
+  <title>DFCH 遠征模擬器</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">DFCH / Expedition Simulator</p>
+        <h1>遠征模擬器</h1>
+        <p class="sub">V1 UI Prototype · 先做介面，速度 / 地圖 / 權重之後逐版接入</p>
+      </div>
+      <div class="version-pill">V1 UI</div>
+    </header>
+
+    <nav class="tabs" aria-label="主功能">
+      <button class="tab active" data-tab="simulator">遠征配置</button>
+      <button class="tab" data-tab="stats">統計預覽</button>
+      <button class="tab" data-tab="roadmap">開發階段</button>
+    </nav>
+
+    <main>
+      <section class="tab-panel active" id="tab-simulator">
+        <div class="layout-grid">
+          <div class="main-column">
+            <section class="panel">
+              <div class="panel-head">
+                <div>
+                  <span class="step-badge">01</span>
+                  <h2>遠征地圖</h2>
+                </div>
+                <span class="status-chip neutral">V3 接地圖邏輯</span>
+              </div>
+
+              <div class="field-grid two">
+                <label class="field">
+                  <span>地圖</span>
+                  <select id="mapSelect">
+                    <option value="stage_1">米維克威茲 外緣部</option>
+                    <option value="stage_2">希敏約格 湖畔</option>
+                    <option value="stage_3">世界樹 樹海</option>
+                    <option value="stage_4">阿斯嘉特 邊境</option>
+                    <option value="stage_5">赫爾海姆 支川</option>
+                    <option value="stage_6">學術都市 露克斯・艾特納</option>
+                    <option value="stage_hard">金倫加鴻溝</option>
+                    <option value="stage_atli">昔日的米德加爾德</option>
+                    <option value="stage_uw">不歸的牢獄 庫・努・吉亞</option>
+                    <option value="stage_snow">雪嶺孤城 烏沃貝爾克</option>
+                    <option value="stage_labyrinth_1">巨大迷宮探索 上層</option>
+                    <option value="stage_labyrinth_2">巨大迷宮探索 下層</option>
+                    <option value="stage_satan">決戰魔王</option>
+                  </select>
+                </label>
+
+                <div class="field readout">
+                  <span>目前版本</span>
+                  <strong>僅 UI，不計算遠征時間</strong>
+                </div>
+              </div>
+            </section>
+
+            <section class="panel">
+              <div class="panel-head">
+                <div>
+                  <span class="step-badge">02</span>
+                  <h2>遠征隊伍</h2>
+                </div>
+                <span class="status-chip accent">V2 接速度公式</span>
+              </div>
+
+              <div class="party-summary">
+                <div>
+                  <span>隊伍人數</span>
+                  <strong id="partyCount">1</strong>
+                </div>
+                <div>
+                  <span>隊長</span>
+                  <strong id="leaderName">露娜</strong>
+                </div>
+                <div>
+                  <span>隊伍步行速度</span>
+                  <strong id="partySpeed">待解析</strong>
+                </div>
+              </div>
+
+              <div class="leader-wrap">
+                <p class="section-label">隊長</p>
+                <article class="unit-card leader-card" data-slot="leader">
+                  <div class="unit-avatar">隊</div>
+                  <div class="unit-body">
+                    <div class="unit-title-row">
+                      <input class="unit-name" value="露娜" aria-label="隊長名稱" />
+                      <span class="leader-tag">LEADER</span>
+                    </div>
+                    <label class="speed-line">
+                      <span>步行速度</span>
+                      <input class="speed-input" type="number" inputmode="decimal" step="0.001" min="0" value="0.577" />
+                      <em>km/s</em>
+                    </label>
+                    <div class="ability-tags">
+                      <button class="ability-tag" data-ability="collector1">收集家 I +1%</button>
+                      <button class="ability-tag" data-ability="collector2">收集家 II +2%</button>
+                      <button class="ability-tag active" data-ability="collector3">收集家 III +10%</button>
+                    </div>
+                  </div>
+                </article>
+              </div>
+
+              <div class="members-head">
+                <p class="section-label">隊員</p>
+                <button class="text-btn" id="addMemberBtn">＋ 新增隊員</button>
+              </div>
+
+              <div class="member-list" id="memberList"></div>
+
+              <template id="memberTemplate">
+                <article class="unit-card member-card">
+                  <div class="unit-avatar">員</div>
+                  <div class="unit-body">
+                    <div class="unit-title-row">
+                      <input class="unit-name" value="隊員" aria-label="隊員名稱" />
+                      <button class="icon-btn remove-member" title="移除隊員">×</button>
+                    </div>
+                    <label class="speed-line">
+                      <span>步行速度</span>
+                      <input class="speed-input" type="number" inputmode="decimal" step="0.001" min="0" value="0.500" />
+                      <em>km/s</em>
+                    </label>
+                    <div class="ability-tags">
+                      <button class="ability-tag" data-ability="collector1">收集家 I +1%</button>
+                      <button class="ability-tag" data-ability="collector2">收集家 II +2%</button>
+                      <button class="ability-tag" data-ability="collector3">收集家 III +10%</button>
+                    </div>
+                  </div>
+                </article>
+              </template>
+            </section>
+
+            <section class="panel">
+              <div class="panel-head">
+                <div>
+                  <span class="step-badge">03</span>
+                  <h2>神器與掉落加成</h2>
+                </div>
+                <span class="status-chip neutral">V4 接正式公式</span>
+              </div>
+
+              <label class="artifact-card">
+                <input id="affectionGlasses" type="checkbox" checked />
+                <span class="artifact-icon">◎</span>
+                <span>
+                  <strong>觀緣眼鏡</strong>
+                  <small>遠征時羈絆道具掉落率提升 30%</small>
+                </span>
+                <b>+30%</b>
+              </label>
+
+              <div class="bonus-readout">
+                <span>目前 UI 選取的羈絆加成</span>
+                <strong id="affectionBonus">角色 +10% · 神器 +30%</strong>
+                <small>僅顯示配置；V4 才依官方疊加公式計算</small>
+              </div>
+            </section>
+
+            <section class="panel">
+              <div class="panel-head">
+                <div>
+                  <span class="step-badge">04</span>
+                  <h2>模擬設定</h2>
+                </div>
+                <span class="status-chip warning">V4 啟用</span>
+              </div>
+
+              <div class="field-grid two">
+                <label class="field">
+                  <span>模擬次數</span>
+                  <select id="simulationCount">
+                    <option value="1">1 次</option>
+                    <option value="100">100 次</option>
+                    <option value="10000" selected>10,000 次</option>
+                    <option value="100000">100,000 次</option>
+                    <option value="1000000">1,000,000 次</option>
+                  </select>
+                </label>
+
+                <label class="field">
+                  <span>戰鬥處理</span>
+                  <select disabled>
+                    <option>必勝 / 無敵（固定）</option>
+                  </select>
+                </label>
+              </div>
+
+              <button class="primary-btn" id="simulateBtn">
+                <span>開始模擬</span>
+                <small>目前為 UI 預覽</small>
+              </button>
+              <p class="helper" id="simulateMessage">V1 不執行事件抽選；按鈕只用來確認操作流程。</p>
+            </section>
+          </div>
+
+          <aside class="side-column">
+            <section class="panel sticky-panel">
+              <div class="panel-head compact">
+                <div>
+                  <span class="step-badge">結果</span>
+                  <h2>統計預覽</h2>
+                </div>
+              </div>
+
+              <div class="result-block diamond">
+                <div class="result-title">
+                  <span class="result-icon">◆</span>
+                  <strong>鑽石</strong>
+                </div>
+                <div class="metric-grid">
+                  <div><span>總量</span><b>—</b></div>
+                  <div><span>平均 / 輪</span><b>—</b></div>
+                  <div><span>Fever</span><b>—</b></div>
+                  <div><span>5000 / 7777 / 9999</span><b>—</b></div>
+                </div>
+              </div>
+
+              <div class="result-block affection">
+                <div class="result-title">
+                  <span class="result-icon">♥</span>
+                  <strong>羈絆道具</strong>
+                </div>
+                <div class="metric-grid">
+                  <div><span>總掉落</span><b>—</b></div>
+                  <div><span>平均 / 輪</span><b>—</b></div>
+                  <div><span>事件率</span><b>—</b></div>
+                  <div><span>空結果</span><b>—</b></div>
+                </div>
+
+                <div class="drop-preview">
+                  <span>指定道具統計</span>
+                  <p>V4 接入 28 種羈絆 rewardId 後顯示排行。</p>
+                </div>
+              </div>
+
+              <div class="formula-note">
+                <strong>V1 原則</strong>
+                <p>保留戰鬥事件，但戰鬥必勝；不模擬 HP / SP / 攻防。只統計鑽石與羈絆結果。</p>
+              </div>
+            </section>
+          </aside>
+        </div>
+      </section>
+
+      <section class="tab-panel" id="tab-stats">
+        <section class="panel empty-state">
+          <span class="empty-icon">Σ</span>
+          <h2>統計頁先保留版面</h2>
+          <p>之後會加入地圖比較、鑽石 / 小時、羈絆 / 小時、指定羈絆最佳地圖，以及理論值 vs 模擬值。</p>
+        </section>
+      </section>
+
+      <section class="tab-panel" id="tab-roadmap">
+        <section class="panel">
+          <div class="roadmap">
+            <article class="roadmap-item current">
+              <span>V1</span>
+              <div><strong>UI</strong><p>地圖、隊長、多隊員、個體速度、收集家、神器、統計框架。</p></div>
+            </article>
+            <article class="roadmap-item">
+              <span>V2</span>
+              <div><strong>英靈速度</strong><p>解析隊長與大量隊員的官方隊伍步行速度公式。</p></div>
+            </article>
+            <article class="roadmap-item">
+              <span>V3</span>
+              <div><strong>地圖邏輯</strong><p>Progress、地區事件、戰鬥與 Boss 流程；生存全部必勝處理。</p></div>
+            </article>
+            <article class="roadmap-item">
+              <span>V4</span>
+              <div><strong>權重引擎</strong><p>事件池、鑽石、Fever、羈絆、能力、神器與條件事件。</p></div>
+            </article>
+          </div>
+        </section>
+      </section>
+    </main>
+  </div>
+
+  <script src="./app.js"></script>
+</body>
+</html>
