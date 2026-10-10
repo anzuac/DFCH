@@ -27,3 +27,11 @@ assert.equal(S.calcProgressEvent({baseProgress: 1, multiplier: 0.8, bypassSpeed:
 assert.equal(S.calcProgressEvent({baseProgress: 1, multiplier: 3.36, randomSample: 0.35}).progress, 4);
 assert.equal(S.calcProgressEvent({baseProgress: 1, multiplier: 3.36, randomSample: 0.37}).progress, 3);
 assert.equal(S.calcProgressEvent({baseProgress: 1, multiplier: 0.8, randomSample: 1}), null);
+// New-member tradeoff uses the existing average level, including mixed formula segments.
+const current = S.calcFromVisibleSpeeds({leaderSpeed: 0.9, memberSpeeds: [0.47]});
+const thresholdSpeed = S.actualWalkSpeedFromLevel(current.averageLevel);
+const join = (candidate) => S.calcFromVisibleSpeeds({leaderSpeed: 0.9, memberSpeeds: [0.47, candidate]}).multiplier;
+close(join(thresholdSpeed), current.multiplier);
+assert.ok(join(thresholdSpeed + 0.01) > current.multiplier);
+assert.ok(join(thresholdSpeed - 0.01) < current.multiplier);
+console.log('Member tradeoff checks passed');

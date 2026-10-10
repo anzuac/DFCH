@@ -83,9 +83,17 @@
                   <strong id="leaderName">露娜</strong>
                 </div>
                 <div>
-                  <span>隊伍速度換算</span>
+                  <span>隊伍移動速度（遠征倍率）</span>
                   <strong id="partySpeed">解析中</strong>
                 </div>
+              </div>
+
+              <div class="official-formula-card">
+                <strong>增加隊員會更快嗎？</strong>
+                <p id="partySpeedTradeoff" aria-live="polite"></p>
+                <label for="candidateSpeed">試算新隊員的未加速面板速度（km/s）</label>
+                <input id="candidateSpeed" type="number" min="0.05" step="0.001" placeholder="例如 0.577" inputmode="decimal">
+                <p id="candidateSpeedResult" aria-live="polite">輸入速度即可預覽加入後的變化。</p>
               </div>
 
               <div class="official-formula-card">

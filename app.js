@@ -61,11 +61,15 @@
     const result = window.DFCHSpeed.calcFromVisibleSpeeds({
       leaderSpeed: speeds[0], memberSpeeds: speeds.slice(1)
     });
+    const tradeoff = document.getElementById("partySpeedTradeoff");
+    const candidateResult = document.getElementById("candidateSpeedResult");
     const final = document.getElementById("officialSpeedResult");
     const detail = document.getElementById("speedDetailRows");
     detail.replaceChildren();
     if (!result.ready) {
       partySpeed.textContent = "請填入有效速度";
+      tradeoff.textContent = "請先填妥隊伍速度，才能比較新增隊員的影響。";
+      candidateResult.textContent = "等待有效隊伍配置。";
       final.textContent = "尚未完成隊伍換算";
       document.getElementById("speedCalculation").textContent = "每位角色請填入未啟動步行加速技能的面板速度（至少 0.050 km/s）。";
       document.getElementById("speedPrecision").textContent = "";
@@ -74,6 +78,21 @@
     const f = (value) => value.toFixed(6);
     partySpeed.textContent = `約 ×${f(result.multiplier)}`;
     final.textContent = `隊伍最終速度：約 ×${f(result.multiplier)}`;
+    const threshold = window.DFCHSpeed.actualWalkSpeedFromLevel(result.averageLevel);
+    tradeoff.textContent = `隊長 ×2、隊員 ×1 加權平均，並非人數越多越快。新隊員面板速度高於約 ${threshold.toFixed(6)} km/s 會加快，低於會拖慢，相同則不變；這個門檻由目前隊伍反推估算。`;
+    const candidate = document.getElementById("candidateSpeed").value;
+    const joined = window.DFCHSpeed.calcFromVisibleSpeeds({leaderSpeed: speeds[0], memberSpeeds: [...speeds.slice(1), candidate]});
+    if (speeds.length >= state.maxPartySize) {
+      candidateResult.textContent = "隊伍已滿；請先移除一位隊員再比較。";
+    } else if (candidate === "") {
+      candidateResult.textContent = "輸入速度即可預覽加入後的變化。";
+    } else if (!joined.ready) {
+      candidateResult.textContent = "請輸入至少 0.050 km/s 的有效速度。";
+    } else {
+      const delta = joined.multiplier - result.multiplier;
+      const direction = Math.abs(delta) < 1e-10 ? "不變" : delta > 0 ? "加快" : "變慢";
+      candidateResult.textContent = `加入後：約 ×${f(joined.multiplier)}，${direction}（倍率差 ${delta >= 0 ? "+" : ""}${f(delta)}；約 ${delta >= 0 ? "+" : ""}${(delta / result.multiplier * 100).toFixed(2)}%）。只比較進度速度，未計入其他隊伍能力。`;
+    }
     const levels = [result.leaderLevel, ...result.memberLevels];
     const weightedSum = levels.reduce((sum, level, index) => sum + level * (index === 0 ? 2 : 1), 0);
     const weightSum = cards.length + 1;
@@ -103,6 +122,8 @@
       `若遊戲面板四捨五入至三位小數，對應倍率約 ×${f(bounds[0])}–×${f(bounds[1])}。` +
       "顯示值為反推估算；官方面板的取整方式尚待確認。";
   }
+
+  document.getElementById("candidateSpeed").addEventListener("input", updateSpeedPreview);
 
   function updateSummary() {
     const units = allUnitCards();
