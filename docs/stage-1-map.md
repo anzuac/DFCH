@@ -6,7 +6,7 @@
 
 - dungeonId=1001，key=stage_1，referenceDungeonId=900。
 - duration=600 秒；depth=60。ExpeditionContext constructor 0x34b62f4–0x34b6304 把 dungeon +0x24 的 depth 放入 goalProgress，因此目標進度為 60；不能把它直接稱為 60 km。
-- 一般戰鬥群組 100100，1–4 名怪物，事件權重 20。
+- 一般戰鬥群組 100100，原欄位 min=1／max=4；Next 上限不包含，實際 1–3 名怪物，事件權重 20。
 - 原始物品事件權重：50→1、51→5、100150→5、100170→float32 的 0.48。
 - 解鎖群組 100 權重 5，條件旗標 6504；群組 0 權重 0。
 - Boss 群組 100190；Boss 掉落組 [100190,90,80,0]，multiDropContinuousRate=0.75。這不是每個 Boss 神器的 75% 掉率，需追對應程式如何使用。

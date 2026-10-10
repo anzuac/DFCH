@@ -41,7 +41,7 @@
     const list=row.conditionTypes.map((t,i)=>{
       const v=fmt(row.conditionValues[i]);
       if(t===2)return `角色生命低於 ${v}%`;
-      if(t===7)return `耐力高於 ${v}%`;
+      if(t===7)return `耐力至少 ${v}%`;
       if(t===0)return '';
       return '須符合額外事件條件';
     }).filter(Boolean);
@@ -57,7 +57,7 @@
     explored.disabled=!supported;
     document.getElementById('mapDataDetails').hidden=!supported;
     document.getElementById('mapDataTitle').textContent=supported?data.name:'此地圖資料尚未接入';
-    document.getElementById('mapDataSummary').textContent=supported?`原始遠征時間 ${data.master.duration} 秒（10 分鐘）；目標進度 ${data.master.depth}。一般戰鬥敵人 ${data.master.basicBattleMinMonsterCount}–${data.master.basicBattleMaxMonsterCount} 名。`:'目前僅第一張地圖有官方資料；切回米維克威茲 外緣部查看。';
+    document.getElementById('mapDataSummary').textContent=supported?`原始遠征時間 ${data.master.duration} 秒（10 分鐘）；目標進度 ${data.master.depth}。一般戰鬥敵人 ${data.master.basicBattleMinMonsterCount}–${data.master.basicBattleMaxMonsterCount-1} 名（上限不包含）。`:'目前僅第一張地圖有官方資料；切回米維克威茲 外緣部查看。';
     const rate=explored.checked?100:0;
     window.DFCHMapConfig={dungeonKey:select.value,completionRate:rate,combat:'instant-victory',combatDurationSeconds:0};
     const unlocked=data.completionRewards.filter(r=>r.requiredCompletionRate<=rate);

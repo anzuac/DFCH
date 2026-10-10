@@ -8,74 +8,28 @@
 - 羈絆道具（28 種 rewardId）
 - 後續的效率比較（依英靈步行速度）
 
-## 開發階段
+## 目前版本：V1.2
 
-### V1 — UI（目前）
+第一張地圖已可执行單輪與批次模擬，使用官方 3.16.0 資料；保留使用者指定的秒殺戰鬥、0 秒及無限／自訂耐力。
 
-- 地圖選擇
-- 1 名隊長 + 最多 11 名隊員
-- 固定 1 名隊長 + 最多 11 名隊員
-- 每名英靈只輸入遊戲面板看得到的步行速度 km/s
-- 內部 WalkSpd 狀態與遠征倍率由模擬器自行換算，不暴露給玩家
-- 收集家 I / II / III 選取
-- 觀緣眼鏡「擁有 / 未擁有」開關
-- 模擬次數設定
-- 鑽石 / 羈絆統計版面
-- 手機優先響應式 UI
+- 隊長 ×2、隊員 ×1 的內部步行值加權速度。
+- 收集家與觀緣眼鏡權重轉移、探索快照、礦脈合併及到期。
+- 首領與連續掉落、當日起始鑽石上限重抽、持有量、秘石與結算。
+- 共用 seeded System.Random、單輪日志與亂數明細。
+- 固定起始配置／連續遠征兩種批次模式、進度與中止。
 
-目前不執行正式事件抽選。
+範圍限定第一張地圖和現有 UI 的收集家能力。其他角色專屬條件事件、角色經驗、寶箱開箱與跨日重置未開放；不宣稱包含原版戰鬥的逐局完全一致。
 
-### V2 — 英靈速度公式
+詳見 [V1.2 核對與驗證範圍](docs/v1.2-simulator.md)。執行全部驗證：
 
-已從 3.16.0 IL2CPP 確認：
-
-- 玩家面板顯示的步行速度不是遠征公式直接拿來平均的值。
-- `UniquePlayerParams.get_walkSpd`：
-  `visibleWalkSpd = walkSpd1 × Skill2Value / 100`
-- `walkSpd1` 由 WalkSpd 內部狀態值經 `GetActualValue` 換算。
-- 遠征 `CalcAverageWalkSpdLevel` 使用角色內部 WalkSpd 狀態，隊長權重 2、每名隊員權重 1。
-- `WalkSpeedMultiplier = 0.8 + (加權平均 WalkSpd 狀態 / 100) × 3.2`
-
-本次已追到主動技能流程對 `Skill2Value` 的更新與恢復 100% 的分支。請輸入未啟動步行加速技能時的面板 km/s；網頁即時顯示估算遠征倍率與各隊員的加權明細。三位小數面板無法恢復精確隱藏值。
-
-### V3 — 地圖邏輯
-
-接入：
-
-- Dungeon Master
-- Progress
-- 地區事件
-- 一般戰鬥事件
-- Boss 流程
-- Dia Fever / MergeDungeon
-- 地圖條件事件
-
-戰鬥處理固定為：
-
-> 必勝 / 無敵
-
-不模擬 HP、SP、攻擊、防禦、死亡等戰鬥細節；但戰鬥事件本身仍保留，因為會影響事件池與遠征流程。
-
-### V4 — 官方權重引擎
-
-接入：
-
-- Expedition Event Lottery
-- 鑽石 Group 50
-- Dia Fever Group 990100
-- 5000 / 7777 / 9999
-- 羈絆 Group
-- 28 種羈絆 rewardId
-- 收集家 I / II / III
-- 觀緣眼鏡
-- Progress Weight 重分配
-- 一次性 / 條件事件
-- Boss Drop / 連續率
+```bash
+for testfile in tests/*.test.cjs; do node "$testfile" || exit 1; done
+```
 
 ## 專案結構
 
 ```
-index.html   V1 主介面
+index.html   V1.2 主介面
 styles.css  響應式樣式
 app.js      UI 狀態與互動
 ```

@@ -1,5 +1,6 @@
 const assert=require('node:assert/strict');global.window={};require('../affection.js');const A=window.DFCHAffection;
-assert.ok(Math.abs(A.ratio(10,30)-1.43)<1e-12);
+assert.equal(A.ratio(10,30),Math.fround(1.43));
+assert.equal(A.ratio(2,30),Math.fround(Math.fround(Math.fround(102/100)*130)/100));
 assert.equal(A.ratio(0,0),1);
 assert.equal(A.progressScale(5,20),0.75);
 assert.equal(A.progressScale(25,20),0);

@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#10181c" />
   <title>DFCH 遠征模擬器</title>
-  <link rel="stylesheet" href="./styles.css" />
+  <link rel="stylesheet" href="./styles.css?v=1.2.0" />
 </head>
 <body>
   <div class="app-shell">
@@ -13,9 +13,9 @@
       <div>
         <p class="eyebrow">DFCH / Expedition Simulator</p>
         <h1>遠征模擬器</h1>
-        <p class="sub">V1.1 · 隊伍速度與第一張地圖官方資料已接入</p>
+        <p class="sub">V1.2 · 第一張地圖遠征模擬 · 官方資料 3.16.0</p>
       </div>
-      <div class="version-pill">V1.1</div>
+      <div class="version-pill">V1.2</div>
     </header>
 
     <nav class="tabs" aria-label="主功能">
@@ -59,13 +59,13 @@
 
                 <div class="field readout">
                   <span>目前版本</span>
-                  <strong>地圖資料預覽，事件重播待接入</strong>
+                  <strong>V1.2 · 單輪與批次模擬可用</strong>
                 </div>
               </div>
               <div class="official-formula-card" id="mapOfficialData">
                 <strong id="mapDataTitle">官方地圖資料</strong>
                 <p id="mapDataSummary" aria-live="polite"></p>
-                <p>V1.1 核對進度：收集家等級、探索完成排除與體力規則已核對；整場事件抽選及地圖獎勵轉換仍待接入。<a href="./docs/v1.1-audit.md" target="_blank" rel="noopener">查看完整核對記錄</a></p>
+                <p>V1.2：第一張地圖已可執行單輪與批次模擬，使用收集家／觀緣眼鏡配置及秒殺戰鬥。其他角色專屬能力尚未開放。<a href="./docs/v1.2-simulator.md" target="_blank" rel="noopener">查看完整核對記錄</a></p>
                 <p>模擬設定：遭遇敵人後立即勝利，戰鬥耗時 0 秒；保留遭遇、勝利掉落與後續事件。這是模擬器設定。</p>
                 <label class="field"><span><input type="checkbox" id="mapExplored100"> 地圖探索已達 100%</span></label>
                 <p id="mapExplorationSummary" aria-live="polite"></p>
@@ -78,6 +78,7 @@
                     <label class="field"><span>查看抽選池</span><select id="dropPoolMode"><option value="basic">基本鑽石物品事件</option><option value="boss">首領合併掉落池（單次抽選）</option></select></label>
                   </div>
                   <div id="dropStateControls" class="field-grid two"></div>
+                  <label class="field"><span><input id="stoneSearchAvailable" type="checkbox"> 已開放秘石搜尋（前置解鎖）</span></label>
                   <label class="field"><span><input id="stoneUnlocked" type="checkbox"> 已解鎖此地圖秘石</span></label>
                   <p id="dropStateSummary" aria-live="polite"></p>
                   <div class="speed-table-scroll"><table class="speed-table"><thead><tr><th>物品</th><th>原始數量範圍</th><th>此抽選的條件機率</th></tr></thead><tbody id="dropStateRows"></tbody></table></div>
@@ -87,7 +88,7 @@
                 </details>
                 <details id="mapDataDetails">
                   <summary>查看地圖事件、掉落與原始權重</summary>
-                  <p class="unit-note">權重以易讀的小數顯示。權重不是固定百分比。技能、探索率、已取得獎勵與解鎖狀態可能改變候選池；以下保留官方原值。事件完整重播尚未接入。</p>
+                  <p class="unit-note">權重以易讀的小數顯示。權重不是固定百分比。技能、探索率、已取得獎勵與解鎖狀態可能改變候選池；以下保留官方原值。實際動態抽選請使用下方模擬功能。</p>
                   <div id="mapDataTables"></div>
 
                 </details>
@@ -225,7 +226,7 @@
                   <span class="step-badge">03</span>
                   <h2>神器與掉落加成</h2>
                 </div>
-                <span class="status-chip neutral">V4 接正式公式</span>
+                <span class="status-chip neutral">已接入抽選</span>
               </div>
 
               <div class="artifact-card">
@@ -247,7 +248,7 @@
               <div class="bonus-readout">
                 <span>目前 UI 選取的羈絆加成</span>
                 <strong id="affectionBonus">角色 +10% · 神器 +30%</strong>
-                <small>僅顯示配置；V4 才依官方疊加公式計算</small>
+                <small>收集家加成與觀緣眼鏡相乘，增量由步行事件權重轉移</small>
               </div>
             </section>
 
@@ -257,7 +258,7 @@
                   <span class="step-badge">04</span>
                   <h2>模擬設定</h2>
                 </div>
-                <span class="status-chip warning">V4 啟用</span>
+                <span class="status-chip warning">可執行</span>
               </div>
 
               <div class="field-grid two">
@@ -288,11 +289,15 @@
               <label class="field"><span>重播種子（有號 32 位整數）</span><input id="simulationSeed" type="number" min="-2147483648" max="2147483647" step="1" value="42" inputmode="numeric"></label>
               <p class="helper">用來重播相同亂數序列；官方儲存的加密種子另須解碼。同種子仍須相同完整狀態及呼叫順序，才能得到相同事件。</p>
               <p class="unit-note">自行輸入的是隊伍耐力總額。每輪以此值開始，消耗降至 0 時結束；恢復不超過最大值。無限耐力略過耐力消耗與耗盡判定，仍保留地圖進度及終點事件。</p>
+              <label class="field"><span>批次狀態</span><select id="simulationMode"><option value="independent">每輪獨立：固定起始配置</option><option value="continuous">連續遠征：累積探索、持有與當日鑽石</option></select></label>
+              <p class="helper">連續模式每輪刷新已達到的探索門檻；不自動跨日重置鑽石。第一輪使用輸入種子，後續種子由獨立的批次種子序列產生。</p>
               <button class="primary-btn" id="simulateBtn">
                 <span>開始模擬</span>
-                <small>檢查串接；完整引擎尚未啟用</small>
+                <small>第一張地圖 · 戰鬥 0 秒</small>
               </button>
-              <p class="helper" id="simulateMessage">官方亂數已接入；完整事件串接未通過前，不產生模擬結果。</p>
+              <button type="button" class="secondary-btn" id="cancelSimulation" hidden>中止模擬</button>
+              <progress id="simulationProgress" value="0" max="1" hidden aria-label="模擬進度"></progress>
+              <p class="helper" id="simulateMessage" aria-live="polite">準備就緒。可選 1 次查看整輪事件，或執行批次統計。</p>
             </section>
           </div>
 
@@ -305,41 +310,8 @@
                 </div>
               </div>
 
-              <div class="result-block diamond">
-                <div class="result-title">
-                  <span class="result-icon">◆</span>
-                  <strong>鑽石</strong>
-                </div>
-                <div class="metric-grid">
-                  <div><span>總量</span><b>—</b></div>
-                  <div><span>平均 / 輪</span><b>—</b></div>
-                  <div><span>Fever</span><b>—</b></div>
-                  <div><span>5000 / 7777 / 9999</span><b>—</b></div>
-                </div>
-              </div>
-
-              <div class="result-block affection">
-                <div class="result-title">
-                  <span class="result-icon">♥</span>
-                  <strong>羈絆道具</strong>
-                </div>
-                <div class="metric-grid">
-                  <div><span>總掉落</span><b>—</b></div>
-                  <div><span>平均 / 輪</span><b>—</b></div>
-                  <div><span>事件率</span><b>—</b></div>
-                  <div><span>空結果</span><b>—</b></div>
-                </div>
-
-                <div class="drop-preview">
-                  <span>指定道具統計</span>
-                  <p>第一張地圖已接入 3 種羈絆道具；整場掉落統計待事件引擎接入。</p>
-                </div>
-              </div>
-
-              <div class="formula-note">
-                <strong>V1 原則</strong>
-                <p>保留戰鬥事件，但戰鬥必勝；不模擬 HP / SP / 攻防。只統計鑽石與羈絆結果。</p>
-              </div>
+              <div id="simulationResults" aria-live="polite"><p>尚未執行遠征。</p></div>
+              <p class="unit-note">以官方 3.16.0 的已抽取規則執行；戰鬥固定秒殺、0 秒。未模擬原版戰鬥亂數、角色經驗分配、寶箱開箱內容與跨日重置。固定地圖倒數 600 秒不除以速度倍率。</p>
             </section>
           </aside>
         </div>
@@ -348,48 +320,35 @@
       <section class="tab-panel" id="tab-stats">
         <section class="panel empty-state">
           <span class="empty-icon">Σ</span>
-          <h2>統計頁先保留版面</h2>
-          <p>之後會加入地圖比較、鑽石 / 小時、羈絆 / 小時、指定羈絆最佳地圖，以及理論值 vs 模擬值。</p>
+          <h2>第一張地圖統計已接入</h2>
+          <p>執行模擬後，可在遠征頁查看各獎勵總量、平均每輪與取得輪數比例。地圖比較尚未開放。</p>
         </section>
       </section>
 
       <section class="tab-panel" id="tab-roadmap">
         <section class="panel">
-          <div class="roadmap">
-            <article class="roadmap-item current">
-              <span>V1</span>
-              <div><strong>UI</strong><p>地圖、隊長、多隊員、個體速度、收集家、神器、統計框架。</p></div>
-            </article>
-            <article class="roadmap-item">
-              <span>V2</span>
-              <div><strong>英靈速度</strong><p>追完整面板 km/s → 內部 WalkSpd → 隊伍遠征倍率的官方換算；玩家端只保留 km/s。</p></div>
-            </article>
-            <article class="roadmap-item">
-              <span>V3</span>
-              <div><strong>地圖邏輯</strong><p>Progress、地區事件、戰鬥與 Boss 流程；生存全部必勝處理。</p></div>
-            </article>
-            <article class="roadmap-item">
-              <span>V4</span>
-              <div><strong>權重引擎</strong><p>事件池、鑽石、Fever、羈絆、能力、神器與條件事件。</p></div>
-            </article>
-          </div>
+          <div class="roadmap"><article class="roadmap-item current"><span>V1.2</span><div><strong>第一張地圖可執行</strong><p>合併池、探索門檻、條件、事件流程、結算、共用亂數與批次統計已串接。此版限定收集家及觀緣眼鏡，其他專屬能力遇到不支援配置會停止。</p><a href="./docs/v1.2-simulator.md">查看驗證範圍</a></div></article></div>
         </section>
       </section>
     </main>
   </div>
 
-  <script src="./speed.js"></script>
-  <script src="./affection.js"></script>
-  <script src="./expedition-rules.js"></script>
-  <script src="./stamina.js"></script>
-  <script src="./event-state.js"></script>
-  <script src="./lottery.js"></script>
-  <script src="./random.js"></script>
-  <script src="./map-data.js"></script>
-  <script src="./drop-state.js"></script>
-  <script src="./drop-preview.js"></script>
-  <script src="./map-view.js"></script>
-  <script src="./simulation-runtime.js"></script>
-  <script src="./app.js"></script>
+  <script src="./speed.js?v=1.2.0"></script>
+  <script src="./affection.js?v=1.2.0"></script>
+  <script src="./expedition-rules.js?v=1.2.0"></script>
+  <script src="./stamina.js?v=1.2.0"></script>
+  <script src="./event-state.js?v=1.2.0"></script>
+  <script src="./lottery.js?v=1.2.0"></script>
+  <script src="./random.js?v=1.2.0"></script>
+  <script src="./map-data.js?v=1.2.0"></script>
+  <script src="./drop-state.js?v=1.2.0"></script>
+  <script src="./drop-preview.js?v=1.2.0"></script>
+  <script src="./map-view.js?v=1.2.0"></script>
+  <script src="./simulation-runtime.js?v=1.2.0"></script>
+  <script src="./event-pool.js?v=1.2.0"></script>
+  <script src="./simulator.js?v=1.2.0"></script>
+  <script src="./simulation-batch.js?v=1.2.0"></script>
+  <script src="./simulation-view.js?v=1.2.0"></script>
+  <script src="./app.js?v=1.2.0"></script>
 </body>
 </html>

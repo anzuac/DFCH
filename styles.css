@@ -1028,3 +1028,17 @@ select:disabled {
 .map-detail-scroll:focus-visible { outline: 2px solid var(--teal); outline-offset: 2px; }
 .speed-table-scroll { min-width: 0; width: 100%; -webkit-overflow-scrolling: touch; }
 #staminaValueField[hidden] { display: none; }
+
+/* V1.2: keep result details scrollable on small screens. */
+#simulationResults { min-width: 0; overflow-wrap: anywhere; }
+#simulationResults h3 { margin-top: 1.4rem; }
+#simulationResults details { margin-block: 1rem; min-width: 0; }
+#simulationResults summary { cursor: pointer; color: var(--mint, #9cd9ce); }
+.simulation-table-scroll { width: 100%; min-width: 0; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.simulation-table-scroll table { width: 100%; border-collapse: collapse; }
+.simulation-table-scroll th, .simulation-table-scroll td { padding: .7rem .4rem; text-align: left; border-bottom: 1px solid #ffffff22; white-space: nowrap; }
+.simulation-log { max-height: 26rem; overflow-y: auto; overscroll-behavior: contain; padding-left: 1.7rem; }
+.simulation-log li { margin-bottom: .6rem; }
+#simulationProgress { width: 100%; margin-top: 1rem; accent-color: #9cd9ce; }
+#cancelSimulation { margin-top: .8rem; }
+[hidden] { display: none !important; }

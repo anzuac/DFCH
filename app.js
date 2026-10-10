@@ -27,7 +27,7 @@
     const config = window.DFCHStamina.configure(staminaMode.value, staminaValue.value);
     window.DFCHStaminaConfig = config;
     document.getElementById("staminaSummary").textContent = !config.ready ? config.error : manual ? `每輪隊伍耐力：${config.maximum}，恢復上限相同。` : "無限耐力：不會因耐力耗盡而結束遠征。";
-    simulateBtn.disabled = !config.ready;
+    simulateBtn.disabled = !config.ready || Boolean(window.DFCHSimulationRunning);
   }
   staminaMode.addEventListener("change", updateStamina);
   staminaValue.addEventListener("input", updateStamina);
@@ -217,25 +217,37 @@
   document.querySelectorAll(".leader-card").forEach(wireUnit);
   affectionGlasses.addEventListener("change", updateSummary);
 
-  simulateBtn.addEventListener("click", () => {
+  let running=false,controller=null;
+  const cancel=document.getElementById('cancelSimulation'),bar=document.getElementById('simulationProgress');
+  cancel.addEventListener('click',()=>controller?.abort());
+  simulateBtn.addEventListener("click", async () => {
+    if(running)return;
     try {
       if(document.getElementById("mapSelect").value!=="stage_1")throw new Error("目前只抽取第一張地圖的資料。");
       const input=document.getElementById("simulationSeed").value;
       if(input.trim()==="")throw new Error("請輸入重播種子。");
-      const seed=Number(input);
-      const context=window.DFCHSimulationRuntime.initialize(window.DFCHMapData,{
-        seed,completionRate:window.DFCHMapConfig?.completionRate??0,
-        stamina:window.DFCHStaminaConfig
-      });
-      const report=window.DFCHSimulationRuntime.preflight(window.DFCHMapData);
-      const missingHandlers=report.missing.filter(s=>s.startsWith("事件處理"));
-      const missingStages=report.missing.filter(s=>!s.startsWith("事件處理"));
-      simulateMessage.textContent=`種子 ${context.seed} 初始化成功（尚未消耗亂數）。完整模擬尚未啟用：${missingHandlers.length} 種事件處理尚未串接；${missingStages.join("；")}。此次沒有執行遠征或產生掉落結果。`;
+      const seed=Number(input),cards=allUnitCards(),speeds=cards.map(c=>c.querySelector('.speed-input').value);
+      const speed=window.DFCHSpeed.calcFromVisibleSpeeds({leaderSpeed:speeds[0],memberSpeeds:speeds.slice(1)});
+      if(!speed.ready)throw new Error('請填妥每位角色的步行速度。');
+      const role=selectedCollectorBonus();if(!Number.isFinite(role))throw new Error('收集家等級無效。');
+      const data=window.DFCHMapData,ids={collector1:0,collector2:1,collector3:2};
+      const abilityIds=[...new Set(cards.flatMap(c=>[...c.querySelectorAll('.ability-tag.active')].map(b=>data.collectorMasters[ids[b.dataset.ability]].rewardId)))];
+      const ownedInputs=[...document.querySelectorAll('#dropStateControls input')],daily=document.getElementById('dailyDiamondCount');
+      if(daily.value.trim()===''||ownedInputs.some(i=>i.value.trim()===''))throw new Error('請填妥持有量與當日鑽石累計。');
+      const flags=[];if(document.getElementById('stoneSearchAvailable').checked)flags.push(6504);if(document.getElementById('stoneUnlocked').checked)flags.push(6602);
+      const options={seed,multiplier:speed.multiplier,abilityIds,affectionRatio:window.DFCHAffection.ratio(role,affectionGlasses.checked?30:0),completionRate:window.DFCHMapConfig?.completionRate??0,stamina:window.DFCHStaminaConfig,saved:{daily:Number(daily.value),owned:Object.fromEntries(ownedInputs.map(i=>[i.dataset.reward,Number(i.value)])),flags}};
+      // Snapshot all controls: editing during a run cannot change its config.
+      const count=Number(document.getElementById('simulationCount').value),mode=document.getElementById('simulationMode').value;
+      window.DFCHSimulator.create(data,options); // fail before replacing prior results
+      running=true;window.DFCHSimulationRunning=true;simulateBtn.disabled=true;cancel.hidden=false;bar.hidden=false;bar.max=count;bar.value=0;controller=new AbortController();
+      const result=await window.DFCHSimulationBatch.run(data,options,{count,mode,signal:controller.signal,onProgress:a=>{bar.value=a.completed;simulateMessage.textContent=`執行中：${a.completed.toLocaleString()}／${count.toLocaleString()} 輪。配置已固定。`;}});
+      window.DFCHLastSimulation=result;window.DFCHSimulationView.render(data,result);
+      simulateMessage.textContent=`${result.cancelled?'已中止':'已完成'}：${result.completed.toLocaleString()} 輪，${result.goals.toLocaleString()} 輪到達終點；第一輪種子 ${seed}。`;
     } catch(error) {
-      simulateMessage.textContent=`無法初始化：${error.message}`;
+      simulateMessage.textContent=`模擬未完成：${error.message}。沒有結算未完成的遠征。`;
+    } finally {
+      running=false;window.DFCHSimulationRunning=false;controller=null;cancel.hidden=true;updateStamina();
     }
-    simulateBtn.classList.add("clicked");
-    window.setTimeout(() => simulateBtn.classList.remove("clicked"), 220);
   });
 
   addMember({ name: "隊員 1", speed: "0.520" });

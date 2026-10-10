@@ -2,7 +2,12 @@
   function ratio(rolePercent, artifactPercent) {
     const role=Number(rolePercent),artifact=Number(artifactPercent);
     if(!Number.isFinite(role)||!Number.isFinite(artifact))return null;
-    return (1+Math.max(0,role)/100)*(1+Math.max(0,artifact)/100);
+    // 0x34b17f8–0x34b1848: add/divide role, multiply by
+    // (100+artifact), then divide; preserve each float32 operation.
+    const f=Math.fround;
+    let value=role>=1?f(f(100+f(role))/100):1;
+    if(artifact>=1)value=f(f(value*f(100+f(artifact)))/100);
+    return value;
   }
   function progressScale(addedAffectionWeight,progressWeight) {
     if(progressWeight<=0)return 1;
