@@ -20,3 +20,8 @@ assert.equal(data.simulationPolicy.combatDurationSeconds, 0);
 assert.equal(data.simulationPolicy.eventReplayImplemented, false);
 assert.deepEqual(data.eventSequences.filter(s => s.logEventId === 1).map(s => s.functionType), [101,100,2]);
 console.log('Map reference and offline data checks passed');
+// Conditions are serialized Int64 values, not floating-point values.
+assert.deepEqual(data.conditionalTemplates[0].conditionValues, [90,0]);
+for (const row of data.conditionalTemplates) {
+  for (const id of row.requiredAbilities.filter(Boolean)) assert.ok(data.abilityNames[id]);
+}

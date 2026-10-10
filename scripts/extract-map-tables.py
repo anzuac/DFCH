@@ -6,7 +6,7 @@ from pathlib import Path
 for archive,member in [('project_sources/06-net.room6.horizon.apk','assets/bin/Data/Managed/Metadata/global-metadata.dat'),('project_sources/07-assets.zip','assets/bin/Data/datapack.unity3d')]:
  with zipfile.ZipFile(archive) as z:
   target=Path('research')/member;target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes(z.read(member))
-needed={76122,76123,76124,76125,76121,76120,76126,76127,76119,76103,76141,76137,76143,76196,76099,76117,76118,76112,76085,76138,76836,76838,76839,76840}
+needed={76122,76123,76124,76125,76121,76120,76126,76127,76119,76103,76141,76137,76143,76196,76099,76117,76118,76112,76085,76138,76836,76838,76839,76840,76192}
 env=UnityPy.load('research/assets/bin/Data/datapack.unity3d')
 for obj in env.objects:
  if obj.type.name=='MonoBehaviour' and obj.path_id in needed:
@@ -37,10 +37,10 @@ class R:
   if t==46687:return [self.read('f'),self.read('f')]
   if t==30085:return self.read('d')
   if t==35422:return self.read('q')
-  arrays={23983:35390,24269:42409,23828:35390,23807:35390,23998:'d',23762:'d',24330:43358,23562:35390,23678:35390}
+  arrays={23983:35390,24269:42409,23828:35390,23807:35390,23998:'q',23762:'d',24330:43358,23562:35390,23678:35390}
   if t in arrays:
    n=self.read('i');assert 0<=n<100000
-   return [self.read('d') if arrays[t]=='d' else self.val(arrays[t]) for _ in range(n)]
+   return [self.read(arrays[t]) if arrays[t] in ('d','q') else self.val(arrays[t]) for _ in range(n)]
   return self.read('i')
  def table(self,name):
   n=self.read('i');schema=(fields('ExpeditionEventSampleMaster') if name=='ExpeditionEventSampleTemplateMaster' else [])+fields(name);rows=[{k:self.val(t) for k,t in schema} for _ in range(n)]
@@ -86,3 +86,6 @@ for i,cn in [(76112,'EquipMaster'),(76085,'ArtifactMaster'),(76138,'MonsterParam
 for i in [76836,76838,76839,76840]:
  r=R(Path(f'research/mb-{i}.bin').read_bytes());r.string();rows=r.table('LocalizationData')
  Path('research/tables/'+r.name+'.json').write_text(json.dumps(rows,ensure_ascii=False,indent=2)+'\n')
+
+schema=[(k,'str' if t==43358 else 'bool' if t==27036 else 'long' if t==35422 else 'int') for k,t in fields('RewardBase')[:-3]+fields('EquipMaster')[1:]]
+Path('research/reward-name-schemas.json').write_text(json.dumps(schema))

@@ -66,11 +66,13 @@
                 <strong id="mapDataTitle">官方地圖資料</strong>
                 <p id="mapDataSummary" aria-live="polite"></p>
                 <p>模擬設定：遭遇敵人後立即勝利，戰鬥耗時 0 秒；保留遭遇、勝利掉落與後續事件。這是模擬器設定。</p>
+                <label class="field"><span><input type="checkbox" id="mapExplored100"> 地圖探索已達 100%</span></label>
+                <p id="mapExplorationSummary" aria-live="polite"></p>
                 <details id="mapDataDetails">
                   <summary>查看地圖事件、掉落與原始權重</summary>
-                  <p class="unit-note">權重不是固定百分比。技能、探索率、已取得獎勵與解鎖狀態可能改變候選池；以下保留官方原值。事件完整重播尚未接入。</p>
+                  <p class="unit-note">權重以易讀的小數顯示。權重不是固定百分比。技能、探索率、已取得獎勵與解鎖狀態可能改變候選池；以下保留官方原值。事件完整重播尚未接入。</p>
                   <div id="mapDataTables"></div>
-                  <p><a href="./data/stage-1.json" download>下載第一張地圖完整解析資料 JSON</a></p>
+
                 </details>
               </div>
             </section>

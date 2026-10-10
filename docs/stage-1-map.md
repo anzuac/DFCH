@@ -59,3 +59,12 @@ node DFCH/tests/map-data.test.cjs
 ```
 
 scripts/extract-map-tables.py 使用 zipfile 完整讀取並檢查 CRC，UnityPy 取出目標 MonoBehaviour；依 metadata 欄位解碼並核對全長。不將 APK、bundle 或原始美術上傳 git。資料輸出在 data/stage-1.json，map-data.js 為相同內容的離線網頁載入版本。
+
+
+## 中文檢視與探索完成配置
+
+詳細資訊改為中文用途、技能名稱與效果說明，不再顯示群組／模板／能力代號及 JSON 下載連結。權重在畫面使用 8 位有效數字方便閱讀，原始資料保留完整 float32 值。大豐收與盛宴的官方繁中欄位為空，分別依日文「大豊作」「豪華な晩餐」補譯。
+
+新增探索已達 100% 開關，更新 DFCHMapConfig.completionRate（0 或 100）與 15 個門檻的達標狀態；不是本次行走完成度，也不把候選事件當成必然掉落。完整事件引擎尚未接入，這個配置目前用於條件／解鎖預覽及保留後續模擬輸入。
+
+本次修正 conditionValues 的型別：metadata type index 23998 是 Int64 陣列，不是 double 陣列。先前把整數 90 誤讀為極小浮點數；原始 bytes 不變，現已正確解析為 90 與 50 等整數，並補上測試。
