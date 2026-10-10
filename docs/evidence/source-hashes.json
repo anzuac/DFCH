@@ -1,0 +1,18 @@
+{
+  "05-config.arm64_v8a-1-.apk": {
+    "bytes": 41375697,
+    "sha256": "62d89136f5e9fb67e055aea02c8a87e76e290e55ca165cc3f0eeee8b65940eee"
+  },
+  "06-net.room6.horizon.apk": {
+    "bytes": 56069188,
+    "sha256": "c3e235103d385611cca52b33ddac68390aa1f94e3b96321d3259eada91378ae7"
+  },
+  "libil2cpp.so": {
+    "bytes": 116410672,
+    "sha256": "c8b930e4e34d18fd7794ac1150b0d5a10138f0f769d8f0fc9525795fdc4e0ddd"
+  },
+  "global-metadata.dat": {
+    "bytes": 17762912,
+    "sha256": "93f3432a65cce1a4e4027f0a0a8f348f60a4d3992b84222e5ad160522306c2e9"
+  }
+}

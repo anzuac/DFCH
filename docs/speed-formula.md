@@ -201,11 +201,7 @@ WalkSpeedMultiplier
 
 ## 7. 下一步
 
-1. 追 `CharaManager.skill2Value` 初始化來源
-2. 找出哪些技能／神器／全局效果會改變 Skill2Value
-3. 用實際面板 0.577 km/s 等樣本反推並交叉驗證
-4. 完成 `visible km/s → WalkSpd L → Expedition Multiplier`
-5. 再把 V1 隊伍速度改成自動即時計算
+此處為最初待辦；面板換算、技能修正寫入、隊伍即時倍率與事件進度作用已在第 8–10 節更新。後續工作為官方 RNG 與地圖事件序列重播、顯示取整規則及縮時效果名稱。
 
 
 ## 8. 本次 APK 核對（2026-10-10）
@@ -227,7 +223,7 @@ V1 現在接入「未加速面板速度」模式，UI 不要求輸入 Skill2Valu
 顯示最終倍率，詳細資訊列出角色、面板 km/s、反推 L、權重、加權值、平均值貢獻及完整最終算式。
 面板三位小數不足以恢復精確隱藏值，故所有反推結果標為估算。
 ±0.0005 的區間僅在官方面板採四捨五入時成立，尚未確認顯示取整規則，不稱為官方精確區間。
-地圖耗時及事件時間仍未接入，不把倍率誤稱為隊伍 km/s。
+地圖耗時及事件時間仍未接入，不把倍率誤稱為隊伍 km/s；事件進度作用已在第 10 節確認。
 
 舊文第 3、7 節的「來源仍在解析」描述為先前進度；本節更新該結論。
 
@@ -241,3 +237,52 @@ V1 現在接入「未加速面板速度」模式，UI 不要求輸入 Skill2Valu
 網頁採十進位公式與 JavaScript double，並未聲稱與 ARM64 float32 每一步位元完全相同；面板反推仍為估算。
 
 詳細資訊按鈕可展開／收起角色明細。新增個體远征倍率欄，定義為該角色單獨组成隊伍时的倍率；隊伍公式只加權 L，不累加個體倍率。
+
+
+## 10. 速度實際作用：事件進度（2026-10-10）
+
+來源仍是同一份 3.16.0 ARM64 APK。重新完整解壓 libil2cpp.so，ZIP CRC 檢查通過，長度 116410672 bytes；先前研究暫存副本缺少尾端，現已修復。以下可重現工具存於 scripts/trace-speed.py。
+
+已由方法表與 metadata 名稱對齊確認：
+
+| 方法 | ARM64 位址 | 行為 |
+| --- | --- | --- |
+| ExpeditionContext.get_WalkSpeedMultiplier | 0x34b6178 | 讀取 context +0xc0 |
+| ExpeditionContext constructor | 0x34b61f0 | 0x34b6390 呼叫 CalcAverageWalkSpdLevel，0x34b6394 保存倍率 |
+| Progress.Execute | 0x34b2710 | 讀取事件 arg[0] 為 float；arg[1] 轉整數後 >0 時跳過速度乘算，其餘乘 context 倍率 |
+| ExpeditionContext.AddProgress | 0x34b28e8 | 接收取整後進度、處理強制事件邊界，再限制至目標進度 |
+| ExpeditionContext.IsGoalReached | 0x34b802c | currentProgress >= goalProgress |
+
+### 小數進度不是固定捨去
+
+0x34b27e4 呼叫 0x64c89e0；ELF relocation 0x691e8d0 對應 libc `fmodf`，第二參數是 1。
+0x34b2874 比較亂數與餘數，0x34b2888 截斷浮點數為整數，0x34b2898 再加上比較結果。
+
+對非負進度，並採通常的 [0,1) 均勻亂數條件：
+
+```
+x = float32(事件基礎進度 × 隊伍倍率)  // arg[1] <= 0
+r = fmodf(x, 1)
+整數進度 = trunc(x) + (亂數 < r ? 1 : 0)
+```
+
+基礎進度 1、倍率 0.8：單次可得到 0 或 1；約 80% 得到 1，長期平均約 0.8。這是單次事件的說明，不能保證每五次必定四次前進。
+基礎進度 10、倍率 0.8：乘算結果 8，整數進度為 8。
+速度倍率本身沒有在 CalcAverageWalkSpdLevel 中限制到 1；進度套用處也沒有把倍率夾到 1。
+
+`AddProgress` 會呼叫事件抽選管理器的邊界檢查（0x2d05fac），可能先停在可觸發的強制事件位置；最後 currentProgress 不超過 goalProgress。因此不能把每個事件乘算結果無條件直接累加到最終通關進度。
+
+speed.js 新增 calcProgressEvent，使用 float32 乘算並由呼叫端提供亂數；尚未接入地圖模擬，避免擅自使用另一套 RNG 破壞官方事件序列。
+
+### 遠征倒數與倍率是兩條路徑
+
+ExpeditionDungeonMaster.get_DurationTimeSpan（0x2e192f4）從 master +0x20 讀整數，經 TimeSpan 秒數建構路徑（0x57196e0，scale=1000）轉換。
+GetReducedDurationTimeSpan（0x2e19358）另外讀取識別值 0x290b 的效果，與 50 取最小值後除以 100，使用 duration × (1 - reduction)，截斷後建立 TimeSpan；此方法沒有讀取隊伍步行倍率。
+0x328efe0 的出發流程使用該 reduced duration，0x328f00c 將它加入取得的時間。這條路徑未使用 WalkSpeedMultiplier。
+
+因此目前不能用「地圖秒數 ÷ 隊伍速度倍率」表示遊戲遠征倒數。速度乘算已確認用於事件進度；倒數使用地圖 duration 與獨立縮時效果。
+
+### 已完成與仍需資料的邊界
+
+面板 → 反推狀態 → 隊長／隊員加權 → 遠征倍率 → 條件式事件進度 → 機率取整 → 目標進度限制，已有官方程式證據與實作。
+仍未宣稱完成：面板顯示的取整規則、官方 seeded RNG 重現、全地圖事件序列／強制事件完整重播，以及縮時效果 0x290b 的玩家名稱。地圖資料未接入前不顯示猜測的通關時間。

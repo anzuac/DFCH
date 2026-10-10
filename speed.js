@@ -137,6 +137,21 @@
     };
   }
 
+  // Expedition Progress.Execute: arg[1] > 0 bypasses speed scaling.
+  // fmodf(value, 1) is used for stochastic rounding, not floor-only steps.
+  // Inject the random sample to preserve the caller's seeded RNG sequence.
+  function calcProgressEvent({ baseProgress, multiplier, bypassSpeed = false, randomSample }) {
+    const base = n(baseProgress), speed = n(multiplier), sample = n(randomSample);
+    if (base === null || speed === null || base < 0 || speed < 0 ||
+        sample === null || sample < 0 || sample >= 1) return null;
+    const rawProgress = bypassSpeed ? Math.fround(base) :
+      Math.fround(Math.fround(base) * Math.fround(speed));
+    if (!Number.isFinite(rawProgress) || rawProgress >= 2147483648) return null;
+    const whole = Math.trunc(rawProgress);
+    const remainder = Math.fround(rawProgress % 1);
+    return { rawProgress, remainder, progress: whole + (sample < remainder ? 1 : 0) };
+  }
+
   window.DFCHSpeed = Object.freeze({
     OFFICIAL,
     actualWalkSpeedFromLevel,
@@ -145,6 +160,7 @@
     levelFromVisibleWalkSpeed,
     calcAverageWalkSpdLevel,
     calcExpeditionWalkMultiplier,
-    calcFromVisibleSpeeds
+    calcFromVisibleSpeeds,
+    calcProgressEvent
   });
 })();

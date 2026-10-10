@@ -18,3 +18,12 @@ assert.equal(S.calcFromVisibleSpeeds({leaderSpeed: 0.5, memberSpeeds: ['']}).rea
 assert.equal(S.calcFromVisibleSpeeds({leaderSpeed: 0.5, memberSpeeds: Array(12).fill(0.5)}).ready, false);
 close(S.calcFromVisibleSpeeds({leaderSpeed: 0.75, memberSpeeds: Array(11).fill(0.75)}).multiplier, 3.36);
 console.log('Speed checks passed; sample party:', a.multiplier);
+
+// Official event progression: stochastic rounding and explicit speed bypass.
+assert.equal(S.calcProgressEvent({baseProgress: 1, multiplier: 0.8, randomSample: 0.79}).progress, 1);
+assert.equal(S.calcProgressEvent({baseProgress: 1, multiplier: 0.8, randomSample: 0.81}).progress, 0);
+assert.equal(S.calcProgressEvent({baseProgress: 10, multiplier: 0.8, randomSample: 0}).progress, 8);
+assert.equal(S.calcProgressEvent({baseProgress: 1, multiplier: 0.8, bypassSpeed: true, randomSample: 0.99}).progress, 1);
+assert.equal(S.calcProgressEvent({baseProgress: 1, multiplier: 3.36, randomSample: 0.35}).progress, 4);
+assert.equal(S.calcProgressEvent({baseProgress: 1, multiplier: 3.36, randomSample: 0.37}).progress, 3);
+assert.equal(S.calcProgressEvent({baseProgress: 1, multiplier: 0.8, randomSample: 1}), null);

@@ -1,0 +1,25 @@
+0x34b2930 ldr x22, [x19, #0x30]
+0x34b2934 ldr w23, [x19, #0x60]
+0x34b2938 mov x0, x19
+0x34b293c mov x1, xzr
+0x34b2940 bl #0x34bdea8
+0x34b2944 cbz x22, #0x34b2a38
+0x34b2948 adrp x24, #0x689f000
+0x34b294c ldr x24, [x24, #0xb10]
+0x34b2950 mov x1, x0
+0x34b2954 scvtf s0, w23
+0x34b2958 scvtf s1, w21
+0x34b295c mov x0, x22
+0x34b2960 mov x2, xzr
+0x34b2964 bl #0x2d05fac
+0x34b2968 ldp w22, w23, [x19, #0x60]
+0x34b296c cmp w0, #0
+0x34b2970 sub w8, w0, w22
+0x34b2974 csel w25, w8, w21, ge
+0x34b2978 add w8, w22, w25
+0x34b297c cmp w8, w23
+0x34b2980 csel w26, w23, w8, gt
+0x34b2984 str w26, [x19, #0x60]
+0x34b2988 ldr x0, [x24]
+0x34b298c bl #0x2a73d88
+0x34b2990 sub w8, w23, w26
