@@ -2,201 +2,207 @@
 
 版本基準：遊戲 3.16.0 / Unity 2022.3.62f2 / IL2CPP
 
-本文件只記錄已從遊戲二進位確認的公式，以及尚未確認的部分。不要把推測值當成官方值。
+本文件只記錄已從二進位確認的內容。玩家端 UI 只應使用遊戲實際顯示的步行速度（km/s），不要要求玩家輸入內部狀態等級。
 
-## 1. 隊伍容量
+## 1. 玩家面板的「步行速度」怎麼來
 
 ### 已確認
 
-方法：
+`UniquePlayerParams.get_walkSpd`
+ARM64 address: `0x2d441c0`
 
-- `BattlerParamCalculator.CalculatePartyMemberCount`
-- ARM64 code address: `0x34bfd10`
-
-公式：
+核心運算：
 
 ```text
-PartySlots = max(1, floor(Leadership / 20) + 1)
+visibleWalkSpd = walkSpd1 × Skill2Value / 100
 ```
 
-例如統率力 230：
+其中：
 
-```text
-floor(230 / 20) + 1
-= 11 + 1
-= 12
-```
+- `walkSpd1`：角色 WalkSpd 狀態換算後的基礎步行值
+- `Skill2Value`：由 `ISkillAndPotionCalc.get_Skill2Value` 取得的百分比修正
+- 玩家面板顯示的 km/s 是上面兩者乘完後的結果
 
-因此目前角色畫面所示統率力 230 對應：
+`walkSpd1` 對應欄位 getter：
+`UniquePlayerParams.get_walkSpd1`
+ARM64 address: `0x2d43d14`
 
-- 隊長 1 名
-- 隊員最多 11 名
-- 合計 12 名
+`ISkillAndPotionCalc` 的四個介面方法包括：
 
-`UseCase_Expedition_PartyEdit.GetEmptyMemberSlotCount` 會取得這個 PartyMemberCount，再扣除目前已編制人數。
+- PotionHpUp
+- PotionAtkUp
+- Skill1Value
+- Skill2Value
 
-> V1 UI 目前另外以 12 人作為遊戲實際畫面上限，避免使用者輸入更高統率力後建立超出目前已觀察編制的隊伍。底層官方容量公式仍獨立保留。
+`CharaManager.get_Skill2Value`
+ARM64 address: `0x2ee4e50`
+
+目前下一個重點就是繼續追 `skill2Value` 的來源與變動條件。
 
 ---
 
-## 2. 隊伍步行等級平均
+## 2. WalkSpd 內部值怎麼換成 walkSpd1
 
 ### 已確認
 
-方法：
+`UniquePlayerParams.ApplyParamAfterMaster`
+ARM64 address: `0x2d45060`
 
-- `ExpeditionLevelLogic.CalcAverageWalkSpdLevel`
-- token: `0x06001074`
-- ARM64 code address: `0x2d07c48`
+它會用 WalkSpd 狀態類型取得實際值，並寫入 `walkSpd1`。
 
-遊戲不是把所有角色等權平均。
+`UniqueStatusData.GetActualValue`
+ARM64 address: `0x2df779c`
 
-隊長：
+最後進入 WalkSpd 的實際值換算。
 
-```text
-weight = 2
-```
+對 WalkSpd 狀態值 L：
 
-每名隊員：
+### L < 80
 
 ```text
-weight = 1
+walkSpd1 = 0.05 + 0.00875 × L
 ```
 
-因此：
+### L >= 80
+
+```text
+walkSpd1 = 0.75 + 0.0035175872035324574 × (L - 80)
+```
+
+兩段在 L = 80 時連續：
+
+```text
+0.05 + 0.00875 × 80 = 0.75
+```
+
+所以完整玩家面板公式是：
+
+```text
+visible km/s
+=
+WalkSpdActualValue(L)
+× Skill2Value
+/ 100
+```
+
+---
+
+## 3. 從玩家面板 km/s 反推 WalkSpd 狀態
+
+如果已知 `Skill2Value`：
+
+```text
+base = visibleKmPerSec × 100 / Skill2Value
+```
+
+若 `base < 0.75`：
+
+```text
+L = (base - 0.05) / 0.00875
+```
+
+若 `base >= 0.75`：
+
+```text
+L = 80 + (base - 0.75) / 0.0035175872035324574
+```
+
+因此目前唯一缺口不是「步行等級公式」，而是：
+
+> `Skill2Value` 在玩家帳號／當前狀態下到底是多少，以及它由哪些技能或全局效果決定。
+
+這一項確認後，就能只靠玩家看到的 km/s 自動反推出遠征所需的內部 WalkSpd 值。
+
+---
+
+## 4. 遠征隊伍速度怎麼合成
+
+### 已確認
+
+`ExpeditionLevelLogic.CalcAverageWalkSpdLevel`
+ARM64 address: `0x2d07c48`
+
+對每名遠征英靈取得 WalkSpd 狀態值後：
+
+- 隊長權重 = 2
+- 每名隊員權重 = 1
 
 ```text
 Lavg =
-(2 × LeaderWalkSpdLevel + Σ MemberWalkSpdLevel)
+(2 × LeaderWalkSpd + Σ MemberWalkSpd)
 /
 (2 + MemberCount)
 ```
 
-舉例：
-
-隊長步行等級 20，3 名隊員分別 10、15、25：
-
-```text
-Lavg
-= (2×20 + 10 + 15 + 25) / (2 + 3)
-= 90 / 5
-= 18
-```
-
----
-
-## 3. 遠征步行倍率
-
-### 已確認
-
-`CalcAverageWalkSpdLevel` 接著使用：
+然後：
 
 ```text
 WalkSpeedMultiplier
-= 0.8 + (Lavg / 100) × 3.2
+=
+0.8 + (Lavg / 100) × 3.2
 ```
 
-二進位常數：
+二進位常數已確認：
 
-- base = `0.8`
-- range = `3.2`
-- divisor = `100`
+- 0.8
+- 3.2
+- 100
 
-前例 `Lavg = 18`：
+所以遠征真正的鏈是：
 
 ```text
-0.8 + (18 / 100) × 3.2
-= 1.376
+玩家面板 km/s
+→ 去除 Skill2Value 修正
+→ 反推 WalkSpd 狀態 L
+→ 隊長×2 / 隊員×1 加權
+→ 0.8 + (Lavg/100)×3.2
+→ Expedition WalkSpeedMultiplier
 ```
-
-所以：
-
-```text
-WalkSpeedMultiplier = 1.376
-```
-
-這個結果會寫入 `ExpeditionContext.<WalkSpeedMultiplier>k__BackingField`。
 
 ---
 
-## 4. 公式使用的是什麼角色值？
+## 5. 隊伍人數
 
-### 已確認
-
-`CalcAverageWalkSpdLevel` 對每名遠征角色呼叫：
+目前 DFCH V1 依實際遊戲編制需求固定 UI 為：
 
 ```text
-UniqueStatusData.GetTotalLevel(2)
+1 隊長 + 最多 11 隊員
 ```
 
-也就是遠征公式讀取的是角色內部的「步行速度狀態總等級」。
+不再使用角色面板上的 230 或其他耐力數值推算隊伍容量。
 
-### 尚未確認
+遊戲程式內確實另外存在：
 
-角色資訊畫面顯示例如：
+`BattlerParamCalculator.CalculatePartyMemberCount`
 
-```text
-0.577 km/s
-```
-
-目前尚不能直接證明：
-
-```text
-0.577 km/s == GetTotalLevel(2) 的某個簡單線性值
-```
-
-而且 `UniquePlayerParams.get_walkSpd` 還會取得基礎 walkSpd，再乘上一個百分比修正，因此：
-
-> **目前不能直接把面板 km/s 拿去套隊長 ×2、隊員 ×1 的公式。**
-
-V1 因此把兩欄分開：
-
-- 面板步行速度 km/s：玩家辨識角色用
-- 內部步行等級：目前用於官方公式驗證
-
-下一個逆向目標是：
-
-```text
-角色 Master / UniqueStatusData
-→ GetTotalLevel(2)
-→ GetActualValue
-→ UniquePlayerParams.get_walkSpd
-→ 面板 km/s
-```
-
-把這條鏈完全接起來後，網頁就不再需要手動輸入內部步行等級。
+以及 Leadership 相關邏輯，但這是另一條系統，不能把角色畫面上的耐力 230 當 Leadership。這部分目前不列入 V1 速度研究。
 
 ---
 
-## 5. 已實作到 DFCH
+## 6. DFCH V1 原則
 
-`speed.js` 目前提供：
+玩家只會看到：
 
-```js
-calcPartySlotCount(leadership)
-calcAverageWalkSpdLevel(leaderLevel, memberLevels)
-calcWalkSpeedMultiplier(averageWalkSpdLevel)
-calcPartyWalkSpeed({ leaderLevel, memberLevels })
-```
+- 角色名稱
+- 步行速度 km/s
+- 收集家技能
+- 神器開關
 
-UI：
+不會看到：
 
-- 1 隊長
-- 最多 11 隊員
-- 統率力
-- 面板 km/s
-- 內部步行等級
-- 官方加權平均
-- 官方 WalkSpeedMultiplier
+- WalkSpd internal level
+- GetTotalLevel
+- Skill2Value
+- Leadership 內部計算
+
+這些全部屬於模擬器內部實作。
 
 ---
 
-## 6. 下一步
+## 7. 下一步
 
-優先順序：
-
-1. 找到角色 Master 中「面板步行 km/s」的來源
-2. 確認 `GetTotalLevel(2)` 的所有加成來源
-3. 確認速度能力是否先加 level 或最後乘 actual speed
-4. 對照遊戲實際角色面板數字，例如 0.577 km/s
-5. 有足夠樣本後把手動「步行等級」欄位改成角色資料自動計算
+1. 追 `CharaManager.skill2Value` 初始化來源
+2. 找出哪些技能／神器／全局效果會改變 Skill2Value
+3. 用實際面板 0.577 km/s 等樣本反推並交叉驗證
+4. 完成 `visible km/s → WalkSpd L → Expedition Multiplier`
+5. 再把 V1 隊伍速度改成自動即時計算
