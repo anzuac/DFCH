@@ -142,7 +142,7 @@
     const roleBonus = selectedCollectorBonus();
     const artifactBonus = affectionGlasses.checked ? 30 : 0;
     artifactStateText.textContent = affectionGlasses.checked ? "擁有" : "未擁有";
-    affectionBonus.textContent = `角色 +${roleBonus}% · 神器 +${artifactBonus}%`;
+    affectionBonus.textContent = `角色 +${roleBonus}% · 神器 +${artifactBonus}% · 事件權重倍率 ×${window.DFCHAffection.ratio(roleBonus, artifactBonus).toFixed(4)}`;
 
     updateSpeedPreview();
   }
@@ -198,7 +198,7 @@
     const map = document.getElementById("mapSelect");
     const runs = document.getElementById("simulationCount");
     simulateMessage.textContent =
-      `V1：${map.options[map.selectedIndex].text} · ${runs.options[runs.selectedIndex].text}。隊伍上限與玩家可見速度欄位已固定；未加速面板速度已換算為遠征倍率；第一張地圖事件與掉落資料已接入檢視。探索配置：${window.DFCHMapConfig?.completionRate ?? 0}%。秒殺勝利模式已設定，完整事件重播與掉落抽選尚未接入。`;
+      `V1.1：${map.options[map.selectedIndex].text} · ${runs.options[runs.selectedIndex].text}。隊伍上限與玩家可見速度欄位已固定；未加速面板速度已換算為遠征倍率；第一張地圖事件與掉落資料已接入檢視。探索配置：${window.DFCHMapConfig?.completionRate ?? 0}%。秒殺勝利模式已設定，完整事件重播與掉落抽選尚未接入。`;
     simulateBtn.classList.add("clicked");
     window.setTimeout(() => simulateBtn.classList.remove("clicked"), 220);
   });

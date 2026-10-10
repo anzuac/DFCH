@@ -13,9 +13,9 @@
       <div>
         <p class="eyebrow">DFCH / Expedition Simulator</p>
         <h1>遠征模擬器</h1>
-        <p class="sub">V1 · 隊伍速度與第一張地圖官方資料已接入</p>
+        <p class="sub">V1.1 · 隊伍速度與第一張地圖官方資料已接入</p>
       </div>
-      <div class="version-pill">V1 UI</div>
+      <div class="version-pill">V1.1</div>
     </header>
 
     <nav class="tabs" aria-label="主功能">
@@ -65,6 +65,7 @@
               <div class="official-formula-card" id="mapOfficialData">
                 <strong id="mapDataTitle">官方地圖資料</strong>
                 <p id="mapDataSummary" aria-live="polite"></p>
+                <p>V1.1 核對進度：羈絆加成與數量規則已核對；整場事件抽選仍待接入。<a href="./docs/v1.1-audit.md" target="_blank" rel="noopener">查看完整核對記錄</a></p>
                 <p>模擬設定：遭遇敵人後立即勝利，戰鬥耗時 0 秒；保留遭遇、勝利掉落與後續事件。這是模擬器設定。</p>
                 <label class="field"><span><input type="checkbox" id="mapExplored100"> 地圖探索已達 100%</span></label>
                 <p id="mapExplorationSummary" aria-live="polite"></p>
@@ -305,7 +306,7 @@
 
                 <div class="drop-preview">
                   <span>指定道具統計</span>
-                  <p>V4 接入 28 種羈絆 rewardId 後顯示排行。</p>
+                  <p>第一張地圖已接入 3 種羈絆道具；整場掉落統計待事件引擎接入。</p>
                 </div>
               </div>
 
@@ -352,6 +353,7 @@
   </div>
 
   <script src="./speed.js"></script>
+  <script src="./affection.js"></script>
   <script src="./map-data.js"></script>
   <script src="./map-view.js"></script>
   <script src="./app.js"></script>

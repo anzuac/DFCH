@@ -73,9 +73,19 @@
     [...new Set(data.dropSamples.map(r=>r.dropItemSampleGroupId))].forEach(id=>{
       const unlock=data.completionRewards.find(r=>r.rewardType===5 && r.referenceId===id);
       const state=unlock?`（探索 ${unlock.requiredCompletionRate}% 解鎖；${rate>=unlock.requiredCompletionRate?'已達標':'未達標'}）`:'';
-      table(`${groupNames[id] || '物品獎勵'}${state}`,['掉落物','數量設定','原始權重'],data.dropSamples.filter(r=>r.dropItemSampleGroupId===id).map(r=>[r.rewardName,r.rewardId===-1?'無物品':r.maxValue===0?`${r.minValue}（原表上限為零，取量方式待核對）`:r.minValue===r.maxValue?String(r.minValue):`${r.minValue}–${r.maxValue}`,fmt(r.weight)]));
+      table(`${groupNames[id] || '物品獎勵'}${state}`,['掉落物','數量設定','原始權重'],data.dropSamples.filter(r=>r.dropItemSampleGroupId===id).map(r=>[r.rewardName,r.rewardId===-1?'無物品':r.maxValue===0?`${r.minValue}（固定）`:r.minValue===r.maxValue?String(r.minValue):`${r.minValue}–${r.maxValue}`,fmt(r.weight)]));
     });
-    table('怪物遭遇',['遭遇種類','怪物','原始權重','出現方式'],data.monsterSamples.map(r=>[r.battleEventId===data.master.basicBattleMonsterGroupId?'一般戰鬥':r.battleEventId===data.master.bossBattleGroupId?'地圖首領戰':'探索解鎖的禁斷遭遇',names[r.monsterId] || '特殊魔物',fmt(r.weight),r.isForceAppear?'強制出現':'依權重抽選']));
+    const affection = data.dropSamples.filter(r=>Math.floor(r.rewardId/1000000)===305);
+    const affectionWeight=affection.reduce((sum,r)=>sum+r.weight,0);
+    const pool=data.dropSamples.filter(r=>r.dropItemSampleGroupId===100170);
+    const poolWeight=pool.reduce((sum,r)=>sum+r.weight,0);
+    table('羈絆道具：第一張地圖', ['道具','取得途徑','數量','組內原始權重','原始組內比例'], affection.map(r=>[
+      r.rewardName,'野外贈禮事件',r.minValue,r.weight,`${(r.weight/poolWeight*100).toFixed(6)}%`
+    ]));
+    const note=document.createElement('p');note.className='unit-note';
+    note.textContent=`此組還包含無掉落，權重 ${pool.filter(r=>r.rewardId===-1).reduce((sum,r)=>sum+r.weight,0)}；羈絆道具總權重 ${affectionWeight}。這是該組已被抽選後、未套用其他修正的比例，不是每場遠征掉率。`;
+    target.appendChild(note);
+    table('怪物遭遇' ,['遭遇種類','怪物','原始權重','出現方式'],data.monsterSamples.map(r=>[r.battleEventId===data.master.basicBattleMonsterGroupId?'一般戰鬥':r.battleEventId===data.master.bossBattleGroupId?'地圖首領戰':'探索解鎖的禁斷遭遇',names[r.monsterId] || '特殊魔物',fmt(r.weight),r.isForceAppear?'強制出現':'依權重抽選']));
     table('探索率解鎖效果',['探索率門檻','獎勵效果','目前狀態'],data.completionRewards.map(r=>[`${r.requiredCompletionRate}%`,rewardDetail(r),rate>=r.requiredCompletionRate?'已達標':'尚未達標']));
   }
   select.addEventListener('change',render);explored.addEventListener('change',render);render();
