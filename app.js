@@ -151,6 +151,7 @@
       affectionBonus.textContent='請填入收集家 III 的有效等級（3–10）';
     } else affectionBonus.textContent = `角色 +${roleBonus}% · 神器 +${artifactBonus}% · 事件權重倍率 ×${window.DFCHAffection.ratio(roleBonus, artifactBonus).toFixed(4)}`;
 
+    window.DFCHDropPreview?.refresh(Number.isFinite(roleBonus) ? window.DFCHAffection.ratio(roleBonus, artifactBonus) : NaN);
     updateSpeedPreview();
   }
 

@@ -69,6 +69,20 @@
                 <p>模擬設定：遭遇敵人後立即勝利，戰鬥耗時 0 秒；保留遭遇、勝利掉落與後續事件。這是模擬器設定。</p>
                 <label class="field"><span><input type="checkbox" id="mapExplored100"> 地圖探索已達 100%</span></label>
                 <p id="mapExplorationSummary" aria-live="polite"></p>
+                <details>
+                  <summary>查看每日鑽石、神器持有與解鎖後的權重</summary>
+                  <p class="unit-note">以下為指定物品抽選已發生時的條件機率，保留原始掉落權重，只套用每日上限、神器滿級與基本池重抽。探索、限定神器加成及其他事件增權尚未合併，不能當成整場掉率。</p>
+                  <div class="field-grid two">
+                    <label class="field"><span>本次遠征開始前，當日一般鑽石累計</span><input id="dailyDiamondCount" type="number" min="0" step="1" value="0"></label>
+                    <label class="field"><span>查看抽選池</span><select id="dropPoolMode"><option value="basic">基本鑽石物品事件</option><option value="boss">首領合併掉落池（單次抽選）</option></select></label>
+                  </div>
+                  <div id="dropStateControls" class="field-grid two"></div>
+                  <label class="field"><span><input id="stoneUnlocked" type="checkbox"> 已解鎖此地圖秘石</span></label>
+                  <p id="dropStateSummary" aria-live="polite"></p>
+                  <div class="speed-table-scroll"><table class="speed-table"><thead><tr><th>物品</th><th>原始數量範圍</th><th>此抽選的條件機率</th></tr></thead><tbody id="dropStateRows"></tbody></table></div>
+                  <p id="flagStateSummary" aria-live="polite"></p>
+                  <p class="unit-note">神器持有未滿級仍可掉落；本輪待結算取得量也會參與滿級排除。神級鑽石不計入一般鑽石日上限。連續遠征需先結算持有與解鎖，再建立下一輪；跨日重置時刻仍待核對。</p>
+                </details>
                 <details id="mapDataDetails">
                   <summary>查看地圖事件、掉落與原始權重</summary>
                   <p class="unit-note">權重以易讀的小數顯示。權重不是固定百分比。技能、探索率、已取得獎勵與解鎖狀態可能改變候選池；以下保留官方原值。事件完整重播尚未接入。</p>
@@ -358,6 +372,8 @@
   <script src="./affection.js"></script>
   <script src="./expedition-rules.js"></script>
   <script src="./map-data.js"></script>
+  <script src="./drop-state.js"></script>
+  <script src="./drop-preview.js"></script>
   <script src="./map-view.js"></script>
   <script src="./app.js"></script>
 </body>
