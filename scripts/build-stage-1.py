@@ -9,6 +9,8 @@ completion=[r for r in load('ExpeditionCompletionRateRewardTable') if r['expedit
 groups=set(master['basicItemDropSampleGroupIds']+master['bossDropSampleGroupIds']+[master['basicBattleDropSampleGroupId']])-{0}
 groups|={int(r['args'][0]) for r in seq if r['functionType'] in [7,9]}
 groups|={r['referenceId'] for r in completion if r['rewardType']==5}
+zoneDungeons=[r for r in load('ExpeditionDungeonTable') if r['dungeonId']==9901]
+groups|={g for d in zoneDungeons for g in d['basicItemDropSampleGroupIds'] if g>0}
 drops=[r for r in load('ExpeditionDropItemSampleTable') if r['dropItemSampleGroupId'] in groups]
 monsterGroups={master['basicBattleMonsterGroupId'],master['bossBattleGroupId']}|{r['referenceId'] for r in completion if r['rewardType']==3}
 monsters=[r for r in load('ExpeditionMonsterSampleTable') if r['battleEventId'] in monsterGroups]
@@ -63,7 +65,7 @@ for abilityId in {a for row in templates for a in row['requiredAbilities'] if a}
  assert label,(abilityId,namekey)
  number=fieldsForName['numbering']
  abilityNames[str(abilityId)]=label+(f' {number}' if fieldsForName['autoNaming'] and number>0 else '')
-x={'schemaVersion' :1,'gameVersion':'3.16.0','name':local['expedition-dungeon-name-stage_1'],'master':master,'simulationPolicy':{'combat':'instant-victory','combatDurationSeconds':0,'preserveEncounter':True,'preserveVictoryRewards':True,'skipAttackSpeedAndDamage':True,'eventReplayImplemented':False},'abilityNames':abilityNames,'eventSamples':samples,'conditionalTemplates':templates,'eventSequences':seq,'completionRewards':completion,'dropSamples':drops,'dropEffects':effects,'flagUnlockSamples':flags,'monsterSamples':monsters,'monsterNames':monsterNames,'rewardMasters':rewardMasters,'buffs':load('ExpeditionBuffTable'),'buffEffects':load('ExpeditionBuffEffectTable'),'enums':load('enums'),'localization':localized,'notes':['原始 float32 以可回讀數值保留，weight 不是百分比。','條件式模板只有符合能力、進度與其他條件時才加入；不可全部無條件抽選。','部分事件由官方程式動態生成，不會出現在序列表；完整重播尚未接入。','寶箱內容權重與遠征取得寶箱權重屬於不同抽選階段。']}
+x={'schemaVersion' :1,'gameVersion':'3.16.0','name':local['expedition-dungeon-name-stage_1'],'master':master,'referenceDungeon':next(r for r in load('MainDungeonTable') if r['dungeonId']==master['referenceDungeonId']),'zoneDungeons':zoneDungeons,'collectorMasters':[r for r in load('UniqueSoldierAbilityTable-full') if r['key'] in ['sab_collector_1','sab_collector_2','sab_collector_3']],'affectionAbilityTypes':[r for r in load('AbilityTypeMasterTable') if r['key'] in [10512,10513]],'simulationPolicy':{'combat':'instant-victory','combatDurationSeconds':0,'preserveEncounter':True,'preserveVictoryRewards':True,'skipAttackSpeedAndDamage':True,'eventReplayImplemented':False},'abilityNames':abilityNames,'eventSamples':samples,'conditionalTemplates':templates,'eventSequences':seq,'completionRewards':completion,'dropSamples':drops,'dropEffects':effects,'flagUnlockSamples':flags,'monsterSamples':monsters,'monsterNames':monsterNames,'rewardMasters':rewardMasters,'buffs':load('ExpeditionBuffTable'),'buffEffects':load('ExpeditionBuffEffectTable'),'enums':load('enums'),'localization':localized,'notes':['原始 float32 以可回讀數值保留，weight 不是百分比。','條件式模板只有符合能力、進度與其他條件時才加入；不可全部無條件抽選。','部分事件由官方程式動態生成，不會出現在序列表；完整重播尚未接入。','寶箱內容權重與遠征取得寶箱權重屬於不同抽選階段。']}
 Path('DFCH/data').mkdir(exist_ok=True)
 s=json.dumps(x,ensure_ascii=False,separators=(',',':'))+'\n';Path('DFCH/data/stage-1.json').write_text(s)
 Path('DFCH/map-data.js').write_text('window.DFCHMapData = '+s.rstrip()+';\n')

@@ -14,7 +14,7 @@ class Element {
 const ids=Object.fromEntries(['mapSelect','mapExplored100','mapDataTables','mapDataDetails','mapDataTitle','mapDataSummary','mapExplorationSummary'].map(id=>[id,new Element()]));
 ids.mapSelect.value='stage_1';ids.mapExplored100.checked=false;
 global.document={getElementById:id=>ids[id],createElement:()=>new Element()};
-global.window={};require('../map-data.js');require('../map-view.js');
+global.window={};require('../expedition-rules.js');require('../map-data.js');require('../map-view.js');
 assert.equal(window.DFCHMapConfig.completionRate,0);
 assert.ok(ids.mapDataTables.text().includes('羈絆道具：第一張地圖'));
 for (const name of ['琥珀色的蜂蜜','獵人的煙斗葉','發光蘑菇']) assert.ok(ids.mapDataTables.text().includes(name));
@@ -24,6 +24,8 @@ assert.ok(ids.mapDataTables.text().includes('角色生命低於 90%'));
 assert.ok(!/requiredAbilities|GemBonusRate|100150|303000704|ItemDrop/.test(ids.mapDataTables.text()));
 ids.mapExplored100.checked=true;ids.mapExplored100.handlers.change();
 assert.equal(window.DFCHMapConfig.completionRate,100);
+assert.equal((ids.mapDataTables.text().match(/探索完成：排除/g)||[]).length,3);
+assert.ok(ids.mapDataTables.text().includes('鑽石增益區域獎勵'));
 assert.equal((ids.mapDataTables.text().match(/尚未達標/g)||[]).length,0);
 assert.ok(ids.mapExplorationSummary.text().includes('15 項'));
 ids.mapSelect.value='stage_2';ids.mapSelect.handlers.change();

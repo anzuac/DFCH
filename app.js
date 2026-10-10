@@ -45,14 +45,19 @@
   }
 
   function selectedCollectorBonus() {
-    const values = {
-      collector1: 1,
-      collector2: 2,
-      collector3: 10
-    };
-
-    return [...document.querySelectorAll(".ability-tag.active")]
-      .reduce((total, button) => total + (values[button.dataset.ability] || 0), 0);
+    const masters=window.DFCHMapData.collectorMasters;
+    let total=0;
+    for (const card of allUnitCards()) {
+      const level=Number(card.querySelector('.collector-level').value);
+      card.querySelectorAll('.ability-tag.active').forEach(button=>{
+        const index={collector1:0,collector2:1,collector3:2}[button.dataset.ability];
+        const n=index===2?level:index+1;
+        const value=window.DFCHAffection.collectorValue(masters[index],n);
+        if (value===null || index===2 && level<3) total=NaN;
+        else total+=value;
+      });
+    }
+    return total;
   }
 
   function updateSpeedPreview() {
@@ -142,7 +147,9 @@
     const roleBonus = selectedCollectorBonus();
     const artifactBonus = affectionGlasses.checked ? 30 : 0;
     artifactStateText.textContent = affectionGlasses.checked ? "擁有" : "未擁有";
-    affectionBonus.textContent = `角色 +${roleBonus}% · 神器 +${artifactBonus}% · 事件權重倍率 ×${window.DFCHAffection.ratio(roleBonus, artifactBonus).toFixed(4)}`;
+    if (!Number.isFinite(roleBonus)) {
+      affectionBonus.textContent='請填入收集家 III 的有效等級（3–10）';
+    } else affectionBonus.textContent = `角色 +${roleBonus}% · 神器 +${artifactBonus}% · 事件權重倍率 ×${window.DFCHAffection.ratio(roleBonus, artifactBonus).toFixed(4)}`;
 
     updateSpeedPreview();
   }

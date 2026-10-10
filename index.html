@@ -65,7 +65,7 @@
               <div class="official-formula-card" id="mapOfficialData">
                 <strong id="mapDataTitle">官方地圖資料</strong>
                 <p id="mapDataSummary" aria-live="polite"></p>
-                <p>V1.1 核對進度：羈絆加成與數量規則已核對；整場事件抽選仍待接入。<a href="./docs/v1.1-audit.md" target="_blank" rel="noopener">查看完整核對記錄</a></p>
+                <p>V1.1 核對進度：收集家等級、探索完成排除與體力規則已核對；整場事件抽選及地圖獎勵轉換仍待接入。<a href="./docs/v1.1-audit.md" target="_blank" rel="noopener">查看完整核對記錄</a></p>
                 <p>模擬設定：遭遇敵人後立即勝利，戰鬥耗時 0 秒；保留遭遇、勝利掉落與後續事件。這是模擬器設定。</p>
                 <label class="field"><span><input type="checkbox" id="mapExplored100"> 地圖探索已達 100%</span></label>
                 <p id="mapExplorationSummary" aria-live="polite"></p>
@@ -157,9 +157,10 @@
                     </div>
                     <p class="unit-note">請輸入未啟動步行加速技能時的面板速度。</p>
                     <div class="ability-tags">
-                      <button class="ability-tag" data-ability="collector1">收集家 I +1%</button>
-                      <button class="ability-tag" data-ability="collector2">收集家 II +2%</button>
-                      <button class="ability-tag active" data-ability="collector3">收集家 III +10%</button>
+                      <button class="ability-tag" data-ability="collector1">收集家 I +1%（未進化）</button>
+                      <button class="ability-tag" data-ability="collector2">收集家 II +2%（未進化）</button>
+                      <button class="ability-tag active" data-ability="collector3">收集家 III（依等級）</button>
+                      <label class="unit-note">收集家 III 等級 <input class="collector-level" type="number" min="3" max="10" step="1" value="10" aria-label="收集家 III 實際等級"></label>
                     </div>
                   </div>
                 </article>
@@ -192,9 +193,10 @@
                     </div>
                     <p class="unit-note">請輸入未啟動步行加速技能時的面板速度。</p>
                     <div class="ability-tags">
-                      <button class="ability-tag" data-ability="collector1">收集家 I +1%</button>
-                      <button class="ability-tag" data-ability="collector2">收集家 II +2%</button>
-                      <button class="ability-tag" data-ability="collector3">收集家 III +10%</button>
+                      <button class="ability-tag" data-ability="collector1">收集家 I +1%（未進化）</button>
+                      <button class="ability-tag" data-ability="collector2">收集家 II +2%（未進化）</button>
+                      <button class="ability-tag" data-ability="collector3">收集家 III（依等級）</button>
+                      <label class="unit-note">收集家 III 等級 <input class="collector-level" type="number" min="3" max="10" step="1" value="10" aria-label="收集家 III 實際等級"></label>
                     </div>
                   </div>
                 </article>
@@ -354,6 +356,7 @@
 
   <script src="./speed.js"></script>
   <script src="./affection.js"></script>
+  <script src="./expedition-rules.js"></script>
   <script src="./map-data.js"></script>
   <script src="./map-view.js"></script>
   <script src="./app.js"></script>
