@@ -25,7 +25,7 @@
         case 101:return `消耗耐力（設定值 ${v}）`;
         case 102:return `回復生命（設定值 ${v}）`;
         case 110:return `固定回復耐力 ${v}`;
-        case 109:return `探索率增加 ${v}`;
+        case 109:return `探索率增加約 ${fmt(Math.fround(Math.fround(Math.fround(Number(v))*60)/Math.max(data.master.depth,10))*2)} 個百分點（官方原始參數 ${v}）`;
         case 104:return '進入鑽石增益區域';
         case 7:return `抽選${groupNames[s.args[0]] || '對應物品獎勵'}`;
         case 8:return '顯示技能觸發';

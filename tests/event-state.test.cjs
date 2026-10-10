@@ -1,0 +1,23 @@
+const assert=require('node:assert/strict');global.window={};require('../event-state.js');
+const E=window.DFCHEventState,data=require('../data/stage-1.json');
+let s=E.begin(data,29);const ids=s.initialRewards.map(r=>r.id);
+s=E.explore(s,1,data);assert.equal(s.completionRate,31);assert.deepEqual(s.initialRewards.map(r=>r.id),ids);
+assert.ok(!s.initialRewards.some(r=>r.requiredCompletionRate===30));
+assert.ok(E.begin(data,s.completionRate).initialRewards.some(r=>r.requiredCompletionRate===30));
+assert.equal(E.currentBonus(E.begin(data,24),data,1),10);assert.equal(E.currentBonus(E.begin(data,26),data,1),25);
+assert.equal(E.explore(E.begin(data,99),1,data).completionRate,100);
+assert.ok(Math.abs(E.completionDelta(.1,60)-.2)<1e-7);assert.equal(E.completionDelta(.5,60),1);assert.equal(E.completionDelta(1,60),2);
+const rates=[],build=(id,rate)=>{rates.push(rate);return [id]};
+assert.deepEqual(E.combine(['base'],s,build,0,9901),['base',9901]);assert.deepEqual(E.combine(['base'],s,build,900,9901),[900]);
+assert.deepEqual(rates,[29,29]);assert.deepEqual(E.combine(['base'],s,build),['base']);
+assert.equal(E.zoneExpired(7,26,data.buffs[0]),false);assert.equal(E.zoneExpired(7,27,data.buffs[0]),true);
+let calls=0;const rng=()=>{calls++;return .2};assert.equal(E.progressDelta(1,1,false,rng),1);assert.equal(calls,1);
+assert.equal(E.progressDelta(1,.8,false,()=>.7),1);assert.equal(E.progressDelta(1,.8,false,()=>.9),0);
+assert.equal(E.progressDelta(2,4,true,()=>.3),2);
+assert.deepEqual(E.sequence(data,200).map(r=>r.functionType),[101,100,109,10]);assert.throws(()=>E.sequence(data,-123));
+(async()=>{
+ const log=[],rows=E.sequence(data,200);const handlers=Object.fromEntries(rows.map(r=>[r.functionType,async row=>log.push(row.functionType)]));
+ await E.execute(rows,handlers,{});assert.deepEqual(log,[101,100,109,10]);log.length=0;delete handlers[109];
+ await assert.rejects(()=>E.execute(rows,handlers,{}));assert.deepEqual(log,[]);
+ console.log('Event state: pools, snapshots, current bonus, expiry, RNG consumption and ordered execution passed');
+})().catch(e=>{console.error(e);process.exitCode=1});

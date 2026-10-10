@@ -15,9 +15,9 @@
 
 ## 解析涵蓋
 
-7 個共用事件、22 個條件模板、69 條有序指令、15 個探索率獎勵、61 個掉落樣本、13 個怪物樣本、16 個獎勵主資料；掉落 rewardId 全部能對應到名稱。模板共享事件 ID 時保留各自條件與權重。
+7 個共用事件、22 個條件模板、69 條有序指令、15 個探索率獎勵、67 個掉落樣本、13 個怪物樣本、16 個獎勵主資料；掉落 rewardId 全部能對應到名稱。模板共享事件 ID 時保留各自條件與權重。
 
-一般移動事件 1：ConsumeSp(5) → Progress(1) → WalkLog；事件 2：ConsumeSp(10) → Progress(2) → WalkLog。休息事件 3：HealHpPartyByRecoveryHp(5) → HealSpFixed(20) → Progress(1) → RestLog。探索率事件 200/201/202 各增加 0.1/0.5/1。區域事件 901 施加 buff 1（dia_fever）。這些只是序列，耐力消耗參數不能未追函式就稱為最終扣除量。
+一般移動事件 1：ConsumeSp(5) → Progress(1) → WalkLog；事件 2：ConsumeSp(10) → Progress(2) → WalkLog。休息事件 3：HealHpPartyByRecoveryHp(5) → HealSpFixed(20) → Progress(1) → RestLog。探索率事件 200/201/202 原始參數為 0.1/0.5/1；實際經地圖深度換算，第一張地圖約增加 0.2/1/2 個百分點。區域事件 901 施加 buff 1（dia_fever）。這些只是序列，耐力消耗參數不能未追函式就稱為最終扣除量。
 
 ## 掉落組對照
 
@@ -40,7 +40,7 @@
 | 1000052 | 1 | 100.0 |
 | 1000053 | 1 | 100.0 |
 
-以上加總是資料核對，不是全地圖掉率。不能把事件權重、群組內權重、稀有度處理、條件與連續掉落合成同一個固定百分比。探索率達標會加入額外掉落組與戰鬥組；技能模板也有各自 requiredAbilities、conditionTypes、conditionValues。minValue/maxValue 保留原值，包含 maxValue=0 的哨兵；其取量語意須由官方函式確認。
+以上加總是資料核對，不是全地圖掉率。不能把事件權重、群組內權重、稀有度處理、條件與連續掉落合成同一個固定百分比。額外掉落組與戰鬥組依本輪起始探索率生成，當輪跨門檻不重建；數量與限定增權另讀當輪探索率；技能模板也有各自 requiredAbilities、conditionTypes、conditionValues。minValue/maxValue 保留原值，包含 maxValue=0 的哨兵；其取量語意須由官方函式確認。
 
 ## 秒殺模式
 

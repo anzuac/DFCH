@@ -1,0 +1,174 @@
+{
+  "gameVersion": "3.16.0",
+  "staticSequenceRows": 69,
+  "functions": [
+    {
+      "functionType": 1,
+      "name": "MessageLog",
+      "executeAddress": "0x34b2278",
+      "serializedRows": 0,
+      "status": "entry-located-full-integration-pending"
+    },
+    {
+      "functionType": 2,
+      "name": "WalkLog",
+      "executeAddress": "0x34b39e4",
+      "serializedRows": 2,
+      "status": "entry-located-full-integration-pending"
+    },
+    {
+      "functionType": 3,
+      "name": "RestLog",
+      "executeAddress": "0x34b2a4c",
+      "serializedRows": 1,
+      "status": "entry-located-full-integration-pending"
+    },
+    {
+      "functionType": 4,
+      "name": "ZoneLog",
+      "executeAddress": "0x34b3b54",
+      "serializedRows": 1,
+      "status": "entry-located-full-integration-pending"
+    },
+    {
+      "functionType": 5,
+      "name": "TrapLog",
+      "executeAddress": "0x34b38d8",
+      "serializedRows": 0,
+      "status": "entry-located-full-integration-pending"
+    },
+    {
+      "functionType": 6,
+      "name": "Battle",
+      "executeAddress": "0x34ac678",
+      "serializedRows": 0,
+      "status": "instant-victory-policy"
+    },
+    {
+      "functionType": 7,
+      "name": "ItemDrop",
+      "executeAddress": "0x34afe58",
+      "serializedRows": 4,
+      "status": "entry-located-full-integration-pending"
+    },
+    {
+      "functionType": 8,
+      "name": "AbilityTriggerLog",
+      "executeAddress": "0x34ac0a0",
+      "serializedRows": 15,
+      "status": "entry-located-full-integration-pending"
+    },
+    {
+      "functionType": 9,
+      "name": "MultiItemDrop",
+      "executeAddress": "0x34b2378",
+      "serializedRows": 0,
+      "status": "entry-located-full-integration-pending"
+    },
+    {
+      "functionType": 10,
+      "name": "AddCompletionRateLog",
+      "executeAddress": "0x34ac550",
+      "serializedRows": 3,
+      "status": "entry-located-full-integration-pending"
+    },
+    {
+      "functionType": 100,
+      "name": "Progress",
+      "executeAddress": "0x34b2710",
+      "serializedRows": 21,
+      "status": "entry-located-full-integration-pending"
+    },
+    {
+      "functionType": 101,
+      "name": "ConsumeSp",
+      "executeAddress": "0x34ae328",
+      "serializedRows": 9,
+      "status": "entry-located-full-integration-pending"
+    },
+    {
+      "functionType": 102,
+      "name": "HealHpPartyByRecoveryHp",
+      "executeAddress": "0x34af79c",
+      "serializedRows": 1,
+      "status": "entry-located-full-integration-pending"
+    },
+    {
+      "functionType": 103,
+      "name": "HealSpByRecoverySp",
+      "executeAddress": "0x34afbcc",
+      "serializedRows": 0,
+      "status": "entry-located-full-integration-pending"
+    },
+    {
+      "functionType": 104,
+      "name": "SetZoneBuff",
+      "executeAddress": "0x34b2c4c",
+      "serializedRows": 1,
+      "status": "entry-located-full-integration-pending"
+    },
+    {
+      "functionType": 105,
+      "name": "DamageHpPartyPerMaxHp",
+      "executeAddress": "0x34ae86c",
+      "serializedRows": 0,
+      "status": "entry-located-full-integration-pending"
+    },
+    {
+      "functionType": 106,
+      "name": "DamageSpPerMaxSp",
+      "executeAddress": "0x34aec74",
+      "serializedRows": 0,
+      "status": "entry-located-full-integration-pending"
+    },
+    {
+      "functionType": 107,
+      "name": "Warp",
+      "executeAddress": "0x34b3aec",
+      "serializedRows": 0,
+      "status": "entry-located-full-integration-pending"
+    },
+    {
+      "functionType": 108,
+      "name": "SetMonsterGroup",
+      "executeAddress": "0x34b2b54",
+      "serializedRows": 0,
+      "status": "entry-located-full-integration-pending"
+    },
+    {
+      "functionType": 109,
+      "name": "AddCompletionRate",
+      "executeAddress": "0x34ac3e4",
+      "serializedRows": 3,
+      "status": "entry-located-full-integration-pending"
+    },
+    {
+      "functionType": 110,
+      "name": "HealSpFixed",
+      "executeAddress": "0x34afd1c",
+      "serializedRows": 8,
+      "status": "entry-located-full-integration-pending"
+    },
+    {
+      "functionType": 111,
+      "name": "TrapAttackSingle",
+      "executeAddress": "0x34b335c",
+      "serializedRows": 0,
+      "status": "entry-located-full-integration-pending"
+    },
+    {
+      "functionType": 112,
+      "name": "TrapAttackAll",
+      "executeAddress": "0x34b2fd8",
+      "serializedRows": 0,
+      "status": "entry-located-full-integration-pending"
+    },
+    {
+      "functionType": 11,
+      "name": "FlagUnlock",
+      "executeAddress": "0x34aecdc",
+      "serializedRows": 0,
+      "status": "entry-located-full-integration-pending"
+    }
+  ]
+}
