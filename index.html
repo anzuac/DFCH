@@ -83,23 +83,23 @@
                   <strong id="leaderName">露娜</strong>
                 </div>
                 <div>
-                  <span>遠征步行倍率</span>
-                  <strong id="partySpeed">待填步行等級</strong>
+                  <span>隊伍速度換算</span>
+                  <strong id="partySpeed">解析中</strong>
                 </div>
               </div>
 
               <div class="official-formula-card">
                 <div>
-                  <span class="formula-kicker">官方公式 · 3.16.0 IL2CPP 已確認</span>
-                  <strong>隊長速度權重 ×2，隊員 ×1</strong>
-                  <p id="speedFormulaText">Lavg = (2×隊長步行等級 + Σ隊員步行等級) ÷ (2 + 隊員數)</p>
-                  <p>WalkSpeedMultiplier = 0.8 + (Lavg ÷ 100) × 3.2</p>
+                  <span class="formula-kicker">官方換算鏈 · 3.16.0 IL2CPP</span>
+                  <strong>玩家只需要面板步行速度 km/s</strong>
+                  <p>面板步行 = 角色基礎步行值 × Skill2Value ÷ 100</p>
+                  <p>遠征內部再以角色 WalkSpd 狀態值計算隊長 ×2、隊員 ×1 的加權結果。</p>
                 </div>
                 <div class="formula-result">
-                  <span>加權平均 Lv</span>
-                  <b id="averageWalkLevel">—</b>
-                  <span>倍率</span>
-                  <b id="walkMultiplier">—</b>
+                  <span>目前進度</span>
+                  <b>Skill2Value 來源解析中</b>
+                  <span>UI 輸入</span>
+                  <b>只用 km/s</b>
                 </div>
               </div>
 
@@ -114,22 +114,12 @@
                     </div>
                     <div class="unit-stat-grid">
                       <label class="speed-line">
-                        <span>面板步行</span>
+                        <span>步行速度</span>
                         <input class="speed-input" type="number" inputmode="decimal" step="0.001" min="0" value="0.577" />
                         <em>km/s</em>
                       </label>
-                      <label class="speed-line internal-level-line">
-                        <span>步行等級</span>
-                        <input class="walk-level-input" type="number" inputmode="decimal" step="0.01" min="0" placeholder="官方內部值" />
-                        <em>Lv</em>
-                      </label>
-                      <label class="speed-line leadership-line">
-                        <span>統率力</span>
-                        <input id="leaderLeadership" class="leadership-input" type="number" inputmode="numeric" step="1" min="0" value="230" />
-                        <em>→ <b id="slotCountPreview">12</b> 人</em>
-                      </label>
                     </div>
-                    <p class="unit-note">遠征公式使用內部「步行等級」，不是直接平均畫面上的 km/s。</p>
+                    <p class="unit-note">只輸入遊戲角色面板看得到的步行速度；內部換算由模擬器處理。</p>
                     <div class="ability-tags">
                       <button class="ability-tag" data-ability="collector1">收集家 I +1%</button>
                       <button class="ability-tag" data-ability="collector2">收集家 II +2%</button>
@@ -142,7 +132,7 @@
               <div class="members-head">
                 <div>
                   <p class="section-label">隊員</p>
-                  <small id="memberLimitText">目前可編制 11 名隊員（1 隊長 + 11 隊員）</small>
+                  <small id="memberLimitText">上限：1 隊長 + 11 隊員</small>
                 </div>
                 <button class="text-btn" id="addMemberBtn">＋ 新增隊員</button>
               </div>
@@ -159,17 +149,12 @@
                     </div>
                     <div class="unit-stat-grid">
                       <label class="speed-line">
-                        <span>面板步行</span>
+                        <span>步行速度</span>
                         <input class="speed-input" type="number" inputmode="decimal" step="0.001" min="0" value="0.500" />
                         <em>km/s</em>
                       </label>
-                      <label class="speed-line internal-level-line">
-                        <span>步行等級</span>
-                        <input class="walk-level-input" type="number" inputmode="decimal" step="0.01" min="0" placeholder="官方內部值" />
-                        <em>Lv</em>
-                      </label>
                     </div>
-                    <p class="unit-note">隊員在官方速度公式中的權重為 ×1。</p>
+                    <p class="unit-note">只輸入遊戲面板的 km/s；不顯示任何內部等級。</p>
                     <div class="ability-tags">
                       <button class="ability-tag" data-ability="collector1">收集家 I +1%</button>
                       <button class="ability-tag" data-ability="collector2">收集家 II +2%</button>
@@ -315,7 +300,7 @@
             </article>
             <article class="roadmap-item">
               <span>V2</span>
-              <div><strong>英靈速度</strong><p>核心公式已於 V1 先接入；下一步補齊面板 km/s ↔ 內部步行等級的角色資料映射。</p></div>
+              <div><strong>英靈速度</strong><p>追完整面板 km/s → 內部 WalkSpd → 隊伍遠征倍率的官方換算；玩家端只保留 km/s。</p></div>
             </article>
             <article class="roadmap-item">
               <span>V3</span>
