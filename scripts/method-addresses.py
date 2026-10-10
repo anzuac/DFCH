@@ -1,4 +1,4 @@
-"""Resolve this build's metadata methods through ELF RELA, including abstract gaps."""
+"""Resolve Assembly-CSharp methods only; other codegen modules have separate pointer arrays."""
 import struct, os
 from pathlib import Path
 M=Path(os.environ.get('DFCH_METADATA_PATH','research/assets/bin/Data/Managed/Metadata/global-metadata.dat')).read_bytes()
@@ -13,7 +13,12 @@ for i in range(struct.unpack_from('<H',B,60)[0]):
  if s[1]==4:
   for off,info,val in struct.iter_unpack('<QQq',B[s[4]:s[4]+s[5]]):
    if info==1027:rel[off]=val
-def addr(j):return rel.get(base+j*8,0)
+def addr(j):
+ v=struct.unpack_from('<9I',M,3959024+j*36)
+ # ImageDefinition for this build: Assembly-CSharp.dll types [0, 6312).
+ if v[1]>=6312:
+  raise ValueError('Address mapping supports Assembly-CSharp.dll only; trace external callsites for other modules')
+ return rel.get(base+j*8,0)
 def method(j):
  v=struct.unpack_from('<9I',M,3959024+j*36)
  t=struct.unpack_from('<22I',M,14263744+v[1]*88)

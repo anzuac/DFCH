@@ -218,10 +218,22 @@
   affectionGlasses.addEventListener("change", updateSummary);
 
   simulateBtn.addEventListener("click", () => {
-    const map = document.getElementById("mapSelect");
-    const runs = document.getElementById("simulationCount");
-    simulateMessage.textContent =
-      `V1.1：${map.options[map.selectedIndex].text} · ${runs.options[runs.selectedIndex].text}。隊伍上限與玩家可見速度欄位已固定；未加速面板速度已換算為遠征倍率；第一張地圖事件與掉落資料已接入檢視。探索配置：${window.DFCHMapConfig?.completionRate ?? 0}%。秒殺勝利模式已設定，完整事件重播與掉落抽選尚未接入。耐力配置：${window.DFCHStaminaConfig.mode === "unlimited" ? "無限" : window.DFCHStaminaConfig.maximum}。`;
+    try {
+      if(document.getElementById("mapSelect").value!=="stage_1")throw new Error("目前只抽取第一張地圖的資料。");
+      const input=document.getElementById("simulationSeed").value;
+      if(input.trim()==="")throw new Error("請輸入重播種子。");
+      const seed=Number(input);
+      const context=window.DFCHSimulationRuntime.initialize(window.DFCHMapData,{
+        seed,completionRate:window.DFCHMapConfig?.completionRate??0,
+        stamina:window.DFCHStaminaConfig
+      });
+      const report=window.DFCHSimulationRuntime.preflight(window.DFCHMapData);
+      const missingHandlers=report.missing.filter(s=>s.startsWith("事件處理"));
+      const missingStages=report.missing.filter(s=>!s.startsWith("事件處理"));
+      simulateMessage.textContent=`種子 ${context.seed} 初始化成功（尚未消耗亂數）。完整模擬尚未啟用：${missingHandlers.length} 種事件處理尚未串接；${missingStages.join("；")}。此次沒有執行遠征或產生掉落結果。`;
+    } catch(error) {
+      simulateMessage.textContent=`無法初始化：${error.message}`;
+    }
     simulateBtn.classList.add("clicked");
     window.setTimeout(() => simulateBtn.classList.remove("clicked"), 220);
   });

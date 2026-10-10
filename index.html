@@ -285,12 +285,14 @@
                 <label class="field" id="staminaValueField" hidden><span>每輪隊伍起始／最大耐力</span><input id="staminaValue" type="number" min="1" step="1" value="300" inputmode="numeric" disabled></label>
               </div>
               <p class="helper" id="staminaSummary" aria-live="polite"></p>
+              <label class="field"><span>重播種子（有號 32 位整數）</span><input id="simulationSeed" type="number" min="-2147483648" max="2147483647" step="1" value="42" inputmode="numeric"></label>
+              <p class="helper">用來重播相同亂數序列；官方儲存的加密種子另須解碼。同種子仍須相同完整狀態及呼叫順序，才能得到相同事件。</p>
               <p class="unit-note">自行輸入的是隊伍耐力總額。每輪以此值開始，消耗降至 0 時結束；恢復不超過最大值。無限耐力略過耐力消耗與耗盡判定，仍保留地圖進度及終點事件。</p>
               <button class="primary-btn" id="simulateBtn">
                 <span>開始模擬</span>
-                <small>目前為 UI 預覽</small>
+                <small>檢查串接；完整引擎尚未啟用</small>
               </button>
-              <p class="helper" id="simulateMessage">V1 不執行事件抽選；按鈕只用來確認操作流程。</p>
+              <p class="helper" id="simulateMessage">官方亂數已接入；完整事件串接未通過前，不產生模擬結果。</p>
             </section>
           </div>
 
@@ -382,10 +384,12 @@
   <script src="./stamina.js"></script>
   <script src="./event-state.js"></script>
   <script src="./lottery.js"></script>
+  <script src="./random.js"></script>
   <script src="./map-data.js"></script>
   <script src="./drop-state.js"></script>
   <script src="./drop-preview.js"></script>
   <script src="./map-view.js"></script>
+  <script src="./simulation-runtime.js"></script>
   <script src="./app.js"></script>
 </body>
 </html>
