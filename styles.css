@@ -1012,3 +1012,19 @@ select:disabled {
 .speed-details[hidden] { display: none; }
 .speed-details-button { padding: 12px 20px; border: 1px solid #54706c; border-radius: 12px; }
 .speed-details-button:focus-visible { outline: 2px solid #9edbd2; outline-offset: 3px; }
+
+/* Keep wide tables inside the map card, with a dedicated mobile scroll area. */
+#mapOfficialData > * { min-width: 0; max-width: 100%; grid-column: 1 / -1; }
+#mapOfficialData details { width: 100%; min-width: 0; overflow-wrap: anywhere; }
+#mapOfficialData summary { cursor: pointer; padding: 12px 0; }
+.map-detail-scroll {
+  max-height: 65vh;
+  max-height: 65dvh;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-x pan-y;
+  padding: 0 4px 12px 0;
+}
+.map-detail-scroll:focus-visible { outline: 2px solid var(--teal); outline-offset: 2px; }
+.speed-table-scroll { min-width: 0; width: 100%; -webkit-overflow-scrolling: touch; }
+#staminaValueField[hidden] { display: none; }

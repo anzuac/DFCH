@@ -1,0 +1,12 @@
+const assert=require('node:assert/strict');global.window={};require('../stamina.js');
+const S=window.DFCHStamina;
+let state=S.start(S.configure('manual','300'));
+state=S.change(state,-301);assert.equal(state.current,0);assert.equal(S.exhausted(state),true);
+state=S.change(state,20);assert.equal(state.current,20);assert.equal(S.exhausted(state),false);
+assert.equal(S.change(state,500).current,300);
+assert.equal(S.start(S.configure('manual',300)).current,300);
+state=S.start(S.configure('unlimited',''));state=S.change(state,-1000000);
+assert.equal(state.current,null);assert.equal(S.exhausted(state),false);
+assert.equal(JSON.parse(JSON.stringify(state)).current,null);
+for(const input of ['',0,-1,1.5,'NaN'])assert.equal(S.configure('manual',input).ready,false);
+console.log('Stamina mode, depletion, recovery and per-run reset checks passed');

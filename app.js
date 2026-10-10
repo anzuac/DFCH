@@ -18,6 +18,21 @@
   const simulateBtn = document.getElementById("simulateBtn");
   const simulateMessage = document.getElementById("simulateMessage");
 
+  const staminaMode = document.getElementById("staminaMode");
+  const staminaValue = document.getElementById("staminaValue");
+  function updateStamina() {
+    const manual = staminaMode.value === "manual";
+    document.getElementById("staminaValueField").hidden = !manual;
+    staminaValue.disabled = !manual;
+    const config = window.DFCHStamina.configure(staminaMode.value, staminaValue.value);
+    window.DFCHStaminaConfig = config;
+    document.getElementById("staminaSummary").textContent = !config.ready ? config.error : manual ? `每輪隊伍耐力：${config.maximum}，恢復上限相同。` : "無限耐力：不會因耐力耗盡而結束遠征。";
+    simulateBtn.disabled = !config.ready;
+  }
+  staminaMode.addEventListener("change", updateStamina);
+  staminaValue.addEventListener("input", updateStamina);
+  updateStamina();
+
   const speedDetailsBtn = document.getElementById("speedDetailsBtn");
   const speedDetailsPanel = document.getElementById("speedDetailsPanel");
   speedDetailsBtn.addEventListener("click", () => {
@@ -206,7 +221,7 @@
     const map = document.getElementById("mapSelect");
     const runs = document.getElementById("simulationCount");
     simulateMessage.textContent =
-      `V1.1：${map.options[map.selectedIndex].text} · ${runs.options[runs.selectedIndex].text}。隊伍上限與玩家可見速度欄位已固定；未加速面板速度已換算為遠征倍率；第一張地圖事件與掉落資料已接入檢視。探索配置：${window.DFCHMapConfig?.completionRate ?? 0}%。秒殺勝利模式已設定，完整事件重播與掉落抽選尚未接入。`;
+      `V1.1：${map.options[map.selectedIndex].text} · ${runs.options[runs.selectedIndex].text}。隊伍上限與玩家可見速度欄位已固定；未加速面板速度已換算為遠征倍率；第一張地圖事件與掉落資料已接入檢視。探索配置：${window.DFCHMapConfig?.completionRate ?? 0}%。秒殺勝利模式已設定，完整事件重播與掉落抽選尚未接入。耐力配置：${window.DFCHStaminaConfig.mode === "unlimited" ? "無限" : window.DFCHStaminaConfig.maximum}。`;
     simulateBtn.classList.add("clicked");
     window.setTimeout(() => simulateBtn.classList.remove("clicked"), 220);
   });
