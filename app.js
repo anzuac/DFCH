@@ -198,7 +198,7 @@
     const map = document.getElementById("mapSelect");
     const runs = document.getElementById("simulationCount");
     simulateMessage.textContent =
-      `V1：${map.options[map.selectedIndex].text} · ${runs.options[runs.selectedIndex].text}。隊伍上限與玩家可見速度欄位已固定；未加速面板速度已換算為遠征倍率；地圖時間與掉落引擎尚未接入。`;
+      `V1：${map.options[map.selectedIndex].text} · ${runs.options[runs.selectedIndex].text}。隊伍上限與玩家可見速度欄位已固定；未加速面板速度已換算為遠征倍率；第一張地圖事件與掉落資料已接入檢視。秒殺勝利模式已設定，完整事件重播與掉落抽選尚未接入。`;
     simulateBtn.classList.add("clicked");
     window.setTimeout(() => simulateBtn.classList.remove("clicked"), 220);
   });

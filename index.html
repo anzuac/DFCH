@@ -13,7 +13,7 @@
       <div>
         <p class="eyebrow">DFCH / Expedition Simulator</p>
         <h1>遠征模擬器</h1>
-        <p class="sub">V1 · 官方遠征編制與速度公式已開始接入；地圖與權重後續逐版補齊</p>
+        <p class="sub">V1 · 隊伍速度與第一張地圖官方資料已接入</p>
       </div>
       <div class="version-pill">V1 UI</div>
     </header>
@@ -34,7 +34,7 @@
                   <span class="step-badge">01</span>
                   <h2>遠征地圖</h2>
                 </div>
-                <span class="status-chip neutral">V3 接地圖邏輯</span>
+                <span class="status-chip neutral">第一張地圖資料已解析</span>
               </div>
 
               <div class="field-grid two">
@@ -59,8 +59,19 @@
 
                 <div class="field readout">
                   <span>目前版本</span>
-                  <strong>僅 UI，不計算遠征時間</strong>
+                  <strong>地圖資料預覽，事件重播待接入</strong>
                 </div>
+              </div>
+              <div class="official-formula-card" id="mapOfficialData">
+                <strong id="mapDataTitle">官方地圖資料</strong>
+                <p id="mapDataSummary" aria-live="polite"></p>
+                <p>模擬設定：遭遇敵人後立即勝利，戰鬥耗時 0 秒；保留遭遇、勝利掉落與後續事件。這是模擬器設定。</p>
+                <details id="mapDataDetails">
+                  <summary>查看地圖事件、掉落與原始權重</summary>
+                  <p class="unit-note">權重不是固定百分比。技能、探索率、已取得獎勵與解鎖狀態可能改變候選池；以下保留官方原值。事件完整重播尚未接入。</p>
+                  <div id="mapDataTables"></div>
+                  <p><a href="./data/stage-1.json" download>下載第一張地圖完整解析資料 JSON</a></p>
+                </details>
               </div>
             </section>
 
@@ -339,6 +350,8 @@
   </div>
 
   <script src="./speed.js"></script>
+  <script src="./map-data.js"></script>
+  <script src="./map-view.js"></script>
   <script src="./app.js"></script>
 </body>
 </html>
