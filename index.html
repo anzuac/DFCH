@@ -13,7 +13,7 @@
       <div>
         <p class="eyebrow">DFCH / Expedition Simulator</p>
         <h1>遠征模擬器</h1>
-        <p class="sub">V1 UI Prototype · 先做介面，速度 / 地圖 / 權重之後逐版接入</p>
+        <p class="sub">V1 · 官方遠征編制與速度公式已開始接入；地圖與權重後續逐版補齊</p>
       </div>
       <div class="version-pill">V1 UI</div>
     </header>
@@ -75,16 +75,31 @@
 
               <div class="party-summary">
                 <div>
-                  <span>隊伍人數</span>
-                  <strong id="partyCount">1</strong>
+                  <span>隊伍編制</span>
+                  <strong id="partyCount">1 / 12</strong>
                 </div>
                 <div>
                   <span>隊長</span>
                   <strong id="leaderName">露娜</strong>
                 </div>
                 <div>
-                  <span>隊伍步行速度</span>
-                  <strong id="partySpeed">待解析</strong>
+                  <span>遠征步行倍率</span>
+                  <strong id="partySpeed">待填步行等級</strong>
+                </div>
+              </div>
+
+              <div class="official-formula-card">
+                <div>
+                  <span class="formula-kicker">官方公式 · 3.16.0 IL2CPP 已確認</span>
+                  <strong>隊長速度權重 ×2，隊員 ×1</strong>
+                  <p id="speedFormulaText">Lavg = (2×隊長步行等級 + Σ隊員步行等級) ÷ (2 + 隊員數)</p>
+                  <p>WalkSpeedMultiplier = 0.8 + (Lavg ÷ 100) × 3.2</p>
+                </div>
+                <div class="formula-result">
+                  <span>加權平均 Lv</span>
+                  <b id="averageWalkLevel">—</b>
+                  <span>倍率</span>
+                  <b id="walkMultiplier">—</b>
                 </div>
               </div>
 
@@ -97,11 +112,24 @@
                       <input class="unit-name" value="露娜" aria-label="隊長名稱" />
                       <span class="leader-tag">LEADER</span>
                     </div>
-                    <label class="speed-line">
-                      <span>步行速度</span>
-                      <input class="speed-input" type="number" inputmode="decimal" step="0.001" min="0" value="0.577" />
-                      <em>km/s</em>
-                    </label>
+                    <div class="unit-stat-grid">
+                      <label class="speed-line">
+                        <span>面板步行</span>
+                        <input class="speed-input" type="number" inputmode="decimal" step="0.001" min="0" value="0.577" />
+                        <em>km/s</em>
+                      </label>
+                      <label class="speed-line internal-level-line">
+                        <span>步行等級</span>
+                        <input class="walk-level-input" type="number" inputmode="decimal" step="0.01" min="0" placeholder="官方內部值" />
+                        <em>Lv</em>
+                      </label>
+                      <label class="speed-line leadership-line">
+                        <span>統率力</span>
+                        <input id="leaderLeadership" class="leadership-input" type="number" inputmode="numeric" step="1" min="0" value="230" />
+                        <em>→ <b id="slotCountPreview">12</b> 人</em>
+                      </label>
+                    </div>
+                    <p class="unit-note">遠征公式使用內部「步行等級」，不是直接平均畫面上的 km/s。</p>
                     <div class="ability-tags">
                       <button class="ability-tag" data-ability="collector1">收集家 I +1%</button>
                       <button class="ability-tag" data-ability="collector2">收集家 II +2%</button>
@@ -112,7 +140,10 @@
               </div>
 
               <div class="members-head">
-                <p class="section-label">隊員</p>
+                <div>
+                  <p class="section-label">隊員</p>
+                  <small id="memberLimitText">目前可編制 11 名隊員（1 隊長 + 11 隊員）</small>
+                </div>
                 <button class="text-btn" id="addMemberBtn">＋ 新增隊員</button>
               </div>
 
@@ -126,11 +157,19 @@
                       <input class="unit-name" value="隊員" aria-label="隊員名稱" />
                       <button class="icon-btn remove-member" title="移除隊員">×</button>
                     </div>
-                    <label class="speed-line">
-                      <span>步行速度</span>
-                      <input class="speed-input" type="number" inputmode="decimal" step="0.001" min="0" value="0.500" />
-                      <em>km/s</em>
-                    </label>
+                    <div class="unit-stat-grid">
+                      <label class="speed-line">
+                        <span>面板步行</span>
+                        <input class="speed-input" type="number" inputmode="decimal" step="0.001" min="0" value="0.500" />
+                        <em>km/s</em>
+                      </label>
+                      <label class="speed-line internal-level-line">
+                        <span>步行等級</span>
+                        <input class="walk-level-input" type="number" inputmode="decimal" step="0.01" min="0" placeholder="官方內部值" />
+                        <em>Lv</em>
+                      </label>
+                    </div>
+                    <p class="unit-note">隊員在官方速度公式中的權重為 ×1。</p>
                     <div class="ability-tags">
                       <button class="ability-tag" data-ability="collector1">收集家 I +1%</button>
                       <button class="ability-tag" data-ability="collector2">收集家 II +2%</button>
@@ -150,15 +189,21 @@
                 <span class="status-chip neutral">V4 接正式公式</span>
               </div>
 
-              <label class="artifact-card">
-                <input id="affectionGlasses" type="checkbox" checked />
+              <div class="artifact-card">
                 <span class="artifact-icon">◎</span>
                 <span>
                   <strong>觀緣眼鏡</strong>
                   <small>遠征時羈絆道具掉落率提升 30%</small>
                 </span>
+                <div class="artifact-toggle-wrap">
+                  <span id="artifactStateText">擁有</span>
+                  <label class="switch" aria-label="是否擁有觀緣眼鏡">
+                    <input id="affectionGlasses" type="checkbox" checked />
+                    <span class="slider"></span>
+                  </label>
+                </div>
                 <b>+30%</b>
-              </label>
+              </div>
 
               <div class="bonus-readout">
                 <span>目前 UI 選取的羈絆加成</span>
@@ -270,7 +315,7 @@
             </article>
             <article class="roadmap-item">
               <span>V2</span>
-              <div><strong>英靈速度</strong><p>解析隊長與大量隊員的官方隊伍步行速度公式。</p></div>
+              <div><strong>英靈速度</strong><p>核心公式已於 V1 先接入；下一步補齊面板 km/s ↔ 內部步行等級的角色資料映射。</p></div>
             </article>
             <article class="roadmap-item">
               <span>V3</span>
@@ -286,6 +331,7 @@
     </main>
   </div>
 
+  <script src="./speed.js"></script>
   <script src="./app.js"></script>
 </body>
 </html>
