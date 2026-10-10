@@ -1008,3 +1008,7 @@ select:disabled {
 .speed-table th, .speed-table td { text-align: left; padding: 12px 10px; border-bottom: 1px solid #354449; white-space: nowrap; }
 .speed-table th { color: #9edbd2; }
 #speedCalculation, #speedPrecision { overflow-wrap: anywhere; }
+
+.speed-details[hidden] { display: none; }
+.speed-details-button { padding: 12px 20px; border: 1px solid #54706c; border-radius: 12px; }
+.speed-details-button:focus-visible { outline: 2px solid #9edbd2; outline-offset: 3px; }

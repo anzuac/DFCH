@@ -101,19 +101,20 @@
                   <span>結果單位</span>
                   <b>遠征速度倍率（×）</b>
                 </div>
-                <details class="speed-details">
-                  <summary>詳細資訊：隊長與各隊員的實際換算</summary>
+                <button type="button" id="speedDetailsBtn" class="text-btn speed-details-button" aria-expanded="false" aria-controls="speedDetailsPanel">詳細資訊</button>
+                <section class="speed-details" id="speedDetailsPanel" hidden aria-label="隊伍速度換算明細">
+                  <strong>每位角色的速度換算</strong>
                   <p>未加速時面板速度等於基礎步行速度。小於 0.750：L = (速度 − 0.05) ÷ 0.00875；其餘：L = 80 + (速度 − 0.75) ÷ 0.0035175872035324574。</p>
                   <div class="speed-table-scroll">
                     <table class="speed-table">
-                      <thead><tr><th>角色</th><th>面板速度</th><th>反推步行值 L</th><th>權重</th><th>加權值</th><th>平均值貢獻</th></tr></thead>
+                      <thead><tr><th>角色</th><th>面板速度</th><th>反推步行值 L</th><th>個體遠征倍率</th><th>權重</th><th>加權值</th><th>平均值貢獻</th></tr></thead>
                       <tbody id="speedDetailRows"></tbody>
                     </table>
                   </div>
                   <p id="speedCalculation"></p>
                   <p id="speedPrecision" class="unit-note"></p>
-                  <p class="unit-note">倍率不是隊伍 km/s；地圖時間還需要地圖進度及事件耗時。收集家與觀緣眼鏡目前屬於掉落配置，不加到速度中。</p>
-                </details>
+                  <p class="unit-note">個體遠征倍率 = 0.8 + (個體 L ÷ 100) × 3.2，代表該角色單獨作為隊伍時的倍率；不能把每人的倍率相加。倍率不是隊伍 km/s；地圖時間還需要地圖進度及事件耗時。收集家與觀緣眼鏡目前屬於掉落配置，不加到速度中。</p>
+                </section>
               </div>
 
               <div class="leader-wrap">

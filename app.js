@@ -18,6 +18,15 @@
   const simulateBtn = document.getElementById("simulateBtn");
   const simulateMessage = document.getElementById("simulateMessage");
 
+  const speedDetailsBtn = document.getElementById("speedDetailsBtn");
+  const speedDetailsPanel = document.getElementById("speedDetailsPanel");
+  speedDetailsBtn.addEventListener("click", () => {
+    const expanded = speedDetailsBtn.getAttribute("aria-expanded") !== "true";
+    speedDetailsBtn.setAttribute("aria-expanded", String(expanded));
+    speedDetailsPanel.hidden = !expanded;
+    speedDetailsBtn.textContent = expanded ? "收起詳細資訊" : "詳細資訊";
+  });
+
   function activateTab(name) {
     tabs.forEach((tab) => tab.classList.toggle("active", tab.dataset.tab === name));
     panels.forEach((panel) => panel.classList.toggle("active", panel.id === `tab-${name}`));
@@ -73,7 +82,8 @@
       const weight = index === 0 ? 2 : 1;
       const name = card.querySelector(".unit-name").value.trim() || "未命名";
       const values = [index === 0 ? `隊長：${name}` : `隊員 ${index}：${name}`,
-        `${Number(speeds[index]).toFixed(3)} km/s`, f(levels[index]), `×${weight}`,
+        `${Number(speeds[index]).toFixed(3)} km/s`, f(levels[index]),
+        `×${f(window.DFCHSpeed.calcExpeditionWalkMultiplier(levels[index]))}`, `×${weight}`,
         f(levels[index] * weight), f(levels[index] * weight / weightSum)];
       values.forEach((value) => {
         const cell = document.createElement("td");
