@@ -63,8 +63,8 @@
    * UniquePlayerParams.get_walkSpd:
    * visibleWalkSpd = walkSpd1 * Skill2Value / 100
    *
-   * Skill2Value is player/account state and its source is still being traced.
-   * Therefore visible km/s cannot be safely inverted unless Skill2Value is known.
+   * Skill2Value is controlled by the active skill flow (UseCase_UseSkill).
+   * OnFireEnd restores it to 100. UI accepts speeds with no active speed buff.
    */
   function visibleWalkSpeedFromLevel(level, skill2Percent) {
     const base = actualWalkSpeedFromLevel(level);
@@ -76,9 +76,10 @@
   function levelFromVisibleWalkSpeed(visibleSpeed, skill2Percent) {
     const visible = n(visibleSpeed);
     const skill2 = n(skill2Percent);
-    if (visible === null || skill2 === null || skill2 === 0) return null;
+    if (visible === null || visible < 0 || skill2 === null || skill2 <= 0) return null;
 
     const base = visible * 100 / skill2;
+    if (base < OFFICIAL.walkLowBase) return null;
     return levelFromActualWalkSpeed(base);
   }
 
@@ -105,7 +106,10 @@
       (level / OFFICIAL.expeditionLevelDivisor) * OFFICIAL.expeditionRange;
   }
 
-  function calcFromVisibleSpeeds({ leaderSpeed, memberSpeeds = [], skill2Percent }) {
+  function calcFromVisibleSpeeds({ leaderSpeed, memberSpeeds = [], skill2Percent = 100 }) {
+    if (!Array.isArray(memberSpeeds) || memberSpeeds.length > OFFICIAL.maxMembers) {
+      return { ready: false, reason: "party-size-invalid" };
+    }
     const leaderLevel = levelFromVisibleWalkSpeed(leaderSpeed, skill2Percent);
     const memberLevels = memberSpeeds.map((speed) =>
       levelFromVisibleWalkSpeed(speed, skill2Percent)
@@ -114,7 +118,7 @@
     if (leaderLevel === null || memberLevels.some((value) => value === null)) {
       return {
         ready: false,
-        reason: "skill2-percent-required",
+        reason: "invalid-speed-or-correction",
         leaderLevel: null,
         memberLevels: [],
         averageLevel: null,

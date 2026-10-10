@@ -47,18 +47,51 @@
   }
 
   function updateSpeedPreview() {
-    const speeds = allUnitCards()
-      .map((card) => Number(card.querySelector(".speed-input")?.value))
-      .filter((value) => Number.isFinite(value) && value > 0);
-
-    if (!speeds.length) {
-      partySpeed.textContent = "解析中";
+    const cards = allUnitCards();
+    const speeds = cards.map((card) => card.querySelector(".speed-input").value);
+    const result = window.DFCHSpeed.calcFromVisibleSpeeds({
+      leaderSpeed: speeds[0], memberSpeeds: speeds.slice(1)
+    });
+    const final = document.getElementById("officialSpeedResult");
+    const detail = document.getElementById("speedDetailRows");
+    detail.replaceChildren();
+    if (!result.ready) {
+      partySpeed.textContent = "請填入有效速度";
+      final.textContent = "尚未完成隊伍換算";
+      document.getElementById("speedCalculation").textContent = "每位角色請填入未啟動步行加速技能的面板速度（至少 0.050 km/s）。";
+      document.getElementById("speedPrecision").textContent = "";
       return;
     }
-
-    const min = Math.min(...speeds).toFixed(3);
-    const max = Math.max(...speeds).toFixed(3);
-    partySpeed.textContent = `面板 ${min}–${max} km/s`;
+    const f = (value) => value.toFixed(6);
+    partySpeed.textContent = `約 ×${f(result.multiplier)}`;
+    final.textContent = `隊伍最終速度：約 ×${f(result.multiplier)}`;
+    const levels = [result.leaderLevel, ...result.memberLevels];
+    const weightedSum = levels.reduce((sum, level, index) => sum + level * (index === 0 ? 2 : 1), 0);
+    const weightSum = cards.length + 1;
+    cards.forEach((card, index) => {
+      const row = document.createElement("tr");
+      const weight = index === 0 ? 2 : 1;
+      const name = card.querySelector(".unit-name").value.trim() || "未命名";
+      const values = [index === 0 ? `隊長：${name}` : `隊員 ${index}：${name}`,
+        `${Number(speeds[index]).toFixed(3)} km/s`, f(levels[index]), `×${weight}`,
+        f(levels[index] * weight), f(levels[index] * weight / weightSum)];
+      values.forEach((value) => {
+        const cell = document.createElement("td");
+        cell.textContent = value;
+        row.appendChild(cell);
+      });
+      detail.appendChild(row);
+    });
+    document.getElementById("speedCalculation").textContent =
+      `加權總和 ${f(weightedSum)} ÷ 總權重 ${weightSum} = 平均步行值 ${f(result.averageLevel)}；` +
+      `0.8 + (${f(result.averageLevel)} ÷ 100) × 3.2 = ×${f(result.multiplier)}。`;
+    const bounds = [-0.0005, 0.0005].map((delta) => window.DFCHSpeed.calcFromVisibleSpeeds({
+      leaderSpeed: Math.max(0.05, Number(speeds[0]) + delta),
+      memberSpeeds: speeds.slice(1).map((speed) => Math.max(0.05, Number(speed) + delta))
+    }).multiplier);
+    document.getElementById("speedPrecision").textContent =
+      `若遊戲面板四捨五入至三位小數，對應倍率約 ×${f(bounds[0])}–×${f(bounds[1])}。` +
+      "顯示值為反推估算；官方面板的取整方式尚待確認。";
   }
 
   function updateSummary() {
@@ -134,7 +167,7 @@
     const map = document.getElementById("mapSelect");
     const runs = document.getElementById("simulationCount");
     simulateMessage.textContent =
-      `V1：${map.options[map.selectedIndex].text} · ${runs.options[runs.selectedIndex].text}。隊伍上限與玩家可見速度欄位已固定；官方 km/s → 遠征速度換算仍在解析中。`;
+      `V1：${map.options[map.selectedIndex].text} · ${runs.options[runs.selectedIndex].text}。隊伍上限與玩家可見速度欄位已固定；未加速面板速度已換算為遠征倍率；地圖時間與掉落引擎尚未接入。`;
     simulateBtn.classList.add("clicked");
     window.setTimeout(() => simulateBtn.classList.remove("clicked"), 220);
   });

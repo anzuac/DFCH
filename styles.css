@@ -998,3 +998,13 @@ select:disabled {
     align-self: center;
   }
 }
+
+/* Expedition conversion breakdown */
+.official-formula-card { flex-wrap: wrap; }
+.speed-details { width: 100%; min-width: 0; }
+.speed-details summary { cursor: pointer; color: var(--accent, #9edbd2); padding: 12px 0; font-weight: 700; }
+.speed-table-scroll { overflow-x: auto; max-width: 100%; }
+.speed-table { width: 100%; border-collapse: collapse; font-size: 13px; font-variant-numeric: tabular-nums; }
+.speed-table th, .speed-table td { text-align: left; padding: 12px 10px; border-bottom: 1px solid #354449; white-space: nowrap; }
+.speed-table th { color: #9edbd2; }
+#speedCalculation, #speedPrecision { overflow-wrap: anywhere; }
