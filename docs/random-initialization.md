@@ -31,3 +31,7 @@ Next(min,max) 的 max 為排除上限；min=max 仍消耗 Sample。跨度大於 
 ## V1.2 更新
 
 第一張地圖的現有 UI 配置已串接整輪及批次，詳見 [本版範圍](v1.2-simulator.md)。上述「現行 UI 只初始化」是上一版狀態；目前會產生限定配置的結果。其他專屬角色事件與原版戰鬥逐局重現仍未完成。
+
+## 正常出發種子來源已確認
+
+正常出發在 0x328f020 呼叫 UnityEngine.Random.Range(0,2147483647)，再存入 ExpeditionStatus.Start。完整產生／包裝／還原／事件 RNG 的區分见 [seed-origin.md](seed-origin.md)。先前「未驗證最初寫入」記錄是較早狀態；Unity 全域原始狀態與所有其他系統的消耗尚未還原。
