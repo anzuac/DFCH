@@ -19,14 +19,15 @@
   function refresh(nextRatio=ratio) {
     ratio=nextRatio;
     const hasStone=data.master.basicFlagUnlockSampleGroupIds.some(id=>id>0);
-    flag.disabled=!hasStone;document.getElementById('stoneSearchAvailable').disabled=!hasStone;
+    flag.disabled=!hasStone;document.getElementById('stoneSearchAvailable').disabled=!hasStone||data.master.basicFlagUnlockConditions[0]===-1;
+    const unlockFlag=data.flagUnlockSamples.find(r=>r.flagType>0)?.flagType;
     const body=document.getElementById('dropStateRows');body.replaceChildren();
     const note=document.getElementById('dropStateSummary');
     if(!window.DFCHMaps[document.getElementById('mapSelect').value]) {note.textContent='此地圖尚未接入狀態權重預覽。';return;}
     try {
       if(daily.value.trim()==='' || [...root.querySelectorAll('input')].some(i=>i.value.trim()===''))throw new Error('請填妥持有量');
       const owned=Object.fromEntries([...root.querySelectorAll('input')].map(i=>[i.dataset.reward,Number(i.value)]));
-      const state=rules.begin(data,{daily:Number(daily.value),owned,flags:flag.checked&&data.master.stoneFlag>0?[data.master.stoneFlag]:[]});
+      const state=rules.begin(data,{daily:Number(daily.value),owned,flags:flag.checked&&unlockFlag?[unlockFlag]:[]});
       const groups=mode.value==='basic'?[50]:data.master.bossDropSampleGroupIds;
       const result=rules.distribution(groups,state,data,ratio);
       note.textContent=`當日起始一般鑽石 ${state.daily}／${data.master.dailyDiamondLimit}：${state.limitReached?'已達上限':'未達上限'}。${state.limitReached && result.basic?'抽到一般鑽石後，改按其他基本群組的事件權重重抽；神級鑽石保留原抽選機會。':state.limitReached?'此池的一般鑽石權重歸零，神級鑽石保留。':'此輪跨過上限仍沿用起始判定；下一輪才重新檢查。'}`;
@@ -39,7 +40,7 @@
         body.append(tr);
       }
       const candidates=rules.flagPool(data.flagUnlockSamples,state);
-      document.getElementById('flagStateSummary').textContent=!hasStone?'此地圖沒有官方秘石搜尋事件。':`秘石解鎖池：${candidates.some(r=>r.flagType===data.master.stoneFlag)?'尚未解鎖時，無收穫與秘石原始權重各 50。':'已解鎖秘石，移除秘石候選，只剩無收穫。'} 此表以解鎖事件已符合其他條件為前提，尚未代表事件遭遇率。`;
+      document.getElementById('flagStateSummary').textContent=!hasStone?'此地圖沒有官方秘石搜尋事件。':`解鎖發現池：${candidates.map(r=>`${r.flagType===-1?'無收穫':data.master.key==='stage_atli'?'決戰魔王地點解鎖':'秘石發現'}權重 ${r.weight}`).join('；')}。${data.master.basicFlagUnlockConditions[0]===-1?'此事件不需要額外搜尋前置。':''} 這是事件已抽中後的候選權重。`;
     } catch(error) {note.textContent=`無法預覽：${error.message}`;document.getElementById('flagStateSummary').textContent='';}
   }
   [daily,flag,mode].forEach(el=>el.addEventListener('input',()=>refresh()));

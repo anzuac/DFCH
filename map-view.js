@@ -3,7 +3,7 @@
   const select = document.getElementById('mapSelect');
   const explored = document.getElementById('mapExplored100');
   const target = document.getElementById('mapDataTables');
-  const groupNames = {50:'鑽石發現',51:'寶石發現',80:'遠征戰塵與魂片',90:'首領戰後追加獎勵',100:'一般戰鬥掉落',100150:'一般寶箱發現',100151:'不祥寶箱發現',100152:'神奇寶箱發現',100160:'士兵五倍成長書發現',100161:'遠征隊支援物資發現',990100:'鑽石增益區域獎勵',100170:'野外贈禮發現',100190:'地圖限定神器',1000050:'尋寶：黃金寶箱',1000051:'尋寶：神奇寶箱',1000052:'尋寶：紅色寶箱',1000053:'尋寶：荊刺寶箱',100260:'能力忘卻之書發現',100261:'特殊能力之書發現',100270:'野外贈禮發現',100290:'地圖限定神器',1010:'禁斷遭遇追加寶箱',1020:'禁斷遭遇追加寶箱',100360:'能力值忘卻之書發現',100361:'禁斷的永環石發現',100370:'野外贈禮發現',100390:'地圖限定神器',100460:'士兵五倍成長書發現',100461:'被遺忘的祕寶發現',100470:'野外贈禮發現',100490:'地圖限定神器',1030:'禁斷遭遇追加寶箱',110:'一般戰鬥掉落',1040:'禁斷的高夫追加掉落',1050:'禁斷的尼德霍格追加掉落',100560:'禁斷的守門人召喚石發現',100570:'野外贈禮發現',100590:'地圖限定神器',100660:'被遺忘的祕寶發現',100661:'遠征隊支援物資發現',100670:'野外贈禮發現',100690:'地圖限定神器',200:'一般戰鬥掉落',200160:'士兵五倍成長書發現',200161:'禁斷的守門人召喚石發現',200170:'野外贈禮發現',200190:'地圖限定神器',2000:'禁斷遭遇追加掉落'};
+  const groupNames = {50:'鑽石發現',51:'寶石發現',80:'遠征戰塵與魂片',90:'首領戰後追加獎勵',100:'一般戰鬥掉落',100150:'一般寶箱發現',100151:'不祥寶箱發現',100152:'神奇寶箱發現',100160:'士兵五倍成長書發現',100161:'遠征隊支援物資發現',990100:'鑽石增益區域獎勵',100170:'野外贈禮發現',100190:'地圖限定神器',1000050:'尋寶：黃金寶箱',1000051:'尋寶：神奇寶箱',1000052:'尋寶：紅色寶箱',1000053:'尋寶：荊刺寶箱',100260:'能力忘卻之書發現',100261:'特殊能力之書發現',100270:'野外贈禮發現',100290:'地圖限定神器',1010:'禁斷遭遇追加寶箱',1020:'禁斷遭遇追加寶箱',100360:'能力值忘卻之書發現',100361:'禁斷的永環石發現',100370:'野外贈禮發現',100390:'地圖限定神器',100460:'士兵五倍成長書發現',100461:'被遺忘的祕寶發現',100470:'野外贈禮發現',100490:'地圖限定神器',1030:'禁斷遭遇追加寶箱',110:'一般戰鬥掉落',1040:'禁斷的高夫追加掉落',1050:'禁斷的尼德霍格追加掉落',100560:'禁斷的守門人召喚石發現',100570:'野外贈禮發現',100590:'地圖限定神器',100660:'被遺忘的祕寶發現',100661:'遠征隊支援物資發現',100670:'野外贈禮發現',100690:'地圖限定神器',200:'一般戰鬥掉落',200160:'士兵五倍成長書發現',200161:'禁斷的守門人召喚石發現',200170:'野外贈禮發現',200190:'地圖限定神器',2000:'禁斷遭遇追加掉落',300:'一般戰鬥掉落',200260:'遠征隊支援物資發現',200261:'特殊能力之書發現',200270:'野外贈禮發現',200290:'地圖限定神器'};
   const eventNames = {1:'一般行走',2:'快速行走',3:'休息',200:'小幅探索',201:'深入探索',202:'重大探索',901:'鑽石增益區域',350:'毒霧陷阱',300:'物理陷阱',301:'強力物理陷阱',304:'火焰陷阱'};
   const rewardNames = {1:'寶石加成',2:'寶箱掉落加成',3:'新增戰鬥事件',4:'新增一般事件',5:'新增物品發現事件',6:'限定掉落加成',7:'經驗加成'};
   let names = {};
@@ -63,7 +63,7 @@
     explored.disabled=!supported;
     document.getElementById('mapDataDetails').hidden=!supported;
     document.getElementById('mapDataTitle').textContent=supported?data.name:'此地圖資料尚未接入';
-    document.getElementById('mapDataSummary').textContent=supported?`原始遠征時間 ${data.master.duration} 秒（${data.master.duration/60} 分鐘）；目標進度 ${data.master.depth}。一般戰鬥敵人 ${data.master.basicBattleMinMonsterCount}–${data.master.basicBattleMaxMonsterCount-1} 名（上限不包含）。`:'目前前七張地圖已接入；請選擇已支援地圖。';
+    document.getElementById('mapDataSummary').textContent=supported?`原始遠征時間 ${data.master.duration} 秒（${data.master.duration/60} 分鐘）；目標進度 ${data.master.depth}。一般戰鬥敵人 ${data.master.basicBattleMinMonsterCount}–${data.master.basicBattleMaxMonsterCount-1} 名（上限不包含）。`:'目前前八張地圖已接入；請選擇已支援地圖。';
     const rate=explored.checked?100:0;
     window.DFCHMapConfig={dungeonKey:select.value,completionRate:rate,combat:'instant-victory',combatDurationSeconds:0};
     const unlocked=data.completionRewards.filter(r=>r.requiredCompletionRate<=rate);
@@ -72,8 +72,9 @@
     table('基本事件抽選權重',['類別','原始權重'],[
       ['一般戰鬥',fmt(data.master.basicBattleWeight)],
       ...data.master.basicItemDropSampleGroupIds.map((id,i)=>[groupNames[id] || '物品獎勵',fmt(data.master.basicItemDropWeights[i])]),
-      ['道路解鎖事件（須符合解鎖條件）',fmt(data.master.basicFlagUnlockWeights[0])]
+      ['地點解鎖事件（依官方條件）',fmt(data.master.basicFlagUnlockWeights[0])]
     ]);
+    if(data.flagUnlockSamples.length)table('地點解鎖候選池',['候選','原始權重'],data.flagUnlockSamples.map(r=>[r.flagType===-1?'無收穫':r.flagType===6613?'解鎖決戰魔王遠征地點':'發現秘石',fmt(r.weight)]));
     table('共用事件與執行順序',['事件','原始權重','目前探索配置','依序執行'],data.eventSamples.map(r=>[eventNames[r.logEventId] || '共用事件',fmt(r.weight),rate>=100 && data.eventSequences.some(s=>s.logEventId===r.logEventId && s.functionType===109)?'探索完成：排除':'保留候選',sequence(r.logEventId)]));
     table('技能事件與觸發條件',['所需技能','狀態條件','原始權重','依序執行'],data.conditionalTemplates.map(r=>[r.requiredAbilities.filter(Boolean).map(id=>data.abilityNames[id] || '特殊技能').join('、'),conditions(r),fmt(r.weight),sequence(r.logEventId)]));
     [...new Set(data.dropSamples.map(r=>r.dropItemSampleGroupId))].forEach(id=>{

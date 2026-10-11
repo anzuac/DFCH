@@ -33,7 +33,7 @@
       const prerequisite=master.basicFlagUnlockConditions[i];
       if(id>0 && master.basicFlagUnlockWeights[i]>0 && (prerequisite===-1 || flags.includes(prerequisite))) {
         const unlock=data.flagUnlockSamples.find(r=>r.flagUnlockEventSampleGroupId===id && r.flagType!==-1)?.flagType??-1;
-        result.push(row(base+50+i,10,master.basicFlagUnlockWeights[i],[seq(100,1),seq(11,id)],{name:'搜尋秘石',conditionTypes:[9],conditionValues:[unlock]}));
+        result.push(row(base+50+i,10,master.basicFlagUnlockWeights[i],[seq(100,1),seq(11,id)],{name:master.key==='stage_atli'?'搜尋決戰魔王地點':'搜尋秘石',conditionTypes:[9],conditionValues:[unlock]}));
       }
     });
     if(master.bossBattleGroupId>0)result.push(row(base+1,2,0,[seq(1),seq(108,master.bossBattleGroupId),seq(6),seq(100,1),seq(9,master.multiDropContinuousRate,...master.bossDropSampleGroupIds.filter(id=>id>0))],{name:'終點首領',isForce:true,isOnce:true,checkPointProgress:master.depth,boss:true}));
