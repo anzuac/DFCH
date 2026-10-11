@@ -1,7 +1,7 @@
 import json,hashlib,sys,re
 stage=int(sys.argv[1]) if len(sys.argv)>1 else 1
-dungeon_id=1000+stage
-stage_key=f"stage_{stage}"
+dungeon_id=2001 if stage==7 else 1000+stage
+stage_key="stage_hard" if stage==7 else f"stage_{stage}"
 from pathlib import Path
 load=lambda n:json.loads(Path('research/tables/'+n+'.json').read_text())
 master=next(r for r in load('ExpeditionDungeonTable') if r['dungeonId']==dungeon_id)
@@ -21,6 +21,10 @@ monsters=[r for r in load('ExpeditionMonsterSampleTable') if r['battleEventId'] 
 flags=[r for r in load('ExpeditionFlagUnlockEventSampleTable') if r['flagUnlockEventSampleGroupId'] in master['basicFlagUnlockSampleGroupIds']]
 effectIDs={r['dropEffectGroupId'] for r in drops+flags};effects=[r for r in load('ExpeditionDropEffectSampleTable') if r['dropEffectGroupId'] in effectIDs]
 rewardIDs={r['rewardId'] for r in drops}|set(master['limitedRewardIds']);rewardMasters=[]
+reference=next(r for r in load('MainDungeonTable') if r['dungeonId']==master['referenceDungeonId'])
+if any(r['dungeonConversion'] for r in drops):
+ rewardIDs.add(reference['returnCurrencyType']*1000000)
+ rewardIDs|={600000000+reference[k] for k in ['baseChestSampleType','legendChestSampleType','illusionChestSampleType','epicChestSampleType'] if reference[k]>=0}
 for n in ['CurrencyTable','MaterialTable','EquipTable','ArtifactTable','OtherRewardTable','ChestSampleTable','PotionTable','UniqueSoldierInheritanceStatusTable']:
  rewardMasters += [{**r,'sourceTable':n} for r in load(n) if r['rewardId'] in rewardIDs]
 local={r['key']:r['zh_tw'] for n in ['localize_master','localize_master2','localize_monster','localize_expedition'] for r in load(n)}
@@ -69,11 +73,12 @@ for abilityId in {a for row in templates for a in row['requiredAbilities'] if a}
  assert label,(abilityId,namekey)
  number=fieldsForName['numbering']
  abilityNames[str(abilityId)]=label+(f' {number}' if fieldsForName['autoNaming'] and number>0 else '')
-x={'schemaVersion' :1,'gameVersion':'3.16.0','name':local['expedition-dungeon-name-'+stage_key],'master':master,'referenceDungeon':next(r for r in load('MainDungeonTable') if r['dungeonId']==master['referenceDungeonId']),'zoneDungeons':zoneDungeons,'collectorMasters':[r for r in load('UniqueSoldierAbilityTable-full') if r['key'] in ['sab_collector_1','sab_collector_2','sab_collector_3']],'affectionAbilityTypes':[r for r in load('AbilityTypeMasterTable') if r['key'] in [10512,10513]],'simulationPolicy':{'combat':'instant-victory','combatDurationSeconds':0,'preserveEncounter':True,'preserveVictoryRewards':True,'skipAttackSpeedAndDamage':True,'eventReplayImplemented':False,**({'trapDamage':'immune','trapDamageReason':'使用者指定：保留傷害事件、免除傷害及原版傷害亂數'} if stage in [3,4,5,6] else {})},'abilityNames':abilityNames,'eventSamples':samples,'conditionalTemplates':templates,'eventSequences':seq,'completionRewards':completion,'dropSamples':drops,'dropEffects':effects,'flagUnlockSamples':flags,'monsterSamples':monsters,'monsterNames':monsterNames,'rewardMasters':rewardMasters,'buffs':load('ExpeditionBuffTable'),'buffEffects':load('ExpeditionBuffEffectTable'),'enums':load('enums'),'localization':localized,'notes':['原始 float32 以可回讀數值保留，weight 不是百分比。','條件式模板只有符合能力、進度與其他條件時才加入；不可全部無條件抽選。','部分事件由官方程式動態生成，不會出現在序列表；完整重播尚未接入。','寶箱內容權重與遠征取得寶箱權重屬於不同抽選階段。']}
+x={'schemaVersion' :1,'gameVersion':'3.16.0','name':local['expedition-dungeon-name-'+stage_key],'master':master,'referenceDungeon':next(r for r in load('MainDungeonTable') if r['dungeonId']==master['referenceDungeonId']),'zoneDungeons':zoneDungeons,'collectorMasters':[r for r in load('UniqueSoldierAbilityTable-full') if r['key'] in ['sab_collector_1','sab_collector_2','sab_collector_3']],'affectionAbilityTypes':[r for r in load('AbilityTypeMasterTable') if r['key'] in [10512,10513]],'simulationPolicy':{'combat':'instant-victory','combatDurationSeconds':0,'preserveEncounter':True,'preserveVictoryRewards':True,'skipAttackSpeedAndDamage':True,'eventReplayImplemented':False,**({'trapDamage':'immune','trapDamageReason':'使用者指定：保留傷害事件、免除傷害及原版傷害亂數'} if stage in [3,4,5,6,7] else {})},'abilityNames':abilityNames,'eventSamples':samples,'conditionalTemplates':templates,'eventSequences':seq,'completionRewards':completion,'dropSamples':drops,'dropEffects':effects,'flagUnlockSamples':flags,'monsterSamples':monsters,'monsterNames':monsterNames,'rewardMasters':rewardMasters,'buffs':load('ExpeditionBuffTable'),'buffEffects':load('ExpeditionBuffEffectTable'),'enums':load('enums'),'localization':localized,'notes':['原始 float32 以可回讀數值保留，weight 不是百分比。','條件式模板只有符合能力、進度與其他條件時才加入；不可全部無條件抽選。','部分事件由官方程式動態生成，不會出現在序列表；完整重播尚未接入。','寶箱內容權重與遠征取得寶箱權重屬於不同抽選階段。']}
 Path('DFCH/data').mkdir(exist_ok=True)
 s=json.dumps(x,ensure_ascii=False,separators=(',',':'))+'\n';Path(f'DFCH/data/stage-{stage}.json').write_text(s)
 # Keep both browser datasets offline and select without a network request.
-maps={f'stage_{i}':json.loads(Path(f'DFCH/data/stage-{i}.json').read_text()) for i in [1,2,3,4,5,6] if Path(f'DFCH/data/stage-{i}.json').exists()}
+datasets=[json.loads(Path(f'DFCH/data/stage-{i}.json').read_text()) for i in [1,2,3,4,5,6,7] if Path(f'DFCH/data/stage-{i}.json').exists()]
+maps={d['master']['key']:d for d in datasets}
 Path('DFCH/map-data.js').write_text('window.DFCHMaps = '+json.dumps(maps,ensure_ascii=False,separators=(',',':'))+';\nwindow.DFCHMapData = window.DFCHMaps.stage_1;\n')
 print('bytes',len(s.encode()),'counts',{k:len(x[k]) for k in ['eventSamples','conditionalTemplates','eventSequences','completionRewards','dropSamples','monsterSamples','rewardMasters']})
 print('unresolved rewards',rewardIDs-set(byid)-{-1})

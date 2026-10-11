@@ -24,11 +24,12 @@
   function convertDrop(row, quantity, data) {
     if(!row.dungeonConversion)return {rewardId:row.rewardId,quantity};
     const ref=data.referenceDungeon;
-    if(!ref || ref.gameModeType!==0) throw new Error('尚未支援此參照地圖的獎勵轉換');
+    if(!ref || ![0,2].includes(ref.gameModeType)) throw new Error('尚未支援此參照地圖的獎勵轉換');
     if(row.rewardId===101000000)return {rewardId:ref.returnCurrencyType*1000000,quantity:Math.ceil(quantity*data.master.gemScaler)};
     if(Math.floor(row.rewardId/1000000)===600){
       const index=row.rewardId%1000000;
       const map={2:ref.baseChestSampleType,3:ref.legendChestSampleType,4:ref.illusionChestSampleType,5:ref.epicChestSampleType};
+      if(ref.gameModeType===0)return {rewardId:row.rewardId,quantity:Math.ceil(quantity*data.master.chestScaler)};
       if(index>=2 && index<=5 && map[index]!==-1)return {rewardId:600000000+map[index],quantity:Math.ceil(quantity*data.master.chestScaler)};
     }
     return {rewardId:row.rewardId,quantity};

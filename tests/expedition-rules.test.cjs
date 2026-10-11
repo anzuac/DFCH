@@ -17,8 +17,8 @@ console.log('Verified expedition rule checks passed');
 
 require('../map-data.js');const data=window.DFCHMapData;
 assert.equal(data.referenceDungeon.dungeonId,900);
-assert.deepEqual(R.convertDrop({rewardId:600000003,dungeonConversion:true},3,data),{rewardId:600000004,quantity:3});
-assert.deepEqual(R.convertDrop({rewardId:600000004,dungeonConversion:true},1,data),{rewardId:600000005,quantity:1});
+assert.deepEqual(R.convertDrop({rewardId:600000003,dungeonConversion:true},3,data),{rewardId:600000003,quantity:3});
+assert.deepEqual(R.convertDrop({rewardId:600000004,dungeonConversion:true},1,data),{rewardId:600000004,quantity:1});
 assert.deepEqual(R.convertDrop({rewardId:600000003,dungeonConversion:false},3,data),{rewardId:600000003,quantity:3});
 assert.deepEqual(R.convertDrop({rewardId:101000000,dungeonConversion:true},100,data),{rewardId:101000000,quantity:100});
 
