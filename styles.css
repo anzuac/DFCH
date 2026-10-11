@@ -1049,3 +1049,5 @@ select:disabled {
 #recordStatus { color: #a7ddd1; }
 #importRecords { display: block; max-width: 100%; margin-top: .5rem; }
 #tab-stats > .panel { min-width: 0; }
+.diamond-cap-state { padding: 1rem; border: 1px solid #b4d7bd55; border-radius: 14px; margin-block: 1rem; }
+.diamond-cap-state progress { display: block; width: 100%; margin-top: .8rem; accent-color: #9cd9ce; }

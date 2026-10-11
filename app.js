@@ -255,9 +255,13 @@
       window.DFCHSimulator.create(data,options); // fail before replacing prior results
       running=true;window.DFCHSimulationRunning=true;simulateBtn.disabled=true;document.getElementById('simulateOnceBtn').disabled=true;cancel.hidden=false;bar.hidden=false;bar.max=count;bar.value=0;controller=new AbortController();
       let lastRecordPaint=0;
-      const result=await window.DFCHSimulationBatch.run(data,options,{count,mode,signal:controller.signal,onResult:r=>window.DFCHRecordStore.add(mode,data,r,options),onProgress:a=>{bar.value=a.completed;simulateMessage.textContent=`執行中：${a.completed.toLocaleString()}／${count.toLocaleString()} 輪。已完成輪已自動存檔。`;if(Date.now()-lastRecordPaint>=150){window.DFCHRecordView.render();lastRecordPaint=Date.now();}}});
+      const result=await window.DFCHSimulationBatch.run(data,options,{count,mode,signal:controller.signal,onLimit:info=>{
+        window.DFCHRecordView.render();
+        simulateMessage.textContent=`已暫停：今日此地圖一般鑽石 ${info.daily}／${info.limit}，已達上限。已完成 ${info.completed} 輪已保存。`;
+        return window.confirm(`今日「${info.mapName}」的一般鑽石已達上限（${info.daily}／${info.limit}）。\n已完成 ${info.completed} 輪並存檔，尚有 ${info.requested-info.completed} 輪。\n繼續後將套用一般鑽石上限規則；神級鑽石仍可取得。\n是否繼續遠征？`);
+      },onResult:r=>window.DFCHRecordStore.add(mode,data,r,options),onProgress:a=>{bar.value=a.completed;simulateMessage.textContent=`執行中：${a.completed.toLocaleString()}／${count.toLocaleString()} 輪。已完成輪已自動存檔。`;if(Date.now()-lastRecordPaint>=150){window.DFCHRecordView.render();lastRecordPaint=Date.now();}}});
       window.DFCHLastSimulation=result;window.DFCHSimulationView.render(data,result);
-      simulateMessage.textContent=`${result.cancelled?'已中止':'已完成'}：${result.completed.toLocaleString()} 輪，${result.goals.toLocaleString()} 輪到達終點；第一輪種子 ${seed}。`;
+      simulateMessage.textContent=`${result.stopReason==='diamond-limit'?'已停止：今日此地圖一般鑽石達到上限':result.cancelled?'已中止':'已完成'}：${result.completed.toLocaleString()} 輪，${result.goals.toLocaleString()} 輪到達終點；第一輪種子 ${seed}。${mode==='continuous'&&result.last?.limitReachedAtEnd?' 今日此地圖一般鑽石已達上限。':''}`;
     } catch(error) {
       simulateMessage.textContent=`模擬未完成：${error.message}。沒有結算未完成的遠征。`;
     } finally {

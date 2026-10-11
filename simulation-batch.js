@@ -19,17 +19,22 @@
     for(const [name,n] of Object.entries(r.eventCounts))a.eventCounts[name]=(a.eventCounts[name]??0)+n;
     if(!a.first)a.first=r;a.last=r;return a;
   }
-  async function run(data,options,{count=1,mode='independent',signal,onProgress=()=>{},onResult=()=>{}}={}) {
+  async function run(data,options,{count=1,mode='independent',signal,onProgress=()=>{},onResult=()=>{},onLimit=async()=>true}={}) {
     if(!Number.isSafeInteger(count)||count<1||count>1000000)throw new Error('模擬次數須為 1–1,000,000');
     if(!['independent','continuous'].includes(mode))throw new Error('未知批次模式');
     S.validate(data,options);
     // Batch seed scheduling is a simulator policy, not the game's seed writer.
     const seeds=new window.DFCHRandom.OfficialRandom(options.seed),a=aggregate(count,mode);
-    let saved=options.saved,completionRate=options.completionRate??0,context=null;
+    let saved=options.saved,completionRate=options.completionRate??0,context=null,limitAcknowledged=false;
     while(a.completed<count) {
       const started=Date.now();let operations=0;
       do {
         if(signal?.aborted){a.cancelled=true;onProgress(a);return a;}
+        if(!context && mode==='continuous' && !limitAcknowledged && data.master.dailyDiamondLimit>0 && (saved?.daily??0)>=data.master.dailyDiamondLimit){
+          const proceed=await onLimit({completed:a.completed,requested:count,daily:saved.daily,limit:data.master.dailyDiamondLimit,mapName:data.name});
+          if(!proceed || signal?.aborted){a.cancelled=true;a.stopReason=!proceed?'diamond-limit':'cancelled';onProgress(a);return a;}
+          limitAcknowledged=true;
+        }
         if(!context)context=S.create(data,{...options,seed:a.completed===0?options.seed:seeds.next(),saved:mode==='continuous'?saved:options.saved,completionRate:mode==='continuous'?completionRate:options.completionRate,record:a.completed===0||a.completed===count-1});
         const more=S.step(data,context);operations++;
         if(!more) {

@@ -9,6 +9,11 @@
     const r=store.get(mode.value,data.master.key);status.textContent='每完成一輪自動存檔；只累積已結算的遠征。';
     if(!r){root.append(el('p','此類型尚無遠征紀錄。'));return;}
     const a=r.totals;root.append(el('h3',r.name));
+    const daily=mode.value==='continuous'?r.latest.saved.daily:r.config?.saved?.daily??0;
+    const cap=el('div');cap.className='diamond-cap-state';
+    cap.append(el('strong',`${mode.value==='continuous'?'下一輪承接':'最近一批起始配置'}：一般鑽石 ${number(daily)}／${data.master.dailyDiamondLimit} · ${daily>=data.master.dailyDiamondLimit?'已達上限':'未達上限'}`));
+    const progress=el('progress');progress.max=data.master.dailyDiamondLimit;progress.value=Math.min(daily,progress.max);progress.setAttribute('aria-label','一般鑽石上限進度');cap.append(progress);
+    cap.append(el('p','高額神級鑽石不計入一般鑽石上限；歷史累積總量與上限判定分開。'));root.append(cap);
     root.append(table(['項目','累積紀錄'],[['遠征次數',number(a.completed)],['探索事件次數',number(['小幅探索','探索','深入探索'].reduce((sum,key)=>sum+(a.eventCounts[key]??0),0))],['抵達終點／耐力耗盡',`${number(a.goals)}／${number(a.exhausted)}`],['一般／神級鑽石',`${number(a.ordinaryDiamonds)}／${number(a.godDiamonds)}`],['鑽石合計',number(a.ordinaryDiamonds+a.godDiamonds)],['平均鑽石／輪',number((a.ordinaryDiamonds+a.godDiamonds)/a.completed)],['起始已達上限的輪數',number(a.capStartRuns)],['當輪跨過上限的輪數',number(a.capCrossRuns)],['結束時達上限的輪數',number(a.capEndRuns)],['遇到高額鑽石的輪數',number(a.highRuns)],['最近一輪探索率',`${number(r.latest.completionRate)}%`]]));
     root.append(table(['高額鑽石','抽中次數','累積量（包含於總量）'],[5000,7777,9999].map(n=>[number(n),number(a.highDiamonds[n]),number(n*a.highDiamonds[n])])));
     root.append(el('p',mode.value==='independent'?'每輪重新使用玩家設定；歷史鑽石及道具數量不影響下一輪上限。':`承接狀態：當日一般鑽石 ${number(r.latest.saved.daily)}／${data.master.dailyDiamondLimit}，${r.latest.saved.daily>=data.master.dailyDiamondLimit?'已達上限':'未達上限'}；探索率 ${number(r.latest.completionRate)}%。`));

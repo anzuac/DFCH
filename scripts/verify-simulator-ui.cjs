@@ -2,10 +2,11 @@ const fs=require('node:fs'),assert=require('node:assert/strict'),{JSDOM}=require
 const root=require('node:path').resolve(__dirname,'..')+'/';
 const dom=new JSDOM(fs.readFileSync(root+'index.html','utf8'),{runScripts:'outside-only',url:'https://example.test/'}),w=dom.window;
 for(const script of w.document.querySelectorAll('script[src]'))w.eval(fs.readFileSync(root+script.getAttribute('src').slice(2).split('?')[0],'utf8'));
+w.confirm=()=>true;
 const get=id=>w.document.getElementById(id),change=(id,value,type='change')=>{get(id).value=value;get(id).dispatchEvent(new w.Event(type,{bubbles:true}));};
 const wait=async()=>{for(let i=0;i<1000&&get('simulateBtn').disabled;i++)await new Promise(r=>setTimeout(r,2));assert.equal(get('simulateBtn').disabled,false);};
 (async()=>{
- assert.ok(w.document.querySelector('.version-pill').textContent.includes('V1.3'));assert.equal(get('partyCount').textContent,'3 / 12');
+ assert.ok(w.document.querySelector('.version-pill').textContent.includes('V1.3.1'));assert.equal(get('partyCount').textContent,'3 / 12');
  change('seedMode','replay');change('simulationCount','1');get('simulateBtn').click();await wait();assert.equal(w.DFCHLastSimulation.completed,1);assert.equal(w.DFCHLastSimulation.goals,1);
  assert.ok(get('simulationResults').textContent.includes('各獎勵統計'));assert.ok(get('simulationResults').textContent.includes('亂數呼叫明細'));assert.ok(!get('simulationResults').textContent.includes('[object Object]'));
  change('simulationMode','continuous');change('simulationCount','100');get('simulateBtn').click();await wait();assert.equal(w.DFCHLastSimulation.completed,100);
@@ -22,5 +23,6 @@ const wait=async()=>{for(let i=0;i<1000&&get('simulateBtn').disabled;i++)await n
  change('recordMode','continuous');assert.ok(get('recordDashboard').textContent.includes('承接狀態'));
  const saved=w.localStorage.getItem(w.DFCHRecords.KEY);const restored=w.DFCHRecords.create(w.localStorage);assert.equal(restored.get('independent','stage_1').totals.completed,before+1);
  assert.ok(saved.includes('highDiamonds'));w.confirm=()=>true;get('resetMapRecords').click();assert.equal(w.DFCHRecordStore.get('continuous','stage_1'),null);assert.equal(w.DFCHRecordStore.get('independent','stage_1').totals.completed,before+1);
+ change('simulationMode','continuous');change('dailyDiamondCount','500','input');w.confirm=()=>false;get('simulateOnceBtn').click();await wait();assert.equal(w.DFCHLastSimulation.completed,0);assert.equal(w.DFCHLastSimulation.stopReason,'diamond-limit');assert.equal(w.DFCHRecordStore.get('continuous','stage_1'),null);assert.ok(get('simulateMessage').textContent.includes('達到上限'));
  assert.equal(get('cancelSimulation').hidden,true);console.log('Real HTML/module load and UI: single run, 100 continuous, invalid input, manual stamina, million-run cancellation, 100% exploration and fresh/replay seed modes passed');w.close();
 })().catch(e=>{console.error(e);w.close();process.exitCode=1;});
