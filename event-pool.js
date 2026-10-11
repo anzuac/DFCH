@@ -22,7 +22,7 @@
     const scale=progress>0?f(1-f(Math.min(Math.max(extra,0),progress)/progress)):1;
     return boosted.map(r=>!r.isForce && r.weight>0 && r.eventType===1?{...r,weight:f(r.weight*scale)}:r);
   }
-  function dynamic(data,master,initialRate,flags) {
+  function dynamic(data,master,initialRate,flags,effects={}) {
     const result=[],base=999000000+master.dungeonId*100;
     if(master.basicBattleMonsterGroupId>0)result.push(row(base,2,master.basicBattleWeight,
       [seq(108,master.basicBattleMonsterGroupId,master.basicBattleMinMonsterCount,master.basicBattleMaxMonsterCount),seq(6),seq(100,1),seq(7,master.basicBattleDropSampleGroupId)],{name:'怪物遭遇'}));
@@ -36,7 +36,7 @@
         result.push(row(base+50+i,10,master.basicFlagUnlockWeights[i],[seq(100,1),seq(11,id)],{name:master.key==='stage_atli'?'搜尋決戰魔王地點':master.key==='stage_labyrinth_1'?'搜尋巨大迷宮下層地點':'搜尋秘石',conditionTypes:[9],conditionValues:[unlock]}));
       }
     });
-    if(master.bossBattleGroupId>0)result.push(row(base+1,2,0,[seq(1),seq(108,master.bossBattleGroupId),seq(6),seq(100,1),seq(9,master.multiDropContinuousRate,...master.bossDropSampleGroupIds.filter(id=>id>0))],{name:'終點首領',isForce:true,isOnce:true,checkPointProgress:master.depth,boss:true}));
+    if(master.bossBattleGroupId>0)result.push(row(base+1,2,0,[seq(1),seq(108,master.bossBattleGroupId),seq(6),seq(100,1),seq(9,master.multiDropContinuousRate,...(window.DFCHArtifacts?.bossGroups({master},effects)??master.bossDropSampleGroupIds.filter(id=>id>0)))],{name:'終點首領',isForce:true,isOnce:true,checkPointProgress:master.depth,boss:true}));
     let dropIndex=0,battleIndex=0;
     if(master.dungeonId===data.master.dungeonId)for(const reward of data.completionRewards) {
       if(reward.requiredCompletionRate>initialRate)continue;
@@ -52,11 +52,11 @@
       const name={1:'步行',2:'快速步行',3:'休息',200:'小幅探索',201:'探索',202:'深入探索',901:'發現鑽石礦脈',351:'深雪阻行',352:'暴風雪',360:'全隊毒物陷阱',350:'毒霧陷阱',300:'物理陷阱',301:'強力物理陷阱',302:'重型物理陷阱',303:'毒物陷阱',304:'火焰陷阱'}[r.logEventId]??'地圖事件';
       return {...r,eventType:type,originalWeight:f(r.weight),rows,name};
     }):[];
-    pool.push(...dynamic(data,master,context.exploration.initialCompletionRate,context.drops.flags));
+    pool.push(...dynamic(data,master,context.exploration.initialCompletionRate,context.drops.flags,context.artifacts));
     // The current UI provides collector abilities only, none of which unlock
     // these templates. Do not silently activate a template or invent HP input.
     for(const template of data.conditionalTemplates)if(template.requiredAbilities.some(id=>id>0 && context.abilityIds.includes(id)))throw new Error('此能力的角色狀態尚未提供，無法啟用專屬事件');
-    return applyAffection(data,pool,context.affectionRatio);
+    return applyAffection(data,pool,context.affectionRatio).map(r=>r.eventType===9&&context.artifacts?.exploration>0?{...r,weight:f(r.weight*(100+context.artifacts.exploration)/100)}:r);
   }
   function conditions(r,c) {
     return r.conditionTypes.every((type,i)=>{

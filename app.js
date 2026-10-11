@@ -236,33 +236,37 @@
       const ownedInputs=[...document.querySelectorAll('#dropStateControls input')],daily=document.getElementById('dailyDiamondCount');
       if(daily.value.trim()===''||ownedInputs.some(i=>i.value.trim()===''))throw new Error('請填妥持有量與當日鑽石累計。');
       const flags=[];if(data.master.basicFlagUnlockConditions[0]>=0&&data.master.basicFlagUnlockSampleGroupIds[0]>0&&document.getElementById('stoneSearchAvailable').checked)flags.push(data.master.basicFlagUnlockConditions[0]);if(document.getElementById('stoneUnlocked').checked){const unlock=data.flagUnlockSamples.find(r=>r.flagType>0);if(unlock)flags.push(unlock.flagType);}
-      const options={seed,multiplier:speed.multiplier,abilityIds,affectionRatio:window.DFCHAffection.ratio(role,affectionGlasses.checked?30:0),completionRate:window.DFCHMapConfig?.completionRate??0,stamina:window.DFCHStaminaConfig,saved:{daily:Number(daily.value),owned:Object.fromEntries(ownedInputs.map(i=>[i.dataset.reward,Number(i.value)])),flags}};
+      window.DFCHAccount?.assertValid();
+      const options={seed,rolePercent:role,multiplier:speed.multiplier,abilityIds,affectionRatio:window.DFCHAffection.ratio(role,affectionGlasses.checked?30:0),completionRate:window.DFCHMapConfig?.completionRate??0,stamina:window.DFCHStaminaConfig,saved:{daily:Number(daily.value),owned:Object.fromEntries(ownedInputs.map(i=>[i.dataset.reward,Number(i.value)])),flags}};
       // Snapshot all controls: editing during a run cannot change its config.
       const count=once?1:Number(document.getElementById('simulationCount').value),mode=document.getElementById('simulationMode').value;
       if(window.DFCHRecordStore.error)throw new Error(window.DFCHRecordStore.error);
       const previous=window.DFCHRecordStore.get(mode,data.master.key);
-      if(mode==='continuous'&&previous){options.saved=previous.latest.saved;options.completionRate=previous.latest.completionRate;}
+      if(window.DFCHAccount)options.saved=window.DFCHDropPreview.saved();
+      else if(mode==='continuous'&&previous){options.saved=previous.latest.saved;options.completionRate=previous.latest.completionRate;}
       window.DFCHSimulator.create(data,options); // fail before replacing prior results
-      running=true;window.DFCHSimulationRunning=true;simulateBtn.disabled=true;document.getElementById('mapSelect').disabled=true;document.getElementById('simulateOnceBtn').disabled=true;cancel.hidden=false;bar.hidden=false;bar.max=count;bar.value=0;controller=new AbortController();
+      running=true;window.DFCHSimulationRunning=true;window.DFCHAccount?.lock(true);simulateBtn.disabled=true;document.getElementById('mapSelect').disabled=true;document.getElementById('simulateOnceBtn').disabled=true;cancel.hidden=false;bar.hidden=false;bar.max=count;bar.value=0;controller=new AbortController();
       let lastRecordPaint=0;
       const result=await window.DFCHSimulationBatch.run(data,options,{count,mode,signal:controller.signal,seedFactory:window.DFCHRandom.freshSeed,onLimit:info=>{
         window.DFCHRecordView.render();
         simulateMessage.textContent=`已暫停：今日此地圖一般鑽石 ${info.daily}／${info.limit}，已達上限。已完成 ${info.completed} 輪已保存。`;
         return window.confirm(`今日「${info.mapName}」的一般鑽石已達上限（${info.daily}／${info.limit}）。\n已完成 ${info.completed} 輪並存檔，尚有 ${info.requested-info.completed} 輪。\n繼續後將套用一般鑽石上限規則；神級鑽石仍可取得。\n是否繼續遠征？`);
-      },onResult:r=>window.DFCHRecordStore.add(mode,data,r,options),onProgress:a=>{bar.value=a.completed;simulateMessage.textContent=`執行中：${a.completed.toLocaleString()}／${count.toLocaleString()} 輪。已完成輪已自動存檔。`;if(Date.now()-lastRecordPaint>=150){window.DFCHRecordView.render();lastRecordPaint=Date.now();}}});
+      },onResult:r=>{window.DFCHRecordStore.add(mode,data,r,options);if(mode==='continuous')window.DFCHAccount?.commit(r,data.master.key);},onProgress:a=>{bar.value=a.completed;simulateMessage.textContent=`執行中：${a.completed.toLocaleString()}／${count.toLocaleString()} 輪。已完成輪已自動存檔。`;if(Date.now()-lastRecordPaint>=150){window.DFCHRecordView.render();lastRecordPaint=Date.now();}}});
       window.DFCHLastSimulation=result;window.DFCHSimulationView.render(data,result);
       simulateMessage.textContent=`${result.stopReason==='diamond-limit'?'已停止：今日此地圖一般鑽石達到上限':result.cancelled?'已中止':'已完成'}：${result.completed.toLocaleString()} 輪，${result.goals.toLocaleString()} 輪到達終點；第一輪種子 ${seed}。${mode==='continuous'&&result.last?.limitReachedAtEnd?' 今日此地圖一般鑽石已達上限。':''}`;
     } catch(error) {
       simulateMessage.textContent=`模擬未完成：${error.message}。沒有結算未完成的遠征。`;
     } finally {
-      running=false;window.DFCHSimulationRunning=false;controller=null;cancel.hidden=true;document.getElementById('mapSelect').disabled=false;updateStamina();document.getElementById('simulateOnceBtn').disabled=simulateBtn.disabled;window.DFCHRecordView.render();
+      running=false;window.DFCHSimulationRunning=false;window.DFCHAccount?.lock(false);window.DFCHAccount?.render();window.dispatchEvent(new Event('dfch-account-change'));controller=null;cancel.hidden=true;document.getElementById('mapSelect').disabled=false;updateStamina();document.getElementById('simulateOnceBtn').disabled=simulateBtn.disabled;window.DFCHRecordView.render();
     }
   }
   simulateBtn.addEventListener('click',()=>startSimulation(false));
   document.getElementById('simulateOnceBtn').addEventListener('click',()=>startSimulation(true));
   const modeSelect=document.getElementById('simulationMode');
-  function modeNote(){document.getElementById('simulationModeNote').textContent=modeSelect.value==='independent'?'每輪獨立初始化；只累積紀錄，不承接鑽石上限與持有量。':'承接連續面板已存進度；若無紀錄才採用玩家起始配置。可在儀表板調整當日鑽石或重置。';}
+  function modeNote(){document.getElementById('simulationModeNote').textContent=modeSelect.value==='independent'?'每輪獨立初始化；只累積紀錄，不承接鑽石上限與持有量。':'以上方帳號神器與探索開始，逐輪累積；當日鑽石承接此地圖的連續紀錄，可在統計頁調整。';}
   modeSelect.addEventListener('change',modeNote);modeNote();
+
+  window.addEventListener('dfch-account-change',updateSummary);
 
   addMember({ name: "隊員 1", speed: "0.520" });
   addMember({ name: "隊員 2", speed: "0.480" });

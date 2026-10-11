@@ -13,7 +13,7 @@
     let affection=0;
     for(const [id,n] of Object.entries(r.rewards)) {
       a.quantities[id]=(a.quantities[id]??0)+n;a.rewardRuns[id]=(a.rewardRuns[id]??0)+1;
-      if(Math.floor(Number(id)/1000000)===305)affection+=n;
+      if(Number(id)>=305001000&&Number(id)<305002000)affection+=n;
     }
     a.affection+=affection;a.affectionRuns+=affection>0?1:0;
     for(const [name,n] of Object.entries(r.eventCounts))a.eventCounts[name]=(a.eventCounts[name]??0)+n;

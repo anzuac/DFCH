@@ -1,11 +1,9 @@
-<!doctype html>
-<html lang="zh-Hant">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#10181c" />
-  <title>DFCH 遠征模擬器</title>
-  <link rel="stylesheet" href="./styles.css?v=1.6.0" />
+<!DOCTYPE html><html lang="zh-Hant"><head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0b1420">
+  <title>DFCH 遠征模擬器 · V2.0.0</title>
+  <link rel="stylesheet" href="./styles.css?v=2.0.0">
 </head>
 <body>
   <div class="app-shell">
@@ -13,25 +11,37 @@
       <div>
         <p class="eyebrow">DFCH / Expedition Simulator</p>
         <div class="title-actions"><h1>遠征模擬器</h1><button id="openDiamondSimulator" class="speed-details-button" type="button">💎 鑽石抽取模擬器</button></div>
-        <p class="sub">V1.6.0 · 十三張地圖遠征模擬 · 官方資料 3.16.0</p>
+        <p class="sub">配置你的遠征隊，探索十三張地圖的獎勵。</p>
       </div>
-      <div class="version-pill">V1.6.0</div>
+      <div class="version-pill">V2.0.0</div>
     </header>
 
     <nav class="tabs" aria-label="主功能">
       <button class="tab active" data-tab="simulator">遠征配置</button>
-      <button class="tab" data-tab="stats">統計預覽</button>
-      <button class="tab" data-tab="roadmap">開發階段</button>
+      <button class="tab" data-tab="stats">統計總覽</button>
+      <button class="tab" data-tab="roadmap">版本與說明</button>
     </nav>
 
     <main>
-      <section class="tab-panel active" id="tab-simulator">
+      <section class="tab-panel active" id="tab-simulator"><section class="panel account-panel" id="accountSettings" aria-labelledby="accountTitle">
+<div class="panel-head"><div><span class="step-badge">01</span><h2 id="accountTitle">帳號神器與探索</h2></div><span class="status-chip accent" id="accountActiveCount"></span></div>
+<p class="section-intro">先選好你擁有的神器。切換地圖時共用；連續遠征新取得的神器，從下一輪開始生效。</p>
+<div id="accountArtifacts" class="account-artifact-grid"></div>
+<div class="exploration-switch"><label><input type="checkbox" id="allMapsExplored"><span><strong>全部地圖探索 100%</strong><small>套用所有探索解鎖獎勵，並排除已無作用的探索事件。</small></span></label><span class="status-chip neutral">13 張地圖</span></div>
+<div class="account-footer"><p id="accountSummary" role="status"></p><span id="artifactStateText" hidden=""></span><div class="bonus-readout">
+                <span>目前 UI 選取的羈絆加成</span>
+                <strong id="affectionBonus">角色 +10% · 神器 +30%</strong>
+                <small>收集家加成與觀緣眼鏡相乘，增量由步行事件權重轉移</small>
+              </div></div>
+<details class="account-inventory"><summary>其他限定神器持有量 · 目前選擇的地圖</summary><p class="unit-note">這些持有量用於滿級掉落排除。耐力總額請在執行設定輸入；戰鬥、經驗及年齡效果不在此次模擬範圍。</p><div id="dropStateControls" class="field-grid two"></div></details>
+<div class="account-tools"><span id="accountSaveStatus" role="status"></span><button type="button" id="accountExport" class="text-btn">匯出設定</button><label class="text-btn import-label">匯入設定<input type="file" id="accountImport" accept=".json,application/json"></label></div>
+</section>
         <div class="layout-grid">
           <div class="main-column">
             <section class="panel">
               <div class="panel-head">
                 <div>
-                  <span class="step-badge">01</span>
+                  <span class="step-badge">02</span>
                   <h2>遠征地圖</h2>
                 </div>
                 <span class="status-chip neutral">十三張地圖資料已解析</span>
@@ -57,31 +67,28 @@
                   </select>
                 </label>
 
-                <div class="field readout">
-                  <span>目前版本</span>
-                  <strong>V1.6.0 · 單輪與批次模擬可用</strong>
-                </div>
+                <div class="field readout"><span>遊戲資料版本</span><strong>3.16.0 · 十三張地圖</strong></div>
               </div>
               <div class="official-formula-card" id="mapOfficialData">
                 <strong id="mapDataTitle">官方地圖資料</strong>
                 <p id="mapDataSummary" aria-live="polite"></p>
-                <p>V1.6.0：十三張地圖已可執行單輪與批次模擬，使用收集家／觀緣眼鏡配置及秒殺戰鬥。其他角色專屬能力尚未開放。<a href="./docs/stage-12-13-map.md" target="_blank" rel="noopener">查看完整核對記錄</a></p>
-                <p>模擬設定：遭遇敵人後立即勝利，戰鬥耗時 0 秒；保留遭遇、勝利掉落與後續事件。這是模擬器設定。</p>
-                <label class="field"><span><input type="checkbox" id="mapExplored100"> 地圖探索已達 100%</span></label>
-                <p id="mapExplorationSummary" aria-live="polite"></p>
+
+
+                <label class="field"><span>此地圖起始探索率（%）</span><input id="mapExplorationRate" type="number" min="0" max="100" step="any" value="0"></label><label class="field"><span><input type="checkbox" id="mapExplored100"> 地圖探索已達 100%</span></label>
+                <p id="mapExplorationSummary" aria-live="polite" class="helper"></p>
                 <details id="dropStateDetails">
-                  <summary>查看每日鑽石、神器持有與解鎖後的權重</summary>
+                  <summary>有效掉落預覽與當日狀態</summary>
                   <div class="map-detail-scroll" tabindex="0" role="region" aria-label="鑽石與持有權重明細，可上下捲動">
-                  <p class="unit-note">以下為指定物品抽選已發生時的條件機率，保留原始掉落權重，只套用每日上限、神器滿級與基本池重抽。探索、限定神器加成及其他事件增權尚未合併，不能當成整場掉率。</p>
+                  <p class="unit-note">此處是單次物品抽選的條件機率，已套用上方神器、探索率及滿級排除；不代表整場取得機率。連續模式已有紀錄時，沿用其當日鑽石。</p>
                   <div class="field-grid two">
                     <label class="field"><span>本次遠征開始前，當日一般鑽石累計</span><input id="dailyDiamondCount" type="number" min="0" step="1" value="0"></label>
                     <label class="field"><span>查看抽選池</span><select id="dropPoolMode"><option value="basic">基本鑽石物品事件</option><option value="boss">首領合併掉落池（單次抽選）</option></select></label>
                   </div>
-                  <div id="dropStateControls" class="field-grid two"></div>
+
                   <label class="field"><span><input id="stoneSearchAvailable" type="checkbox"> 已開放秘石搜尋（前置解鎖）</span></label>
                   <label class="field"><span><input id="stoneUnlocked" type="checkbox"> 已取得此地圖的解鎖發現</span></label>
                   <p id="dropStateSummary" aria-live="polite"></p>
-                  <div class="speed-table-scroll"><table class="speed-table"><thead><tr><th>物品</th><th>原始數量範圍</th><th>此抽選的條件機率</th></tr></thead><tbody id="dropStateRows"></tbody></table></div>
+                  <div class="speed-table-scroll"><table class="speed-table"><thead><tr><th>物品</th><th>實際數量範圍</th><th>此抽選的條件機率</th></tr></thead><tbody id="dropStateRows"></tbody></table></div>
                   <p id="flagStateSummary" aria-live="polite"></p>
                   <p class="unit-note">神器持有未滿級仍可掉落；本輪待結算取得量也會參與滿級排除。神級鑽石不計入一般鑽石日上限。連續遠征需先結算持有與解鎖，再建立下一輪；跨日重置時刻仍待核對。</p>
                   </div>
@@ -98,7 +105,7 @@
             <section class="panel">
               <div class="panel-head">
                 <div>
-                  <span class="step-badge">02</span>
+                  <span class="step-badge">03</span>
                   <h2>遠征隊伍</h2>
                 </div>
                 <span class="status-chip accent">速度換算已接入</span>
@@ -119,15 +126,15 @@
                 </div>
               </div>
 
-              <div class="official-formula-card">
+              <details class="compact-help"><summary>增加隊員會更快嗎？</summary><div class="official-formula-card">
                 <strong>增加隊員會更快嗎？</strong>
                 <p id="partySpeedTradeoff" aria-live="polite"></p>
                 <label for="candidateSpeed">試算新隊員的未加速面板速度（km/s）</label>
                 <input id="candidateSpeed" type="number" min="0.05" step="0.001" placeholder="例如 0.577" inputmode="decimal">
                 <p id="candidateSpeedResult" aria-live="polite">輸入速度即可預覽加入後的變化。</p>
-              </div>
+              </div></details>
 
-              <div class="official-formula-card">
+              <details class="compact-help"><summary>輸入未加速的面板步行速度 km/s</summary><div class="official-formula-card">
                 <div>
                   <span class="formula-kicker">官方換算鏈 · 3.16.0 IL2CPP</span>
                   <strong>輸入未加速的面板步行速度 km/s</strong>
@@ -141,7 +148,7 @@
                   <b>遠征速度倍率（×）</b>
                 </div>
                 <button type="button" id="speedDetailsBtn" class="text-btn speed-details-button" aria-expanded="false" aria-controls="speedDetailsPanel">詳細資訊</button>
-                <section class="speed-details" id="speedDetailsPanel" hidden aria-label="隊伍速度換算明細">
+                <section class="speed-details" id="speedDetailsPanel" hidden="" aria-label="隊伍速度換算明細">
                   <strong>每位角色的速度換算</strong>
                   <p>未加速時面板速度等於基礎步行速度。小於 0.750：L = (速度 − 0.05) ÷ 0.00875；其餘：L = 80 + (速度 − 0.75) ÷ 0.0035175872035324574。</p>
                   <div class="speed-table-scroll">
@@ -154,7 +161,7 @@
                   <p id="speedPrecision" class="unit-note"></p>
                   <p class="unit-note">個體遠征倍率 = 0.8 + (個體 L ÷ 100) × 3.2，代表該角色單獨作為隊伍時的倍率；不能把每人的倍率相加。倍率用於事件進度，不是隊伍 km/s 或最小移動單位。基礎進度 1、倍率 ×0.8 時，單次進度可能是 0 或 1，小數餘額以機率補 1；部分事件會略過速度乘算。遠征倒數使用地圖設定與獨立縮時效果，不能直接除以隊伍倍率。收集家與觀緣眼鏡目前屬於掉落配置，不加到速度中。</p>
                 </section>
-              </div>
+              </div></details>
 
               <div class="leader-wrap">
                 <p class="section-label">隊長</p>
@@ -162,13 +169,13 @@
                   <div class="unit-avatar">隊</div>
                   <div class="unit-body">
                     <div class="unit-title-row">
-                      <input class="unit-name" value="露娜" aria-label="隊長名稱" />
+                      <input class="unit-name" value="露娜" aria-label="隊長名稱">
                       <span class="leader-tag">LEADER</span>
                     </div>
                     <div class="unit-stat-grid">
                       <label class="speed-line">
                         <span>步行速度</span>
-                        <input class="speed-input" type="number" inputmode="decimal" step="0.001" min="0" value="0.577" />
+                        <input class="speed-input" type="number" inputmode="decimal" step="0.001" min="0" value="0.577">
                         <em>km/s</em>
                       </label>
                     </div>
@@ -198,13 +205,13 @@
                   <div class="unit-avatar">員</div>
                   <div class="unit-body">
                     <div class="unit-title-row">
-                      <input class="unit-name" value="隊員" aria-label="隊員名稱" />
+                      <input class="unit-name" value="隊員" aria-label="隊員名稱">
                       <button class="icon-btn remove-member" title="移除隊員">×</button>
                     </div>
                     <div class="unit-stat-grid">
                       <label class="speed-line">
                         <span>步行速度</span>
-                        <input class="speed-input" type="number" inputmode="decimal" step="0.001" min="0" value="0.500" />
+                        <input class="speed-input" type="number" inputmode="decimal" step="0.001" min="0" value="0.500">
                         <em>km/s</em>
                       </label>
                     </div>
@@ -220,43 +227,16 @@
               </template>
             </section>
 
-            <section class="panel">
-              <div class="panel-head">
-                <div>
-                  <span class="step-badge">03</span>
-                  <h2>神器與掉落加成</h2>
-                </div>
-                <span class="status-chip neutral">已接入抽選</span>
-              </div>
 
-              <div class="artifact-card">
-                <span class="artifact-icon">◎</span>
-                <span>
-                  <strong>觀緣眼鏡</strong>
-                  <small>遠征時羈絆道具掉落率提升 30%</small>
-                </span>
-                <div class="artifact-toggle-wrap">
-                  <span id="artifactStateText">擁有</span>
-                  <label class="switch" aria-label="是否擁有觀緣眼鏡">
-                    <input id="affectionGlasses" type="checkbox" checked />
-                    <span class="slider"></span>
-                  </label>
-                </div>
-                <b>+30%</b>
-              </div>
 
-              <div class="bonus-readout">
-                <span>目前 UI 選取的羈絆加成</span>
-                <strong id="affectionBonus">角色 +10% · 神器 +30%</strong>
-                <small>收集家加成與觀緣眼鏡相乘，增量由步行事件權重轉移</small>
-              </div>
-            </section>
 
-            <section class="panel">
+          </div>
+
+          <aside class="side-column"><section class="panel" id="runSettings">
               <div class="panel-head">
                 <div>
                   <span class="step-badge">04</span>
-                  <h2>模擬設定</h2>
+                  <h2>開始遠征</h2>
                 </div>
                 <span class="status-chip warning">可執行</span>
               </div>
@@ -267,29 +247,29 @@
                   <select id="simulationCount">
                     <option value="1">1 次</option>
                     <option value="100">100 次</option>
-                    <option value="10000" selected>10,000 次</option>
+                    <option value="10000">10,000 次</option>
                     <option value="100000">100,000 次</option>
                     <option value="1000000">1,000,000 次</option>
-                  </select>
+                  <option value="1000" selected="">1,000 次</option></select>
                 </label>
 
                 <label class="field">
                   <span>戰鬥處理</span>
-                  <select disabled>
+                  <select disabled="">
                     <option>必勝 / 無敵（固定）</option>
                   </select>
                 </label>
               </div>
 
               <div class="field-grid two">
-                <label class="field"><span>隊伍耐力設定</span><select id="staminaMode"><option value="unlimited" selected>無限耐力</option><option value="manual">自行輸入</option></select></label>
-                <label class="field" id="staminaValueField" hidden><span>每輪隊伍起始／最大耐力</span><input id="staminaValue" type="number" min="1" step="1" value="300" inputmode="numeric" disabled></label>
+                <label class="field"><span>隊伍耐力設定</span><select id="staminaMode"><option value="unlimited" selected="">無限耐力</option><option value="manual">自行輸入</option></select></label>
+                <label class="field" id="staminaValueField" hidden=""><span>每輪隊伍起始／最大耐力</span><input id="staminaValue" type="number" min="1" step="1" value="300" inputmode="numeric" disabled=""></label>
               </div>
               <p class="helper" id="staminaSummary" aria-live="polite"></p>
-              <p class="helper">每輪自動產生新種子並保存至紀錄，玩家不需輸入。</p>
-              <p class="unit-note">自行輸入的是隊伍耐力總額。每輪以此值開始，消耗降至 0 時結束；恢復不超過最大值。無限耐力略過耐力消耗與耗盡判定，仍保留地圖進度及終點事件。</p>
+
+
               <label class="field"><span>批次狀態</span><select id="simulationMode"><option value="independent">每輪獨立：固定起始配置</option><option value="continuous">連續遠征：累積探索、持有與當日鑽石</option></select></label>
-              <p class="helper">連續模式每輪刷新已達到的探索門檻；不自動跨日重置鑽石。每輪各自產生新種子。</p>
+
               <div class="simulation-actions"><button class="primary-btn" id="simulateOnceBtn"><span>遠征一次</span><small>完成後累積紀錄</small></button>
               <button class="primary-btn" id="simulateBtn">
                 <span>批次模擬</span>
@@ -297,14 +277,11 @@
               </button>
               </div>
               <p class="helper" id="simulationModeNote"></p>
-              <button type="button" class="secondary-btn" id="cancelSimulation" hidden>中止模擬</button>
-              <progress id="simulationProgress" value="0" max="1" hidden aria-label="模擬進度"></progress>
+              <button type="button" class="secondary-btn" id="cancelSimulation" hidden="">中止模擬</button>
+              <progress id="simulationProgress" value="0" max="1" hidden="" aria-label="模擬進度"></progress>
               <p class="helper" id="simulateMessage" aria-live="polite">準備就緒。可選 1 次查看整輪事件，或執行批次統計。</p>
-            </section>
-          </div>
-
-          <aside class="side-column">
-            <section class="panel sticky-panel">
+            <details class="compact-help"><summary>耐力、種子與連續模式說明</summary><p class="helper">每輪自動產生新種子並保存至紀錄，玩家不需輸入。</p><p class="unit-note">自行輸入的是隊伍耐力總額。每輪以此值開始，消耗降至 0 時結束；恢復不超過最大值。無限耐力略過耐力消耗與耗盡判定，仍保留地圖進度及終點事件。</p><p class="helper">連續模式每輪刷新已達到的探索門檻；不自動跨日重置鑽石。每輪各自產生新種子。</p></details></section>
+            <section class="panel">
               <div class="panel-head compact">
                 <div>
                   <span class="step-badge">結果</span>
@@ -313,7 +290,7 @@
               </div>
 
               <div id="simulationResults" aria-live="polite"><p>尚未執行遠征。</p></div>
-              <p class="unit-note">以官方 3.16.0 的已抽取規則執行；戰鬥固定秒殺、0 秒。第三、第五張毒霧與第四、第六、第八張物理陷阱與第七張火焰陷阱保留事件與前進，依玩家指定免除傷害；略過原版陷阱傷害亂數。未模擬原版戰鬥亂數、角色經驗分配、寶箱開箱內容與跨日重置。官方各地圖固定倒數不除以速度倍率。</p>
+              <p class="unit-note">固定無敵必勝、戰鬥 0 秒、陷阱免傷。未模擬角色專屬事件、活動加成、經驗、開箱及跨日重置。</p>
             </section>
           </aside>
         </div>
@@ -324,20 +301,16 @@
           <h2>遠征紀錄儀表板</h2><p><a href="./docs/v1.3-records.md" target="_blank" rel="noopener">紀錄與存檔說明</a></p>
           <label class="field"><span>紀錄地圖</span><select id="recordMapSelect"><option value="stage_1">米維克威茲 外緣部</option><option value="stage_2">希敏約格 湖畔</option><option value="stage_3">世界樹 樹海</option><option value="stage_4">阿斯嘉特 邊境</option><option value="stage_5">赫爾海姆 支川</option><option value="stage_6">學術都市 露克斯・艾特納</option><option value="stage_hard">金倫加鴻溝</option><option value="stage_atli">昔日的米德加爾德</option><option value="stage_uw">不歸的牢獄 庫・努・吉亞</option><option value="stage_snow">雪嶺孤城 烏沃貝爾克</option><option value="stage_labyrinth_1">巨大迷宮探索 上層</option><option value="stage_labyrinth_2">巨大迷宮探索 下層</option><option value="stage_satan">決戰魔王</option></select></label>
           <label class="field"><span>紀錄類型</span><select id="recordMode"><option value="independent">獨立遠征統計</option><option value="continuous">連續遠征統計</option></select></label>
-          <p class="helper">兩種模式各自累積、各自存檔。獨立模式取得物品只進入統計，不改變下一輪的持有配置。更換配置的結果會累積在同一模式，平均值代表混合配置。</p>
+          <p class="helper">獨立與連續模式分開累積；不同版本與配置會混合統計。重置統計不清除上方帳號神器與探索設定；需要比較時可先匯出備份。</p>
           <p id="recordStatus" role="status"></p><div id="recordDashboard"></div>
           <div class="record-actions"><button id="exportRecords" class="secondary-btn">匯出全部紀錄</button><label class="secondary-btn">匯入存檔<input type="file" id="importRecords" accept="application/json,.json"></label></div>
           <details><summary>調整連續遠征的當日鑽石</summary><p>只更改連續模式下一輪的上限判定，不清除累積統計。</p><label class="field"><span>當日一般鑽石</span><input type="number" id="recordDailyValue" min="0" step="1" value="0"></label><button id="setRecordDaily" class="secondary-btn">套用至連續模式</button></details>
-          <details><summary>重置紀錄</summary><p>重置此面板只清除目前類型與所選地圖的紀錄與承接狀態；不影響另一種類型或玩家配置。</p><button id="resetMapRecords" class="secondary-btn">重置此面板地圖紀錄</button><button id="resetModeRecords" class="secondary-btn">重置此類型全部地圖</button><button id="resetAllRecords" class="secondary-btn">重置兩種類型全部地圖</button></details>
+          <details><summary>重置紀錄</summary><p>重置此面板只清除目前類型與所選地圖的統計及當日鑽石；不影響另一種類型或玩家配置。</p><button id="resetMapRecords" class="secondary-btn">重置此面板地圖紀錄</button><button id="resetModeRecords" class="secondary-btn">重置此類型全部地圖</button><button id="resetAllRecords" class="secondary-btn">重置兩種類型全部地圖</button></details>
           <p class="unit-note">自動存檔保存在目前瀏覽器／網站；清除網站資料或換裝置不會保留，請先匯出備份。當日上限不自動跨日重置。</p>
         </section>
       </section>
 
-      <section class="tab-panel" id="tab-roadmap">
-        <section class="panel">
-          <div class="roadmap"><article class="roadmap-item current"><span>V1.6.0</span><div><strong>十三張地圖可執行</strong><p>合併池、探索門檻、條件、事件流程、結算、共用亂數與批次統計已串接。此版限定收集家及觀緣眼鏡，其他專屬能力遇到不支援配置會停止。</p><a href="./docs/stage-12-13-map.md">查看驗證範圍</a></div></article></div>
-        </section>
-      </section>
+      <section class="tab-panel" id="tab-roadmap"><section class="panel release-notes"><span class="eyebrow">VERSION 2.0.0</span><h2>讓設定、預覽與模擬用同一套規則</h2><p>官方資料 3.16.0 · 保留 V1.6.0 鑽石抽取與獎勵輪盤。</p><div class="release-grid"><article><h3>共用帳號配置</h3><p>六種遠征神器、全部地圖 100% 或各圖探索率。設定自動保存，連續模式新取得神器跨地圖共用。</p></article><article><h3>有效掉落預覽</h3><p>預覽與模擬共用神器及探索加成，顯示轉換後的獎勵數量。魂之果物獨立於羈絆贈禮。</p></article><article><h3>保留你的紀錄</h3><p>舊版統計持續保留。不同版本或配置累積在一起時，平均值代表混合結果；需要比較時先匯出備份，再重置統計。</p></article></div><details><summary>模擬範圍</summary><p>無敵必勝、戰鬥 0 秒、陷阱免傷；可用無限耐力或自訂隊伍最終耐力。活動倍率、其他角色專屬事件、經驗、年齡、寶箱開箱及跨日重置尚未接入。面板步行速度換算為估算，不能當作原版逐種子重播。</p></details><a href="./docs/v2.0.0.md" target="_blank" rel="noopener">查看 V2.0.0 更新與驗證</a></section></section>
     </main>
   </div>
 
@@ -346,33 +319,34 @@
     <div class="diamond-dialog-body">
       <div class="diamond-tabs" role="tablist" aria-label="抽取模式"><button id="diamondSimpleTab" role="tab" aria-controls="diamondSimple" aria-selected="true">鑽石抽取</button><button id="diamondRouletteTab" role="tab" aria-controls="diamondRoulette" aria-selected="false">獎勵輪盤</button></div>
       <section id="diamondSimple" role="tabpanel" aria-labelledby="diamondSimpleTab"><h3>41 種等機率結果</h3><p id="diamondRange"></p><p class="hint">每個數量的機率都是 1／41（約 2.439024%）。</p><label class="diamond-option"><input id="diamondEye" type="checkbox">擁有神器「惡魔之眼」LV8：數量提高 100%</label><p class="hint">此選項只加倍本頁鑽石數量，不改變機率。</p></section>
-      <section id="diamondRoulette" role="tabpanel" aria-labelledby="diamondRouletteTab" hidden><label class="diamond-option"><input id="diamondHorn" type="checkbox">擁有 AF「高貴一角的寶牙」</label><p id="diamondTier"></p><div id="diamondWheel" class="diamond-wheel" role="button" tabindex="0" aria-label="點擊停止輪盤"></div><details class="diamond-probabilities"><summary>查看完整機率表</summary><p class="hint">先抽稀有度，再抽該層獎勵。整體機率＝稀有度機率 × 該層獎勵機率。金色代幣沿用截圖圖示稱呼。</p><div id="diamondProbabilities"></div></details></section>
+      <section id="diamondRoulette" role="tabpanel" aria-labelledby="diamondRouletteTab" hidden=""><label class="diamond-option"><input id="diamondHorn" type="checkbox">擁有 AF「高貴一角的寶牙」</label><p id="diamondTier"></p><div id="diamondWheel" class="diamond-wheel" role="button" tabindex="0" aria-label="點擊停止輪盤"></div><details class="diamond-probabilities"><summary>查看完整機率表</summary><p class="hint">先抽稀有度，再抽該層獎勵。整體機率＝稀有度機率 × 該層獎勵機率。金色代幣沿用截圖圖示稱呼。</p><div id="diamondProbabilities"></div></details></section>
       <p id="diamondResult" class="diamond-result" role="status" aria-live="polite"></p>
-      <div class="diamond-controls"><button id="diamondStart" type="button">開始抽取</button><button id="diamondStop" type="button" disabled>點一下停止</button></div>
+      <div class="diamond-controls"><button id="diamondStart" type="button">開始抽取</button><button id="diamondStop" type="button" disabled="">點一下停止</button></div>
       <p class="hint">游標依機率表跳動；點擊停止時依同一張機率表抽選並停在最終獎勵。動畫不是平均輪流經過每格，點擊時機不提高稀有獎勵機率。</p>
       <details><summary>本模式最近結果</summary><p id="diamondHistoryEmpty" class="hint">尚未抽取。</p><ol id="diamondHistory"></ol><p id="diamondStorageNote" class="hint"></p></details>
     </div>
   </dialog>
-  <script src="./diamond-draw.js?v=1.6.0"></script>
-  <script src="./diamond-view.js?v=1.6.0"></script>
-  <script src="./speed.js?v=1.6.0"></script>
-  <script src="./affection.js?v=1.6.0"></script>
-  <script src="./expedition-rules.js?v=1.6.0"></script>
-  <script src="./stamina.js?v=1.6.0"></script>
-  <script src="./event-state.js?v=1.6.0"></script>
-  <script src="./lottery.js?v=1.6.0"></script>
-  <script src="./random.js?v=1.6.0"></script>
-  <script src="./map-data.js?v=1.6.0"></script>
-  <script src="./drop-state.js?v=1.6.0"></script>
-  <script src="./drop-preview.js?v=1.6.0"></script>
-  <script src="./map-view.js?v=1.6.0"></script>
-  <script src="./simulation-runtime.js?v=1.6.0"></script>
-  <script src="./event-pool.js?v=1.6.0"></script>
-  <script src="./simulator.js?v=1.6.0"></script>
-  <script src="./simulation-batch.js?v=1.6.0"></script>
-  <script src="./simulation-view.js?v=1.6.0"></script>
-  <script src="./records.js?v=1.6.0"></script>
-  <script src="./record-view.js?v=1.6.0"></script>
-  <script src="./app.js?v=1.6.0"></script>
-</body>
-</html>
+  <script src="./diamond-draw.js?v=2.0.0"></script>
+  <script src="./diamond-view.js?v=2.0.0"></script>
+  <script src="./speed.js?v=2.0.0"></script>
+  <script src="./affection.js?v=2.0.0"></script>
+  <script src="./expedition-rules.js?v=2.0.0"></script>
+  <script src="./stamina.js?v=2.0.0"></script>
+  <script src="./event-state.js?v=2.0.0"></script>
+  <script src="./lottery.js?v=2.0.0"></script>
+  <script src="./random.js?v=2.0.0"></script>
+  <script src="./map-data.js?v=2.0.0"></script><script src="./artifact-data.js?v=2.0.0"></script><script src="./artifacts.js?v=2.0.0"></script><script src="./account-settings.js?v=2.0.0"></script>
+  <script src="./drop-state.js?v=2.0.0"></script>
+  <script src="./drop-preview.js?v=2.0.0"></script>
+  <script src="./map-view.js?v=2.0.0"></script>
+  <script src="./simulation-runtime.js?v=2.0.0"></script>
+  <script src="./event-pool.js?v=2.0.0"></script>
+  <script src="./simulator.js?v=2.0.0"></script>
+  <script src="./simulation-batch.js?v=2.0.0"></script>
+  <script src="./simulation-view.js?v=2.0.0"></script>
+  <script src="./records.js?v=2.0.0"></script>
+  <script src="./record-view.js?v=2.0.0"></script>
+  <script src="./app.js?v=2.0.0"></script>
+
+
+</body></html>

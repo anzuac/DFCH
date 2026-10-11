@@ -19,9 +19,19 @@
     const master = data.rewardMasters.find(m => m.rewardId === row.rewardId && m.sourceTable === 'ArtifactTable');
     return !!master && (state.owned[row.rewardId] ?? 0) + (state.pending[row.rewardId] ?? 0) >= master.maxLevel;
   }
-  function pool(rows, state, data, suppressOrdinary = true) {
-    return rows.map(row => ({...row, effectiveWeight: artifactFull(row,state,data) ||
-      suppressOrdinary && state.limitReached && ordinaryDiamond(row) ? 0 : f(row.weight)}));
+  function bonus(data,rate,type) {
+    let value=0;for(const row of data.completionRewards)if(row.requiredCompletionRate<=rate&&row.rewardType===type)value=f(value+f(row.value));return value;
+  }
+  function pool(rows, state, data, suppressOrdinary = true, config={}) {
+    const exploration=bonus(data,config.completionRate??0,6),artifact=config.effects?.limited??0;
+    return rows.map(row => {
+      let weight=f(row.weight);
+      if(data.master.limitedRewardIds.includes(row.rewardId)) {
+        weight=f(f(weight*f(100+artifact))/100);
+        weight=f(f(weight*f(100+exploration))/100);
+      }
+      return {...row,effectiveWeight:artifactFull(row,state,data)||suppressOrdinary&&state.limitReached&&ordinaryDiamond(row)?0:weight};
+    });
   }
   function fallbackGroups(data, affectionRatio = 1) {
     if (!Number.isFinite(affectionRatio) || affectionRatio < 1) throw new RangeError('羈絆倍率無效');
@@ -34,12 +44,13 @@
       return [{id, weight: affection ? f(weight*f(affectionRatio)) : weight}];
     });
   }
-  function distribution(groupIds, state, data, affectionRatio = 1) {
+  function distribution(groupIds, state, data, affectionRatio = 1, config={}) {
+    const samples=window.DFCHArtifacts?.drops(data)??data.dropSamples;
     const positive = groupIds.filter(id => id > 0);
     const basic = positive.length > 0 && positive.every(id => data.master.basicItemDropSampleGroupIds.some(
       (g,i) => g === id && data.master.basicItemDropWeights[i] > 0));
-    const rows = positive.flatMap(id => data.dropSamples.filter(r => r.dropItemSampleGroupId === id));
-    const first = pool(rows,state,data,!basic);
+    const rows = positive.flatMap(id => samples.filter(r => r.dropItemSampleGroupId === id));
+    const first = pool(rows,state,data,!basic,config);
     const total = first.reduce((s,r) => s+r.effectiveWeight,0);
     if (!total) return {rows: [], noDropProbability: 1, basic};
     const result = new Map();
@@ -53,7 +64,7 @@
       const groupTotal = groups.reduce((s,g) => s+g.weight,0);
       if (!groupTotal) {missing += p; continue;}
       for (const group of groups) {
-        const candidates = pool(data.dropSamples.filter(r => r.dropItemSampleGroupId === group.id),state,data);
+        const candidates = pool(data.dropSamples.filter(r => r.dropItemSampleGroupId === group.id),state,data,true,config);
         const sum = candidates.reduce((s,r) => s+r.effectiveWeight,0);
         if (!sum) {missing += p*group.weight/groupTotal; continue;}
         for (const candidate of candidates) if(candidate.effectiveWeight > 0)
@@ -61,6 +72,16 @@
       }
     }
     return {rows: [...result.values()], noDropProbability: missing, basic};
+  }
+  function quantity(row,raw,data,config={}) {
+    let amount=raw;
+    if(row.rewardId===101000000) {
+      const b=bonus(data,config.completionRate??0,1);
+      if(b>0)amount=Math.ceil(f(f(1+f(b/100))*f(amount)));
+      amount=amount*(100+(config.effects?.gem??0))/100;
+    }
+    const converted=window.DFCHExpeditionRules.convertDrop(row,amount,data);
+    return {...converted,quantity:Math.ceil(converted.quantity)};
   }
   function register(state, row, quantity, data) {
     count(quantity);
@@ -84,5 +105,5 @@
     for (const [id,n] of Object.entries(state.pending)) owned[id] = count((owned[id] ?? 0)+n);
     return {daily:state.daily,owned,flags:[...new Set([...state.flags,...state.pendingFlags])]};
   }
-  window.DFCHDropState = Object.freeze({begin,ordinaryDiamond,artifactFull,pool,fallbackGroups,distribution,register,unlock,flagPool,commit});
+  window.DFCHDropState = Object.freeze({begin,ordinaryDiamond,artifactFull,bonus,quantity,pool,fallbackGroups,distribution,register,unlock,flagPool,commit});
 })();

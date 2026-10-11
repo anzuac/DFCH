@@ -1,0 +1,33 @@
+const assert=require('node:assert/strict');global.window={};
+for(const m of ['artifact-data','artifacts','affection','random','lottery','event-state','drop-state','stamina','expedition-rules','simulation-runtime','event-pool','simulator','simulation-batch'])require('../'+m+'.js');
+const A=window.DFCHArtifacts,D=window.DFCHDropState,S=window.DFCHSimulator,P=window.DFCHEventPool,R=window.DFCHExpeditionRules;
+const data=require('../data/stage-1.json'),source=require('../data/artifacts.json');
+assert.deepEqual(window.DFCHArtifactData,source);assert.equal(A.catalog.length,6);assert.equal(source.dropSamples.length,14);assert.equal(source.rewardMasters.length,14);assert.ok(source.rewardMasters.every(r=>r.name));
+const owned=Object.fromEntries(A.catalog.map(r=>[r.rewardId,r.maxLevel])),effects=A.effects(owned);
+assert.deepEqual(effects,{affection:30,exploration:30,continuation:1,limited:50,bossItems:true,gem:30});
+assert.equal(A.effects({[A.ids.telescope]:1}).exploration,10);assert.throws(()=>A.effects({[A.ids.telescope]:-1}));
+assert.equal(R.minimumMultiDropRolls(A.continuation(.75,1)),5);assert.equal(R.minimumMultiDropRolls(.75),4);assert.equal(A.continuation(.99,1),Math.fround(.99));
+const options={seed:42,multiplier:2,rolePercent:50,completionRate:0,stamina:window.DFCHStamina.configure('unlimited')};
+const base=S.create(data,options),boost=S.create(data,{...options,saved:{owned}});
+assert.equal(boost.affectionRatio,window.DFCHAffection.ratio(50,30));
+for(const e of base.basePool.filter(r=>r.eventType===9))assert.equal(boost.basePool.find(r=>r.logEventSampleId===e.logEventSampleId).weight,Math.fround(e.weight*1.3));
+const full=S.create(data,{...options,completionRate:100,saved:{owned}});assert.ok(full.basePool.filter(r=>r.eventType===9).every(r=>!P.eligible(r,full)));
+const boss=c=>c.basePool.find(r=>r.boss).rows.find(r=>r.functionType===9).args;
+assert.ok(!boss(base).includes(10000000));assert.ok(boss(boost).includes(10000000));
+const bag=data.dropSamples.find(r=>r.rewardId===301005002),state=D.begin(data);
+assert.equal(D.pool([bag],state,data,true,{completionRate:100,effects})[0].effectiveWeight,15);
+const preview=D.distribution(A.bossGroups(data,effects),state,data,1,{completionRate:100,effects});
+const rows=A.bossGroups(data,effects).flatMap(id=>A.drops(data).filter(r=>r.dropItemSampleGroupId===id));
+const weights=D.pool(rows,state,data,true,{completionRate:100,effects}),total=weights.reduce((s,r)=>s+r.effectiveWeight,0);
+for(const r of preview.rows)assert.equal(r.probability,weights.find(x=>x.dropItemSampleId===r.dropItemSampleId).effectiveWeight/total);
+const gem=data.dropSamples.find(r=>r.rewardId===101000000&&r.dungeonConversion),quantity=D.quantity(gem,17,data,{completionRate:100,effects});
+const b=D.bonus(data,100,1),amount=Math.ceil(Math.fround(Math.fround(1+Math.fround(b/100))*17));
+assert.deepEqual(quantity,R.convertDrop(gem,amount*1.3,data));
+let fruits=0;for(let seed=0;seed<100;seed++){
+ const r=S.run(data,{...options,seed,saved:{owned},record:false});assert.deepEqual(r.artifactEffects,effects);assert.equal(r.engineVersion,'2.0.0');
+ fruits+=Object.keys(r.rewards).filter(id=>Number(id)>=305000000&&Number(id)<305001000).length;
+ const aggregate=window.DFCHSimulationBatch.add(window.DFCHSimulationBatch.aggregate(1,'independent'),r);
+ assert.equal(aggregate.affection,Object.entries(r.rewards).filter(([id])=>A.isAffection(id)).reduce((s,[id,n])=>s+n,0));
+}
+assert.ok(fruits>0);
+console.log('V2 artifacts: official rows, levels, continuation, exploration, limited weights, gem conversion, boss rewards and affection separation passed');

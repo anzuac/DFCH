@@ -60,14 +60,16 @@
     const supported=!!selected;
     if(selected){data=selected;window.DFCHMapData=data;}
     names=Object.fromEntries(data.monsterNames.map(r=>[r.index,r.name]));
-    explored.disabled=!supported;
+    explored.disabled=!supported||Boolean(window.DFCHAccount?.snapshot().allExplored);
+    if(window.DFCHAccount)explored.checked=window.DFCHAccount.rate(select.value)===100;
     document.getElementById('mapDataDetails').hidden=!supported;
     document.getElementById('mapDataTitle').textContent=supported?data.name:'此地圖資料尚未接入';
     document.getElementById('mapDataSummary').textContent=supported?`原始遠征時間 ${data.master.duration} 秒（${data.master.duration/60} 分鐘）；目標進度 ${data.master.depth}。${data.master.basicBattleMonsterGroupId>0?`一般戰鬥敵人 ${data.master.basicBattleMinMonsterCount}–${data.master.basicBattleMaxMonsterCount-1} 名（上限不包含）。`:'此地圖沒有一般戰鬥，僅有終點首領戰。'}`:'目前十三張地圖已接入；請選擇已支援地圖。';
-    const rate=explored.checked?100:0;
+    const rate=window.DFCHAccount?.rate(select.value)??(explored.checked?100:0);
+    const rateInput=document.getElementById('mapExplorationRate');if(rateInput){rateInput.setCustomValidity('');rateInput.value=rate;rateInput.disabled=!supported||!!window.DFCHAccount?.snapshot().allExplored;}
     window.DFCHMapConfig={dungeonKey:select.value,completionRate:rate,combat:'instant-victory',combatDurationSeconds:0};
     const unlocked=data.completionRewards.filter(r=>r.requiredCompletionRate<=rate);
-    document.getElementById('mapExplorationSummary').textContent=!supported?'此地圖尚未支援探索效果預覽。':explored.checked?`已按探索 100% 配置，增加探索率的 3 種共用事件會排除；${unlocked.length} 項探索獎勵皆達標；包含本地圖探索解鎖的物品與禁斷遭遇候選事件。仍須抽選與其他條件判定；不是每次必得。`:'目前按探索 0% 預覽。開啟後可比較探索完成所解鎖的效果；探索率與本次行走進度不同。';
+    document.getElementById('mapExplorationSummary').textContent=!supported?'此地圖尚未支援探索效果預覽。':explored.checked?`已按探索 100% 配置，增加探索率的 3 種共用事件會排除；${unlocked.length} 項探索獎勵皆達標；包含本地圖探索解鎖的物品與禁斷遭遇候選事件。仍須抽選與其他條件判定；不是每次必得。`:`目前探索 ${rate}%；已解鎖 ${unlocked.length} 項效果。連續遠征會累積此地圖的探索進度。`;
     target.replaceChildren();
     table('基本事件抽選權重',['類別','原始權重'],[
       ['一般戰鬥',fmt(data.master.basicBattleWeight)],
@@ -95,5 +97,12 @@
     table('怪物遭遇' ,['遭遇種類','怪物','原始權重','出現方式'],data.monsterSamples.map(r=>[r.battleEventId===data.master.basicBattleMonsterGroupId?'一般戰鬥':r.battleEventId===data.master.bossBattleGroupId?'地圖首領戰':'探索解鎖的禁斷遭遇',names[r.monsterId] || '特殊魔物',fmt(r.weight),r.isForceAppear?'強制出現':'依權重抽選']));
     table('探索率解鎖效果',['探索率門檻','獎勵效果','目前狀態'],data.completionRewards.map(r=>[`${r.requiredCompletionRate}%`,rewardDetail(r),rate>=r.requiredCompletionRate?'已達標':'尚未達標']));
   }
-  select.addEventListener('change',render);explored.addEventListener('change',render);render();
+  select.addEventListener('change',render);
+  explored.addEventListener('change',()=>{if(window.DFCHAccount)window.DFCHAccount.setRate(select.value,explored.checked?100:0);render();window.DFCHDropPreview?.refresh();});
+  document.getElementById('mapExplorationRate')?.addEventListener('change',event=>{
+    const value=Number(event.target.value);
+    if(event.target.value.trim()===''||!Number.isFinite(value)||value<0||value>100){event.target.setCustomValidity('探索率須介於 0–100');event.target.reportValidity();return;}
+    event.target.setCustomValidity('');window.DFCHAccount.setRate(select.value,value);render();
+  });
+  window.addEventListener?.('dfch-account-change',render);render();
 })();

@@ -21,6 +21,11 @@
     const root=document.getElementById('simulationResults');root.replaceChildren();
     root.append(el('p',`${a.cancelled?'已中止':'模擬結果'} · 已完成 ${number(a.completed)}／${number(a.requested)} 輪 · ${a.mode==='continuous'?'連續遠征':'每輪獨立'}`));
     if(!a.completed){root.append(el('p','沒有已完成的遠征，本輪尚未結算。'));return;}
+    const cards=el('div');cards.className='metric-grid';
+    for(const [label,total,average] of [
+      ['鑽石總量',a.ordinaryDiamonds+a.godDiamonds,(a.ordinaryDiamonds+a.godDiamonds)/a.completed],
+      ['羈絆贈禮',a.affection,a.affection/a.completed]
+    ]){const card=el('div');card.className='metric';card.append(el('span',label),el('strong',number(total)),el('small',`平均每輪 ${number(average)}`));cards.append(card);}root.append(cards);
     root.append(table(['項目','總量','平均每輪'],[
       ['到達終點',number(a.goals),`${number(a.goals/a.completed*100)}%`],
       ['耐力耗盡',number(a.exhausted),`${number(a.exhausted/a.completed*100)}%`],
@@ -35,7 +40,7 @@
     root.append(el('p',`遇到高額鑽石的輪數 ${number(a.highRuns)}；本輪跨過一般鑽石上限 ${number(a.capCrossRuns)} 輪。`));
     root.append(el('h3','各獎勵統計'));
     root.append(table(['獎勵','總量','平均每輪','取得輪數比例'],Object.entries(a.quantities).map(([id,n])=>[
-      data.rewardMasters.find(m=>m.rewardId===Number(id))?.name??'獎勵',number(n),number(n/a.completed),`${number(a.rewardRuns[id]/a.completed*100)}%`
+      (window.DFCHArtifacts?.masters(data)??data.rewardMasters).find(m=>m.rewardId===Number(id))?.name??'獎勵',number(n),number(n/a.completed),`${number(a.rewardRuns[id]/a.completed*100)}%`
     ])));
     const events=el('details');events.append(el('summary','查看各事件出現次數'),table(['事件','次數'],Object.entries(a.eventCounts).map(([name,n])=>[name,number(n)])));root.append(events);
     root.append(details(a.first,'第一輪'));

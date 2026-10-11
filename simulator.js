@@ -4,7 +4,7 @@
   function indexed(data) {
     if(indexes.has(data))return indexes.get(data);
     const group=(rows,key)=>{const out=new Map();for(const r of rows){if(!out.has(r[key]))out.set(r[key],[]);out.get(r[key]).push(r);}return out;};
-    const index={drops:group(data.dropSamples,'dropItemSampleGroupId'),effects:group(data.dropEffects,'dropEffectGroupId'),monsters:group(data.monsterSamples,'battleEventId'),flags:group(data.flagUnlockSamples,'flagUnlockEventSampleGroupId'),monsterNames:new Map(data.monsterNames.map(r=>[r.index,r.name]))};
+    const index={drops:group(window.DFCHArtifacts?.drops(data)??data.dropSamples,'dropItemSampleGroupId'),effects:group([...data.dropEffects,...(window.DFCHArtifactData?.dropEffects??[])],'dropEffectGroupId'),monsters:group(data.monsterSamples,'battleEventId'),flags:group(data.flagUnlockSamples,'flagUnlockEventSampleGroupId'),monsterNames:new Map(data.monsterNames.map(r=>[r.index,r.name]))};
     indexes.set(data,index);return index;
   }
   const unsupported=()=>{throw new Error('目前隊伍未提供此事件所需的角色能力、生命或恢復值；停止執行以避免推測結果。');};
@@ -20,6 +20,11 @@
     validate(data,options);
     const c=window.DFCHSimulationRuntime.initialize(data,options);
     Object.assign(c,{index:indexed(data),multiplier:f(options.multiplier),affectionRatio:f(options.affectionRatio??1),abilityIds:[...(options.abilityIds??[])],once:new Set(),tables:{},zone:null,zonePool:[],monsterInfo:null,steps:0,battles:0,bosses:0,log:[],trace:[],record:options.record!==false,eventCounts:{},rewardHits:{},ordinaryDiamonds:0,godDiamonds:0,highDiamonds:{5000:0,7777:0,9999:0},dailyStart:c.drops.daily,completionStart:c.exploration.completionRate});
+    c.artifacts=window.DFCHArtifacts?.effects(c.drops.owned)??{};
+    if(options.rolePercent!==undefined) {
+      if(!Number.isFinite(options.rolePercent)||options.rolePercent<0)throw new Error('收集家加成無效');
+      c.affectionRatio=window.DFCHAffection.ratio(options.rolePercent,c.artifacts.affection??0);
+    }
     c.sample=label=>{const before=c.random.calls,value=c.random.nextDouble();if(c.record)c.trace.push({label,call:before+1,value});return value;};
     c.integer=(min,max,label)=>{const before=c.random.calls,value=c.random.next(min,max);if(c.record)c.trace.push({label,call:before+1,consumed:c.random.calls-before,min,max,value});return value;};
     c.drawRows=(rows,weights,label)=>{
@@ -36,13 +41,7 @@
   function roll(data,c,groupIds,suppressOrdinary=true) {
     // Group order and row order are both preserved, including zero-weight rows.
     const rows=groupIds.filter(id=>id>0).flatMap(id=>c.index.drops.get(id)??[]);
-    const bonus=ES.currentBonus(c.exploration,data,6);
-    const weights=rows.map(r=>{
-      if(DS.artifactFull(r,c.drops,data)||suppressOrdinary&&c.drops.limitReached&&DS.ordinaryDiamond(r))return 0;
-      let weight=f(r.weight);
-      if(data.master.limitedRewardIds.includes(r.rewardId))weight=f(f(weight*f(100+bonus))/100);
-      return weight;
-    });
+    const weights=DS.pool(rows,c.drops,data,suppressOrdinary,{completionRate:c.exploration.completionRate,effects:c.artifacts}).map(r=>r.effectiveWeight);
     const row=c.drawRows(rows,weights,'掉落樣本');
     if(!row)return null;
     let quantity=row.minValue;
@@ -68,21 +67,16 @@
     if(!drop){c.emit('drop','沒有可抽選掉落');return;}
     const {row,effect}=drop;
     if(row.rewardId<0||drop.quantity<=0){c.emit('drop','此次沒有收穫',{sampleId:row.dropItemSampleId,effectId:effect?.dropEffectSampleId});return;}
-    let quantity=drop.quantity;
-    if(row.rewardId===101000000) {
-      const bonus=ES.currentBonus(c.exploration,data,1);
-      if(bonus>0)quantity=Math.ceil(f(f(1+f(bonus/100))*f(quantity)));
-    }
-    const converted=Rules.convertDrop(row,quantity,data);
+    const converted=DS.quantity(row,drop.quantity,data,{completionRate:c.exploration.completionRate,effects:c.artifacts});
     c.drops=DS.register(c.drops,{...row,rewardId:converted.rewardId},converted.quantity,data);
     if(DS.ordinaryDiamond(row))c.ordinaryDiamonds+=converted.quantity;
     else if(Math.floor(row.rewardId/1000000)===102){c.godDiamonds+=converted.quantity;if(Object.hasOwn(c.highDiamonds,drop.quantity))c.highDiamonds[drop.quantity]++;}
     c.rewardHits[converted.rewardId]=(c.rewardHits[converted.rewardId]??0)+1;
-    const name=data.rewardMasters.find(m=>m.rewardId===converted.rewardId)?.name??row.rewardName??'獎勵';
+    const name=(window.DFCHArtifacts?.masters(data)??data.rewardMasters).find(m=>m.rewardId===converted.rewardId)?.name??row.rewardName??'獎勵';
     c.emit('drop',`${name} ×${converted.quantity}`,{rewardId:converted.rewardId,quantity:converted.quantity,sampleId:row.dropItemSampleId,effectId:effect?.dropEffectSampleId});
   }
   function multiDrop(data,c,args) {
-    const p=f(args[0]),ids=args.slice(1).filter(id=>id>0),minimum=Rules.minimumMultiDropRolls(p);
+    const p=window.DFCHArtifacts?.continuation(args[0],c.artifacts?.continuation)??f(args[0]),ids=args.slice(1).filter(id=>id>0),minimum=Rules.minimumMultiDropRolls(p);
     if(minimum===null)throw new Error('連續掉落參數無效');
     let count=0;
     for(;;) {
@@ -150,7 +144,8 @@
     103:unsupported,
     104:(d,c,r)=>zone(d,c,r.args[0]),
     105:unsupported,
-    106:(d,c,r)=>{if(c.stamina.mode==='manual')c.stamina=window.DFCHStamina.change(c.stamina,-f(f(c.stamina.maximum)*f(r.args[0]/100)));},
+    106:()=>{} // Official 3.16.0 Execute is an empty completed task.
+,
     107:()=>{}, // Official Warp.Execute is an empty completed task.
     108:(d,c,r)=>{c.monsterInfo={group:r.args[0],min:r.args[1]??0,max:r.args[2]??0};},
     109:(d,c,r)=>{c.exploration=ES.explore(c.exploration,r.args[0],d);},
@@ -177,7 +172,7 @@
   }
   function result(data,c) {
     if(!c.endReason)throw new Error('遠征尚未結束，不能結算');
-    return {seed:c.seed,endReason:c.endReason,progress:c.progress,depth:data.master.depth,completionStart:c.completionStart,completionRate:c.exploration.completionRate,stamina:c.stamina.current,steps:c.steps,battles:c.battles,bosses:c.bosses,rewards:{...c.drops.pending},rewardHits:{...c.rewardHits},ordinaryDiamonds:c.ordinaryDiamonds,godDiamonds:c.godDiamonds,highDiamonds:{...c.highDiamonds},dailyStart:c.dailyStart,limitReachedAtStart:c.drops.limitReached,limitReachedAtEnd:c.drops.daily>=data.master.dailyDiamondLimit,unlockedFlags:[...c.drops.pendingFlags],saved:DS.commit(c.drops),randomCalls:c.random.calls,eventCounts:{...c.eventCounts},log:c.log,trace:c.trace,configuredDurationSeconds:data.master.duration,combatDurationSeconds:0,trapDamagePolicy:data.simulationPolicy.trapDamage??'not-applicable'};
+    return {engineVersion:'2.0.0',artifactEffects:{...c.artifacts},seed:c.seed,endReason:c.endReason,progress:c.progress,depth:data.master.depth,completionStart:c.completionStart,completionRate:c.exploration.completionRate,stamina:c.stamina.current,steps:c.steps,battles:c.battles,bosses:c.bosses,rewards:{...c.drops.pending},rewardHits:{...c.rewardHits},ordinaryDiamonds:c.ordinaryDiamonds,godDiamonds:c.godDiamonds,highDiamonds:{...c.highDiamonds},dailyStart:c.dailyStart,limitReachedAtStart:c.drops.limitReached,limitReachedAtEnd:c.drops.daily>=data.master.dailyDiamondLimit,unlockedFlags:[...c.drops.pendingFlags],saved:DS.commit(c.drops),randomCalls:c.random.calls,eventCounts:{...c.eventCounts},log:c.log,trace:c.trace,configuredDurationSeconds:data.master.duration,combatDurationSeconds:0,trapDamagePolicy:data.simulationPolicy.trapDamage??'not-applicable'};
   }
   function run(data,options) {
     const c=create(data,options);while(step(data,c)){}return result(data,c);
