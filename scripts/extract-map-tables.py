@@ -6,7 +6,7 @@ from pathlib import Path
 for archive,member in [('project_sources/06-net.room6.horizon.apk','assets/bin/Data/Managed/Metadata/global-metadata.dat'),('project_sources/07-assets.zip','assets/bin/Data/datapack.unity3d')]:
  with zipfile.ZipFile(archive) as z:
   target=Path('research')/member;target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes(z.read(member))
-needed={76122,76123,76124,76125,76121,76120,76126,76127,76119,76103,76141,76137,76143,76196,76099,76117,76118,76112,76085,76138,76836,76838,76839,76840,76192,76081,76135}
+needed={76122,76123,76124,76125,76121,76120,76126,76127,76119,76103,76141,76137,76143,76196,76099,76117,76118,76112,76085,76138,76836,76838,76839,76840,76192,76081,76135,76109,76131}
 env=UnityPy.load('research/assets/bin/Data/datapack.unity3d')
 for obj in env.objects:
  if obj.type.name=='MonoBehaviour' and obj.path_id in needed:
@@ -104,3 +104,19 @@ schema=fields('DungeonMasterBase')[:-1]+fields('MainDungeonMaster')
 rows=[{k:r.val(t) for k,t in schema} for _ in range(count)]
 assert r.p==len(r.b),(r.name,r.p,len(r.b))
 Path('research/tables/MainDungeonTable.json').write_text(json.dumps(rows,ensure_ascii=False))
+
+# Read the requested GameEventMaster's inherited DungeonMasterBase prefix.
+# DungeonTable PPtrs select MainDungeonTable and GameEventTable; the nested
+# event/shop arrays are outside the expedition reference conversion contract.
+registry=R(Path('research/mb-76109.bin').read_bytes());assert registry.name=='DungeonTable'
+assert (registry.read('i'),registry.read('q'),registry.read('i'),registry.read('q'))==(0,76135,0,76131)
+assert registry.p==len(registry.b)
+b=Path('research/mb-76131.bin').read_bytes()
+anchor=struct.pack('<ii',3,len('under_world'))+b'under_world'
+pos=b.find(anchor);assert pos>=52 and b.find(anchor,pos+1)==-1
+r=R.__new__(R);r.b=b;r.p=pos;r.name='GameEventTable'
+reference={k:r.val(t) for k,t in fields('DungeonMasterBase')[:-1]}
+assert reference['dungeonId']==3 and reference['key']=='under_world'
+assert r.read('i')==3 # next field: GameEventMaster.eventId
+reference['sourceOffset']=pos
+Path('research/tables/GameEventDungeonReferences.json').write_text(json.dumps([reference],ensure_ascii=False))
