@@ -9,7 +9,7 @@
   }
   const unsupported=()=>{throw new Error('目前隊伍未提供此事件所需的角色能力、生命或恢復值；停止執行以避免推測結果。');};
   function validate(data,options) {
-    if(data.gameVersion!=='3.16.0'||![1001,1002,1003,1004,1005].includes(data.master.dungeonId))throw new Error('目前只支援已核對的前五張地圖。');
+    if(data.gameVersion!=='3.16.0'||![1001,1002,1003,1004,1005,1006].includes(data.master.dungeonId))throw new Error('目前只支援已核對的前六張地圖。');
     if(!(Number.isFinite(options.multiplier)&&options.multiplier>=.8&&Number.isFinite(f(options.multiplier))))throw new Error('請填妥有效隊伍速度。');
     const collectors=new Set(data.collectorMasters.map(m=>m.rewardId));
     if((options.abilityIds??[]).some(id=>!collectors.has(id)))throw new Error('目前只開放已接入的收集家能力；其他專屬事件尚缺角色狀態輸入。');

@@ -235,7 +235,7 @@
       const abilityIds=[...new Set(cards.flatMap(c=>[...c.querySelectorAll('.ability-tag.active')].map(b=>data.collectorMasters[ids[b.dataset.ability]].rewardId)))];
       const ownedInputs=[...document.querySelectorAll('#dropStateControls input')],daily=document.getElementById('dailyDiamondCount');
       if(daily.value.trim()===''||ownedInputs.some(i=>i.value.trim()===''))throw new Error('請填妥持有量與當日鑽石累計。');
-      const flags=[];if(document.getElementById('stoneSearchAvailable').checked)flags.push(data.master.basicFlagUnlockConditions[0]);if(document.getElementById('stoneUnlocked').checked)flags.push(data.master.stoneFlag);
+      const flags=[];if(data.master.basicFlagUnlockSampleGroupIds[0]>0&&document.getElementById('stoneSearchAvailable').checked)flags.push(data.master.basicFlagUnlockConditions[0]);if(data.master.stoneFlag>0&&document.getElementById('stoneUnlocked').checked)flags.push(data.master.stoneFlag);
       const options={seed,multiplier:speed.multiplier,abilityIds,affectionRatio:window.DFCHAffection.ratio(role,affectionGlasses.checked?30:0),completionRate:window.DFCHMapConfig?.completionRate??0,stamina:window.DFCHStaminaConfig,saved:{daily:Number(daily.value),owned:Object.fromEntries(ownedInputs.map(i=>[i.dataset.reward,Number(i.value)])),flags}};
       // Snapshot all controls: editing during a run cannot change its config.
       const count=once?1:Number(document.getElementById('simulationCount').value),mode=document.getElementById('simulationMode').value;

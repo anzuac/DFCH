@@ -1,0 +1,98 @@
+{
+  "stage_1": {
+    "dungeonId": 1001,
+    "name": "米維克威茲 外緣部",
+    "sha256": "fae177de808182f3243e36ed4338fa3e56445fc007248223b0c62f1b3736dba4",
+    "counts": {
+      "eventSamples": 7,
+      "conditionalTemplates": 22,
+      "eventSequences": 69,
+      "completionRewards": 15,
+      "dropSamples": 68,
+      "dropEffects": 24,
+      "flagUnlockSamples": 2,
+      "monsterSamples": 13
+    },
+    "allIncludedRowsMatchOfficial": true
+  },
+  "stage_2": {
+    "dungeonId": 1002,
+    "name": "希敏約格 湖畔",
+    "sha256": "568c81cf18f3548a33622a35bb5cce18af1cda0088220d5db2a4f69fb39922b4",
+    "counts": {
+      "eventSamples": 7,
+      "conditionalTemplates": 22,
+      "eventSequences": 69,
+      "completionRewards": 15,
+      "dropSamples": 69,
+      "dropEffects": 24,
+      "flagUnlockSamples": 2,
+      "monsterSamples": 13
+    },
+    "allIncludedRowsMatchOfficial": true
+  },
+  "stage_3": {
+    "dungeonId": 1003,
+    "name": "世界樹 樹海",
+    "sha256": "62be1eaca2ddc8440d6778c72f405bfc15e9dd53003d95f4bd64ee713945f9b7",
+    "counts": {
+      "eventSamples": 8,
+      "conditionalTemplates": 22,
+      "eventSequences": 72,
+      "completionRewards": 15,
+      "dropSamples": 69,
+      "dropEffects": 24,
+      "flagUnlockSamples": 2,
+      "monsterSamples": 14
+    },
+    "allIncludedRowsMatchOfficial": true
+  },
+  "stage_4": {
+    "dungeonId": 1004,
+    "name": "阿斯嘉特 邊境",
+    "sha256": "ecf6d423f78e4557b3255321818810f49a7d9edde63146a43e0cce364231f22d",
+    "counts": {
+      "eventSamples": 8,
+      "conditionalTemplates": 22,
+      "eventSequences": 72,
+      "completionRewards": 15,
+      "dropSamples": 70,
+      "dropEffects": 24,
+      "flagUnlockSamples": 2,
+      "monsterSamples": 16
+    },
+    "allIncludedRowsMatchOfficial": true
+  },
+  "stage_5": {
+    "dungeonId": 1005,
+    "name": "赫爾海姆 支川",
+    "sha256": "a76c89b47da3748aa50a73676dbb8c6da85c18e572c559ebdf027f6d6b51e57b",
+    "counts": {
+      "eventSamples": 8,
+      "conditionalTemplates": 22,
+      "eventSequences": 72,
+      "completionRewards": 15,
+      "dropSamples": 68,
+      "dropEffects": 23,
+      "flagUnlockSamples": 2,
+      "monsterSamples": 21
+    },
+    "allIncludedRowsMatchOfficial": true
+  },
+  "stage_6": {
+    "dungeonId": 1006,
+    "name": "學術都市 露克斯・艾特納",
+    "sha256": "02cc5909e15fca06d5687f288f2f80292a40c467db9e4fc8bbaafebb5717c889",
+    "counts": {
+      "eventSamples": 9,
+      "conditionalTemplates": 22,
+      "eventSequences": 75,
+      "completionRewards": 15,
+      "dropSamples": 73,
+      "dropEffects": 21,
+      "flagUnlockSamples": 0,
+      "monsterSamples": 11
+    },
+    "allIncludedRowsMatchOfficial": true
+  }
+}
