@@ -48,8 +48,8 @@
   function build(data,context,master=data.master,includeGlobal=true) {
     let pool=includeGlobal?data.eventSamples.filter(r=>r.limitedDungeonId===-1 || r.limitedDungeonId===master.dungeonId).map(r=>{
       const rows=sequence(data,r.logEventId);
-      const type=rows.some(s=>s.functionType===109)?9:rows.some(s=>s.functionType===104)?5:rows.some(s=>s.functionType===3)?3:1;
-      const name={1:'步行',2:'快速步行',3:'休息',200:'小幅探索',201:'探索',202:'深入探索',901:'發現鑽石礦脈'}[r.logEventId]??'地圖事件';
+      const type=rows.some(s=>s.functionType===109)?9:rows.some(s=>s.functionType===104)?5:rows.some(s=>s.functionType===3)?3:rows.some(s=>[111,112].includes(s.functionType))?6:1;
+      const name={1:'步行',2:'快速步行',3:'休息',200:'小幅探索',201:'探索',202:'深入探索',901:'發現鑽石礦脈',350:'毒霧陷阱'}[r.logEventId]??'地圖事件';
       return {...r,eventType:type,originalWeight:f(r.weight),rows,name};
     }):[];
     pool.push(...dynamic(data,master,context.exploration.initialCompletionRate,context.drops.flags));

@@ -5,7 +5,7 @@
     if(s?.schema!==1||!s.modes)throw new Error('不支援此存檔格式');
     for(const mode of modes){if(!s.modes[mode]||typeof s.modes[mode]!=='object'||Array.isArray(s.modes[mode]))throw new Error('存檔模式格式錯誤');
       for(const [key,r] of Object.entries(s.modes[mode])){
-        if(!['stage_1','stage_2'].includes(key)||r.mode!==mode||!r.totals)throw new Error('存檔地圖格式錯誤');
+        if(!['stage_1','stage_2','stage_3'].includes(key)||r.mode!==mode||!r.totals)throw new Error('存檔地圖格式錯誤');
         const a=r.totals;
         for(const k of ['completed','goals','exhausted','steps','battles','bosses','randomCalls','ordinaryDiamonds','godDiamonds','affection','affectionRuns','highRuns','capStartRuns','capEndRuns','capCrossRuns'])if(!Number.isSafeInteger(a[k])||a[k]<0)throw new Error('存檔統計數量錯誤');
         if(a.goals+a.exhausted!==a.completed||a.affectionRuns>a.completed||a.highRuns>a.completed)throw new Error('統計輪數不一致');
@@ -32,6 +32,7 @@
       },
       setDaily(mode,key,n){if(!Number.isSafeInteger(n)||n<0)throw new Error('當日鑽石須為非負整數');const next=copy(state);if(!next.modes[mode][key])throw new Error('此模式尚無紀錄');next.modes[mode][key].latest.saved.daily=n;persist(next);},
       reset(mode,key){const next=copy(state);delete next.modes[mode][key];persist(next);},
+      resetMode(mode){if(!modes.includes(mode))throw new Error('未知紀錄類型');const next=copy(state);next.modes[mode]={};persist(next);},
       resetAll(){storage.removeItem(KEY);state=empty();expectedRaw=null;error=null;},
       import(input){const next=validate(JSON.parse(input));const raw=JSON.stringify(next);storage.setItem(KEY,raw);expectedRaw=raw;state=copy(next);error=null;},
       export:()=>storage.getItem(KEY)??JSON.stringify(state)

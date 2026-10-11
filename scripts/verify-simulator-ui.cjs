@@ -7,7 +7,7 @@ const get=id=>w.document.getElementById(id),change=(id,value,type='change')=>{ge
 const wait=async()=>{for(let i=0;i<1000&&get('simulateBtn').disabled;i++)await new Promise(r=>setTimeout(r,2));assert.equal(get('simulateBtn').disabled,false);};
 const once=async()=>{get('simulateOnceBtn').click();await wait();assert.equal(w.DFCHLastSimulation.completed,1);};
 (async()=>{
- assert.ok(w.document.querySelector('.version-pill').textContent.includes('V1.4.0'));assert.equal(get('seedMode'),null);assert.equal(get('simulationSeed'),null);
+ assert.ok(w.document.querySelector('.version-pill').textContent.includes('V1.4.1'));assert.equal(get('seedMode'),null);assert.equal(get('simulationSeed'),null);
  await once();assert.equal(w.DFCHLastSimulation.first.seed,123);assert.equal(w.DFCHLastSimulation.first.depth,60);
  assert.ok(get('simulationResults').textContent.includes('各獎勵統計'));assert.ok(!get('simulationResults').textContent.includes('[object Object]'));
  change('dailyDiamondCount','321','input');get('stoneSearchAvailable').checked=true;
@@ -26,6 +26,10 @@ const once=async()=>{get('simulateOnceBtn').click();await wait();assert.equal(w.
  const saved=w.localStorage.getItem(w.DFCHRecords.KEY);assert.ok(saved.includes('stage_2'));assert.equal(w.DFCHRecords.create(w.localStorage).get('continuous','stage_2').totals.completed,2);
  get('resetMapRecords').click();assert.equal(w.DFCHRecordStore.get('continuous','stage_2'),null);assert.ok(w.DFCHRecordStore.get('independent','stage_1'));
  change('mapSelect','stage_1');assert.equal(get('dailyDiamondCount').value,'321');assert.equal(get('stoneSearchAvailable').checked,true);
- change('mapSelect','stage_3');const last=w.DFCHLastSimulation;get('simulateOnceBtn').click();await wait();assert.equal(w.DFCHLastSimulation,last);assert.ok(get('simulateMessage').textContent.includes('尚未接入'));
+ change('mapSelect','stage_3');change('simulationMode','independent');await once();assert.equal(w.DFCHLastSimulation.first.depth,150);assert.equal(w.DFCHLastSimulation.first.trapDamagePolicy,'immune');
+ change('recordMode','independent');change('recordMapSelect','stage_3');assert.ok(get('recordDashboard').textContent.includes('世界樹'));
+ change('recordMode','independent');w.confirm=()=>false;get('resetModeRecords').click();assert.ok(w.DFCHRecordStore.get('independent','stage_1'));
+ w.confirm=()=>true;get('resetModeRecords').click();for(const key of ['stage_1','stage_2','stage_3'])assert.equal(w.DFCHRecordStore.get('independent',key),null);
+ change('mapSelect','stage_4');const last=w.DFCHLastSimulation;get('simulateOnceBtn').click();await wait();assert.equal(w.DFCHLastSimulation,last);assert.ok(get('simulateMessage').textContent.includes('尚未接入'));
  console.log('Real HTML UI: two-map switching, automatic seeds per round, separate controls/records, cap prompt, carry-over, stamina and cancellation passed');w.close();
 })().catch(e=>{console.error(e);w.close();process.exitCode=1;});
