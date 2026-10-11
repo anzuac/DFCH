@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#10181c" />
   <title>DFCH 遠征模擬器</title>
-  <link rel="stylesheet" href="./styles.css?v=1.2.0" />
+  <link rel="stylesheet" href="./styles.css?v=1.2.1" />
 </head>
 <body>
   <div class="app-shell">
@@ -13,9 +13,9 @@
       <div>
         <p class="eyebrow">DFCH / Expedition Simulator</p>
         <h1>遠征模擬器</h1>
-        <p class="sub">V1.2 · 第一張地圖遠征模擬 · 官方資料 3.16.0</p>
+        <p class="sub">V1.2.1 · 第一張地圖遠征模擬 · 官方資料 3.16.0</p>
       </div>
-      <div class="version-pill">V1.2</div>
+      <div class="version-pill">V1.2.1</div>
     </header>
 
     <nav class="tabs" aria-label="主功能">
@@ -59,13 +59,13 @@
 
                 <div class="field readout">
                   <span>目前版本</span>
-                  <strong>V1.2 · 單輪與批次模擬可用</strong>
+                  <strong>V1.2.1 · 單輪與批次模擬可用</strong>
                 </div>
               </div>
               <div class="official-formula-card" id="mapOfficialData">
                 <strong id="mapDataTitle">官方地圖資料</strong>
                 <p id="mapDataSummary" aria-live="polite"></p>
-                <p>V1.2：第一張地圖已可執行單輪與批次模擬，使用收集家／觀緣眼鏡配置及秒殺戰鬥。其他角色專屬能力尚未開放。<a href="./docs/v1.2-simulator.md" target="_blank" rel="noopener">查看完整核對記錄</a></p>
+                <p>V1.2.1：第一張地圖已可執行單輪與批次模擬，使用收集家／觀緣眼鏡配置及秒殺戰鬥。其他角色專屬能力尚未開放。<a href="./docs/v1.2-simulator.md" target="_blank" rel="noopener">查看完整核對記錄</a></p>
                 <p>模擬設定：遭遇敵人後立即勝利，戰鬥耗時 0 秒；保留遭遇、勝利掉落與後續事件。這是模擬器設定。</p>
                 <label class="field"><span><input type="checkbox" id="mapExplored100"> 地圖探索已達 100%</span></label>
                 <p id="mapExplorationSummary" aria-live="polite"></p>
@@ -286,8 +286,9 @@
                 <label class="field" id="staminaValueField" hidden><span>每輪隊伍起始／最大耐力</span><input id="staminaValue" type="number" min="1" step="1" value="300" inputmode="numeric" disabled></label>
               </div>
               <p class="helper" id="staminaSummary" aria-live="polite"></p>
-              <label class="field"><span>重播種子（有號 32 位整數）</span><input id="simulationSeed" type="number" min="-2147483648" max="2147483647" step="1" value="42" inputmode="numeric"></label>
-              <p class="helper">用來重播相同亂數序列；官方儲存的加密種子另須解碼。同種子仍須相同完整狀態及呼叫順序，才能得到相同事件。</p>
+              <label class="field"><span>亂數模式</span><select id="seedMode"><option value="fresh" selected>每次重新隨機</option><option value="replay">固定種子重播</option></select></label>
+              <label class="field" id="simulationSeedField" hidden><span>重播種子（有號 32 位整數）</span><input id="simulationSeed" type="number" min="-2147483648" max="2147483647" step="1" value="42" inputmode="numeric"></label>
+              <p class="helper">預設每次開始都產生新種子；固定種子重播會刻意重現相同配置的整批結果。實際種子會顯示在結果中。</p>
               <p class="unit-note">自行輸入的是隊伍耐力總額。每輪以此值開始，消耗降至 0 時結束；恢復不超過最大值。無限耐力略過耐力消耗與耗盡判定，仍保留地圖進度及終點事件。</p>
               <label class="field"><span>批次狀態</span><select id="simulationMode"><option value="independent">每輪獨立：固定起始配置</option><option value="continuous">連續遠征：累積探索、持有與當日鑽石</option></select></label>
               <p class="helper">連續模式每輪刷新已達到的探索門檻；不自動跨日重置鑽石。第一輪使用輸入種子，後續種子由獨立的批次種子序列產生。</p>
@@ -327,28 +328,28 @@
 
       <section class="tab-panel" id="tab-roadmap">
         <section class="panel">
-          <div class="roadmap"><article class="roadmap-item current"><span>V1.2</span><div><strong>第一張地圖可執行</strong><p>合併池、探索門檻、條件、事件流程、結算、共用亂數與批次統計已串接。此版限定收集家及觀緣眼鏡，其他專屬能力遇到不支援配置會停止。</p><a href="./docs/v1.2-simulator.md">查看驗證範圍</a></div></article></div>
+          <div class="roadmap"><article class="roadmap-item current"><span>V1.2.1</span><div><strong>第一張地圖可執行</strong><p>合併池、探索門檻、條件、事件流程、結算、共用亂數與批次統計已串接。此版限定收集家及觀緣眼鏡，其他專屬能力遇到不支援配置會停止。</p><a href="./docs/v1.2-simulator.md">查看驗證範圍</a></div></article></div>
         </section>
       </section>
     </main>
   </div>
 
-  <script src="./speed.js?v=1.2.0"></script>
-  <script src="./affection.js?v=1.2.0"></script>
-  <script src="./expedition-rules.js?v=1.2.0"></script>
-  <script src="./stamina.js?v=1.2.0"></script>
-  <script src="./event-state.js?v=1.2.0"></script>
-  <script src="./lottery.js?v=1.2.0"></script>
-  <script src="./random.js?v=1.2.0"></script>
-  <script src="./map-data.js?v=1.2.0"></script>
-  <script src="./drop-state.js?v=1.2.0"></script>
-  <script src="./drop-preview.js?v=1.2.0"></script>
-  <script src="./map-view.js?v=1.2.0"></script>
-  <script src="./simulation-runtime.js?v=1.2.0"></script>
-  <script src="./event-pool.js?v=1.2.0"></script>
-  <script src="./simulator.js?v=1.2.0"></script>
-  <script src="./simulation-batch.js?v=1.2.0"></script>
-  <script src="./simulation-view.js?v=1.2.0"></script>
-  <script src="./app.js?v=1.2.0"></script>
+  <script src="./speed.js?v=1.2.1"></script>
+  <script src="./affection.js?v=1.2.1"></script>
+  <script src="./expedition-rules.js?v=1.2.1"></script>
+  <script src="./stamina.js?v=1.2.1"></script>
+  <script src="./event-state.js?v=1.2.1"></script>
+  <script src="./lottery.js?v=1.2.1"></script>
+  <script src="./random.js?v=1.2.1"></script>
+  <script src="./map-data.js?v=1.2.1"></script>
+  <script src="./drop-state.js?v=1.2.1"></script>
+  <script src="./drop-preview.js?v=1.2.1"></script>
+  <script src="./map-view.js?v=1.2.1"></script>
+  <script src="./simulation-runtime.js?v=1.2.1"></script>
+  <script src="./event-pool.js?v=1.2.1"></script>
+  <script src="./simulator.js?v=1.2.1"></script>
+  <script src="./simulation-batch.js?v=1.2.1"></script>
+  <script src="./simulation-view.js?v=1.2.1"></script>
+  <script src="./app.js?v=1.2.1"></script>
 </body>
 </html>

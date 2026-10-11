@@ -28,7 +28,7 @@ c.progress=20;assert.equal(window.DFCHEventState.zoneExpired(0,c.progress,c.zone
 const forced=S.create(data,defaults);forced.progress=60;const chosen=P.choose(forced);assert.equal(chosen.boss,true);assert.equal(forced.random.calls,0);
 assert.throws(()=>S.create(data,{...defaults,abilityIds:[-100]}),/收集家/);
 (async()=>{
- const independent=await B.run(data,defaults,{count:20}),again=await B.run(data,defaults,{count:20});assert.deepEqual(independent,again);assert.equal(independent.completed,20);assert.equal(independent.goals,20);
+ const independent=await B.run(data,defaults,{count:20}),again=await B.run(data,defaults,{count:20});assert.deepEqual(independent,again);assert.equal(independent.completed,20);assert.equal(independent.goals,20);assert.notEqual(independent.first.seed,independent.last.seed);assert.notDeepEqual(independent.first.rewards,independent.last.rewards);
  const continuous=await B.run(data,defaults,{count:100,mode:'continuous'});assert.equal(continuous.completed,100);assert.ok(continuous.last.completionRate>continuous.first.completionRate);
  const expected=S.run(data,{...defaults,seed:continuous.last.seed,saved:continuous.last.saved});assert.ok(expected.saved.daily>=continuous.last.saved.daily);
  const signal={aborted:false};const cancelled=await B.run(data,defaults,{count:10000,signal,onProgress:a=>{if(a.completed>=1)signal.aborted=true;}});assert.equal(cancelled.cancelled,true);assert.ok(cancelled.completed>=1&&cancelled.completed<10000);

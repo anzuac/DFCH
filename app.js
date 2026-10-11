@@ -217,6 +217,9 @@
   document.querySelectorAll(".leader-card").forEach(wireUnit);
   affectionGlasses.addEventListener("change", updateSummary);
 
+  const seedMode=document.getElementById('seedMode');
+  function updateSeedMode(){document.getElementById('simulationSeedField').hidden=seedMode.value!=='replay';}
+  seedMode.addEventListener('change',updateSeedMode);updateSeedMode();
   let running=false,controller=null;
   const cancel=document.getElementById('cancelSimulation'),bar=document.getElementById('simulationProgress');
   cancel.addEventListener('click',()=>controller?.abort());
@@ -225,8 +228,15 @@
     try {
       if(document.getElementById("mapSelect").value!=="stage_1")throw new Error("目前只抽取第一張地圖的資料。");
       const input=document.getElementById("simulationSeed").value;
-      if(input.trim()==="")throw new Error("請輸入重播種子。");
-      const seed=Number(input),cards=allUnitCards(),speeds=cards.map(c=>c.querySelector('.speed-input').value);
+      if(seedMode.value==='replay' && input.trim()==="")throw new Error("請輸入重播種子。");
+      let seed;
+      if(seedMode.value==='replay')seed=Number(input);
+      else {
+        const bytes=new Int32Array(1);
+        if(!window.crypto?.getRandomValues)throw new Error('此瀏覽器無法產生新種子，請改用固定種子重播。');
+        window.crypto.getRandomValues(bytes);seed=bytes[0];
+      }
+      const cards=allUnitCards(),speeds=cards.map(c=>c.querySelector('.speed-input').value);
       const speed=window.DFCHSpeed.calcFromVisibleSpeeds({leaderSpeed:speeds[0],memberSpeeds:speeds.slice(1)});
       if(!speed.ready)throw new Error('請填妥每位角色的步行速度。');
       const role=selectedCollectorBonus();if(!Number.isFinite(role))throw new Error('收集家等級無效。');
