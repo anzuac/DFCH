@@ -2,8 +2,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#0b1420">
-  <title>DFCH 遠征模擬器 · V2.0.0</title>
-  <link rel="stylesheet" href="./styles.css?v=2.0.0">
+  <title>DFCH 遠征模擬器 · V2.0.1</title>
+  <link rel="stylesheet" href="./styles.css?v=2.0.1">
 </head>
 <body>
   <div class="app-shell">
@@ -13,7 +13,7 @@
         <div class="title-actions"><h1>遠征模擬器</h1><button id="openDiamondSimulator" class="speed-details-button" type="button">💎 鑽石抽取模擬器</button></div>
         <p class="sub">配置你的遠征隊，探索十三張地圖的獎勵。</p>
       </div>
-      <div class="version-pill">V2.0.0</div>
+      <div class="version-pill">V2.0.1</div>
     </header>
 
     <nav class="tabs" aria-label="主功能">
@@ -318,35 +318,35 @@
     <div class="diamond-dialog-head"><div><p class="eyebrow">DIAMOND SIMULATOR</p><h2 id="diamondTitle">鑽石抽取模擬器</h2></div><button id="diamondClose" type="button" aria-label="關閉鑽石模擬器">✕</button></div>
     <div class="diamond-dialog-body">
       <div class="diamond-tabs" role="tablist" aria-label="抽取模式"><button id="diamondSimpleTab" role="tab" aria-controls="diamondSimple" aria-selected="true">鑽石抽取</button><button id="diamondRouletteTab" role="tab" aria-controls="diamondRoulette" aria-selected="false">獎勵輪盤</button></div>
-      <section id="diamondSimple" role="tabpanel" aria-labelledby="diamondSimpleTab"><h3>41 種等機率結果</h3><p id="diamondRange"></p><p class="hint">每個數量的機率都是 1／41（約 2.439024%）。</p><label class="diamond-option"><input id="diamondEye" type="checkbox">擁有神器「惡魔之眼」LV8：數量提高 100%</label><p class="hint">此選項只加倍本頁鑽石數量，不改變機率。</p></section>
-      <section id="diamondRoulette" role="tabpanel" aria-labelledby="diamondRouletteTab" hidden=""><label class="diamond-option"><input id="diamondHorn" type="checkbox">擁有 AF「高貴一角的寶牙」</label><p id="diamondTier"></p><div id="diamondWheel" class="diamond-wheel" role="button" tabindex="0" aria-label="點擊停止輪盤"></div><details class="diamond-probabilities"><summary>查看完整機率表</summary><p class="hint">先抽稀有度，再抽該層獎勵。整體機率＝稀有度機率 × 該層獎勵機率。金色代幣沿用截圖圖示稱呼。</p><div id="diamondProbabilities"></div></details></section>
+      <section id="diamondSimple" role="tabpanel" aria-labelledby="diamondSimpleTab"><p id="diamondRange"></p><label class="diamond-option"><input id="diamondEye" type="checkbox">擁有神器「惡魔之眼」LV8：數量提高 100%</label><p class="hint">每個結果等機率，按「抽取鑽石」立即顯示結果。</p></section>
+      <section id="diamondRoulette" role="tabpanel" aria-labelledby="diamondRouletteTab" hidden=""><label class="diamond-option"><input id="diamondHorn" type="checkbox">擁有 AF「高貴一角的寶牙」</label><p id="diamondTier"></p><div class="diamond-auto"><label for="diamondTarget">連續抽取目標（累積鑽石）</label><div class="diamond-auto-input"><input id="diamondTarget" type="number" min="1" max="1000000000" step="1" value="1000"><button id="diamondAutoStart" type="button">連續抽取</button></div><p class="hint">每次開始重新累計，達到或超過目標即停止；寶箱與代幣不計入鑽石。</p><p id="diamondAutoStatus" role="status" aria-live="polite"></p></div><div id="diamondWheel" class="diamond-wheel" role="button" tabindex="0" aria-label="點擊揭曉本輪獎勵"></div><details class="diamond-probabilities"><summary>查看完整機率表</summary><p class="hint">先抽稀有度，再抽該層獎勵。整體機率＝稀有度機率 × 該層獎勵機率。金色代幣沿用截圖圖示稱呼。</p><div id="diamondProbabilities"></div></details></section>
       <p id="diamondResult" class="diamond-result" role="status" aria-live="polite"></p>
-      <div class="diamond-controls"><button id="diamondStart" type="button">開始抽取</button><button id="diamondStop" type="button" disabled="">點一下停止</button></div>
-      <p class="hint">游標依機率表跳動；點擊停止時依同一張機率表抽選並停在最終獎勵。動畫不是平均輪流經過每格，點擊時機不提高稀有獎勵機率。</p>
+      <div class="diamond-controls"><button id="diamondStart" type="button">開始抽取</button><button id="diamondStop" type="button" disabled="">揭曉獎勵</button></div>
+      <p id="diamondAnimationNote" class="hint">開始時已依機率決定本輪獎勵。閃光由上往下循環，只作顯示；按揭曉後停在預先抽定的獎勵，點擊時機不影響結果。</p>
       <details><summary>本模式最近結果</summary><p id="diamondHistoryEmpty" class="hint">尚未抽取。</p><ol id="diamondHistory"></ol><p id="diamondStorageNote" class="hint"></p></details>
     </div>
   </dialog>
-  <script src="./diamond-draw.js?v=2.0.0"></script>
-  <script src="./diamond-view.js?v=2.0.0"></script>
-  <script src="./speed.js?v=2.0.0"></script>
-  <script src="./affection.js?v=2.0.0"></script>
-  <script src="./expedition-rules.js?v=2.0.0"></script>
-  <script src="./stamina.js?v=2.0.0"></script>
-  <script src="./event-state.js?v=2.0.0"></script>
-  <script src="./lottery.js?v=2.0.0"></script>
-  <script src="./random.js?v=2.0.0"></script>
-  <script src="./map-data.js?v=2.0.0"></script><script src="./artifact-data.js?v=2.0.0"></script><script src="./artifacts.js?v=2.0.0"></script><script src="./account-settings.js?v=2.0.0"></script>
-  <script src="./drop-state.js?v=2.0.0"></script>
-  <script src="./drop-preview.js?v=2.0.0"></script>
-  <script src="./map-view.js?v=2.0.0"></script>
-  <script src="./simulation-runtime.js?v=2.0.0"></script>
-  <script src="./event-pool.js?v=2.0.0"></script>
-  <script src="./simulator.js?v=2.0.0"></script>
-  <script src="./simulation-batch.js?v=2.0.0"></script>
-  <script src="./simulation-view.js?v=2.0.0"></script>
-  <script src="./records.js?v=2.0.0"></script>
-  <script src="./record-view.js?v=2.0.0"></script>
-  <script src="./app.js?v=2.0.0"></script>
+  <script src="./diamond-draw.js?v=2.0.1"></script>
+  <script src="./diamond-view.js?v=2.0.1"></script>
+  <script src="./speed.js?v=2.0.1"></script>
+  <script src="./affection.js?v=2.0.1"></script>
+  <script src="./expedition-rules.js?v=2.0.1"></script>
+  <script src="./stamina.js?v=2.0.1"></script>
+  <script src="./event-state.js?v=2.0.1"></script>
+  <script src="./lottery.js?v=2.0.1"></script>
+  <script src="./random.js?v=2.0.1"></script>
+  <script src="./map-data.js?v=2.0.1"></script><script src="./artifact-data.js?v=2.0.1"></script><script src="./artifacts.js?v=2.0.1"></script><script src="./account-settings.js?v=2.0.1"></script>
+  <script src="./drop-state.js?v=2.0.1"></script>
+  <script src="./drop-preview.js?v=2.0.1"></script>
+  <script src="./map-view.js?v=2.0.1"></script>
+  <script src="./simulation-runtime.js?v=2.0.1"></script>
+  <script src="./event-pool.js?v=2.0.1"></script>
+  <script src="./simulator.js?v=2.0.1"></script>
+  <script src="./simulation-batch.js?v=2.0.1"></script>
+  <script src="./simulation-view.js?v=2.0.1"></script>
+  <script src="./records.js?v=2.0.1"></script>
+  <script src="./record-view.js?v=2.0.1"></script>
+  <script src="./app.js?v=2.0.1"></script>
 
 
 </body></html>

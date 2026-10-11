@@ -1106,3 +1106,12 @@ input,select{border-color:#9fbccc35!important;border-radius:9px!important;backgr
 @media(max-width:1080px){.layout-grid{grid-template-columns:minmax(0,1fr) minmax(300px,360px)}.account-artifact-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.panel{padding:20px}.account-footer{grid-template-columns:1fr;gap:0}}
 @media(max-width:800px){.app-shell{width:calc(100% - 24px);padding-top:20px}.layout-grid{grid-template-columns:1fr}.side-column{display:flex;flex-direction:column}.panel{padding:18px}.topbar{gap:12px}.title-actions{flex-wrap:wrap;gap:10px}.title-actions button{font-size:12px;padding:8px 12px}.version-pill{padding:6px 9px;font-size:10px}.sub{font-size:12px}.tabs{width:100%;top:4px}.tab{flex:1;white-space:nowrap;font-size:13px}.account-artifact{padding:14px;gap:10px;min-height:124px;align-items:flex-start}.artifact-copy strong{font-size:13px}.artifact-copy small{font-size:11px}.account-artifact input[type=checkbox]{width:20px;height:20px;flex-basis:20px}.account-artifact input[type=number]{width:46px;min-width:46px;padding:6px}.exploration-switch{padding:14px}.exploration-switch>.status-chip{display:none}.panel-head{gap:8px}.panel-head h2{font-size:18px}.status-chip{font-size:10px}.release-grid{grid-template-columns:1fr;gap:8px}.party-summary{gap:10px}.account-tools{gap:6px}.account-tools>span{flex-basis:100%}.simulation-actions .primary-btn{min-height:60px}}
 @media(max-width:380px){.account-artifact-grid{grid-template-columns:1fr}.account-artifact{min-height:80px}.panel-head .status-chip{display:none}.party-summary{grid-template-columns:1fr}.unit-card{gap:10px}.unit-avatar{display:none}}
+
+/* Diamond draw: immediate result and sequential reveal. */
+.diamond-auto { padding:16px;border:1px solid var(--line);border-radius:12px;margin:16px 0; }
+.diamond-auto-input { display:flex;gap:10px;margin-top:10px; }
+.diamond-auto-input input { width:0;min-width:0;flex:1; }
+.diamond-auto-input button { padding:10px 14px;border:1px solid var(--teal);border-radius:10px;background:var(--panel-2);color:var(--teal-2);cursor:pointer; }
+.diamond-auto-input button:disabled { opacity:.45;cursor:default; }
+#diamondAutoStatus { font-variant-numeric:tabular-nums;color:var(--teal-2);line-height:1.7; }
+.diamond-wheel-row.selected { background:rgba(105,214,191,.18);box-shadow:inset 4px 0 var(--teal); }
