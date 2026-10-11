@@ -5,7 +5,7 @@
     if(s?.schema!==1||!s.modes)throw new Error('不支援此存檔格式');
     for(const mode of modes){if(!s.modes[mode]||typeof s.modes[mode]!=='object'||Array.isArray(s.modes[mode]))throw new Error('存檔模式格式錯誤');
       for(const [key,r] of Object.entries(s.modes[mode])){
-        if(!['stage_1','stage_2','stage_3','stage_4','stage_5','stage_6','stage_hard','stage_atli','stage_uw'].includes(key)||r.mode!==mode||!r.totals)throw new Error('存檔地圖格式錯誤');
+        if(!['stage_1','stage_2','stage_3','stage_4','stage_5','stage_6','stage_hard','stage_atli','stage_uw','stage_snow'].includes(key)||r.mode!==mode||!r.totals)throw new Error('存檔地圖格式錯誤');
         const a=r.totals;
         for(const k of ['completed','goals','exhausted','steps','battles','bosses','randomCalls','ordinaryDiamonds','godDiamonds','affection','affectionRuns','highRuns','capStartRuns','capEndRuns','capCrossRuns'])if(!Number.isSafeInteger(a[k])||a[k]<0)throw new Error('存檔統計數量錯誤');
         if(a.goals+a.exhausted!==a.completed||a.affectionRuns>a.completed||a.highRuns>a.completed)throw new Error('統計輪數不一致');

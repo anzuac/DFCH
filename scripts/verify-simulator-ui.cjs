@@ -7,7 +7,7 @@ const get=id=>w.document.getElementById(id),change=(id,value,type='change')=>{ge
 const wait=async()=>{for(let i=0;i<1000&&get('simulateBtn').disabled;i++)await new Promise(r=>setTimeout(r,2));assert.equal(get('simulateBtn').disabled,false);};
 const once=async()=>{get('simulateOnceBtn').click();await wait();assert.equal(w.DFCHLastSimulation.completed,1);};
 (async()=>{
- assert.ok(w.document.querySelector('.version-pill').textContent.includes('V1.4.7'));assert.equal(get('seedMode'),null);assert.equal(get('simulationSeed'),null);
+ assert.ok(w.document.querySelector('.version-pill').textContent.includes('V1.4.8'));assert.equal(get('seedMode'),null);assert.equal(get('simulationSeed'),null);
  await once();assert.equal(w.DFCHLastSimulation.first.seed,123);assert.equal(w.DFCHLastSimulation.first.depth,60);
  assert.ok(get('simulationResults').textContent.includes('各獎勵統計'));assert.ok(!get('simulationResults').textContent.includes('[object Object]'));
  change('dailyDiamondCount','321','input');get('stoneSearchAvailable').checked=true;
@@ -29,7 +29,7 @@ const once=async()=>{get('simulateOnceBtn').click();await wait();assert.equal(w.
  change('mapSelect','stage_3');change('simulationMode','independent');await once();assert.equal(w.DFCHLastSimulation.first.depth,150);assert.equal(w.DFCHLastSimulation.first.trapDamagePolicy,'immune');
  change('recordMode','independent');change('recordMapSelect','stage_3');assert.ok(get('recordDashboard').textContent.includes('世界樹'));
  change('recordMode','independent');w.confirm=()=>false;get('resetModeRecords').click();assert.ok(w.DFCHRecordStore.get('independent','stage_1'));
- w.confirm=()=>true;get('resetModeRecords').click();for(const key of ['stage_1','stage_2','stage_3','stage_4','stage_5','stage_6','stage_hard','stage_atli','stage_uw'])assert.equal(w.DFCHRecordStore.get('independent',key),null);
+ w.confirm=()=>true;get('resetModeRecords').click();for(const key of ['stage_1','stage_2','stage_3','stage_4','stage_5','stage_6','stage_hard','stage_atli','stage_uw','stage_snow'])assert.equal(w.DFCHRecordStore.get('independent',key),null);
  change('mapSelect','stage_4');await once();assert.equal(w.DFCHLastSimulation.first.depth,420);assert.equal(w.DFCHLastSimulation.first.trapDamagePolicy,'immune');
  change('recordMapSelect','stage_4');assert.ok(get('recordDashboard').textContent.includes('阿斯嘉特'));
  change('mapSelect','stage_5');await once();assert.equal(w.DFCHLastSimulation.first.depth,540);assert.equal(w.DFCHLastSimulation.first.trapDamagePolicy,'immune');
@@ -45,6 +45,8 @@ const once=async()=>{get('simulateOnceBtn').click();await wait();assert.equal(w.
  get('stoneUnlocked').checked=true;await once();assert.ok(w.DFCHLastSimulation.first.saved.flags.includes(6613));
  change('mapSelect','stage_uw');await once();assert.equal(w.DFCHLastSimulation.first.depth,600);assert.equal(get('stoneUnlocked').disabled,true);assert.ok(get('mapDataTables').textContent.includes('螢石'));
  change('recordMapSelect','stage_uw');assert.ok(get('recordDashboard').textContent.includes('庫・努・吉亞'));
- change('mapSelect','stage_snow');const last=w.DFCHLastSimulation;get('simulateOnceBtn').click();await wait();assert.equal(w.DFCHLastSimulation,last);assert.ok(get('simulateMessage').textContent.includes('尚未接入'));
- console.log('Real HTML UI: nine-map switching, automatic seeds per round, separate controls/records, cap prompt, carry-over, stamina and cancellation passed');w.close();
+ change('mapSelect','stage_snow');await once();assert.equal(w.DFCHLastSimulation.first.depth,600);assert.equal(w.DFCHLastSimulation.first.configuredDurationSeconds,28800);assert.ok(get('mapDataTables').textContent.includes('海藍寶石'));assert.ok(get('mapDataTables').textContent.includes('暴風雪'));
+ change('recordMapSelect','stage_snow');assert.ok(get('recordDashboard').textContent.includes('雪嶺孤城'));
+ change('mapSelect','stage_labyrinth_1');const last=w.DFCHLastSimulation;get('simulateOnceBtn').click();await wait();assert.equal(w.DFCHLastSimulation,last);assert.ok(get('simulateMessage').textContent.includes('尚未接入'));
+ console.log('Real HTML UI: ten-map switching, automatic seeds per round, separate controls/records, cap prompt, carry-over, stamina and cancellation passed');w.close();
 })().catch(e=>{console.error(e);w.close();process.exitCode=1;});

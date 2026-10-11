@@ -1,0 +1,162 @@
+{
+  "stage_1": {
+    "dungeonId": 1001,
+    "name": "米維克威茲 外緣部",
+    "sha256": "fae177de808182f3243e36ed4338fa3e56445fc007248223b0c62f1b3736dba4",
+    "counts": {
+      "eventSamples": 7,
+      "conditionalTemplates": 22,
+      "eventSequences": 69,
+      "completionRewards": 15,
+      "dropSamples": 68,
+      "dropEffects": 24,
+      "flagUnlockSamples": 2,
+      "monsterSamples": 13
+    },
+    "allIncludedRowsMatchOfficial": true
+  },
+  "stage_2": {
+    "dungeonId": 1002,
+    "name": "希敏約格 湖畔",
+    "sha256": "568c81cf18f3548a33622a35bb5cce18af1cda0088220d5db2a4f69fb39922b4",
+    "counts": {
+      "eventSamples": 7,
+      "conditionalTemplates": 22,
+      "eventSequences": 69,
+      "completionRewards": 15,
+      "dropSamples": 69,
+      "dropEffects": 24,
+      "flagUnlockSamples": 2,
+      "monsterSamples": 13
+    },
+    "allIncludedRowsMatchOfficial": true
+  },
+  "stage_3": {
+    "dungeonId": 1003,
+    "name": "世界樹 樹海",
+    "sha256": "62be1eaca2ddc8440d6778c72f405bfc15e9dd53003d95f4bd64ee713945f9b7",
+    "counts": {
+      "eventSamples": 8,
+      "conditionalTemplates": 22,
+      "eventSequences": 72,
+      "completionRewards": 15,
+      "dropSamples": 69,
+      "dropEffects": 24,
+      "flagUnlockSamples": 2,
+      "monsterSamples": 14
+    },
+    "allIncludedRowsMatchOfficial": true
+  },
+  "stage_4": {
+    "dungeonId": 1004,
+    "name": "阿斯嘉特 邊境",
+    "sha256": "ecf6d423f78e4557b3255321818810f49a7d9edde63146a43e0cce364231f22d",
+    "counts": {
+      "eventSamples": 8,
+      "conditionalTemplates": 22,
+      "eventSequences": 72,
+      "completionRewards": 15,
+      "dropSamples": 70,
+      "dropEffects": 24,
+      "flagUnlockSamples": 2,
+      "monsterSamples": 16
+    },
+    "allIncludedRowsMatchOfficial": true
+  },
+  "stage_5": {
+    "dungeonId": 1005,
+    "name": "赫爾海姆 支川",
+    "sha256": "a76c89b47da3748aa50a73676dbb8c6da85c18e572c559ebdf027f6d6b51e57b",
+    "counts": {
+      "eventSamples": 8,
+      "conditionalTemplates": 22,
+      "eventSequences": 72,
+      "completionRewards": 15,
+      "dropSamples": 68,
+      "dropEffects": 23,
+      "flagUnlockSamples": 2,
+      "monsterSamples": 21
+    },
+    "allIncludedRowsMatchOfficial": true
+  },
+  "stage_6": {
+    "dungeonId": 1006,
+    "name": "學術都市 露克斯・艾特納",
+    "sha256": "02cc5909e15fca06d5687f288f2f80292a40c467db9e4fc8bbaafebb5717c889",
+    "counts": {
+      "eventSamples": 9,
+      "conditionalTemplates": 22,
+      "eventSequences": 75,
+      "completionRewards": 15,
+      "dropSamples": 73,
+      "dropEffects": 21,
+      "flagUnlockSamples": 0,
+      "monsterSamples": 11
+    },
+    "allIncludedRowsMatchOfficial": true
+  },
+  "stage_hard": {
+    "dungeonId": 2001,
+    "name": "金倫加鴻溝",
+    "sha256": "8699a766dc8b92c63ccf197927c07e6adc90e60a3518e7314d5b5e91f195b97e",
+    "counts": {
+      "eventSamples": 8,
+      "conditionalTemplates": 22,
+      "eventSequences": 72,
+      "completionRewards": 15,
+      "dropSamples": 71,
+      "dropEffects": 20,
+      "flagUnlockSamples": 0,
+      "monsterSamples": 28
+    },
+    "allIncludedRowsMatchOfficial": true
+  },
+  "stage_atli": {
+    "dungeonId": 2002,
+    "name": "昔日的米德加爾德",
+    "sha256": "fea8d1e4e11bf647d74148967ab74e2161fe203edc449fb2080d6b9701de74a4",
+    "counts": {
+      "eventSamples": 8,
+      "conditionalTemplates": 22,
+      "eventSequences": 72,
+      "completionRewards": 15,
+      "dropSamples": 75,
+      "dropEffects": 23,
+      "flagUnlockSamples": 2,
+      "monsterSamples": 26
+    },
+    "allIncludedRowsMatchOfficial": true
+  },
+  "stage_uw": {
+    "dungeonId": 3001,
+    "name": "不歸的牢獄 庫・努・吉亞",
+    "sha256": "0d6fe080b6ef0946f6354b40567df7e9c2fa23c061045a51ac1da122e4c415ee",
+    "counts": {
+      "eventSamples": 10,
+      "conditionalTemplates": 22,
+      "eventSequences": 78,
+      "completionRewards": 15,
+      "dropSamples": 72,
+      "dropEffects": 20,
+      "flagUnlockSamples": 0,
+      "monsterSamples": 13
+    },
+    "allIncludedRowsMatchOfficial": true
+  },
+  "stage_snow": {
+    "dungeonId": 3002,
+    "name": "雪嶺孤城 烏沃貝爾克",
+    "sha256": "8a6d9eefeeebad71ed666ff33e6323ac73d3878c80248d932fbf2c9bb949450f",
+    "counts": {
+      "eventSamples": 9,
+      "conditionalTemplates": 22,
+      "eventSequences": 75,
+      "completionRewards": 15,
+      "dropSamples": 70,
+      "dropEffects": 20,
+      "flagUnlockSamples": 0,
+      "monsterSamples": 13
+    },
+    "allIncludedRowsMatchOfficial": true
+  }
+}

@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#10181c" />
   <title>DFCH 遠征模擬器</title>
-  <link rel="stylesheet" href="./styles.css?v=1.4.7" />
+  <link rel="stylesheet" href="./styles.css?v=1.4.8" />
 </head>
 <body>
   <div class="app-shell">
@@ -13,9 +13,9 @@
       <div>
         <p class="eyebrow">DFCH / Expedition Simulator</p>
         <h1>遠征模擬器</h1>
-        <p class="sub">V1.4.7 · 前九張地圖遠征模擬 · 官方資料 3.16.0</p>
+        <p class="sub">V1.4.8 · 前十張地圖遠征模擬 · 官方資料 3.16.0</p>
       </div>
-      <div class="version-pill">V1.4.7</div>
+      <div class="version-pill">V1.4.8</div>
     </header>
 
     <nav class="tabs" aria-label="主功能">
@@ -34,7 +34,7 @@
                   <span class="step-badge">01</span>
                   <h2>遠征地圖</h2>
                 </div>
-                <span class="status-chip neutral">前九張地圖資料已解析</span>
+                <span class="status-chip neutral">前十張地圖資料已解析</span>
               </div>
 
               <div class="field-grid two">
@@ -59,13 +59,13 @@
 
                 <div class="field readout">
                   <span>目前版本</span>
-                  <strong>V1.4.7 · 單輪與批次模擬可用</strong>
+                  <strong>V1.4.8 · 單輪與批次模擬可用</strong>
                 </div>
               </div>
               <div class="official-formula-card" id="mapOfficialData">
                 <strong id="mapDataTitle">官方地圖資料</strong>
                 <p id="mapDataSummary" aria-live="polite"></p>
-                <p>V1.4.7：前九張地圖已可執行單輪與批次模擬，使用收集家／觀緣眼鏡配置及秒殺戰鬥。其他角色專屬能力尚未開放。<a href="./docs/stage-9-map.md" target="_blank" rel="noopener">查看完整核對記錄</a></p>
+                <p>V1.4.8：前十張地圖已可執行單輪與批次模擬，使用收集家／觀緣眼鏡配置及秒殺戰鬥。其他角色專屬能力尚未開放。<a href="./docs/stage-10-map.md" target="_blank" rel="noopener">查看完整核對記錄</a></p>
                 <p>模擬設定：遭遇敵人後立即勝利，戰鬥耗時 0 秒；保留遭遇、勝利掉落與後續事件。這是模擬器設定。</p>
                 <label class="field"><span><input type="checkbox" id="mapExplored100"> 地圖探索已達 100%</span></label>
                 <p id="mapExplorationSummary" aria-live="polite"></p>
@@ -293,7 +293,7 @@
               <div class="simulation-actions"><button class="primary-btn" id="simulateOnceBtn"><span>遠征一次</span><small>完成後累積紀錄</small></button>
               <button class="primary-btn" id="simulateBtn">
                 <span>批次模擬</span>
-                <small>前九張地圖 · 戰鬥 0 秒</small>
+                <small>前十張地圖 · 戰鬥 0 秒</small>
               </button>
               </div>
               <p class="helper" id="simulationModeNote"></p>
@@ -322,7 +322,7 @@
       <section class="tab-panel" id="tab-stats">
         <section class="panel">
           <h2>遠征紀錄儀表板</h2><p><a href="./docs/v1.3-records.md" target="_blank" rel="noopener">紀錄與存檔說明</a></p>
-          <label class="field"><span>紀錄地圖</span><select id="recordMapSelect"><option value="stage_1">米維克威茲 外緣部</option><option value="stage_2">希敏約格 湖畔</option><option value="stage_3">世界樹 樹海</option><option value="stage_4">阿斯嘉特 邊境</option><option value="stage_5">赫爾海姆 支川</option><option value="stage_6">學術都市 露克斯・艾特納</option><option value="stage_hard">金倫加鴻溝</option><option value="stage_atli">昔日的米德加爾德</option><option value="stage_uw">不歸的牢獄 庫・努・吉亞</option></select></label>
+          <label class="field"><span>紀錄地圖</span><select id="recordMapSelect"><option value="stage_1">米維克威茲 外緣部</option><option value="stage_2">希敏約格 湖畔</option><option value="stage_3">世界樹 樹海</option><option value="stage_4">阿斯嘉特 邊境</option><option value="stage_5">赫爾海姆 支川</option><option value="stage_6">學術都市 露克斯・艾特納</option><option value="stage_hard">金倫加鴻溝</option><option value="stage_atli">昔日的米德加爾德</option><option value="stage_uw">不歸的牢獄 庫・努・吉亞</option><option value="stage_snow">雪嶺孤城 烏沃貝爾克</option></select></label>
           <label class="field"><span>紀錄類型</span><select id="recordMode"><option value="independent">獨立遠征統計</option><option value="continuous">連續遠征統計</option></select></label>
           <p class="helper">兩種模式各自累積、各自存檔。獨立模式取得物品只進入統計，不改變下一輪的持有配置。更換配置的結果會累積在同一模式，平均值代表混合配置。</p>
           <p id="recordStatus" role="status"></p><div id="recordDashboard"></div>
@@ -335,30 +335,30 @@
 
       <section class="tab-panel" id="tab-roadmap">
         <section class="panel">
-          <div class="roadmap"><article class="roadmap-item current"><span>V1.4.7</span><div><strong>前九張地圖可執行</strong><p>合併池、探索門檻、條件、事件流程、結算、共用亂數與批次統計已串接。此版限定收集家及觀緣眼鏡，其他專屬能力遇到不支援配置會停止。</p><a href="./docs/stage-9-map.md">查看驗證範圍</a></div></article></div>
+          <div class="roadmap"><article class="roadmap-item current"><span>V1.4.8</span><div><strong>前十張地圖可執行</strong><p>合併池、探索門檻、條件、事件流程、結算、共用亂數與批次統計已串接。此版限定收集家及觀緣眼鏡，其他專屬能力遇到不支援配置會停止。</p><a href="./docs/stage-10-map.md">查看驗證範圍</a></div></article></div>
         </section>
       </section>
     </main>
   </div>
 
-  <script src="./speed.js?v=1.4.7"></script>
-  <script src="./affection.js?v=1.4.7"></script>
-  <script src="./expedition-rules.js?v=1.4.7"></script>
-  <script src="./stamina.js?v=1.4.7"></script>
-  <script src="./event-state.js?v=1.4.7"></script>
-  <script src="./lottery.js?v=1.4.7"></script>
-  <script src="./random.js?v=1.4.7"></script>
-  <script src="./map-data.js?v=1.4.7"></script>
-  <script src="./drop-state.js?v=1.4.7"></script>
-  <script src="./drop-preview.js?v=1.4.7"></script>
-  <script src="./map-view.js?v=1.4.7"></script>
-  <script src="./simulation-runtime.js?v=1.4.7"></script>
-  <script src="./event-pool.js?v=1.4.7"></script>
-  <script src="./simulator.js?v=1.4.7"></script>
-  <script src="./simulation-batch.js?v=1.4.7"></script>
-  <script src="./simulation-view.js?v=1.4.7"></script>
-  <script src="./records.js?v=1.4.7"></script>
-  <script src="./record-view.js?v=1.4.7"></script>
-  <script src="./app.js?v=1.4.7"></script>
+  <script src="./speed.js?v=1.4.8"></script>
+  <script src="./affection.js?v=1.4.8"></script>
+  <script src="./expedition-rules.js?v=1.4.8"></script>
+  <script src="./stamina.js?v=1.4.8"></script>
+  <script src="./event-state.js?v=1.4.8"></script>
+  <script src="./lottery.js?v=1.4.8"></script>
+  <script src="./random.js?v=1.4.8"></script>
+  <script src="./map-data.js?v=1.4.8"></script>
+  <script src="./drop-state.js?v=1.4.8"></script>
+  <script src="./drop-preview.js?v=1.4.8"></script>
+  <script src="./map-view.js?v=1.4.8"></script>
+  <script src="./simulation-runtime.js?v=1.4.8"></script>
+  <script src="./event-pool.js?v=1.4.8"></script>
+  <script src="./simulator.js?v=1.4.8"></script>
+  <script src="./simulation-batch.js?v=1.4.8"></script>
+  <script src="./simulation-view.js?v=1.4.8"></script>
+  <script src="./records.js?v=1.4.8"></script>
+  <script src="./record-view.js?v=1.4.8"></script>
+  <script src="./app.js?v=1.4.8"></script>
 </body>
 </html>

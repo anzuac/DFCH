@@ -112,11 +112,13 @@ registry=R(Path('research/mb-76109.bin').read_bytes());assert registry.name=='Du
 assert (registry.read('i'),registry.read('q'),registry.read('i'),registry.read('q'))==(0,76135,0,76131)
 assert registry.p==len(registry.b)
 b=Path('research/mb-76131.bin').read_bytes()
-anchor=struct.pack('<ii',3,len('under_world'))+b'under_world'
-pos=b.find(anchor);assert pos>=52 and b.find(anchor,pos+1)==-1
-r=R.__new__(R);r.b=b;r.p=pos;r.name='GameEventTable'
-reference={k:r.val(t) for k,t in fields('DungeonMasterBase')[:-1]}
-assert reference['dungeonId']==3 and reference['key']=='under_world'
-assert r.read('i')==3 # next field: GameEventMaster.eventId
-reference['sourceOffset']=pos
-Path('research/tables/GameEventDungeonReferences.json').write_text(json.dumps([reference],ensure_ascii=False))
+references=[]
+for dungeonId,key in [(3,'under_world'),(5,'snow_mountain')]:
+ anchor=struct.pack('<ii',dungeonId,len(key))+key.encode()
+ pos=b.find(anchor);assert pos>=52 and b.find(anchor,pos+1)==-1
+ r=R.__new__(R);r.b=b;r.p=pos;r.name='GameEventTable'
+ reference={k:r.val(t) for k,t in fields('DungeonMasterBase')[:-1]}
+ assert reference['dungeonId']==dungeonId and reference['key']==key
+ assert r.read('i')==dungeonId # next field: GameEventMaster.eventId
+ reference['sourceOffset']=pos;references.append(reference)
+Path('research/tables/GameEventDungeonReferences.json').write_text(json.dumps(references,ensure_ascii=False))

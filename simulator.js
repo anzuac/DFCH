@@ -9,7 +9,7 @@
   }
   const unsupported=()=>{throw new Error('目前隊伍未提供此事件所需的角色能力、生命或恢復值；停止執行以避免推測結果。');};
   function validate(data,options) {
-    if(data.gameVersion!=='3.16.0'||![1001,1002,1003,1004,1005,1006,2001,2002,3001].includes(data.master.dungeonId))throw new Error('目前只支援已核對的前九張地圖。');
+    if(data.gameVersion!=='3.16.0'||![1001,1002,1003,1004,1005,1006,2001,2002,3001,3002].includes(data.master.dungeonId))throw new Error('目前只支援已核對的前十張地圖。');
     if(!(Number.isFinite(options.multiplier)&&options.multiplier>=.8&&Number.isFinite(f(options.multiplier))))throw new Error('請填妥有效隊伍速度。');
     const collectors=new Set(data.collectorMasters.map(m=>m.rewardId));
     if((options.abilityIds??[]).some(id=>!collectors.has(id)))throw new Error('目前只開放已接入的收集家能力；其他專屬事件尚缺角色狀態輸入。');
@@ -135,7 +135,7 @@
     2:(d,c)=>c.emit('walk','隊伍繼續前進'),
     3:(d,c)=>c.emit('rest','隊伍休息'),
     4:(d,c)=>c.emit('zone','鑽石礦脈事件'),
-    5:(d,c)=>c.emit('trap','陷阱事件：本模擬設定免除傷害'),
+    5:(d,c,r)=>c.emit('trap',[351,352].includes(c.currentEvent?.logEventId)?(d.localization['expedition-trap-'+r.flavorKey]??'雪地事件：消耗耐力').replace(/<[^>]+>/g,''):'陷阱事件：本模擬設定免除傷害'),
     6:(d,c)=>battle(d,c),
     7:(d,c,r)=>itemDrop(d,c,r.args),
     8:unsupported,
