@@ -7,7 +7,7 @@ const get=id=>w.document.getElementById(id),change=(id,value,type='change')=>{ge
 const wait=async()=>{for(let i=0;i<1000&&get('simulateBtn').disabled;i++)await new Promise(r=>setTimeout(r,2));assert.equal(get('simulateBtn').disabled,false);};
 const once=async()=>{get('simulateOnceBtn').click();await wait();assert.equal(w.DFCHLastSimulation.completed,1);};
 (async()=>{
- assert.ok(w.document.querySelector('.version-pill').textContent.includes('V1.5.0'));assert.equal(get('seedMode'),null);assert.equal(get('simulationSeed'),null);
+ assert.ok(w.document.querySelector('.version-pill').textContent.includes('V1.6.0'));assert.equal(get('seedMode'),null);assert.equal(get('simulationSeed'),null);
  await once();assert.equal(w.DFCHLastSimulation.first.seed,123);assert.equal(w.DFCHLastSimulation.first.depth,60);
  assert.ok(get('simulationResults').textContent.includes('各獎勵統計'));assert.ok(!get('simulationResults').textContent.includes('[object Object]'));
  change('dailyDiamondCount','321','input');get('stoneSearchAvailable').checked=true;

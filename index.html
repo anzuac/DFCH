@@ -5,17 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#10181c" />
   <title>DFCH 遠征模擬器</title>
-  <link rel="stylesheet" href="./styles.css?v=1.5.0" />
+  <link rel="stylesheet" href="./styles.css?v=1.6.0" />
 </head>
 <body>
   <div class="app-shell">
     <header class="topbar">
       <div>
         <p class="eyebrow">DFCH / Expedition Simulator</p>
-        <h1>遠征模擬器</h1>
-        <p class="sub">V1.5.0 · 十三張地圖遠征模擬 · 官方資料 3.16.0</p>
+        <div class="title-actions"><h1>遠征模擬器</h1><button id="openDiamondSimulator" class="speed-details-button" type="button">💎 鑽石抽取模擬器</button></div>
+        <p class="sub">V1.6.0 · 十三張地圖遠征模擬 · 官方資料 3.16.0</p>
       </div>
-      <div class="version-pill">V1.5.0</div>
+      <div class="version-pill">V1.6.0</div>
     </header>
 
     <nav class="tabs" aria-label="主功能">
@@ -59,13 +59,13 @@
 
                 <div class="field readout">
                   <span>目前版本</span>
-                  <strong>V1.5.0 · 單輪與批次模擬可用</strong>
+                  <strong>V1.6.0 · 單輪與批次模擬可用</strong>
                 </div>
               </div>
               <div class="official-formula-card" id="mapOfficialData">
                 <strong id="mapDataTitle">官方地圖資料</strong>
                 <p id="mapDataSummary" aria-live="polite"></p>
-                <p>V1.5.0：十三張地圖已可執行單輪與批次模擬，使用收集家／觀緣眼鏡配置及秒殺戰鬥。其他角色專屬能力尚未開放。<a href="./docs/stage-12-13-map.md" target="_blank" rel="noopener">查看完整核對記錄</a></p>
+                <p>V1.6.0：十三張地圖已可執行單輪與批次模擬，使用收集家／觀緣眼鏡配置及秒殺戰鬥。其他角色專屬能力尚未開放。<a href="./docs/stage-12-13-map.md" target="_blank" rel="noopener">查看完整核對記錄</a></p>
                 <p>模擬設定：遭遇敵人後立即勝利，戰鬥耗時 0 秒；保留遭遇、勝利掉落與後續事件。這是模擬器設定。</p>
                 <label class="field"><span><input type="checkbox" id="mapExplored100"> 地圖探索已達 100%</span></label>
                 <p id="mapExplorationSummary" aria-live="polite"></p>
@@ -335,30 +335,44 @@
 
       <section class="tab-panel" id="tab-roadmap">
         <section class="panel">
-          <div class="roadmap"><article class="roadmap-item current"><span>V1.5.0</span><div><strong>十三張地圖可執行</strong><p>合併池、探索門檻、條件、事件流程、結算、共用亂數與批次統計已串接。此版限定收集家及觀緣眼鏡，其他專屬能力遇到不支援配置會停止。</p><a href="./docs/stage-12-13-map.md">查看驗證範圍</a></div></article></div>
+          <div class="roadmap"><article class="roadmap-item current"><span>V1.6.0</span><div><strong>十三張地圖可執行</strong><p>合併池、探索門檻、條件、事件流程、結算、共用亂數與批次統計已串接。此版限定收集家及觀緣眼鏡，其他專屬能力遇到不支援配置會停止。</p><a href="./docs/stage-12-13-map.md">查看驗證範圍</a></div></article></div>
         </section>
       </section>
     </main>
   </div>
 
-  <script src="./speed.js?v=1.5.0"></script>
-  <script src="./affection.js?v=1.5.0"></script>
-  <script src="./expedition-rules.js?v=1.5.0"></script>
-  <script src="./stamina.js?v=1.5.0"></script>
-  <script src="./event-state.js?v=1.5.0"></script>
-  <script src="./lottery.js?v=1.5.0"></script>
-  <script src="./random.js?v=1.5.0"></script>
-  <script src="./map-data.js?v=1.5.0"></script>
-  <script src="./drop-state.js?v=1.5.0"></script>
-  <script src="./drop-preview.js?v=1.5.0"></script>
-  <script src="./map-view.js?v=1.5.0"></script>
-  <script src="./simulation-runtime.js?v=1.5.0"></script>
-  <script src="./event-pool.js?v=1.5.0"></script>
-  <script src="./simulator.js?v=1.5.0"></script>
-  <script src="./simulation-batch.js?v=1.5.0"></script>
-  <script src="./simulation-view.js?v=1.5.0"></script>
-  <script src="./records.js?v=1.5.0"></script>
-  <script src="./record-view.js?v=1.5.0"></script>
-  <script src="./app.js?v=1.5.0"></script>
+  <dialog id="diamondDialog" class="diamond-dialog" aria-labelledby="diamondTitle">
+    <div class="diamond-dialog-head"><div><p class="eyebrow">DIAMOND SIMULATOR</p><h2 id="diamondTitle">鑽石抽取模擬器</h2></div><button id="diamondClose" type="button" aria-label="關閉鑽石模擬器">✕</button></div>
+    <div class="diamond-dialog-body">
+      <div class="diamond-tabs" role="tablist" aria-label="抽取模式"><button id="diamondSimpleTab" role="tab" aria-controls="diamondSimple" aria-selected="true">鑽石抽取</button><button id="diamondRouletteTab" role="tab" aria-controls="diamondRoulette" aria-selected="false">獎勵輪盤</button></div>
+      <section id="diamondSimple" role="tabpanel" aria-labelledby="diamondSimpleTab"><h3>41 種等機率結果</h3><p id="diamondRange"></p><p class="hint">每個數量的機率都是 1／41（約 2.439024%）。</p><label class="diamond-option"><input id="diamondEye" type="checkbox">擁有神器「惡魔之眼」LV8：數量提高 100%</label><p class="hint">此選項只加倍本頁鑽石數量，不改變機率。</p></section>
+      <section id="diamondRoulette" role="tabpanel" aria-labelledby="diamondRouletteTab" hidden><label class="diamond-option"><input id="diamondHorn" type="checkbox">擁有 AF「高貴一角的寶牙」</label><p id="diamondTier"></p><div id="diamondWheel" class="diamond-wheel" role="button" tabindex="0" aria-label="點擊停止輪盤"></div><details class="diamond-probabilities"><summary>查看完整機率表</summary><p class="hint">先抽稀有度，再抽該層獎勵。整體機率＝稀有度機率 × 該層獎勵機率。金色代幣沿用截圖圖示稱呼。</p><div id="diamondProbabilities"></div></details></section>
+      <p id="diamondResult" class="diamond-result" role="status" aria-live="polite"></p>
+      <div class="diamond-controls"><button id="diamondStart" type="button">開始抽取</button><button id="diamondStop" type="button" disabled>點一下停止</button></div>
+      <p class="hint">游標依機率表跳動；點擊停止時依同一張機率表抽選並停在最終獎勵。動畫不是平均輪流經過每格，點擊時機不提高稀有獎勵機率。</p>
+      <details><summary>本模式最近結果</summary><p id="diamondHistoryEmpty" class="hint">尚未抽取。</p><ol id="diamondHistory"></ol><p id="diamondStorageNote" class="hint"></p></details>
+    </div>
+  </dialog>
+  <script src="./diamond-draw.js?v=1.6.0"></script>
+  <script src="./diamond-view.js?v=1.6.0"></script>
+  <script src="./speed.js?v=1.6.0"></script>
+  <script src="./affection.js?v=1.6.0"></script>
+  <script src="./expedition-rules.js?v=1.6.0"></script>
+  <script src="./stamina.js?v=1.6.0"></script>
+  <script src="./event-state.js?v=1.6.0"></script>
+  <script src="./lottery.js?v=1.6.0"></script>
+  <script src="./random.js?v=1.6.0"></script>
+  <script src="./map-data.js?v=1.6.0"></script>
+  <script src="./drop-state.js?v=1.6.0"></script>
+  <script src="./drop-preview.js?v=1.6.0"></script>
+  <script src="./map-view.js?v=1.6.0"></script>
+  <script src="./simulation-runtime.js?v=1.6.0"></script>
+  <script src="./event-pool.js?v=1.6.0"></script>
+  <script src="./simulator.js?v=1.6.0"></script>
+  <script src="./simulation-batch.js?v=1.6.0"></script>
+  <script src="./simulation-view.js?v=1.6.0"></script>
+  <script src="./records.js?v=1.6.0"></script>
+  <script src="./record-view.js?v=1.6.0"></script>
+  <script src="./app.js?v=1.6.0"></script>
 </body>
 </html>

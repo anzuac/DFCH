@@ -1051,3 +1051,33 @@ select:disabled {
 #tab-stats > .panel { min-width: 0; }
 .diamond-cap-state { padding: 1rem; border: 1px solid #b4d7bd55; border-radius: 14px; margin-block: 1rem; }
 .diamond-cap-state progress { display: block; width: 100%; margin-top: .8rem; accent-color: #9cd9ce; }
+
+.title-actions { display:flex;align-items:center;gap:16px;flex-wrap:wrap; }
+.title-actions h1 { margin:0; }
+.diamond-dialog { width:min(640px,calc(100vw - 24px));max-height:calc(100dvh - 32px);padding:0;border:1px solid var(--line-strong);border-radius:20px;background:var(--bg-2);color:var(--text);box-shadow:var(--shadow);overflow:auto;overscroll-behavior:contain; }
+.diamond-dialog::backdrop { background:rgba(0,0,0,.76); }
+.diamond-dialog-head { position:sticky;top:0;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:20px 24px;border-bottom:1px solid var(--line);background:var(--bg-2); }
+.diamond-dialog-head h2 { margin:0;font-size:22px; }
+.diamond-dialog-head button { width:44px;height:44px;border:1px solid var(--line);border-radius:50%;background:var(--panel-2);cursor:pointer; }
+.diamond-dialog-body { padding:20px 24px; }
+.diamond-tabs,.diamond-controls { display:flex;gap:10px;margin-bottom:20px; }
+.diamond-tabs button,.diamond-controls button { flex:1;min-height:48px;padding:10px;border:1px solid var(--line);border-radius:12px;background:var(--panel-2);cursor:pointer; }
+.diamond-tabs button[aria-selected=true],#diamondStart { color:var(--gold-2);border-color:var(--gold); }
+.diamond-controls button:disabled { opacity:.4;cursor:default; }
+.diamond-option { display:flex;gap:10px;align-items:flex-start;padding:16px;border:1px solid var(--line);border-radius:12px;background:var(--panel);margin:16px 0;line-height:1.6; }
+.diamond-option input { margin-top:5px;accent-color:var(--teal); }
+.diamond-wheel { border:1px solid var(--line-strong);border-radius:14px;overflow:hidden;margin:16px 0;cursor:pointer; }
+.diamond-wheel-row { display:flex;align-items:center;gap:12px;padding:10px 14px;min-height:54px;border-bottom:1px solid var(--line); }
+.diamond-wheel-row:last-child { border:0; }
+.diamond-wheel-row.selected { background:rgba(213,189,121,.22);box-shadow:inset 4px 0 var(--gold); }
+.diamond-reward-icon { font-size:25px; }
+.diamond-row-weight { margin-left:auto;color:var(--muted);font-size:12px; }
+.diamond-result { padding:20px;text-align:center;border:1px solid var(--line-strong);border-radius:14px;font-size:22px;font-weight:700;color:var(--teal-2);min-height:78px; }
+.diamond-probabilities { margin:16px 0; }
+.diamond-dialog summary { cursor:pointer;padding:12px 0;color:var(--gold-2); }
+.diamond-prob-table { width:100%;border-collapse:collapse;font-size:13px; }
+.diamond-prob-table td,.diamond-prob-table th { padding:9px 5px;text-align:left;border-bottom:1px solid var(--line); }
+.diamond-prob-table th { color:var(--muted); }
+.diamond-dialog button:focus-visible,.diamond-wheel:focus-visible { outline:2px solid var(--teal);outline-offset:3px; }
+@media(max-width:480px) { .diamond-dialog-head,.diamond-dialog-body { padding:16px; }.title-actions { gap:10px; }.title-actions button { font-size:14px;padding:10px 12px; }.diamond-wheel-row { gap:8px; } }
+@media(prefers-reduced-motion:reduce) { .diamond-wheel-row { transition:none; } }

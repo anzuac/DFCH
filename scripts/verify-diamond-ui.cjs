@@ -1,0 +1,10 @@
+const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path');const {JSDOM}=require(process.env.DFCH_JSDOM_PATH||'jsdom');
+const root=path.resolve(__dirname,'..');const html=fs.readFileSync(path.join(root,'index.html'),'utf8').replace(/<script[\s\S]*?<\/script>/g,'');
+const dom=new JSDOM(html,{url:'https://dfch.test/',runScripts:'outside-only'}),w=dom.window;
+for(const name of ['diamond-draw.js','diamond-view.js'])w.eval(fs.readFileSync(path.join(root,name),'utf8'));
+const $=id=>w.document.getElementById(id);$('openDiamondSimulator').click();assert.ok($('diamondDialog').open);assert.equal($('diamondEye').checked,false);
+$('diamondEye').checked=true;$('diamondEye').dispatchEvent(new w.Event('change'));assert.ok($('diamondRange').textContent.includes('20–100'));$('diamondStart').click();assert.equal($('diamondEye').disabled,true);$('diamondStop').click();assert.match($('diamondResult').textContent,/獲得/);assert.equal($('diamondHistory').children.length,1);
+$('diamondRouletteTab').click();assert.equal($('diamondSimple').hidden,true);$('diamondHorn').checked=true;$('diamondHorn').dispatchEvent(new w.Event('change'));assert.ok($('diamondProbabilities').textContent.includes('23.9%'));assert.ok($('diamondProbabilities').textContent.includes('黃金寶箱 ×100'));
+$('diamondStart').click();assert.equal($('diamondWheel').children.length,7);$('diamondWheel').click();assert.equal($('diamondStop').disabled,true);assert.equal($('diamondWheel').querySelectorAll('.selected').length,1);assert.equal($('diamondHistory').children.length,1);
+const result=$('diamondResult').textContent;$('diamondStop').click();assert.equal($('diamondResult').textContent,result);assert.equal(JSON.parse(w.localStorage.getItem('DFCH.diamond.history.v1')).length,2);
+$('diamondClose').click();assert.equal($('diamondDialog').open,false);w.close();console.log('Diamond HTML UI: dialog, both pages, artifact controls, stop target, double-stop guard and separate storage passed');
