@@ -9,6 +9,12 @@ function boot(storage={}){
 const dom=boot(),w=dom.window,$=id=>w.document.getElementById(id),change=(id,value)=>{$(id).value=value;$(id).dispatchEvent(new w.Event('change',{bubbles:true}));};
 const A=w.DFCHArtifacts,C=w.DFCHAccount;
 assert.equal($('accountArtifacts').children.length,6);
+assert.deepEqual([...w.document.querySelectorAll('.tabs .tab')].map(e=>e.dataset.tab),['simulator','expedition','stats','diamond']);
+for(const [id,page] of [['accountArtifacts','simulator'],['partyCount','simulator'],['mapSelect','expedition'],['simulateBtn','expedition'],['simulationResults','expedition'],['recordDashboard','stats'],['diamondStart','diamond']])assert.equal($(id).closest('.tab-panel').id,'tab-'+page);
+for(const page of ['expedition','diamond','stats','simulator']){w.document.querySelector(`[data-tab="${page}"]`).click();assert.equal(w.document.querySelectorAll('.tab-panel.active').length,1);assert.equal(w.document.querySelector('.tab-panel.active').id,'tab-'+page);}
+assert.match($('runConfigSummary').textContent,/隊長/);assert.equal($('recordOverview').querySelectorAll('tbody tr').length,14);
+$('toggleRecordReset').click();assert.equal($('recordResetOptions').hidden,false);assert.match($('recordResetScope').textContent,/指定範圍/);
+
 const ids=[...w.document.querySelectorAll('[id]')].map(x=>x.id);assert.equal(new Set(ids).size,ids.length);
 assert.ok($('accountSettings').compareDocumentPosition($('mapSelect'))&w.Node.DOCUMENT_POSITION_FOLLOWING);
 C.setRate('stage_1',37.123456);assert.equal(Number($('mapExplorationRate').value),37.123456);C.assertValid();

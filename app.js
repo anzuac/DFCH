@@ -46,12 +46,20 @@
   function activateTab(name) {
     tabs.forEach((tab) => tab.classList.toggle("active", tab.dataset.tab === name));
     panels.forEach((panel) => panel.classList.toggle("active", panel.id === `tab-${name}`));
+    tabs.forEach(tab=>tab.setAttribute('aria-current',tab.dataset.tab===name?'page':'false'));
+    window.dispatchEvent(new CustomEvent('dfch-tab-change',{detail:name}));
+    if(name==='expedition')updateRunSummary();
   }
 
   tabs.forEach((tab) => {
     tab.addEventListener("click", () => activateTab(tab.dataset.tab));
   });
 
+  document.querySelectorAll('[data-page-link]').forEach(button=>button.addEventListener('click',()=>{activateTab(button.dataset.pageLink);window.scrollTo?.({top:0,behavior:'smooth'});}));
+  function updateRunSummary(){
+    const summary=document.getElementById('runConfigSummary');if(!summary)return;
+    summary.textContent=`隊長 ${leaderName.textContent} · 隊伍 ${partyCount.textContent} · 遠征倍率 ${partySpeed.textContent} · 神器 ${document.getElementById('accountActiveCount').textContent}。${affectionBonus.textContent}`;
+  }
   function allUnitCards() {
     return [...document.querySelectorAll(".unit-card")];
   }
@@ -168,7 +176,7 @@
     } else affectionBonus.textContent = `角色 +${roleBonus}% · 神器 +${artifactBonus}% · 事件權重倍率 ×${window.DFCHAffection.ratio(roleBonus, artifactBonus).toFixed(4)}`;
 
     window.DFCHDropPreview?.refresh(Number.isFinite(roleBonus) ? window.DFCHAffection.ratio(roleBonus, artifactBonus) : NaN);
-    updateSpeedPreview();
+    updateSpeedPreview();updateRunSummary();
   }
 
   function wireUnit(card) {

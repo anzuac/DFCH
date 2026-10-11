@@ -1,7 +1,7 @@
 (() => {
   'use strict';
-  const D=window.DFCHDiamondDraw,$=id=>document.getElementById(id),dialog=$('diamondDialog');
-  let page='simple',timer=null,pending=null,cursor=-1,revealing=false,opener=null,batch=null;
+  const D=window.DFCHDiamondDraw,$=id=>document.getElementById(id);
+  let page='simple',timer=null,pending=null,cursor=-1,revealing=false,batch=null;
   let records=[];try {const saved=JSON.parse(localStorage.getItem('DFCH.diamond.history.v1')??'[]');if(Array.isArray(saved))records=saved.filter(r=>['simple','roulette'].includes(r.page)&&D.names[r.kind]&&Number.isSafeInteger(r.quantity)&&r.quantity>0).slice(0,30);}catch{}
   function text(tag,value,cls){const e=document.createElement(tag);e.textContent=value;if(cls)e.className=cls;return e;}
   function history(){const list=$('diamondHistory');list.replaceChildren();const shown=records.filter(r=>r.page===page);for(const r of shown.slice(0,10))list.append(text('li',`${r.tierName?`${r.tierName} · `:''}${D.names[r.kind]} ×${r.quantity}${r.eye?' · 惡魔之眼雙倍':''}${r.horn?' · 高貴一角的寶牙':''}`));$('diamondHistoryEmpty').hidden=shown.length>0;}
@@ -16,23 +16,52 @@
     $('diamondStart').textContent=page==='simple'?'抽取鑽石':'開始抽取';
   }
   function progress(reason=''){
-    $('diamondAutoStatus').textContent=batch?`${reason||'連續抽取中'} · 已抽 ${batch.count.toLocaleString()} 次 · 鑽石 ${batch.total.toLocaleString()}／${batch.target.toLocaleString()} 顆` : '';
+    $('diamondAutoStatus').textContent=batch?`${reason||'連續抽取中'} · 已抽 ${batch.count.toLocaleString()} 次 · 鑽石 ${batch.total.toLocaleString()} 顆 · 目標 ${D.names[batch.target.kind]} ×${batch.target.quantity.toLocaleString()}` : '';
+  }
+  const rewardKey=r=>`${r.kind}:${r.quantity}`;
+  function targets(){
+    const input=$('diamondTarget'),previous=input.value,unique=new Map();
+    D.tiers.forEach((_,tier)=>D.rewards($('diamondHorn').checked,tier).forEach(r=>{if(r.weight>0)unique.set(rewardKey(r),r);}));
+    input.replaceChildren(...[...unique].map(([key,r])=>{const option=text('option',`${D.names[r.kind]} ×${r.quantity.toLocaleString()}`);option.value=key;return option;}));
+    input.value=unique.has(previous)?previous:'diamond:7777';
+  }
+  function persist(){
+    try{localStorage.setItem('DFCH.diamond.history.v1',JSON.stringify(records));$('diamondStorageNote').textContent='';}
+    catch{$('diamondStorageNote').textContent='瀏覽器無法保存紀錄，目前只保留本次開啟的結果。';}history();
   }
   function save(r){
     $('diamondResult').textContent=`獲得 ${D.icons[r.kind]} ${D.names[r.kind]} ×${r.quantity}`;
     records.unshift(r);records=records.slice(0,30);
-    try{localStorage.setItem('DFCH.diamond.history.v1',JSON.stringify(records));$('diamondStorageNote').textContent='';}
-    catch{$('diamondStorageNote').textContent='瀏覽器無法保存紀錄，目前只保留本次開啟的結果。';}history();
+    persist();
   }
+  function showWheel(r){
+    $('diamondTier').textContent=`本輪：${D.tiers[r.tier].name}（稀有度機率 ${D.tiers[r.tier].weight}%）`;
+    $('diamondWheel').replaceChildren(...D.rewards(r.horn,r.tier).map(row=>{
+      const e=text('div','','diamond-wheel-row');e.append(text('span',D.icons[row.kind],'diamond-reward-icon'),text('strong',`${D.names[row.kind]} ×${row.quantity}`),text('span',`${row.weight}%`,'diamond-row-weight'));return e;
+    }));
+  }
+  function fastBatch(){
+    timer=null;if(!batch?.active)return;
+    const start=performance.now();let last=null;
+    for(let i=0;i<1000;i++){
+      const r=D.roulette(batch.horn);
+      last={...r,page:'roulette',tierName:D.tiers[r.tier].name,eye:false,horn:batch.horn};
+      batch.count++;if(r.kind==='diamond')batch.total+=r.quantity;
+      records.unshift(last);if(records.length>30)records.pop();
+      if(rewardKey(r)===rewardKey(batch.target)){batch.active=false;batch.hit=true;break;}
+      if(performance.now()-start>=8)break;
+    }
+    if(last){showWheel(last);highlight(last.index);$('diamondResult').textContent=`${batch.hit?'抽中目標！':'最近抽到'} ${D.names[last.kind]} ×${last.quantity}`;persist();}
+    progress(batch.hit?'已抽中目標，自動停止':'快速連續抽取中');controls();
+    if(batch.active)timer=setTimeout(fastBatch,0);
+  }
+
   function settle(){
     clearTimeout(timer);timer=null;if(!pending)return;
     const r=pending;pending=null;revealing=false;highlight(r.index);save(r);
-    if(batch){batch.count++;if(r.kind==='diamond')batch.total+=r.quantity;
-      if(batch.total>=batch.target){batch.active=false;progress('已達目標，自動停止');}
-      else progress(batch.active?'':'已停止');
-    }
-    controls();if(batch?.active)timer=setTimeout(draw,180);
+    controls();
   }
+
   function animate(){
     if(!pending)return;
     cursor=(cursor+1)%$('diamondWheel').children.length;highlight(cursor);
@@ -44,14 +73,9 @@
     const r=D.roulette($('diamondHorn').checked);
     pending={...r,page:'roulette',tierName:D.tiers[r.tier].name,eye:false,horn:$('diamondHorn').checked};
     cursor=-1;revealing=false;
-    $('diamondTier').textContent=`本輪：${D.tiers[r.tier].name}（稀有度機率 ${D.tiers[r.tier].weight}%）`;
-    $('diamondWheel').replaceChildren(...D.rewards(pending.horn,r.tier).map(row=>{
-      const e=text('div','','diamond-wheel-row');e.append(text('span',D.icons[row.kind],'diamond-reward-icon'),text('strong',`${D.names[row.kind]} ×${row.quantity}`),text('span',`${row.weight}%`,'diamond-row-weight'));return e;
-    }));
+    showWheel(pending);
     $('diamondResult').textContent=batch?.active?'連續抽取中…':'獎勵已抽定，按「揭曉獎勵」。';controls();
-    let steps=0;
-    const tick=()=>{if(!pending)return;cursor=(cursor+1)%7;highlight(cursor);steps++;
-      if(batch?.active&&steps>=7)revealing=true;
+    const tick=()=>{if(!pending)return;cursor=(cursor+1)%7;highlight(cursor);
       if(revealing&&cursor===pending.index){settle();return;}timer=setTimeout(tick,90);
     };tick();
   }
@@ -66,7 +90,7 @@
     // Continue downward to the already selected result, never redraw on click.
     clearTimeout(timer);timer=setTimeout(animate,90);
   }
-  function cancel(){if(batch)batch.active=false;clearTimeout(timer);timer=null;if(pending)settle();else controls();if(batch)progress(batch.total>=batch.target?'已達目標，自動停止':'已停止');}
+  function cancel(){if(batch)batch.active=false;clearTimeout(timer);timer=null;if(pending)settle();else controls();if(batch)progress(batch.hit?'已抽中目標，自動停止':'已停止');}
   function render(){
     cancel();batch=null;progress();const simple=page==='simple';
     $('diamondSimple').hidden=!simple;$('diamondRoulette').hidden=simple;
@@ -74,19 +98,20 @@
     $('diamondResult').textContent=simple?'按「抽取鑽石」立即查看結果。':'按「開始抽取」或設定目標連續抽取。';
     $('diamondWheel').replaceChildren();$('diamondWheel').hidden=simple;
     $('diamondRange').textContent=$('diamondEye').checked?'20–100 顆，每次相差 2 顆。':'10–50 顆，每次相差 1 顆。';
-    if(!simple){$('diamondTier').textContent='稀有度：60%／34%／5%／1%。';probabilities();}controls();history();
+    if(!simple){$('diamondTier').textContent='稀有度：60%／34%／5%／1%。';probabilities();targets();}controls();history();
   }
   $('diamondAutoStart').addEventListener('click',()=>{
-    if(pending||batch?.active)return;const input=$('diamondTarget'),target=Number(input.value);
-    input.setCustomValidity('');if(input.value.trim()===''||!Number.isSafeInteger(target)||target<1||target>1000000000){input.setCustomValidity('請輸入 1–1,000,000,000 的整數鑽石目標');input.reportValidity();return;}
-    batch={active:true,target,total:0,count:0};progress();draw();
+    if(pending||batch?.active)return;
+    const key=$('diamondTarget').value,horn=$('diamondHorn').checked;
+    const target=D.tiers.flatMap((_,i)=>D.rewards(horn,i)).find(r=>r.weight>0&&rewardKey(r)===key);
+    if(!target){$('diamondAutoStatus').textContent='請選擇目前獎品表中的目標。';return;}
+    batch={active:true,target:{kind:target.kind,quantity:target.quantity},horn,total:0,count:0,hit:false};
+    progress();controls();timer=setTimeout(fastBatch,0);
   });
-  $('diamondTarget').addEventListener('input',()=>$('diamondTarget').setCustomValidity(''));
-  $('openDiamondSimulator').addEventListener('click',()=>{opener=document.activeElement;render();if(typeof dialog.showModal==='function')dialog.showModal();else dialog.setAttribute('open','');});
-  $('diamondClose').addEventListener('click',()=>{cancel();if(typeof dialog.close==='function')dialog.close();else dialog.removeAttribute('open');opener?.focus();});
-  dialog.addEventListener('cancel',cancel);dialog.addEventListener('close',()=>{cancel();opener?.focus();});
+  window.addEventListener('dfch-tab-change',event=>{if(event.detail!=='diamond')cancel();});
   $('diamondSimpleTab').addEventListener('click',()=>{page='simple';render();});$('diamondRouletteTab').addEventListener('click',()=>{page='roulette';render();});
   ['diamondEye','diamondHorn'].forEach(id=>$(id).addEventListener('change',render));
   $('diamondStart').addEventListener('click',start);$('diamondStop').addEventListener('click',stop);$('diamondWheel').addEventListener('click',()=>{if(!batch?.active)stop();});
   $('diamondWheel').addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();if(!batch?.active)stop();}});
+  render();
 })();

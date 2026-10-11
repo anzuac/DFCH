@@ -90,7 +90,7 @@
   });
   window.DFCHAccount=Object.freeze({KEY,validate,snapshot:()=>clone(state),rate,setRate,setOwned,commit,render,
     assertValid(){if(error)throw new Error(error);for(const input of document.querySelectorAll('[data-account-artifact],#mapExplorationRate'))if(!input.checkValidity())throw new Error('請修正神器持有量或探索率');},
-    lock(on){for(const input of document.querySelectorAll('#accountSettings input,#accountSettings button,#mapExplorationRate,#mapExplored100'))input.disabled=on;}
+    lock(on){for(const input of document.querySelectorAll('#accountSettings input,#accountSettings button,#dropStateControls input,#allMapsExplored,#mapExplorationRate,#mapExplored100'))input.disabled=on;}
   });
   if(!error)try{save(state);}catch{}
   render();

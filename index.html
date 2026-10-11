@@ -2,110 +2,41 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#0b1420">
-  <title>DFCH 遠征模擬器 · V2.0.1</title>
-  <link rel="stylesheet" href="./styles.css?v=2.0.1">
+  <title>DFCH 遠征模擬器 · V2.1.0</title>
+  <link rel="stylesheet" href="./styles.css?v=2.1.0">
 </head>
 <body>
   <div class="app-shell">
     <header class="topbar">
       <div>
         <p class="eyebrow">DFCH / Expedition Simulator</p>
-        <div class="title-actions"><h1>遠征模擬器</h1><button id="openDiamondSimulator" class="speed-details-button" type="button">💎 鑽石抽取模擬器</button></div>
+        <div class="title-actions"><h1>遠征模擬器</h1></div>
         <p class="sub">配置你的遠征隊，探索十三張地圖的獎勵。</p>
       </div>
-      <div class="version-pill">V2.0.1</div>
+      <div class="version-pill">V2.1.0</div>
     </header>
 
-    <nav class="tabs" aria-label="主功能">
-      <button class="tab active" data-tab="simulator">遠征配置</button>
-      <button class="tab" data-tab="stats">統計總覽</button>
-      <button class="tab" data-tab="roadmap">版本與說明</button>
-    </nav>
+    <nav class="tabs" aria-label="主功能"><button class="tab active" data-tab="simulator">① 遠征配置</button><button class="tab" data-tab="expedition">② 開始遠征</button><button class="tab" data-tab="stats">③ 統計資料</button><button class="tab" data-tab="diamond">④ 鑽石模擬器</button></nav>
 
     <main>
       <section class="tab-panel active" id="tab-simulator"><section class="panel account-panel" id="accountSettings" aria-labelledby="accountTitle">
-<div class="panel-head"><div><span class="step-badge">01</span><h2 id="accountTitle">帳號神器與探索</h2></div><span class="status-chip accent" id="accountActiveCount"></span></div>
+<div class="panel-head"><div><span class="step-badge">01</span><h2 id="accountTitle">帳號神器</h2></div><span class="status-chip accent" id="accountActiveCount"></span></div>
 <p class="section-intro">先選好你擁有的神器。切換地圖時共用；連續遠征新取得的神器，從下一輪開始生效。</p>
 <div id="accountArtifacts" class="account-artifact-grid"></div>
-<div class="exploration-switch"><label><input type="checkbox" id="allMapsExplored"><span><strong>全部地圖探索 100%</strong><small>套用所有探索解鎖獎勵，並排除已無作用的探索事件。</small></span></label><span class="status-chip neutral">13 張地圖</span></div>
+
 <div class="account-footer"><p id="accountSummary" role="status"></p><span id="artifactStateText" hidden=""></span><div class="bonus-readout">
                 <span>目前 UI 選取的羈絆加成</span>
                 <strong id="affectionBonus">角色 +10% · 神器 +30%</strong>
                 <small>收集家加成與觀緣眼鏡相乘，增量由步行事件權重轉移</small>
               </div></div>
-<details class="account-inventory"><summary>其他限定神器持有量 · 目前選擇的地圖</summary><p class="unit-note">這些持有量用於滿級掉落排除。耐力總額請在執行設定輸入；戰鬥、經驗及年齡效果不在此次模擬範圍。</p><div id="dropStateControls" class="field-grid two"></div></details>
+
 <div class="account-tools"><span id="accountSaveStatus" role="status"></span><button type="button" id="accountExport" class="text-btn">匯出設定</button><label class="text-btn import-label">匯入設定<input type="file" id="accountImport" accept=".json,application/json"></label></div>
 </section>
-        <div class="layout-grid">
-          <div class="main-column">
-            <section class="panel">
+
+      <section class="panel" id="partySettings">
               <div class="panel-head">
                 <div>
                   <span class="step-badge">02</span>
-                  <h2>遠征地圖</h2>
-                </div>
-                <span class="status-chip neutral">十三張地圖資料已解析</span>
-              </div>
-
-              <div class="field-grid two">
-                <label class="field">
-                  <span>地圖</span>
-                  <select id="mapSelect">
-                    <option value="stage_1">米維克威茲 外緣部</option>
-                    <option value="stage_2">希敏約格 湖畔</option>
-                    <option value="stage_3">世界樹 樹海</option>
-                    <option value="stage_4">阿斯嘉特 邊境</option>
-                    <option value="stage_5">赫爾海姆 支川</option>
-                    <option value="stage_6">學術都市 露克斯・艾特納</option>
-                    <option value="stage_hard">金倫加鴻溝</option>
-                    <option value="stage_atli">昔日的米德加爾德</option>
-                    <option value="stage_uw">不歸的牢獄 庫・努・吉亞</option>
-                    <option value="stage_snow">雪嶺孤城 烏沃貝爾克</option>
-                    <option value="stage_labyrinth_1">巨大迷宮探索 上層</option>
-                    <option value="stage_labyrinth_2">巨大迷宮探索 下層</option>
-                    <option value="stage_satan">決戰魔王</option>
-                  </select>
-                </label>
-
-                <div class="field readout"><span>遊戲資料版本</span><strong>3.16.0 · 十三張地圖</strong></div>
-              </div>
-              <div class="official-formula-card" id="mapOfficialData">
-                <strong id="mapDataTitle">官方地圖資料</strong>
-                <p id="mapDataSummary" aria-live="polite"></p>
-
-
-                <label class="field"><span>此地圖起始探索率（%）</span><input id="mapExplorationRate" type="number" min="0" max="100" step="any" value="0"></label><label class="field"><span><input type="checkbox" id="mapExplored100"> 地圖探索已達 100%</span></label>
-                <p id="mapExplorationSummary" aria-live="polite" class="helper"></p>
-                <details id="dropStateDetails">
-                  <summary>有效掉落預覽與當日狀態</summary>
-                  <div class="map-detail-scroll" tabindex="0" role="region" aria-label="鑽石與持有權重明細，可上下捲動">
-                  <p class="unit-note">此處是單次物品抽選的條件機率，已套用上方神器、探索率及滿級排除；不代表整場取得機率。連續模式已有紀錄時，沿用其當日鑽石。</p>
-                  <div class="field-grid two">
-                    <label class="field"><span>本次遠征開始前，當日一般鑽石累計</span><input id="dailyDiamondCount" type="number" min="0" step="1" value="0"></label>
-                    <label class="field"><span>查看抽選池</span><select id="dropPoolMode"><option value="basic">基本鑽石物品事件</option><option value="boss">首領合併掉落池（單次抽選）</option></select></label>
-                  </div>
-
-                  <label class="field"><span><input id="stoneSearchAvailable" type="checkbox"> 已開放秘石搜尋（前置解鎖）</span></label>
-                  <label class="field"><span><input id="stoneUnlocked" type="checkbox"> 已取得此地圖的解鎖發現</span></label>
-                  <p id="dropStateSummary" aria-live="polite"></p>
-                  <div class="speed-table-scroll"><table class="speed-table"><thead><tr><th>物品</th><th>實際數量範圍</th><th>此抽選的條件機率</th></tr></thead><tbody id="dropStateRows"></tbody></table></div>
-                  <p id="flagStateSummary" aria-live="polite"></p>
-                  <p class="unit-note">神器持有未滿級仍可掉落；本輪待結算取得量也會參與滿級排除。神級鑽石不計入一般鑽石日上限。連續遠征需先結算持有與解鎖，再建立下一輪；跨日重置時刻仍待核對。</p>
-                  </div>
-                </details>
-                <details id="mapDataDetails">
-                  <summary>查看地圖事件、掉落與原始權重</summary>
-                  <p class="unit-note">權重以易讀的小數顯示。權重不是固定百分比。技能、探索率、已取得獎勵與解鎖狀態可能改變候選池；以下保留官方原值。實際動態抽選請使用下方模擬功能。</p>
-                  <div id="mapDataTables"></div>
-
-                </details>
-              </div>
-            </section>
-
-            <section class="panel">
-              <div class="panel-head">
-                <div>
-                  <span class="step-badge">03</span>
                   <h2>遠征隊伍</h2>
                 </div>
                 <span class="status-chip accent">速度換算已接入</span>
@@ -225,14 +156,69 @@
                   </div>
                 </article>
               </template>
-            </section>
+            </section><div class="page-actions"><button class="primary-btn" data-page-link="expedition">配置完成，前往選擇地圖 →</button></div></section><section class="tab-panel" id="tab-expedition"><div class="panel run-config-summary"><div><strong>目前遠征配置</strong><p id="runConfigSummary"></p></div><button class="secondary-btn" data-page-link="simulator">修改神器／隊伍</button></div><div class="layout-grid"><div class="main-column"><section class="panel">
+              <div class="panel-head">
+                <div>
+                  <span class="step-badge">03</span>
+                  <h2>遠征地圖</h2>
+                </div>
+                <span class="status-chip neutral">十三張地圖資料已解析</span>
+              </div><div class="exploration-switch"><label><input type="checkbox" id="allMapsExplored"><span><strong>全部地圖探索 100%</strong><small>套用所有探索解鎖獎勵，並排除已無作用的探索事件。</small></span></label><span class="status-chip neutral">13 張地圖</span></div>
+
+              <div class="field-grid two">
+                <label class="field">
+                  <span>地圖</span>
+                  <select id="mapSelect">
+                    <option value="stage_1">米維克威茲 外緣部</option>
+                    <option value="stage_2">希敏約格 湖畔</option>
+                    <option value="stage_3">世界樹 樹海</option>
+                    <option value="stage_4">阿斯嘉特 邊境</option>
+                    <option value="stage_5">赫爾海姆 支川</option>
+                    <option value="stage_6">學術都市 露克斯・艾特納</option>
+                    <option value="stage_hard">金倫加鴻溝</option>
+                    <option value="stage_atli">昔日的米德加爾德</option>
+                    <option value="stage_uw">不歸的牢獄 庫・努・吉亞</option>
+                    <option value="stage_snow">雪嶺孤城 烏沃貝爾克</option>
+                    <option value="stage_labyrinth_1">巨大迷宮探索 上層</option>
+                    <option value="stage_labyrinth_2">巨大迷宮探索 下層</option>
+                    <option value="stage_satan">決戰魔王</option>
+                  </select>
+                </label>
+
+                <div class="field readout"><span>遊戲資料版本</span><strong>3.16.0 · 十三張地圖</strong></div>
+              </div>
+              <div class="official-formula-card" id="mapOfficialData">
+                <strong id="mapDataTitle">官方地圖資料</strong>
+                <p id="mapDataSummary" aria-live="polite"></p>
 
 
+                <label class="field"><span>此地圖起始探索率（%）</span><input id="mapExplorationRate" type="number" min="0" max="100" step="any" value="0"></label><label class="field"><span><input type="checkbox" id="mapExplored100"> 地圖探索已達 100%</span></label>
+                <p id="mapExplorationSummary" aria-live="polite" class="helper"></p>
+                <details id="dropStateDetails">
+                  <summary>有效掉落預覽與當日狀態</summary>
+                  <div class="map-detail-scroll" tabindex="0" role="region" aria-label="鑽石與持有權重明細，可上下捲動">
+                  <p class="unit-note">此處是單次物品抽選的條件機率，已套用上方神器、探索率及滿級排除；不代表整場取得機率。連續模式已有紀錄時，沿用其當日鑽石。</p>
+                  <div class="field-grid two">
+                    <label class="field"><span>本次遠征開始前，當日一般鑽石累計</span><input id="dailyDiamondCount" type="number" min="0" step="1" value="0"></label>
+                    <label class="field"><span>查看抽選池</span><select id="dropPoolMode"><option value="basic">基本鑽石物品事件</option><option value="boss">首領合併掉落池（單次抽選）</option></select></label>
+                  </div>
 
+                  <label class="field"><span><input id="stoneSearchAvailable" type="checkbox"> 已開放秘石搜尋（前置解鎖）</span></label>
+                  <label class="field"><span><input id="stoneUnlocked" type="checkbox"> 已取得此地圖的解鎖發現</span></label>
+                  <p id="dropStateSummary" aria-live="polite"></p>
+                  <div class="speed-table-scroll"><table class="speed-table"><thead><tr><th>物品</th><th>實際數量範圍</th><th>此抽選的條件機率</th></tr></thead><tbody id="dropStateRows"></tbody></table></div>
+                  <p id="flagStateSummary" aria-live="polite"></p>
+                  <p class="unit-note">神器持有未滿級仍可掉落；本輪待結算取得量也會參與滿級排除。神級鑽石不計入一般鑽石日上限。連續遠征需先結算持有與解鎖，再建立下一輪；跨日重置時刻仍待核對。</p>
+                  </div>
+                </details>
+                <details id="mapDataDetails">
+                  <summary>查看地圖事件、掉落與原始權重</summary>
+                  <p class="unit-note">權重以易讀的小數顯示。權重不是固定百分比。技能、探索率、已取得獎勵與解鎖狀態可能改變候選池；以下保留官方原值。實際動態抽選請使用下方模擬功能。</p>
+                  <div id="mapDataTables"></div>
 
-          </div>
-
-          <aside class="side-column"><section class="panel" id="runSettings">
+                </details>
+              </div>
+            <details class="account-inventory"><summary>其他限定神器持有量 · 目前選擇的地圖</summary><p class="unit-note">這些持有量用於滿級掉落排除。耐力總額請在執行設定輸入；戰鬥、經驗及年齡效果不在此次模擬範圍。</p><div id="dropStateControls" class="field-grid two"></div></details></section></div><aside class="side-column"><section class="panel" id="runSettings">
               <div class="panel-head">
                 <div>
                   <span class="step-badge">04</span>
@@ -280,8 +266,7 @@
               <button type="button" class="secondary-btn" id="cancelSimulation" hidden="">中止模擬</button>
               <progress id="simulationProgress" value="0" max="1" hidden="" aria-label="模擬進度"></progress>
               <p class="helper" id="simulateMessage" aria-live="polite">準備就緒。可選 1 次查看整輪事件，或執行批次統計。</p>
-            <details class="compact-help"><summary>耐力、種子與連續模式說明</summary><p class="helper">每輪自動產生新種子並保存至紀錄，玩家不需輸入。</p><p class="unit-note">自行輸入的是隊伍耐力總額。每輪以此值開始，消耗降至 0 時結束；恢復不超過最大值。無限耐力略過耐力消耗與耗盡判定，仍保留地圖進度及終點事件。</p><p class="helper">連續模式每輪刷新已達到的探索門檻；不自動跨日重置鑽石。每輪各自產生新種子。</p></details></section>
-            <section class="panel">
+            <details class="compact-help"><summary>耐力、種子與連續模式說明</summary><p class="helper">每輪自動產生新種子並保存至紀錄，玩家不需輸入。</p><p class="unit-note">自行輸入的是隊伍耐力總額。每輪以此值開始，消耗降至 0 時結束；恢復不超過最大值。無限耐力略過耐力消耗與耗盡判定，仍保留地圖進度及終點事件。</p><p class="helper">連續模式每輪刷新已達到的探索門檻；不自動跨日重置鑽石。每輪各自產生新種子。</p></details></section><section class="panel">
               <div class="panel-head compact">
                 <div>
                   <span class="step-badge">結果</span>
@@ -291,62 +276,57 @@
 
               <div id="simulationResults" aria-live="polite"><p>尚未執行遠征。</p></div>
               <p class="unit-note">固定無敵必勝、戰鬥 0 秒、陷阱免傷。未模擬角色專屬事件、活動加成、經驗、開箱及跨日重置。</p>
-            </section>
-          </aside>
-        </div>
-      </section>
+            </section></aside></div></section>
 
       <section class="tab-panel" id="tab-stats">
-        <section class="panel">
-          <h2>遠征紀錄儀表板</h2><p><a href="./docs/v1.3-records.md" target="_blank" rel="noopener">紀錄與存檔說明</a></p>
+        <section class="panel"><div class="record-reset-toolbar"><button id="resetAllRecords" class="secondary-btn">全部重置</button><button class="secondary-btn" id="toggleRecordReset" aria-expanded="false" aria-controls="recordResetOptions">指定重置</button></div><details id="recordResetOptions" hidden="" open=""><p class="helper"><strong id="recordResetScope"></strong></p><p>重置此面板只清除目前類型與所選地圖的統計及當日鑽石；不影響另一種類型或玩家配置。</p><button id="resetMapRecords" class="secondary-btn">重置所選地圖與類型</button><button id="resetModeRecords" class="secondary-btn">重置所選類型的全部地圖</button></details>
+          <h2>遠征統計資料</h2><p><a href="./docs/v1.3-records.md" target="_blank" rel="noopener">紀錄與存檔說明</a></p>
           <label class="field"><span>紀錄地圖</span><select id="recordMapSelect"><option value="stage_1">米維克威茲 外緣部</option><option value="stage_2">希敏約格 湖畔</option><option value="stage_3">世界樹 樹海</option><option value="stage_4">阿斯嘉特 邊境</option><option value="stage_5">赫爾海姆 支川</option><option value="stage_6">學術都市 露克斯・艾特納</option><option value="stage_hard">金倫加鴻溝</option><option value="stage_atli">昔日的米德加爾德</option><option value="stage_uw">不歸的牢獄 庫・努・吉亞</option><option value="stage_snow">雪嶺孤城 烏沃貝爾克</option><option value="stage_labyrinth_1">巨大迷宮探索 上層</option><option value="stage_labyrinth_2">巨大迷宮探索 下層</option><option value="stage_satan">決戰魔王</option></select></label>
           <label class="field"><span>紀錄類型</span><select id="recordMode"><option value="independent">獨立遠征統計</option><option value="continuous">連續遠征統計</option></select></label>
           <p class="helper">獨立與連續模式分開累積；不同版本與配置會混合統計。重置統計不清除上方帳號神器與探索設定；需要比較時可先匯出備份。</p>
-          <p id="recordStatus" role="status"></p><div id="recordDashboard"></div>
+          <p id="recordStatus" role="status"></p><div class=""><h3>此類型全部地圖總覽</h3><div id="recordOverview"></div><h3>所選地圖完整資訊</h3></div><div id="recordDashboard"></div>
           <div class="record-actions"><button id="exportRecords" class="secondary-btn">匯出全部紀錄</button><label class="secondary-btn">匯入存檔<input type="file" id="importRecords" accept="application/json,.json"></label></div>
           <details><summary>調整連續遠征的當日鑽石</summary><p>只更改連續模式下一輪的上限判定，不清除累積統計。</p><label class="field"><span>當日一般鑽石</span><input type="number" id="recordDailyValue" min="0" step="1" value="0"></label><button id="setRecordDaily" class="secondary-btn">套用至連續模式</button></details>
-          <details><summary>重置紀錄</summary><p>重置此面板只清除目前類型與所選地圖的統計及當日鑽石；不影響另一種類型或玩家配置。</p><button id="resetMapRecords" class="secondary-btn">重置此面板地圖紀錄</button><button id="resetModeRecords" class="secondary-btn">重置此類型全部地圖</button><button id="resetAllRecords" class="secondary-btn">重置兩種類型全部地圖</button></details>
+
           <p class="unit-note">自動存檔保存在目前瀏覽器／網站；清除網站資料或換裝置不會保留，請先匯出備份。當日上限不自動跨日重置。</p>
         </section>
-      </section>
-
-      <section class="tab-panel" id="tab-roadmap"><section class="panel release-notes"><span class="eyebrow">VERSION 2.0.0</span><h2>讓設定、預覽與模擬用同一套規則</h2><p>官方資料 3.16.0 · 保留 V1.6.0 鑽石抽取與獎勵輪盤。</p><div class="release-grid"><article><h3>共用帳號配置</h3><p>六種遠征神器、全部地圖 100% 或各圖探索率。設定自動保存，連續模式新取得神器跨地圖共用。</p></article><article><h3>有效掉落預覽</h3><p>預覽與模擬共用神器及探索加成，顯示轉換後的獎勵數量。魂之果物獨立於羈絆贈禮。</p></article><article><h3>保留你的紀錄</h3><p>舊版統計持續保留。不同版本或配置累積在一起時，平均值代表混合結果；需要比較時先匯出備份，再重置統計。</p></article></div><details><summary>模擬範圍</summary><p>無敵必勝、戰鬥 0 秒、陷阱免傷；可用無限耐力或自訂隊伍最終耐力。活動倍率、其他角色專屬事件、經驗、年齡、寶箱開箱及跨日重置尚未接入。面板步行速度換算為估算，不能當作原版逐種子重播。</p></details><a href="./docs/v2.0.0.md" target="_blank" rel="noopener">查看 V2.0.0 更新與驗證</a></section></section>
-    </main>
-  </div>
-
-  <dialog id="diamondDialog" class="diamond-dialog" aria-labelledby="diamondTitle">
-    <div class="diamond-dialog-head"><div><p class="eyebrow">DIAMOND SIMULATOR</p><h2 id="diamondTitle">鑽石抽取模擬器</h2></div><button id="diamondClose" type="button" aria-label="關閉鑽石模擬器">✕</button></div>
-    <div class="diamond-dialog-body">
+      </section><section class="tab-panel" id="tab-diamond"><section class="panel diamond-page"><div class="panel-head"><div><p class="eyebrow">DIAMOND SIMULATOR</p><h2 id="diamondTitle">鑽石抽取模擬器</h2></div></div><div class="diamond-dialog-body">
       <div class="diamond-tabs" role="tablist" aria-label="抽取模式"><button id="diamondSimpleTab" role="tab" aria-controls="diamondSimple" aria-selected="true">鑽石抽取</button><button id="diamondRouletteTab" role="tab" aria-controls="diamondRoulette" aria-selected="false">獎勵輪盤</button></div>
       <section id="diamondSimple" role="tabpanel" aria-labelledby="diamondSimpleTab"><p id="diamondRange"></p><label class="diamond-option"><input id="diamondEye" type="checkbox">擁有神器「惡魔之眼」LV8：數量提高 100%</label><p class="hint">每個結果等機率，按「抽取鑽石」立即顯示結果。</p></section>
-      <section id="diamondRoulette" role="tabpanel" aria-labelledby="diamondRouletteTab" hidden=""><label class="diamond-option"><input id="diamondHorn" type="checkbox">擁有 AF「高貴一角的寶牙」</label><p id="diamondTier"></p><div class="diamond-auto"><label for="diamondTarget">連續抽取目標（累積鑽石）</label><div class="diamond-auto-input"><input id="diamondTarget" type="number" min="1" max="1000000000" step="1" value="1000"><button id="diamondAutoStart" type="button">連續抽取</button></div><p class="hint">每次開始重新累計，達到或超過目標即停止；寶箱與代幣不計入鑽石。</p><p id="diamondAutoStatus" role="status" aria-live="polite"></p></div><div id="diamondWheel" class="diamond-wheel" role="button" tabindex="0" aria-label="點擊揭曉本輪獎勵"></div><details class="diamond-probabilities"><summary>查看完整機率表</summary><p class="hint">先抽稀有度，再抽該層獎勵。整體機率＝稀有度機率 × 該層獎勵機率。金色代幣沿用截圖圖示稱呼。</p><div id="diamondProbabilities"></div></details></section>
+      <section id="diamondRoulette" role="tabpanel" aria-labelledby="diamondRouletteTab" hidden=""><label class="diamond-option"><input id="diamondHorn" type="checkbox">擁有 AF「高貴一角的寶牙」</label><p id="diamondTier"></p><div class="diamond-auto"><label for="diamondTarget">連續抽取目標獎品</label><div class="diamond-auto-input"><select id="diamondTarget" aria-label="目標獎品"></select><button id="diamondAutoStart" type="button">連續抽取</button></div><p class="hint">快速抽取，直到單次抽中指定種類與數量的獎品。相同獎品出現在不同稀有度皆算命中；略過逐輪動畫，可隨時停止。</p><p id="diamondAutoStatus" role="status" aria-live="polite"></p></div><div id="diamondWheel" class="diamond-wheel" role="button" tabindex="0" aria-label="點擊揭曉本輪獎勵"></div><details class="diamond-probabilities"><summary>查看完整機率表</summary><p class="hint">先抽稀有度，再抽該層獎勵。整體機率＝稀有度機率 × 該層獎勵機率。金色代幣沿用截圖圖示稱呼。</p><div id="diamondProbabilities"></div></details></section>
       <p id="diamondResult" class="diamond-result" role="status" aria-live="polite"></p>
       <div class="diamond-controls"><button id="diamondStart" type="button">開始抽取</button><button id="diamondStop" type="button" disabled="">揭曉獎勵</button></div>
       <p id="diamondAnimationNote" class="hint">開始時已依機率決定本輪獎勵。閃光由上往下循環，只作顯示；按揭曉後停在預先抽定的獎勵，點擊時機不影響結果。</p>
       <details><summary>本模式最近結果</summary><p id="diamondHistoryEmpty" class="hint">尚未抽取。</p><ol id="diamondHistory"></ol><p id="diamondStorageNote" class="hint"></p></details>
-    </div>
-  </dialog>
-  <script src="./diamond-draw.js?v=2.0.1"></script>
-  <script src="./diamond-view.js?v=2.0.1"></script>
-  <script src="./speed.js?v=2.0.1"></script>
-  <script src="./affection.js?v=2.0.1"></script>
-  <script src="./expedition-rules.js?v=2.0.1"></script>
-  <script src="./stamina.js?v=2.0.1"></script>
-  <script src="./event-state.js?v=2.0.1"></script>
-  <script src="./lottery.js?v=2.0.1"></script>
-  <script src="./random.js?v=2.0.1"></script>
-  <script src="./map-data.js?v=2.0.1"></script><script src="./artifact-data.js?v=2.0.1"></script><script src="./artifacts.js?v=2.0.1"></script><script src="./account-settings.js?v=2.0.1"></script>
-  <script src="./drop-state.js?v=2.0.1"></script>
-  <script src="./drop-preview.js?v=2.0.1"></script>
-  <script src="./map-view.js?v=2.0.1"></script>
-  <script src="./simulation-runtime.js?v=2.0.1"></script>
-  <script src="./event-pool.js?v=2.0.1"></script>
-  <script src="./simulator.js?v=2.0.1"></script>
-  <script src="./simulation-batch.js?v=2.0.1"></script>
-  <script src="./simulation-view.js?v=2.0.1"></script>
-  <script src="./records.js?v=2.0.1"></script>
-  <script src="./record-view.js?v=2.0.1"></script>
-  <script src="./app.js?v=2.0.1"></script>
+    </div></section></section>
+
+
+    <details class="site-help"><summary>版本、資料來源與模擬範圍</summary><section class="panel release-notes"><span class="eyebrow">VERSION 2.1.0</span><p>四頁流程：遠征配置 → 開始遠征 → 統計資料 → 鑽石模擬器。快速連抽以指定獎品單次命中為目標。</p><h2>讓設定、預覽與模擬用同一套規則</h2><p>官方資料 3.16.0 · 保留 V1.6.0 鑽石抽取與獎勵輪盤。</p><div class="release-grid"><article><h3>共用帳號配置</h3><p>六種遠征神器、全部地圖 100% 或各圖探索率。設定自動保存，連續模式新取得神器跨地圖共用。</p></article><article><h3>有效掉落預覽</h3><p>預覽與模擬共用神器及探索加成，顯示轉換後的獎勵數量。魂之果物獨立於羈絆贈禮。</p></article><article><h3>保留你的紀錄</h3><p>舊版統計持續保留。不同版本或配置累積在一起時，平均值代表混合結果；需要比較時先匯出備份，再重置統計。</p></article></div><details><summary>模擬範圍</summary><p>無敵必勝、戰鬥 0 秒、陷阱免傷；可用無限耐力或自訂隊伍最終耐力。活動倍率、其他角色專屬事件、經驗、年齡、寶箱開箱及跨日重置尚未接入。面板步行速度換算為估算，不能當作原版逐種子重播。</p></details><a href="./docs/v2.1.0.md" target="_blank" rel="noopener">查看 V2.1.0 更新與驗證</a></section></details></main>
+  </div>
+
+
+  <script src="./diamond-draw.js?v=2.1.0"></script>
+  <script src="./diamond-view.js?v=2.1.0"></script>
+  <script src="./speed.js?v=2.1.0"></script>
+  <script src="./affection.js?v=2.1.0"></script>
+  <script src="./expedition-rules.js?v=2.1.0"></script>
+  <script src="./stamina.js?v=2.1.0"></script>
+  <script src="./event-state.js?v=2.1.0"></script>
+  <script src="./lottery.js?v=2.1.0"></script>
+  <script src="./random.js?v=2.1.0"></script>
+  <script src="./map-data.js?v=2.1.0"></script><script src="./artifact-data.js?v=2.1.0"></script><script src="./artifacts.js?v=2.1.0"></script><script src="./account-settings.js?v=2.1.0"></script>
+  <script src="./drop-state.js?v=2.1.0"></script>
+  <script src="./drop-preview.js?v=2.1.0"></script>
+  <script src="./map-view.js?v=2.1.0"></script>
+  <script src="./simulation-runtime.js?v=2.1.0"></script>
+  <script src="./event-pool.js?v=2.1.0"></script>
+  <script src="./simulator.js?v=2.1.0"></script>
+  <script src="./simulation-batch.js?v=2.1.0"></script>
+  <script src="./simulation-view.js?v=2.1.0"></script>
+  <script src="./records.js?v=2.1.0"></script>
+  <script src="./record-view.js?v=2.1.0"></script>
+  <script src="./app.js?v=2.1.0"></script>
+
 
 
 </body></html>
