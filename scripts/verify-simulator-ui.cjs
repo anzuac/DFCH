@@ -7,7 +7,7 @@ const get=id=>w.document.getElementById(id),change=(id,value,type='change')=>{ge
 const wait=async()=>{for(let i=0;i<1000&&get('simulateBtn').disabled;i++)await new Promise(r=>setTimeout(r,2));assert.equal(get('simulateBtn').disabled,false);};
 const once=async()=>{get('simulateOnceBtn').click();await wait();assert.equal(w.DFCHLastSimulation.completed,1);};
 (async()=>{
- assert.ok(w.document.querySelector('.version-pill').textContent.includes('V1.4.9'));assert.equal(get('seedMode'),null);assert.equal(get('simulationSeed'),null);
+ assert.ok(w.document.querySelector('.version-pill').textContent.includes('V1.5.0'));assert.equal(get('seedMode'),null);assert.equal(get('simulationSeed'),null);
  await once();assert.equal(w.DFCHLastSimulation.first.seed,123);assert.equal(w.DFCHLastSimulation.first.depth,60);
  assert.ok(get('simulationResults').textContent.includes('各獎勵統計'));assert.ok(!get('simulationResults').textContent.includes('[object Object]'));
  change('dailyDiamondCount','321','input');get('stoneSearchAvailable').checked=true;
@@ -29,7 +29,7 @@ const once=async()=>{get('simulateOnceBtn').click();await wait();assert.equal(w.
  change('mapSelect','stage_3');change('simulationMode','independent');await once();assert.equal(w.DFCHLastSimulation.first.depth,150);assert.equal(w.DFCHLastSimulation.first.trapDamagePolicy,'immune');
  change('recordMode','independent');change('recordMapSelect','stage_3');assert.ok(get('recordDashboard').textContent.includes('世界樹'));
  change('recordMode','independent');w.confirm=()=>false;get('resetModeRecords').click();assert.ok(w.DFCHRecordStore.get('independent','stage_1'));
- w.confirm=()=>true;get('resetModeRecords').click();for(const key of ['stage_1','stage_2','stage_3','stage_4','stage_5','stage_6','stage_hard','stage_atli','stage_uw','stage_snow','stage_labyrinth_1'])assert.equal(w.DFCHRecordStore.get('independent',key),null);
+ w.confirm=()=>true;get('resetModeRecords').click();for(const key of ['stage_1','stage_2','stage_3','stage_4','stage_5','stage_6','stage_hard','stage_atli','stage_uw','stage_snow','stage_labyrinth_1','stage_labyrinth_2','stage_satan'])assert.equal(w.DFCHRecordStore.get('independent',key),null);
  change('mapSelect','stage_4');await once();assert.equal(w.DFCHLastSimulation.first.depth,420);assert.equal(w.DFCHLastSimulation.first.trapDamagePolicy,'immune');
  change('recordMapSelect','stage_4');assert.ok(get('recordDashboard').textContent.includes('阿斯嘉特'));
  change('mapSelect','stage_5');await once();assert.equal(w.DFCHLastSimulation.first.depth,540);assert.equal(w.DFCHLastSimulation.first.trapDamagePolicy,'immune');
@@ -50,6 +50,10 @@ const once=async()=>{get('simulateOnceBtn').click();await wait();assert.equal(w.
  change('mapSelect','stage_labyrinth_1');await once();assert.equal(w.DFCHLastSimulation.first.depth,900);assert.equal(w.DFCHLastSimulation.first.configuredDurationSeconds,36000);assert.ok(get('mapDataTables').textContent.includes('黑膽石'));assert.equal(get('stoneUnlocked').disabled,false);assert.equal(get('stoneSearchAvailable').disabled,true);assert.ok(get('flagStateSummary').textContent.includes('巨大迷宮下層'));
  change('recordMapSelect','stage_labyrinth_1');assert.ok(get('recordDashboard').textContent.includes('巨大迷宮探索'));
  get('stoneUnlocked').checked=true;await once();assert.ok(w.DFCHLastSimulation.first.saved.flags.includes(6612));
- change('mapSelect','stage_labyrinth_2');const last=w.DFCHLastSimulation;get('simulateOnceBtn').click();await wait();assert.equal(w.DFCHLastSimulation,last);assert.ok(get('simulateMessage').textContent.includes('尚未接入'));
- console.log('Real HTML UI: eleven-map switching, automatic seeds per round, separate controls/records, cap prompt, carry-over, stamina and cancellation passed');w.close();
+ change('mapSelect','stage_labyrinth_2');await once();assert.equal(w.DFCHLastSimulation.first.depth,1200);assert.equal(get('stoneUnlocked').disabled,true);assert.ok(get('mapDataTables').textContent.includes('全隊毒物陷阱'));
+ change('recordMapSelect','stage_labyrinth_2');assert.ok(get('recordDashboard').textContent.includes('巨大迷宮探索 下層'));
+ change('mapSelect','stage_satan');await once();assert.equal(w.DFCHLastSimulation.first.depth,10);assert.equal(w.DFCHLastSimulation.first.battles,1);assert.ok(get('mapDataSummary').textContent.includes('沒有一般戰鬥'));
+ change('recordMapSelect','stage_satan');assert.ok(get('recordDashboard').textContent.includes('決戰魔王'));
+ change('mapSelect','stage_missing');const last=w.DFCHLastSimulation;get('simulateOnceBtn').click();await wait();assert.equal(w.DFCHLastSimulation,last);assert.ok(get('simulateMessage').textContent.includes('尚未接入'));
+ console.log('Real HTML UI: thirteen-map switching, automatic seeds per round, separate controls/records, cap prompt, carry-over, stamina and cancellation passed');w.close();
 })().catch(e=>{console.error(e);w.close();process.exitCode=1;});

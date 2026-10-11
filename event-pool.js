@@ -27,7 +27,7 @@
     if(master.basicBattleMonsterGroupId>0)result.push(row(base,2,master.basicBattleWeight,
       [seq(108,master.basicBattleMonsterGroupId,master.basicBattleMinMonsterCount,master.basicBattleMaxMonsterCount),seq(6),seq(100,1),seq(7,master.basicBattleDropSampleGroupId)],{name:'怪物遭遇'}));
     master.basicItemDropSampleGroupIds.forEach((id,i)=>{
-      if(id>0 && master.basicItemDropWeights[i]>0)result.push(row(base+20+i,4,master.basicItemDropWeights[i],[seq(100,1),seq(7,id)],{name:Math.floor(id/100000)===9?'鑽石礦脈採集':hasAffection(data,[seq(7,id)])?'尋找羈絆道具':'沿路尋寶'}));
+      if(id>0 && master.basicItemDropWeights[i]>0)result.push(row(base+20+i,4,master.basicItemDropWeights[i],[seq(100,1),seq(7,id)],{name:master.dungeonId===9901?'鑽石礦脈採集':hasAffection(data,[seq(7,id)])?'尋找羈絆道具':'沿路尋寶'}));
     });
     master.basicFlagUnlockSampleGroupIds.forEach((id,i)=>{
       const prerequisite=master.basicFlagUnlockConditions[i];
@@ -49,7 +49,7 @@
     let pool=includeGlobal?data.eventSamples.filter(r=>r.limitedDungeonId===-1 || r.limitedDungeonId===master.dungeonId).map(r=>{
       const rows=sequence(data,r.logEventId);
       const type=rows.some(s=>s.functionType===109)?9:rows.some(s=>s.functionType===104)?5:rows.some(s=>s.functionType===3)?3:rows.some(s=>[111,112].includes(s.functionType)) || rows.some(s=>s.functionType===5)?6:1;
-      const name={1:'步行',2:'快速步行',3:'休息',200:'小幅探索',201:'探索',202:'深入探索',901:'發現鑽石礦脈',351:'深雪阻行',352:'暴風雪',350:'毒霧陷阱',300:'物理陷阱',301:'強力物理陷阱',302:'重型物理陷阱',303:'毒物陷阱',304:'火焰陷阱'}[r.logEventId]??'地圖事件';
+      const name={1:'步行',2:'快速步行',3:'休息',200:'小幅探索',201:'探索',202:'深入探索',901:'發現鑽石礦脈',351:'深雪阻行',352:'暴風雪',360:'全隊毒物陷阱',350:'毒霧陷阱',300:'物理陷阱',301:'強力物理陷阱',302:'重型物理陷阱',303:'毒物陷阱',304:'火焰陷阱'}[r.logEventId]??'地圖事件';
       return {...r,eventType:type,originalWeight:f(r.weight),rows,name};
     }):[];
     pool.push(...dynamic(data,master,context.exploration.initialCompletionRate,context.drops.flags));
