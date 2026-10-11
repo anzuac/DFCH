@@ -40,7 +40,7 @@
         body.append(tr);
       }
       const candidates=rules.flagPool(data.flagUnlockSamples,state);
-      document.getElementById('flagStateSummary').textContent=!hasStone?'此地圖沒有官方秘石搜尋事件。':`解鎖發現池：${candidates.map(r=>`${r.flagType===-1?'無收穫':data.master.key==='stage_atli'?'決戰魔王地點解鎖':'秘石發現'}權重 ${r.weight}`).join('；')}。${data.master.basicFlagUnlockConditions[0]===-1?'此事件不需要額外搜尋前置。':''} 這是事件已抽中後的候選權重。`;
+      document.getElementById('flagStateSummary').textContent=!hasStone?'此地圖沒有官方秘石搜尋事件。':`解鎖發現池：${candidates.map(r=>`${r.flagType===-1?'無收穫':data.master.key==='stage_atli'?'決戰魔王地點解鎖':data.master.key==='stage_labyrinth_1'?'巨大迷宮下層地點解鎖':'秘石發現'}權重 ${r.weight}`).join('；')}。${data.master.basicFlagUnlockConditions[0]===-1?'此事件不需要額外搜尋前置。':''} 這是事件已抽中後的候選權重。`;
     } catch(error) {note.textContent=`無法預覽：${error.message}`;document.getElementById('flagStateSummary').textContent='';}
   }
   [daily,flag,mode].forEach(el=>el.addEventListener('input',()=>refresh()));

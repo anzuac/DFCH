@@ -24,9 +24,9 @@
   function convertDrop(row, quantity, data) {
     if(!row.dungeonConversion)return {rewardId:row.rewardId,quantity};
     const ref=data.referenceDungeon;
-    if(!ref || ![0,2,5,6].includes(ref.gameModeType)) throw new Error('尚未支援此參照地圖的獎勵轉換');
-    if(ref.gameModeType===6 && ![3,5].includes(ref.dungeonId))throw new Error('尚未核對此活動地圖的貨幣索引');
-    if(row.rewardId===101000000)return {rewardId:ref.returnCurrencyType*1000000+(ref.gameModeType===6?ref.dungeonId:0),quantity:Math.ceil(quantity*data.master.gemScaler)};
+    if(!ref || ![0,2,3,5,6].includes(ref.gameModeType)) throw new Error('尚未支援此參照地圖的獎勵轉換');
+    if((ref.gameModeType===3 && ref.dungeonId!==1) || (ref.gameModeType===6 && ![3,5].includes(ref.dungeonId)))throw new Error('尚未核對此活動地圖的貨幣索引');
+    if(row.rewardId===101000000)return {rewardId:ref.returnCurrencyType*1000000+([3,6].includes(ref.gameModeType)?ref.dungeonId:0),quantity:Math.ceil(quantity*data.master.gemScaler)};
     if(Math.floor(row.rewardId/1000000)===600){
       const index=row.rewardId%1000000;
       const map={2:ref.baseChestSampleType,3:ref.legendChestSampleType,4:ref.illusionChestSampleType,5:ref.epicChestSampleType};

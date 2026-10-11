@@ -113,7 +113,7 @@ assert (registry.read('i'),registry.read('q'),registry.read('i'),registry.read('
 assert registry.p==len(registry.b)
 b=Path('research/mb-76131.bin').read_bytes()
 references=[]
-for dungeonId,key in [(3,'under_world'),(5,'snow_mountain')]:
+for dungeonId,key in [(1,'labyrinth'),(3,'under_world'),(5,'snow_mountain')]:
  anchor=struct.pack('<ii',dungeonId,len(key))+key.encode()
  pos=b.find(anchor);assert pos>=52 and b.find(anchor,pos+1)==-1
  r=R.__new__(R);r.b=b;r.p=pos;r.name='GameEventTable'

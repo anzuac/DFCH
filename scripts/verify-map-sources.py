@@ -4,7 +4,7 @@ from pathlib import Path
 root=Path('DFCH');tables=Path('research/tables')
 load=lambda name:json.loads((tables/(name+'.json')).read_text())
 evidence={}
-for stage in [1,2,3,4,5,6,7,8,9,10]:
+for stage in [1,2,3,4,5,6,7,8,9,10,11]:
  d=json.loads((root/f'data/stage-{stage}.json').read_text());mid=d['master']['dungeonId']
  assert d['referenceDungeon'] in load('MainDungeonTable')+load('GameEventDungeonReferences')
  assert d['master']==next(r for r in load('ExpeditionDungeonTable') if r['dungeonId']==mid)
@@ -16,12 +16,12 @@ for stage in [1,2,3,4,5,6,7,8,9,10]:
   expected=[r for r in load(table) if r[filterkey] in ([-1,mid] if filterkey=='limitedDungeonId' else [mid])];assert d[key]==expected
  for key,table,groupkey in [('dropSamples','ExpeditionDropItemSampleTable','dropItemSampleGroupId'),('monsterSamples','ExpeditionMonsterSampleTable','battleEventId'),('dropEffects','ExpeditionDropEffectSampleTable','dropEffectGroupId')]:
   groups={r[groupkey] for r in d[key]};actual=[{k:v for k,v in r.items() if k!='rewardName'} for r in d[key]];assert actual==[r for r in load(table) if r[groupkey] in groups]
- if stage in [9,10]:
+ if stage in [9,10,11]:
   currency=next(r for r in d['rewardMasters'] if r.get('sourceKind')=='derived-event-currency')
   assert currency['rewardId']==105000000+d['referenceDungeon']['dungeonId'] and currency['key']==f"event-gem-{d['referenceDungeon']['dungeonId']}"
-  assert currency['name']==next(r['zh_tw'] for r in load('localize_master2') if r['key']=='r-name-'+currency['key'])
+  assert currency['name']==next(r['zh_tw'] for r in reversed(load('localize_master')+load('localize_master2')) if r['key']=='r-name-'+currency['key'])
  evidence[d['master']['key']]={'dungeonId':mid,'name':d['name'],'sha256':hashlib.sha256((root/f'data/stage-{stage}.json').read_bytes()).hexdigest(),'counts':{k:len(d[k]) for k in mappings},'allIncludedRowsMatchOfficial':True}
 for obj in json.loads((root/'docs/evidence/map-source-hashes.json').read_text())['objects']:
  p=Path(f"research/mb-{obj['pathId']}.bin");assert hashlib.sha256(p.read_bytes()).hexdigest()==obj['sha256']
-(root/'docs/evidence/stage-10-source-check.json').write_text(json.dumps(evidence,ensure_ascii=False,indent=2)+'\n')
-print('Ten maps: official row order, float values, map filters, complete included groups and source object hashes verified')
+(root/'docs/evidence/stage-11-source-check.json').write_text(json.dumps(evidence,ensure_ascii=False,indent=2)+'\n')
+print('Eleven maps: official row order, float values, map filters, complete included groups and source object hashes verified')

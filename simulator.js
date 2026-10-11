@@ -9,7 +9,7 @@
   }
   const unsupported=()=>{throw new Error('目前隊伍未提供此事件所需的角色能力、生命或恢復值；停止執行以避免推測結果。');};
   function validate(data,options) {
-    if(data.gameVersion!=='3.16.0'||![1001,1002,1003,1004,1005,1006,2001,2002,3001,3002].includes(data.master.dungeonId))throw new Error('目前只支援已核對的前十張地圖。');
+    if(data.gameVersion!=='3.16.0'||![1001,1002,1003,1004,1005,1006,2001,2002,3001,3002,3003].includes(data.master.dungeonId))throw new Error('目前只支援已核對的前十一張地圖。');
     if(!(Number.isFinite(options.multiplier)&&options.multiplier>=.8&&Number.isFinite(f(options.multiplier))))throw new Error('請填妥有效隊伍速度。');
     const collectors=new Set(data.collectorMasters.map(m=>m.rewardId));
     if((options.abilityIds??[]).some(id=>!collectors.has(id)))throw new Error('目前只開放已接入的收集家能力；其他專屬事件尚缺角色狀態輸入。');
@@ -107,7 +107,7 @@
     const effects=c.index.effects.get(selected.dropEffectGroupId)??[];
     const effect=c.drawRows(effects,effects.map(r=>r.weight),'秘石發現演出');
     c.drops=DS.unlock(c.drops,selected.flagType);
-    c.emit('flag',selected.flagType===-1?'地點搜尋沒有收穫':selected.flagType===6613?'發現決戰魔王的遠征地點':'發現秘石，解鎖新的遠征地點',{flag:selected.flagType,effectId:effect?.dropEffectSampleId});
+    c.emit('flag',selected.flagType===-1?'地點搜尋沒有收穫':selected.flagType===6613?'發現決戰魔王的遠征地點':selected.flagType===6612?'發現巨大迷宮探索下層的遠征地點':'發現秘石，解鎖新的遠征地點',{flag:selected.flagType,effectId:effect?.dropEffectSampleId});
   }
   function battle(data,c) {
     if(!c.monsterInfo)throw new Error('遭遇事件缺少怪物群組');
