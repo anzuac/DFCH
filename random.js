@@ -4,6 +4,13 @@
     const bits=BigInt.asUintN(64,BigInt(encoded));
     return Number(BigInt.asIntN(32,(bits&0xffffffffn)^(bits>>32n)));
   }
+  // Same range as normal official departures; browser entropy is not Unity state.
+  function freshSeed() {
+    if(!window.crypto?.getRandomValues)throw new Error('此瀏覽器無法產生遠征種子');
+    const value=new Uint32Array(1);
+    do {window.crypto.getRandomValues(value);} while(value[0]>=4294967294);
+    return value[0]%2147483647;
+  }
   class OfficialRandom {
     constructor(seed) {
       if(!Number.isInteger(seed)||seed<-2147483648||seed>MAX)throw new RangeError('種子須為有號 32 位整數');
@@ -46,5 +53,5 @@
       return (Math.trunc(sample*range)+min)|0;
     }
   }
-  window.DFCHRandom=Object.freeze({OfficialRandom,seedFromStoredCryptoInt});
+  window.DFCHRandom=Object.freeze({OfficialRandom,seedFromStoredCryptoInt,freshSeed});
 })();

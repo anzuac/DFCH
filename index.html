@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#10181c" />
   <title>DFCH 遠征模擬器</title>
-  <link rel="stylesheet" href="./styles.css?v=1.3.1" />
+  <link rel="stylesheet" href="./styles.css?v=1.4.0" />
 </head>
 <body>
   <div class="app-shell">
@@ -13,9 +13,9 @@
       <div>
         <p class="eyebrow">DFCH / Expedition Simulator</p>
         <h1>遠征模擬器</h1>
-        <p class="sub">V1.3.1 · 第一張地圖遠征模擬 · 官方資料 3.16.0</p>
+        <p class="sub">V1.4.0 · 第一、第二張地圖遠征模擬 · 官方資料 3.16.0</p>
       </div>
-      <div class="version-pill">V1.3.1</div>
+      <div class="version-pill">V1.4.0</div>
     </header>
 
     <nav class="tabs" aria-label="主功能">
@@ -34,7 +34,7 @@
                   <span class="step-badge">01</span>
                   <h2>遠征地圖</h2>
                 </div>
-                <span class="status-chip neutral">第一張地圖資料已解析</span>
+                <span class="status-chip neutral">前兩張地圖資料已解析</span>
               </div>
 
               <div class="field-grid two">
@@ -59,13 +59,13 @@
 
                 <div class="field readout">
                   <span>目前版本</span>
-                  <strong>V1.3.1 · 單輪與批次模擬可用</strong>
+                  <strong>V1.4.0 · 單輪與批次模擬可用</strong>
                 </div>
               </div>
               <div class="official-formula-card" id="mapOfficialData">
                 <strong id="mapDataTitle">官方地圖資料</strong>
                 <p id="mapDataSummary" aria-live="polite"></p>
-                <p>V1.3.1：第一張地圖已可執行單輪與批次模擬，使用收集家／觀緣眼鏡配置及秒殺戰鬥。其他角色專屬能力尚未開放。<a href="./docs/v1.2-simulator.md" target="_blank" rel="noopener">查看完整核對記錄</a></p>
+                <p>V1.4.0：前兩張地圖已可執行單輪與批次模擬，使用收集家／觀緣眼鏡配置及秒殺戰鬥。其他角色專屬能力尚未開放。<a href="./docs/stage-2-map.md" target="_blank" rel="noopener">查看完整核對記錄</a></p>
                 <p>模擬設定：遭遇敵人後立即勝利，戰鬥耗時 0 秒；保留遭遇、勝利掉落與後續事件。這是模擬器設定。</p>
                 <label class="field"><span><input type="checkbox" id="mapExplored100"> 地圖探索已達 100%</span></label>
                 <p id="mapExplorationSummary" aria-live="polite"></p>
@@ -286,16 +286,14 @@
                 <label class="field" id="staminaValueField" hidden><span>每輪隊伍起始／最大耐力</span><input id="staminaValue" type="number" min="1" step="1" value="300" inputmode="numeric" disabled></label>
               </div>
               <p class="helper" id="staminaSummary" aria-live="polite"></p>
-              <label class="field"><span>亂數模式</span><select id="seedMode"><option value="fresh" selected>每次重新隨機</option><option value="replay">固定種子重播</option></select></label>
-              <label class="field" id="simulationSeedField" hidden><span>重播種子（有號 32 位整數）</span><input id="simulationSeed" type="number" min="-2147483648" max="2147483647" step="1" value="42" inputmode="numeric"></label>
-              <p class="helper">預設每次開始都產生新種子；固定種子重播會刻意重現相同配置的整批結果。實際種子會顯示在結果中。</p>
+              <p class="helper">每輪自動產生新種子並保存至紀錄，玩家不需輸入。</p>
               <p class="unit-note">自行輸入的是隊伍耐力總額。每輪以此值開始，消耗降至 0 時結束；恢復不超過最大值。無限耐力略過耐力消耗與耗盡判定，仍保留地圖進度及終點事件。</p>
               <label class="field"><span>批次狀態</span><select id="simulationMode"><option value="independent">每輪獨立：固定起始配置</option><option value="continuous">連續遠征：累積探索、持有與當日鑽石</option></select></label>
-              <p class="helper">連續模式每輪刷新已達到的探索門檻；不自動跨日重置鑽石。第一輪使用輸入種子，後續種子由獨立的批次種子序列產生。</p>
+              <p class="helper">連續模式每輪刷新已達到的探索門檻；不自動跨日重置鑽石。每輪各自產生新種子。</p>
               <div class="simulation-actions"><button class="primary-btn" id="simulateOnceBtn"><span>遠征一次</span><small>完成後累積紀錄</small></button>
               <button class="primary-btn" id="simulateBtn">
                 <span>批次模擬</span>
-                <small>第一張地圖 · 戰鬥 0 秒</small>
+                <small>前兩張地圖 · 戰鬥 0 秒</small>
               </button>
               </div>
               <p class="helper" id="simulationModeNote"></p>
@@ -315,7 +313,7 @@
               </div>
 
               <div id="simulationResults" aria-live="polite"><p>尚未執行遠征。</p></div>
-              <p class="unit-note">以官方 3.16.0 的已抽取規則執行；戰鬥固定秒殺、0 秒。未模擬原版戰鬥亂數、角色經驗分配、寶箱開箱內容與跨日重置。固定地圖倒數 600 秒不除以速度倍率。</p>
+              <p class="unit-note">以官方 3.16.0 的已抽取規則執行；戰鬥固定秒殺、0 秒。未模擬原版戰鬥亂數、角色經驗分配、寶箱開箱內容與跨日重置。官方各地圖固定倒數不除以速度倍率。</p>
             </section>
           </aside>
         </div>
@@ -324,42 +322,43 @@
       <section class="tab-panel" id="tab-stats">
         <section class="panel">
           <h2>遠征紀錄儀表板</h2><p><a href="./docs/v1.3-records.md" target="_blank" rel="noopener">紀錄與存檔說明</a></p>
+          <label class="field"><span>紀錄地圖</span><select id="recordMapSelect"><option value="stage_1">米維克威茲 外緣部</option><option value="stage_2">希敏約格 湖畔</option></select></label>
           <label class="field"><span>紀錄類型</span><select id="recordMode"><option value="independent">獨立遠征統計</option><option value="continuous">連續遠征統計</option></select></label>
-          <p class="helper">兩種模式各自累積、各自存檔。独立模式取得物品只進入統計，不改變下一輪的持有配置。更換配置的結果會累積在同一模式，平均值代表混合配置。</p>
+          <p class="helper">兩種模式各自累積、各自存檔。獨立模式取得物品只進入統計，不改變下一輪的持有配置。更換配置的結果會累積在同一模式，平均值代表混合配置。</p>
           <p id="recordStatus" role="status"></p><div id="recordDashboard"></div>
           <div class="record-actions"><button id="exportRecords" class="secondary-btn">匯出全部紀錄</button><label class="secondary-btn">匯入存檔<input type="file" id="importRecords" accept="application/json,.json"></label></div>
           <details><summary>調整連續遠征的當日鑽石</summary><p>只更改連續模式下一輪的上限判定，不清除累積統計。</p><label class="field"><span>當日一般鑽石</span><input type="number" id="recordDailyValue" min="0" step="1" value="0"></label><button id="setRecordDaily" class="secondary-btn">套用至連續模式</button></details>
-          <details><summary>重置紀錄</summary><p>重置此面板只清除目前類型的第一張地圖紀錄與承接狀態；不影響另一種類型或玩家配置。</p><button id="resetMapRecords" class="secondary-btn">重置此面板地圖紀錄</button><button id="resetAllRecords" class="secondary-btn">重置全部存檔</button></details>
+          <details><summary>重置紀錄</summary><p>重置此面板只清除目前類型與所選地圖的紀錄與承接狀態；不影響另一種類型或玩家配置。</p><button id="resetMapRecords" class="secondary-btn">重置此面板地圖紀錄</button><button id="resetAllRecords" class="secondary-btn">重置全部存檔</button></details>
           <p class="unit-note">自動存檔保存在目前瀏覽器／網站；清除網站資料或換裝置不會保留，請先匯出備份。當日上限不自動跨日重置。</p>
         </section>
       </section>
 
       <section class="tab-panel" id="tab-roadmap">
         <section class="panel">
-          <div class="roadmap"><article class="roadmap-item current"><span>V1.3.1</span><div><strong>第一張地圖可執行</strong><p>合併池、探索門檻、條件、事件流程、結算、共用亂數與批次統計已串接。此版限定收集家及觀緣眼鏡，其他專屬能力遇到不支援配置會停止。</p><a href="./docs/v1.2-simulator.md">查看驗證範圍</a></div></article></div>
+          <div class="roadmap"><article class="roadmap-item current"><span>V1.4.0</span><div><strong>前兩張地圖可執行</strong><p>合併池、探索門檻、條件、事件流程、結算、共用亂數與批次統計已串接。此版限定收集家及觀緣眼鏡，其他專屬能力遇到不支援配置會停止。</p><a href="./docs/stage-2-map.md">查看驗證範圍</a></div></article></div>
         </section>
       </section>
     </main>
   </div>
 
-  <script src="./speed.js?v=1.3.1"></script>
-  <script src="./affection.js?v=1.3.1"></script>
-  <script src="./expedition-rules.js?v=1.3.1"></script>
-  <script src="./stamina.js?v=1.3.1"></script>
-  <script src="./event-state.js?v=1.3.1"></script>
-  <script src="./lottery.js?v=1.3.1"></script>
-  <script src="./random.js?v=1.3.1"></script>
-  <script src="./map-data.js?v=1.3.1"></script>
-  <script src="./drop-state.js?v=1.3.1"></script>
-  <script src="./drop-preview.js?v=1.3.1"></script>
-  <script src="./map-view.js?v=1.3.1"></script>
-  <script src="./simulation-runtime.js?v=1.3.1"></script>
-  <script src="./event-pool.js?v=1.3.1"></script>
-  <script src="./simulator.js?v=1.3.1"></script>
-  <script src="./simulation-batch.js?v=1.3.1"></script>
-  <script src="./simulation-view.js?v=1.3.1"></script>
-  <script src="./records.js?v=1.3.1"></script>
-  <script src="./record-view.js?v=1.3.1"></script>
-  <script src="./app.js?v=1.3.1"></script>
+  <script src="./speed.js?v=1.4.0"></script>
+  <script src="./affection.js?v=1.4.0"></script>
+  <script src="./expedition-rules.js?v=1.4.0"></script>
+  <script src="./stamina.js?v=1.4.0"></script>
+  <script src="./event-state.js?v=1.4.0"></script>
+  <script src="./lottery.js?v=1.4.0"></script>
+  <script src="./random.js?v=1.4.0"></script>
+  <script src="./map-data.js?v=1.4.0"></script>
+  <script src="./drop-state.js?v=1.4.0"></script>
+  <script src="./drop-preview.js?v=1.4.0"></script>
+  <script src="./map-view.js?v=1.4.0"></script>
+  <script src="./simulation-runtime.js?v=1.4.0"></script>
+  <script src="./event-pool.js?v=1.4.0"></script>
+  <script src="./simulator.js?v=1.4.0"></script>
+  <script src="./simulation-batch.js?v=1.4.0"></script>
+  <script src="./simulation-view.js?v=1.4.0"></script>
+  <script src="./records.js?v=1.4.0"></script>
+  <script src="./record-view.js?v=1.4.0"></script>
+  <script src="./app.js?v=1.4.0"></script>
 </body>
 </html>

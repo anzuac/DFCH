@@ -1,27 +1,30 @@
 (() => {
-  const data=window.DFCHMapData, rules=window.DFCHDropState;
+  let data=window.DFCHMapData;const rules=window.DFCHDropState;
+  const controls=new Map();
   const root=document.getElementById('dropStateControls');
   const daily=document.getElementById('dailyDiamondCount');
   const flag=document.getElementById('stoneUnlocked');
   const mode=document.getElementById('dropPoolMode');
   let ratio=1;
-  const masters=data.rewardMasters.filter(m=>m.sourceTable==='ArtifactTable');
-  for(const master of masters) {
-    const label=document.createElement('label'); label.className='field';
-    const title=document.createElement('span');title.textContent=`${master.name}（最高 ${master.maxLevel}）`;
-    const input=document.createElement('input');input.type='number';input.min='0';input.step='1';input.value='0';input.dataset.reward=master.rewardId;
-    input.setAttribute('aria-label',`${master.name}目前持有量`);
-    label.append(title,input);root.append(label);
+  function buildControls() {
+    root.replaceChildren();
+    for(const master of data.rewardMasters.filter(m=>m.sourceTable==='ArtifactTable')) {
+      const label=document.createElement('label');label.className='field';
+      const title=document.createElement('span');title.textContent=`${master.name}（最高 ${master.maxLevel}）`;
+      const input=document.createElement('input');input.type='number';input.min='0';input.step='1';input.value='0';input.dataset.reward=master.rewardId;
+      input.setAttribute('aria-label',`${master.name}目前持有量`);input.addEventListener('input',()=>refresh());label.append(title,input);root.append(label);
+    }
   }
+  buildControls();
   function refresh(nextRatio=ratio) {
     ratio=nextRatio;
     const body=document.getElementById('dropStateRows');body.replaceChildren();
     const note=document.getElementById('dropStateSummary');
-    if(document.getElementById('mapSelect').value!=='stage_1') {note.textContent='目前只提供第一張地圖的狀態權重預覽。';return;}
+    if(!window.DFCHMaps[document.getElementById('mapSelect').value]) {note.textContent='此地圖尚未接入狀態權重預覽。';return;}
     try {
       if(daily.value.trim()==='' || [...root.querySelectorAll('input')].some(i=>i.value.trim()===''))throw new Error('請填妥持有量');
       const owned=Object.fromEntries([...root.querySelectorAll('input')].map(i=>[i.dataset.reward,Number(i.value)]));
-      const state=rules.begin(data,{daily:Number(daily.value),owned,flags:flag.checked?[6602]:[]});
+      const state=rules.begin(data,{daily:Number(daily.value),owned,flags:flag.checked?[data.master.stoneFlag]:[]});
       const groups=mode.value==='basic'?[50]:data.master.bossDropSampleGroupIds;
       const result=rules.distribution(groups,state,data,ratio);
       note.textContent=`當日起始一般鑽石 ${state.daily}／${data.master.dailyDiamondLimit}：${state.limitReached?'已達上限':'未達上限'}。${state.limitReached && result.basic?'抽到一般鑽石後，改按其他基本群組的事件權重重抽；神級鑽石保留原抽選機會。':state.limitReached?'此池的一般鑽石權重歸零，神級鑽石保留。':'此輪跨過上限仍沿用起始判定；下一輪才重新檢查。'}`;
@@ -34,11 +37,17 @@
         body.append(tr);
       }
       const candidates=rules.flagPool(data.flagUnlockSamples,state);
-      document.getElementById('flagStateSummary').textContent=`秘石解鎖池：${candidates.some(r=>r.flagType===6602)?'尚未解鎖時，無收穫與秘石原始權重各 50。':'已解鎖秘石，移除秘石候選，只剩無收穫。'} 此表以解鎖事件已符合其他條件為前提，尚未代表事件遭遇率。`;
+      document.getElementById('flagStateSummary').textContent=`秘石解鎖池：${candidates.some(r=>r.flagType===data.master.stoneFlag)?'尚未解鎖時，無收穫與秘石原始權重各 50。':'已解鎖秘石，移除秘石候選，只剩無收穫。'} 此表以解鎖事件已符合其他條件為前提，尚未代表事件遭遇率。`;
     } catch(error) {note.textContent=`無法預覽：${error.message}`;document.getElementById('flagStateSummary').textContent='';}
   }
-  [daily,flag,mode,...root.querySelectorAll('input')].forEach(el=>el.addEventListener('input',()=>refresh()));
-  document.getElementById('mapSelect').addEventListener('change',()=>refresh());
+  [daily,flag,mode].forEach(el=>el.addEventListener('input',()=>refresh()));
+  document.getElementById('mapSelect').addEventListener('change',()=>{
+    controls.set(data.master.key,{daily:daily.value,flag:flag.checked,search:document.getElementById('stoneSearchAvailable').checked,owned:Object.fromEntries([...root.querySelectorAll('input')].map(i=>[i.dataset.reward,i.value]))});
+    const selected=window.DFCHMaps[document.getElementById('mapSelect').value];
+    if(selected){data=selected;buildControls();const saved=controls.get(data.master.key);daily.value=saved?.daily??'0';flag.checked=saved?.flag??false;document.getElementById('stoneSearchAvailable').checked=saved?.search??false;
+      for(const input of root.querySelectorAll('input'))input.value=saved?.owned[input.dataset.reward]??'0';}
+    refresh();
+  });
   window.DFCHDropPreview=Object.freeze({refresh});
   refresh();
 })();

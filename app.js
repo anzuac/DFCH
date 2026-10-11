@@ -218,34 +218,24 @@
   document.querySelectorAll(".leader-card").forEach(wireUnit);
   affectionGlasses.addEventListener("change", updateSummary);
 
-  const seedMode=document.getElementById('seedMode');
-  function updateSeedMode(){document.getElementById('simulationSeedField').hidden=seedMode.value!=='replay';}
-  seedMode.addEventListener('change',updateSeedMode);updateSeedMode();
   let running=false,controller=null;
   const cancel=document.getElementById('cancelSimulation'),bar=document.getElementById('simulationProgress');
   cancel.addEventListener('click',()=>controller?.abort());
   async function startSimulation(once=false) {
     if(running)return;
     try {
-      if(document.getElementById("mapSelect").value!=="stage_1")throw new Error("目前只抽取第一張地圖的資料。");
-      const input=document.getElementById("simulationSeed").value;
-      if(seedMode.value==='replay' && input.trim()==="")throw new Error("請輸入重播種子。");
-      let seed;
-      if(seedMode.value==='replay')seed=Number(input);
-      else {
-        const bytes=new Int32Array(1);
-        if(!window.crypto?.getRandomValues)throw new Error('此瀏覽器無法產生新種子，請改用固定種子重播。');
-        window.crypto.getRandomValues(bytes);seed=bytes[0];
-      }
+      const data=window.DFCHMaps[document.getElementById('mapSelect').value];
+      if(!data)throw new Error('此地圖尚未接入');
+      const seed=window.DFCHRandom.freshSeed();
       const cards=allUnitCards(),speeds=cards.map(c=>c.querySelector('.speed-input').value);
       const speed=window.DFCHSpeed.calcFromVisibleSpeeds({leaderSpeed:speeds[0],memberSpeeds:speeds.slice(1)});
       if(!speed.ready)throw new Error('請填妥每位角色的步行速度。');
       const role=selectedCollectorBonus();if(!Number.isFinite(role))throw new Error('收集家等級無效。');
-      const data=window.DFCHMapData,ids={collector1:0,collector2:1,collector3:2};
+      const ids={collector1:0,collector2:1,collector3:2};
       const abilityIds=[...new Set(cards.flatMap(c=>[...c.querySelectorAll('.ability-tag.active')].map(b=>data.collectorMasters[ids[b.dataset.ability]].rewardId)))];
       const ownedInputs=[...document.querySelectorAll('#dropStateControls input')],daily=document.getElementById('dailyDiamondCount');
       if(daily.value.trim()===''||ownedInputs.some(i=>i.value.trim()===''))throw new Error('請填妥持有量與當日鑽石累計。');
-      const flags=[];if(document.getElementById('stoneSearchAvailable').checked)flags.push(6504);if(document.getElementById('stoneUnlocked').checked)flags.push(6602);
+      const flags=[];if(document.getElementById('stoneSearchAvailable').checked)flags.push(data.master.basicFlagUnlockConditions[0]);if(document.getElementById('stoneUnlocked').checked)flags.push(data.master.stoneFlag);
       const options={seed,multiplier:speed.multiplier,abilityIds,affectionRatio:window.DFCHAffection.ratio(role,affectionGlasses.checked?30:0),completionRate:window.DFCHMapConfig?.completionRate??0,stamina:window.DFCHStaminaConfig,saved:{daily:Number(daily.value),owned:Object.fromEntries(ownedInputs.map(i=>[i.dataset.reward,Number(i.value)])),flags}};
       // Snapshot all controls: editing during a run cannot change its config.
       const count=once?1:Number(document.getElementById('simulationCount').value),mode=document.getElementById('simulationMode').value;
@@ -253,9 +243,9 @@
       const previous=window.DFCHRecordStore.get(mode,data.master.key);
       if(mode==='continuous'&&previous){options.saved=previous.latest.saved;options.completionRate=previous.latest.completionRate;}
       window.DFCHSimulator.create(data,options); // fail before replacing prior results
-      running=true;window.DFCHSimulationRunning=true;simulateBtn.disabled=true;document.getElementById('simulateOnceBtn').disabled=true;cancel.hidden=false;bar.hidden=false;bar.max=count;bar.value=0;controller=new AbortController();
+      running=true;window.DFCHSimulationRunning=true;simulateBtn.disabled=true;document.getElementById('mapSelect').disabled=true;document.getElementById('simulateOnceBtn').disabled=true;cancel.hidden=false;bar.hidden=false;bar.max=count;bar.value=0;controller=new AbortController();
       let lastRecordPaint=0;
-      const result=await window.DFCHSimulationBatch.run(data,options,{count,mode,signal:controller.signal,onLimit:info=>{
+      const result=await window.DFCHSimulationBatch.run(data,options,{count,mode,signal:controller.signal,seedFactory:window.DFCHRandom.freshSeed,onLimit:info=>{
         window.DFCHRecordView.render();
         simulateMessage.textContent=`已暫停：今日此地圖一般鑽石 ${info.daily}／${info.limit}，已達上限。已完成 ${info.completed} 輪已保存。`;
         return window.confirm(`今日「${info.mapName}」的一般鑽石已達上限（${info.daily}／${info.limit}）。\n已完成 ${info.completed} 輪並存檔，尚有 ${info.requested-info.completed} 輪。\n繼續後將套用一般鑽石上限規則；神級鑽石仍可取得。\n是否繼續遠征？`);
@@ -265,7 +255,7 @@
     } catch(error) {
       simulateMessage.textContent=`模擬未完成：${error.message}。沒有結算未完成的遠征。`;
     } finally {
-      running=false;window.DFCHSimulationRunning=false;controller=null;cancel.hidden=true;updateStamina();document.getElementById('simulateOnceBtn').disabled=simulateBtn.disabled;window.DFCHRecordView.render();
+      running=false;window.DFCHSimulationRunning=false;controller=null;cancel.hidden=true;document.getElementById('mapSelect').disabled=false;updateStamina();document.getElementById('simulateOnceBtn').disabled=simulateBtn.disabled;window.DFCHRecordView.render();
     }
   }
   simulateBtn.addEventListener('click',()=>startSimulation(false));

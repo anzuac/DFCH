@@ -1,10 +1,12 @@
 (() => {
-  const {el,table,number}=window.DFCHSimulationView,data=window.DFCHMapData;
+  const {el,table,number}=window.DFCHSimulationView;
+  let data=window.DFCHMapData;const map=document.getElementById('recordMapSelect');
   let store;
   try{store=window.DFCHRecords.create(window.localStorage);}catch(e){store=window.DFCHRecords.create({getItem(){throw e;},setItem(){throw e;},removeItem(){throw e;}});}
   window.DFCHRecordStore=store;
   const mode=document.getElementById('recordMode'),root=document.getElementById('recordDashboard'),status=document.getElementById('recordStatus');
   function render(){
+    data=window.DFCHMaps[map.value];
     root.replaceChildren();if(store.error){status.textContent=store.error;return;}
     const r=store.get(mode.value,data.master.key);status.textContent='每完成一輪自動存檔；只累積已結算的遠征。';
     if(!r){root.append(el('p','此類型尚無遠征紀錄。'));return;}
@@ -22,11 +24,12 @@
     if(mode.value==='continuous')root.append(table(['神器','承接持有／最高'],data.rewardMasters.filter(m=>m.sourceTable==='ArtifactTable').map(m=>[m.name,`${number(r.latest.saved.owned[m.rewardId]??0)}／${m.maxLevel}`])));
     root.append(el('p',`最近完成種子 ${r.latest.seed}；最後儲存 ${new Date(r.updatedAt).toLocaleString('zh-TW')}。`));
   }
+  map.addEventListener('change',render);
   mode.addEventListener('change',render);
   document.getElementById('exportRecords').addEventListener('click',()=>{try{const url=URL.createObjectURL(new Blob([store.export()],{type:'application/json'})),a=el('a');a.href=url;a.download='DFCH-records.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}catch(e){status.textContent=`匯出失敗：${e.message}`;}});
   document.getElementById('importRecords').addEventListener('change',async e=>{if(window.DFCHSimulationRunning){status.textContent='請先中止模擬再匯入。';e.target.value='';return;}const file=e.target.files[0];if(!file)return;
     try{if(file.size>5000000)throw new Error('存檔超過 5 MB');const raw=await file.text();if(window.DFCHSimulationRunning)throw new Error('請先中止模擬');window.DFCHRecords.validate(JSON.parse(raw));if(!window.confirm('匯入將取代兩種類型的全部紀錄，是否繼續？'))return;store.import(raw);render();status.textContent='存檔已匯入。';}catch(e){status.textContent=`匯入失敗：${e.message}；原紀錄保留。`;}finally{e.target.value='';}});
-  for(const [id,all] of [['resetMapRecords',false],['resetAllRecords',true]])document.getElementById(id).addEventListener('click',()=>{if(window.DFCHSimulationRunning){status.textContent='請先中止模擬再重置。';return;}if(!window.confirm(all?'確定清除兩種類型的全部存檔？':'確定清除此面板的第一張地圖紀錄？'))return;try{if(all)store.resetAll();else store.reset(mode.value,data.master.key);render();}catch(e){status.textContent=`重置失敗：${e.message}`;}});
+  for(const [id,all] of [['resetMapRecords',false],['resetAllRecords',true]])document.getElementById(id).addEventListener('click',()=>{if(window.DFCHSimulationRunning){status.textContent='請先中止模擬再重置。';return;}if(!window.confirm(all?'確定清除兩種類型的全部存檔？':'確定清除此面板所選地圖的紀錄？'))return;try{if(all)store.resetAll();else store.reset(mode.value,data.master.key);render();}catch(e){status.textContent=`重置失敗：${e.message}`;}});
   document.getElementById('setRecordDaily').addEventListener('click',()=>{if(window.DFCHSimulationRunning){status.textContent='請先中止模擬再調整。';return;}try{const input=document.getElementById('recordDailyValue');if(input.value.trim()==='')throw new Error('請填入數量');store.setDaily('continuous',data.master.key,Number(input.value));render();status.textContent='已更新連續模式當日鑽石；歷史統計保留。';}catch(e){status.textContent=e.message;}});
   render();window.DFCHRecordView=Object.freeze({render});
 })();

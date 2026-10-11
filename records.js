@@ -5,7 +5,7 @@
     if(s?.schema!==1||!s.modes)throw new Error('不支援此存檔格式');
     for(const mode of modes){if(!s.modes[mode]||typeof s.modes[mode]!=='object'||Array.isArray(s.modes[mode]))throw new Error('存檔模式格式錯誤');
       for(const [key,r] of Object.entries(s.modes[mode])){
-        if(key!=='stage_1'||r.mode!==mode||!r.totals)throw new Error('存檔地圖格式錯誤');
+        if(!['stage_1','stage_2'].includes(key)||r.mode!==mode||!r.totals)throw new Error('存檔地圖格式錯誤');
         const a=r.totals;
         for(const k of ['completed','goals','exhausted','steps','battles','bosses','randomCalls','ordinaryDiamonds','godDiamonds','affection','affectionRuns','highRuns','capStartRuns','capEndRuns','capCrossRuns'])if(!Number.isSafeInteger(a[k])||a[k]<0)throw new Error('存檔統計數量錯誤');
         if(a.goals+a.exhausted!==a.completed||a.affectionRuns>a.completed||a.highRuns>a.completed)throw new Error('統計輪數不一致');
@@ -13,7 +13,7 @@
         for(const k of ['quantities','rewardRuns','highDiamonds','eventCounts']){if(!a[k]||typeof a[k]!=='object'||Array.isArray(a[k]))throw new Error('存檔統計格式錯誤');for(const n of Object.values(a[k]))if(!Number.isSafeInteger(n)||n<0)throw new Error('存檔數量錯誤');}
         if(!r.latest||!Number.isFinite(r.latest.completionRate)||r.latest.completionRate<0||r.latest.completionRate>100)throw new Error('探索狀態錯誤');
         if(!r.latest.saved||(!r.latest.saved.owned||typeof r.latest.saved.owned!=='object'||Array.isArray(r.latest.saved.owned))||!Array.isArray(r.latest.saved.flags)||!Number.isSafeInteger(r.latest.saved.daily))throw new Error('承接狀態錯誤');
-        window.DFCHDropState.begin(window.DFCHMapData,r.latest.saved);
+        window.DFCHDropState.begin(window.DFCHMaps?.[key]??window.DFCHMapData,r.latest.saved);
       }
     }return s;
   }

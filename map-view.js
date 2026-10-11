@@ -1,12 +1,12 @@
 (() => {
-  const data = window.DFCHMapData;
+  let data = window.DFCHMapData;
   const select = document.getElementById('mapSelect');
   const explored = document.getElementById('mapExplored100');
   const target = document.getElementById('mapDataTables');
-  const groupNames = {50:'鑽石發現',51:'寶石發現',80:'遠征戰塵與魂片',90:'首領戰後追加獎勵',100:'一般戰鬥掉落',100150:'一般寶箱發現',100151:'不祥寶箱發現',100152:'神奇寶箱發現',100160:'士兵五倍成長書發現',100161:'遠征隊支援物資發現',990100:'鑽石增益區域獎勵',100170:'野外贈禮發現',100190:'地圖限定神器',1000050:'尋寶：黃金寶箱',1000051:'尋寶：神奇寶箱',1000052:'尋寶：紅色寶箱',1000053:'尋寶：荊刺寶箱'};
+  const groupNames = {50:'鑽石發現',51:'寶石發現',80:'遠征戰塵與魂片',90:'首領戰後追加獎勵',100:'一般戰鬥掉落',100150:'一般寶箱發現',100151:'不祥寶箱發現',100152:'神奇寶箱發現',100160:'士兵五倍成長書發現',100161:'遠征隊支援物資發現',990100:'鑽石增益區域獎勵',100170:'野外贈禮發現',100190:'地圖限定神器',1000050:'尋寶：黃金寶箱',1000051:'尋寶：神奇寶箱',1000052:'尋寶：紅色寶箱',1000053:'尋寶：荊刺寶箱',100260:'能力忘卻之書發現',100261:'特殊能力之書發現',100270:'野外贈禮發現',100290:'地圖限定神器',1010:'禁斷遭遇追加寶箱'};
   const eventNames = {1:'一般行走',2:'快速行走',3:'休息',200:'小幅探索',201:'深入探索',202:'重大探索',901:'鑽石增益區域'};
   const rewardNames = {1:'寶石加成',2:'寶箱掉落加成',3:'新增戰鬥事件',4:'新增一般事件',5:'新增物品發現事件',6:'限定掉落加成',7:'經驗加成'};
-  const names = Object.fromEntries(data.monsterNames.map(r => [r.index,r.name]));
+  let names = {};
   const fmt = value => String(Number(Number(value).toPrecision(8)));
   function table(title,headers,rows) {
     const h=document.createElement('h3');h.textContent=title;
@@ -53,19 +53,22 @@
     return `${rewardNames[row.rewardType] || '探索獎勵'}（設定值 ${fmt(row.value)}）`;
   }
   function render() {
-    const supported=select.value===data.master.key;
+    const selected=(window.DFCHMaps??{stage_1:window.DFCHMapData})[select.value];
+    const supported=!!selected;
+    if(selected){data=selected;window.DFCHMapData=data;}
+    names=Object.fromEntries(data.monsterNames.map(r=>[r.index,r.name]));
     explored.disabled=!supported;
     document.getElementById('mapDataDetails').hidden=!supported;
     document.getElementById('mapDataTitle').textContent=supported?data.name:'此地圖資料尚未接入';
-    document.getElementById('mapDataSummary').textContent=supported?`原始遠征時間 ${data.master.duration} 秒（10 分鐘）；目標進度 ${data.master.depth}。一般戰鬥敵人 ${data.master.basicBattleMinMonsterCount}–${data.master.basicBattleMaxMonsterCount-1} 名（上限不包含）。`:'目前僅第一張地圖有官方資料；切回米維克威茲 外緣部查看。';
+    document.getElementById('mapDataSummary').textContent=supported?`原始遠征時間 ${data.master.duration} 秒（${data.master.duration/60} 分鐘）；目標進度 ${data.master.depth}。一般戰鬥敵人 ${data.master.basicBattleMinMonsterCount}–${data.master.basicBattleMaxMonsterCount-1} 名（上限不包含）。`:'目前第一、第二張地圖已接入；請選擇已支援地圖。';
     const rate=explored.checked?100:0;
     window.DFCHMapConfig={dungeonKey:select.value,completionRate:rate,combat:'instant-victory',combatDurationSeconds:0};
     const unlocked=data.completionRewards.filter(r=>r.requiredCompletionRate<=rate);
-    document.getElementById('mapExplorationSummary').textContent=!supported?'此地圖尚未支援探索效果預覽。':explored.checked?`已按探索 100% 配置，增加探索率的 3 種共用事件會排除；${unlocked.length} 項探索獎勵皆達標；包含新增成長書、不祥寶箱、神奇寶箱、支援物資及禁斷遭遇的候選事件。仍須抽選與其他條件判定；不是每次必得。`:'目前按探索 0% 預覽。開啟後可比較探索完成所解鎖的效果；探索率與本次行走進度不同。';
+    document.getElementById('mapExplorationSummary').textContent=!supported?'此地圖尚未支援探索效果預覽。':explored.checked?`已按探索 100% 配置，增加探索率的 3 種共用事件會排除；${unlocked.length} 項探索獎勵皆達標；包含本地圖探索解鎖的物品與禁斷遭遇候選事件。仍須抽選與其他條件判定；不是每次必得。`:'目前按探索 0% 預覽。開啟後可比較探索完成所解鎖的效果；探索率與本次行走進度不同。';
     target.replaceChildren();
     table('基本事件抽選權重',['類別','原始權重'],[
       ['一般戰鬥',fmt(data.master.basicBattleWeight)],
-      ...data.master.basicItemDropSampleGroupIds.map((id,i)=>[groupNames[id],fmt(data.master.basicItemDropWeights[i])]),
+      ...data.master.basicItemDropSampleGroupIds.map((id,i)=>[groupNames[id] || '物品獎勵',fmt(data.master.basicItemDropWeights[i])]),
       ['道路解鎖事件（須符合解鎖條件）',fmt(data.master.basicFlagUnlockWeights[0])]
     ]);
     table('共用事件與執行順序',['事件','原始權重','目前探索配置','依序執行'],data.eventSamples.map(r=>[eventNames[r.logEventId] || '共用事件',fmt(r.weight),rate>=100 && data.eventSequences.some(s=>s.logEventId===r.logEventId && s.functionType===109)?'探索完成：排除':'保留候選',sequence(r.logEventId)]));
@@ -77,9 +80,9 @@
     });
     const affection = data.dropSamples.filter(r=>Math.floor(r.rewardId/1000000)===305);
     const affectionWeight=affection.reduce((sum,r)=>sum+r.weight,0);
-    const pool=data.dropSamples.filter(r=>r.dropItemSampleGroupId===100170);
+    const pool=data.dropSamples.filter(r=>r.dropItemSampleGroupId===data.master.basicItemDropSampleGroupIds[3]);
     const poolWeight=pool.reduce((sum,r)=>sum+r.weight,0);
-    table('羈絆道具：第一張地圖', ['道具','取得途徑','數量','組內原始權重','原始組內比例'], affection.map(r=>[
+    table(`羈絆道具：${data.name}`, ['道具','取得途徑','數量','組內原始權重','原始組內比例'], affection.map(r=>[
       r.rewardName,'野外贈禮事件',r.minValue,r.weight,`${(r.weight/poolWeight*100).toFixed(6)}%`
     ]));
     const note=document.createElement('p');note.className='unit-note';

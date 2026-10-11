@@ -27,7 +27,7 @@
     if(master.basicBattleMonsterGroupId>0)result.push(row(base,2,master.basicBattleWeight,
       [seq(108,master.basicBattleMonsterGroupId,master.basicBattleMinMonsterCount,master.basicBattleMaxMonsterCount),seq(6),seq(100,1),seq(7,master.basicBattleDropSampleGroupId)],{name:'怪物遭遇'}));
     master.basicItemDropSampleGroupIds.forEach((id,i)=>{
-      if(id>0 && master.basicItemDropWeights[i]>0)result.push(row(base+20+i,4,master.basicItemDropWeights[i],[seq(100,1),seq(7,id)],{name:Math.floor(id/100000)===9?'鑽石礦脈採集':id===100170?'尋找羈絆道具':'沿路尋寶'}));
+      if(id>0 && master.basicItemDropWeights[i]>0)result.push(row(base+20+i,4,master.basicItemDropWeights[i],[seq(100,1),seq(7,id)],{name:Math.floor(id/100000)===9?'鑽石礦脈採集':hasAffection(data,[seq(7,id)])?'尋找羈絆道具':'沿路尋寶'}));
     });
     master.basicFlagUnlockSampleGroupIds.forEach((id,i)=>{
       const prerequisite=master.basicFlagUnlockConditions[i];
