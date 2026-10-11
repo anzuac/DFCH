@@ -9,7 +9,7 @@
   }
   const unsupported=()=>{throw new Error('目前隊伍未提供此事件所需的角色能力、生命或恢復值；停止執行以避免推測結果。');};
   function validate(data,options) {
-    if(data.gameVersion!=='3.16.0'||![1001,1002,1003].includes(data.master.dungeonId))throw new Error('目前只支援已核對的前三張地圖。');
+    if(data.gameVersion!=='3.16.0'||![1001,1002,1003,1004].includes(data.master.dungeonId))throw new Error('目前只支援已核對的前四張地圖。');
     if(!(Number.isFinite(options.multiplier)&&options.multiplier>=.8&&Number.isFinite(f(options.multiplier))))throw new Error('請填妥有效隊伍速度。');
     const collectors=new Set(data.collectorMasters.map(m=>m.rewardId));
     if((options.abilityIds??[]).some(id=>!collectors.has(id)))throw new Error('目前只開放已接入的收集家能力；其他專屬事件尚缺角色狀態輸入。');
@@ -27,7 +27,7 @@
       return rows[window.DFCHLottery.draw(window.DFCHLottery.build(weights),()=>c.sample(label))];
     };
     c.basePool=Pool.build(data,c);
-    if(c.basePool.some(e=>e.rows.some(r=>r.functionType===112))&&data.simulationPolicy.trapDamage!=='immune')throw new Error('陷阱傷害尚未提供角色狀態，無法執行');
+    if(c.basePool.some(e=>e.rows.some(r=>[111,112].includes(r.functionType)))&&data.simulationPolicy.trapDamage!=='immune')throw new Error('陷阱傷害尚未提供角色狀態，無法執行');
     c.emit=(kind,text,extra={})=>{if(c.record)c.log.push({step:c.steps,kind,text,progress:c.progress,completionRate:c.exploration.completionRate,stamina:c.stamina.current,...extra});};
     // Validate every reachable serialized/dynamic function before mutating state.
     for(const r of c.basePool)for(const s of r.rows)if(!implemented.has(s.functionType))throw new Error(`事件 ${r.name} 的處理尚未支援`);
@@ -135,7 +135,7 @@
     2:(d,c)=>c.emit('walk','隊伍繼續前進'),
     3:(d,c)=>c.emit('rest','隊伍休息'),
     4:(d,c)=>c.emit('zone','鑽石礦脈事件'),
-    5:(d,c)=>c.emit('trap','毒霧陷阱：本模擬設定免除傷害'),
+    5:(d,c)=>c.emit('trap','陷阱事件：本模擬設定免除傷害'),
     6:(d,c)=>battle(d,c),
     7:(d,c,r)=>itemDrop(d,c,r.args),
     8:unsupported,
@@ -155,7 +155,7 @@
     108:(d,c,r)=>{c.monsterInfo={group:r.args[0],min:r.args[1]??0,max:r.args[2]??0};},
     109:(d,c,r)=>{c.exploration=ES.explore(c.exploration,r.args[0],d);},
     110:(d,c,r)=>{c.stamina=window.DFCHStamina.change(c.stamina,r.args[0]);c.emit('stamina',`恢復耐力 ${r.args[0]}`);},
-    111:unsupported,
+    111:(d,c)=>{if(d.simulationPolicy.trapDamage!=='immune')unsupported();c.emit('trap','免除單體陷阱傷害（使用者指定假設；略過原版傷害與選擇目標亂數）');},
     112:(d,c)=>{if(d.simulationPolicy.trapDamage!=='immune')unsupported();c.emit('trap','全隊免受陷阱傷害（使用者指定假設；略過原版傷害亂數）');}
   };
   const implemented=new Set(Object.entries(handlers).filter(([,fn])=>fn!==unsupported).map(([type])=>Number(type)));

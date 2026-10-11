@@ -3,8 +3,8 @@
   const select = document.getElementById('mapSelect');
   const explored = document.getElementById('mapExplored100');
   const target = document.getElementById('mapDataTables');
-  const groupNames = {50:'鑽石發現',51:'寶石發現',80:'遠征戰塵與魂片',90:'首領戰後追加獎勵',100:'一般戰鬥掉落',100150:'一般寶箱發現',100151:'不祥寶箱發現',100152:'神奇寶箱發現',100160:'士兵五倍成長書發現',100161:'遠征隊支援物資發現',990100:'鑽石增益區域獎勵',100170:'野外贈禮發現',100190:'地圖限定神器',1000050:'尋寶：黃金寶箱',1000051:'尋寶：神奇寶箱',1000052:'尋寶：紅色寶箱',1000053:'尋寶：荊刺寶箱',100260:'能力忘卻之書發現',100261:'特殊能力之書發現',100270:'野外贈禮發現',100290:'地圖限定神器',1010:'禁斷遭遇追加寶箱',1020:'禁斷遭遇追加寶箱',100360:'能力值忘卻之書發現',100361:'禁斷的永環石發現',100370:'野外贈禮發現',100390:'地圖限定神器'};
-  const eventNames = {1:'一般行走',2:'快速行走',3:'休息',200:'小幅探索',201:'深入探索',202:'重大探索',901:'鑽石增益區域',350:'毒霧陷阱'};
+  const groupNames = {50:'鑽石發現',51:'寶石發現',80:'遠征戰塵與魂片',90:'首領戰後追加獎勵',100:'一般戰鬥掉落',100150:'一般寶箱發現',100151:'不祥寶箱發現',100152:'神奇寶箱發現',100160:'士兵五倍成長書發現',100161:'遠征隊支援物資發現',990100:'鑽石增益區域獎勵',100170:'野外贈禮發現',100190:'地圖限定神器',1000050:'尋寶：黃金寶箱',1000051:'尋寶：神奇寶箱',1000052:'尋寶：紅色寶箱',1000053:'尋寶：荊刺寶箱',100260:'能力忘卻之書發現',100261:'特殊能力之書發現',100270:'野外贈禮發現',100290:'地圖限定神器',1010:'禁斷遭遇追加寶箱',1020:'禁斷遭遇追加寶箱',100360:'能力值忘卻之書發現',100361:'禁斷的永環石發現',100370:'野外贈禮發現',100390:'地圖限定神器',100460:'士兵五倍成長書發現',100461:'被遺忘的祕寶發現',100470:'野外贈禮發現',100490:'地圖限定神器',1030:'禁斷遭遇追加寶箱'};
+  const eventNames = {1:'一般行走',2:'快速行走',3:'休息',200:'小幅探索',201:'深入探索',202:'重大探索',901:'鑽石增益區域',350:'毒霧陷阱',300:'物理陷阱'};
   const rewardNames = {1:'寶石加成',2:'寶箱掉落加成',3:'新增戰鬥事件',4:'新增一般事件',5:'新增物品發現事件',6:'限定掉落加成',7:'經驗加成'};
   let names = {};
   const fmt = value => String(Number(Number(value).toPrecision(8)));
@@ -21,6 +21,7 @@
     return data.eventSequences.filter(s=>s.logEventId===event).map(s=>{
       const v=fmt(s.args[0]);
       switch(s.functionType) {
+        case 111:return `單體陷阱攻擊（原始參數 ${v}；本模擬免除傷害）`;
         case 112:return `全隊陷阱攻擊（原始參數 ${v}；本模擬免除傷害）`;
         case 5:return '顯示陷阱紀錄';
         case 100:return `前進 ${v} 基礎進度${s.args[1]>0?'（不套用速度倍率）':'（套用隊伍速度倍率）'}`;
@@ -62,7 +63,7 @@
     explored.disabled=!supported;
     document.getElementById('mapDataDetails').hidden=!supported;
     document.getElementById('mapDataTitle').textContent=supported?data.name:'此地圖資料尚未接入';
-    document.getElementById('mapDataSummary').textContent=supported?`原始遠征時間 ${data.master.duration} 秒（${data.master.duration/60} 分鐘）；目標進度 ${data.master.depth}。一般戰鬥敵人 ${data.master.basicBattleMinMonsterCount}–${data.master.basicBattleMaxMonsterCount-1} 名（上限不包含）。`:'目前前三張地圖已接入；請選擇已支援地圖。';
+    document.getElementById('mapDataSummary').textContent=supported?`原始遠征時間 ${data.master.duration} 秒（${data.master.duration/60} 分鐘）；目標進度 ${data.master.depth}。一般戰鬥敵人 ${data.master.basicBattleMinMonsterCount}–${data.master.basicBattleMaxMonsterCount-1} 名（上限不包含）。`:'目前前四張地圖已接入；請選擇已支援地圖。';
     const rate=explored.checked?100:0;
     window.DFCHMapConfig={dungeonKey:select.value,completionRate:rate,combat:'instant-victory',combatDurationSeconds:0};
     const unlocked=data.completionRewards.filter(r=>r.requiredCompletionRate<=rate);
