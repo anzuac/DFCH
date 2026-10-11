@@ -19,7 +19,7 @@
   function create(data,options) {
     validate(data,options);
     const c=window.DFCHSimulationRuntime.initialize(data,options);
-    Object.assign(c,{index:indexed(data),multiplier:f(options.multiplier),affectionRatio:f(options.affectionRatio??1),abilityIds:[...(options.abilityIds??[])],once:new Set(),tables:{},zone:null,zonePool:[],monsterInfo:null,steps:0,battles:0,bosses:0,log:[],trace:[],record:options.record!==false,eventCounts:{},rewardHits:{},ordinaryDiamonds:0,godDiamonds:0,completionStart:c.exploration.completionRate});
+    Object.assign(c,{index:indexed(data),multiplier:f(options.multiplier),affectionRatio:f(options.affectionRatio??1),abilityIds:[...(options.abilityIds??[])],once:new Set(),tables:{},zone:null,zonePool:[],monsterInfo:null,steps:0,battles:0,bosses:0,log:[],trace:[],record:options.record!==false,eventCounts:{},rewardHits:{},ordinaryDiamonds:0,godDiamonds:0,highDiamonds:{5000:0,7777:0,9999:0},dailyStart:c.drops.daily,completionStart:c.exploration.completionRate});
     c.sample=label=>{const before=c.random.calls,value=c.random.nextDouble();if(c.record)c.trace.push({label,call:before+1,value});return value;};
     c.integer=(min,max,label)=>{const before=c.random.calls,value=c.random.next(min,max);if(c.record)c.trace.push({label,call:before+1,consumed:c.random.calls-before,min,max,value});return value;};
     c.drawRows=(rows,weights,label)=>{
@@ -75,7 +75,7 @@
     const converted=Rules.convertDrop(row,quantity,data);
     c.drops=DS.register(c.drops,{...row,rewardId:converted.rewardId},converted.quantity,data);
     if(DS.ordinaryDiamond(row))c.ordinaryDiamonds+=converted.quantity;
-    else if(Math.floor(row.rewardId/1000000)===102)c.godDiamonds+=converted.quantity;
+    else if(Math.floor(row.rewardId/1000000)===102){c.godDiamonds+=converted.quantity;if(Object.hasOwn(c.highDiamonds,drop.quantity))c.highDiamonds[drop.quantity]++;}
     c.rewardHits[converted.rewardId]=(c.rewardHits[converted.rewardId]??0)+1;
     const name=data.rewardMasters.find(m=>m.rewardId===converted.rewardId)?.name??row.rewardName??'獎勵';
     c.emit('drop',`${name} ×${converted.quantity}`,{rewardId:converted.rewardId,quantity:converted.quantity,sampleId:row.dropItemSampleId,effectId:effect?.dropEffectSampleId});
@@ -176,7 +176,7 @@
   }
   function result(data,c) {
     if(!c.endReason)throw new Error('遠征尚未結束，不能結算');
-    return {seed:c.seed,endReason:c.endReason,progress:c.progress,depth:data.master.depth,completionStart:c.completionStart,completionRate:c.exploration.completionRate,stamina:c.stamina.current,steps:c.steps,battles:c.battles,bosses:c.bosses,rewards:{...c.drops.pending},rewardHits:{...c.rewardHits},ordinaryDiamonds:c.ordinaryDiamonds,godDiamonds:c.godDiamonds,unlockedFlags:[...c.drops.pendingFlags],saved:DS.commit(c.drops),randomCalls:c.random.calls,eventCounts:{...c.eventCounts},log:c.log,trace:c.trace,configuredDurationSeconds:data.master.duration,combatDurationSeconds:0};
+    return {seed:c.seed,endReason:c.endReason,progress:c.progress,depth:data.master.depth,completionStart:c.completionStart,completionRate:c.exploration.completionRate,stamina:c.stamina.current,steps:c.steps,battles:c.battles,bosses:c.bosses,rewards:{...c.drops.pending},rewardHits:{...c.rewardHits},ordinaryDiamonds:c.ordinaryDiamonds,godDiamonds:c.godDiamonds,highDiamonds:{...c.highDiamonds},dailyStart:c.dailyStart,limitReachedAtStart:c.drops.limitReached,limitReachedAtEnd:c.drops.daily>=data.master.dailyDiamondLimit,unlockedFlags:[...c.drops.pendingFlags],saved:DS.commit(c.drops),randomCalls:c.random.calls,eventCounts:{...c.eventCounts},log:c.log,trace:c.trace,configuredDurationSeconds:data.master.duration,combatDurationSeconds:0};
   }
   function run(data,options) {
     const c=create(data,options);while(step(data,c)){}return result(data,c);

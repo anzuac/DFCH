@@ -31,6 +31,8 @@
       ['終點首領',number(a.bosses),number(a.bosses/a.completed)]
     ]));
     root.append(el('p',`羈絆取得輪數比例 ${number(a.affectionRuns/a.completed*100)}%；無羈絆輪數 ${number(a.completed-a.affectionRuns)}。`));
+    root.append(table(['高額鑽石','抽中次數','取得量（已含在總量）'],[5000,7777,9999].map(n=>[number(n),number(a.highDiamonds[n]),number(n*a.highDiamonds[n])])));
+    root.append(el('p',`遇到高額鑽石的輪數 ${number(a.highRuns)}；本輪跨過一般鑽石上限 ${number(a.capCrossRuns)} 輪。`));
     root.append(el('h3','各獎勵統計'));
     root.append(table(['獎勵','總量','平均每輪','取得輪數比例'],Object.entries(a.quantities).map(([id,n])=>[
       data.rewardMasters.find(m=>m.rewardId===Number(id))?.name??'獎勵',number(n),number(n/a.completed),`${number(a.rewardRuns[id]/a.completed*100)}%`
@@ -40,5 +42,5 @@
     if(a.completed>1)root.append(details(a.last,'最後完成輪'));
     root.append(el('p','取得輪數比例是至少取得一次的輪數／完成輪數；不是原始權重。中止時只結算已完成輪，進行中的遠征捨棄。'));
   }
-  window.DFCHSimulationView=Object.freeze({render});
+  window.DFCHSimulationView=Object.freeze({render,table,el,number});
 })();

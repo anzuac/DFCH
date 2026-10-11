@@ -1042,3 +1042,10 @@ select:disabled {
 #simulationProgress { width: 100%; margin-top: 1rem; accent-color: #9cd9ce; }
 #cancelSimulation { margin-top: .8rem; }
 [hidden] { display: none !important; }
+.simulation-actions, .record-actions { display: flex; flex-wrap: wrap; gap: .75rem; margin-block: 1rem; }
+.simulation-actions > button { flex: 1 1 180px; width: auto; margin: 0; }
+#recordDashboard { min-width: 0; overflow-wrap: anywhere; }
+#recordDashboard h3 { margin-top: 1.4rem; }
+#recordStatus { color: #a7ddd1; }
+#importRecords { display: block; max-width: 100%; margin-top: .5rem; }
+#tab-stats > .panel { min-width: 0; }

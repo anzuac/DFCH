@@ -28,6 +28,7 @@
     window.DFCHStaminaConfig = config;
     document.getElementById("staminaSummary").textContent = !config.ready ? config.error : manual ? `每輪隊伍耐力：${config.maximum}，恢復上限相同。` : "無限耐力：不會因耐力耗盡而結束遠征。";
     simulateBtn.disabled = !config.ready || Boolean(window.DFCHSimulationRunning);
+    document.getElementById('simulateOnceBtn').disabled=simulateBtn.disabled;
   }
   staminaMode.addEventListener("change", updateStamina);
   staminaValue.addEventListener("input", updateStamina);
@@ -223,7 +224,7 @@
   let running=false,controller=null;
   const cancel=document.getElementById('cancelSimulation'),bar=document.getElementById('simulationProgress');
   cancel.addEventListener('click',()=>controller?.abort());
-  simulateBtn.addEventListener("click", async () => {
+  async function startSimulation(once=false) {
     if(running)return;
     try {
       if(document.getElementById("mapSelect").value!=="stage_1")throw new Error("目前只抽取第一張地圖的資料。");
@@ -247,18 +248,27 @@
       const flags=[];if(document.getElementById('stoneSearchAvailable').checked)flags.push(6504);if(document.getElementById('stoneUnlocked').checked)flags.push(6602);
       const options={seed,multiplier:speed.multiplier,abilityIds,affectionRatio:window.DFCHAffection.ratio(role,affectionGlasses.checked?30:0),completionRate:window.DFCHMapConfig?.completionRate??0,stamina:window.DFCHStaminaConfig,saved:{daily:Number(daily.value),owned:Object.fromEntries(ownedInputs.map(i=>[i.dataset.reward,Number(i.value)])),flags}};
       // Snapshot all controls: editing during a run cannot change its config.
-      const count=Number(document.getElementById('simulationCount').value),mode=document.getElementById('simulationMode').value;
+      const count=once?1:Number(document.getElementById('simulationCount').value),mode=document.getElementById('simulationMode').value;
+      if(window.DFCHRecordStore.error)throw new Error(window.DFCHRecordStore.error);
+      const previous=window.DFCHRecordStore.get(mode,data.master.key);
+      if(mode==='continuous'&&previous){options.saved=previous.latest.saved;options.completionRate=previous.latest.completionRate;}
       window.DFCHSimulator.create(data,options); // fail before replacing prior results
-      running=true;window.DFCHSimulationRunning=true;simulateBtn.disabled=true;cancel.hidden=false;bar.hidden=false;bar.max=count;bar.value=0;controller=new AbortController();
-      const result=await window.DFCHSimulationBatch.run(data,options,{count,mode,signal:controller.signal,onProgress:a=>{bar.value=a.completed;simulateMessage.textContent=`執行中：${a.completed.toLocaleString()}／${count.toLocaleString()} 輪。配置已固定。`;}});
+      running=true;window.DFCHSimulationRunning=true;simulateBtn.disabled=true;document.getElementById('simulateOnceBtn').disabled=true;cancel.hidden=false;bar.hidden=false;bar.max=count;bar.value=0;controller=new AbortController();
+      let lastRecordPaint=0;
+      const result=await window.DFCHSimulationBatch.run(data,options,{count,mode,signal:controller.signal,onResult:r=>window.DFCHRecordStore.add(mode,data,r,options),onProgress:a=>{bar.value=a.completed;simulateMessage.textContent=`執行中：${a.completed.toLocaleString()}／${count.toLocaleString()} 輪。已完成輪已自動存檔。`;if(Date.now()-lastRecordPaint>=150){window.DFCHRecordView.render();lastRecordPaint=Date.now();}}});
       window.DFCHLastSimulation=result;window.DFCHSimulationView.render(data,result);
       simulateMessage.textContent=`${result.cancelled?'已中止':'已完成'}：${result.completed.toLocaleString()} 輪，${result.goals.toLocaleString()} 輪到達終點；第一輪種子 ${seed}。`;
     } catch(error) {
       simulateMessage.textContent=`模擬未完成：${error.message}。沒有結算未完成的遠征。`;
     } finally {
-      running=false;window.DFCHSimulationRunning=false;controller=null;cancel.hidden=true;updateStamina();
+      running=false;window.DFCHSimulationRunning=false;controller=null;cancel.hidden=true;updateStamina();document.getElementById('simulateOnceBtn').disabled=simulateBtn.disabled;window.DFCHRecordView.render();
     }
-  });
+  }
+  simulateBtn.addEventListener('click',()=>startSimulation(false));
+  document.getElementById('simulateOnceBtn').addEventListener('click',()=>startSimulation(true));
+  const modeSelect=document.getElementById('simulationMode');
+  function modeNote(){document.getElementById('simulationModeNote').textContent=modeSelect.value==='independent'?'每輪獨立初始化；只累積紀錄，不承接鑽石上限與持有量。':'承接連續面板已存進度；若無紀錄才採用玩家起始配置。可在儀表板調整當日鑽石或重置。';}
+  modeSelect.addEventListener('change',modeNote);modeNote();
 
   addMember({ name: "隊員 1", speed: "0.520" });
   addMember({ name: "隊員 2", speed: "0.480" });

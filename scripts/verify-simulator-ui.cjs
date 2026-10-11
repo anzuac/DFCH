@@ -5,17 +5,22 @@ for(const script of w.document.querySelectorAll('script[src]'))w.eval(fs.readFil
 const get=id=>w.document.getElementById(id),change=(id,value,type='change')=>{get(id).value=value;get(id).dispatchEvent(new w.Event(type,{bubbles:true}));};
 const wait=async()=>{for(let i=0;i<1000&&get('simulateBtn').disabled;i++)await new Promise(r=>setTimeout(r,2));assert.equal(get('simulateBtn').disabled,false);};
 (async()=>{
- assert.ok(w.document.querySelector('.version-pill').textContent.includes('V1.2'));assert.equal(get('partyCount').textContent,'3 / 12');
+ assert.ok(w.document.querySelector('.version-pill').textContent.includes('V1.3'));assert.equal(get('partyCount').textContent,'3 / 12');
  change('seedMode','replay');change('simulationCount','1');get('simulateBtn').click();await wait();assert.equal(w.DFCHLastSimulation.completed,1);assert.equal(w.DFCHLastSimulation.goals,1);
  assert.ok(get('simulationResults').textContent.includes('各獎勵統計'));assert.ok(get('simulationResults').textContent.includes('亂數呼叫明細'));assert.ok(!get('simulationResults').textContent.includes('[object Object]'));
  change('simulationMode','continuous');change('simulationCount','100');get('simulateBtn').click();await wait();assert.equal(w.DFCHLastSimulation.completed,100);
  const prev=w.DFCHLastSimulation;change('simulationSeed','');get('simulateBtn').click();await wait();assert.equal(w.DFCHLastSimulation,prev);assert.ok(get('simulateMessage').textContent.includes('請輸入重播種子'));
  change('simulationSeed','42');change('staminaMode','manual');change('staminaValue','1','input');change('simulationCount','1');get('simulateBtn').click();await wait();assert.equal(w.DFCHLastSimulation.exhausted,1);
  change('staminaMode','unlimited');change('simulationCount','1000000');get('simulateBtn').click();assert.equal(get('cancelSimulation').hidden,false);get('cancelSimulation').click();await wait();assert.equal(w.DFCHLastSimulation.cancelled,true);assert.ok(w.DFCHLastSimulation.completed<1000000);
- get('mapExplored100').checked=true;get('mapExplored100').dispatchEvent(new w.Event('change'));change('simulationCount','1');get('simulateBtn').click();await wait();assert.equal(w.DFCHLastSimulation.first.completionRate,100);
+ change('simulationMode','independent');get('mapExplored100').checked=true;get('mapExplored100').dispatchEvent(new w.Event('change'));change('simulationCount','1');get('simulateBtn').click();await wait();assert.equal(w.DFCHLastSimulation.first.completionRate,100);
  change('seedMode','fresh');const sampled=[];w.crypto.getRandomValues=arr=>{arr[0]=123+sampled.length;sampled.push(arr[0]);return arr;};
  get('simulateBtn').click();await wait();assert.equal(w.DFCHLastSimulation.first.seed,123);
  get('simulateBtn').click();await wait();assert.equal(w.DFCHLastSimulation.first.seed,124);
  assert.equal(get('simulationSeedField').hidden,true);
+ const before=w.DFCHRecordStore.get('independent','stage_1').totals.completed;
+ change('simulationCount','10000');get('simulateOnceBtn').click();await wait();assert.equal(w.DFCHLastSimulation.completed,1);assert.equal(w.DFCHRecordStore.get('independent','stage_1').totals.completed,before+1);
+ change('recordMode','continuous');assert.ok(get('recordDashboard').textContent.includes('承接狀態'));
+ const saved=w.localStorage.getItem(w.DFCHRecords.KEY);const restored=w.DFCHRecords.create(w.localStorage);assert.equal(restored.get('independent','stage_1').totals.completed,before+1);
+ assert.ok(saved.includes('highDiamonds'));w.confirm=()=>true;get('resetMapRecords').click();assert.equal(w.DFCHRecordStore.get('continuous','stage_1'),null);assert.equal(w.DFCHRecordStore.get('independent','stage_1').totals.completed,before+1);
  assert.equal(get('cancelSimulation').hidden,true);console.log('Real HTML/module load and UI: single run, 100 continuous, invalid input, manual stamina, million-run cancellation, 100% exploration and fresh/replay seed modes passed');w.close();
 })().catch(e=>{console.error(e);w.close();process.exitCode=1;});
