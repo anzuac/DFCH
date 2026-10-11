@@ -49,6 +49,8 @@
     tabs.forEach(tab=>tab.setAttribute('aria-current',tab.dataset.tab===name?'page':'false'));
     window.dispatchEvent(new CustomEvent('dfch-tab-change',{detail:name}));
     if(name==='expedition')updateRunSummary();
+    const active=tabs.find(tab=>tab.dataset.tab===name),nav=active?.parentElement;
+    if(nav?.scrollTo){const box=nav.getBoundingClientRect(),item=active.getBoundingClientRect();if(item.left<box.left||item.right>box.right)nav.scrollTo({left:nav.scrollLeft+item.left-box.left-(box.width-item.width)/2,behavior:window.matchMedia?.('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});}
   }
 
   tabs.forEach((tab) => {

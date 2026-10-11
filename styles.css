@@ -1136,3 +1136,23 @@ input,select{border-color:#9fbccc35!important;border-radius:9px!important;backgr
 .site-help>summary { cursor:pointer;padding:12px; }
 @media(max-width:600px){.tabs .tab{font-size:12px;padding:12px 2px;letter-spacing:0}.run-config-summary{display:block}.run-config-summary button{margin-top:14px}.record-reset-toolbar button{flex:1}.page-actions button{width:100%}}
 @media(max-width:420px){.tabs{grid-template-columns:repeat(2,minmax(0,1fr))}.tabs .tab{font-size:13px}}
+
+/* V2.2: scrollable navigation and six-star gift reference. */
+.tabs { display:flex;flex-direction:row;flex-wrap:nowrap;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x proximity;scrollbar-width:thin;scrollbar-color:var(--teal) transparent;overscroll-behavior-x:contain; }
+.tabs .tab { flex:0 0 auto;width:auto;min-width:126px;padding:12px 18px;scroll-snap-align:start; }
+.nav-scroll-hint { color:var(--muted);font-size:12px;margin:-14px 0 18px;text-align:right; }
+.hero-preference-filters { display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px; }
+.hero-preference-filters input,.hero-preference-filters select { width:100%;min-width:0; }
+.hero-filter-status { display:flex;align-items:center;justify-content:space-between;gap:12px;margin:16px 0;color:var(--muted); }
+.hero-common-gifts { background:#142f31;border:1px solid #69d6bf45;padding:18px;border-radius:14px;margin:20px 0; }
+.hero-common-gifts h3 { margin-top:0; }
+.hero-preference-grid { display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px; }
+.hero-preference-card { padding:20px;border:1px solid var(--line);border-radius:14px;background:var(--panel-2);min-width:0; }
+.hero-preference-card h3 { margin:4px 0;font-size:22px; }
+.hero-title { color:var(--muted);font-size:13px;margin:0; }
+.hero-stars { color:var(--gold);font-size:12px;letter-spacing:2px; }
+.gift-group { margin-top:18px; }.gift-group h4 { margin:0 0 8px; }.loved h4 { color:#ffb2c8; }.favorite h4 { color:var(--teal-2); }
+.gift-list { list-style:none;display:flex;flex-wrap:wrap;gap:8px;margin:0;padding:0; }
+.gift-list li { background:#0d1b2780;border:1px solid var(--line);border-radius:8px;padding:7px 10px;font-size:13px;overflow-wrap:anywhere; }
+.loved .gift-list li { border-color:#ffb2c845; }.hero-empty { grid-column:1/-1;padding:32px 12px;color:var(--muted);text-align:center; }
+@media(max-width:650px){.hero-preference-grid,.hero-preference-filters{grid-template-columns:1fr}.tabs .tab{min-width:118px;padding:12px 14px;font-size:13px}.hero-preference-card{padding:16px}}

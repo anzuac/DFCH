@@ -9,7 +9,7 @@ function boot(storage={}){
 const dom=boot(),w=dom.window,$=id=>w.document.getElementById(id),change=(id,value)=>{$(id).value=value;$(id).dispatchEvent(new w.Event('change',{bubbles:true}));};
 const A=w.DFCHArtifacts,C=w.DFCHAccount;
 assert.equal($('accountArtifacts').children.length,6);
-assert.deepEqual([...w.document.querySelectorAll('.tabs .tab')].map(e=>e.dataset.tab),['simulator','expedition','stats','diamond']);
+assert.deepEqual([...w.document.querySelectorAll('.tabs .tab')].map(e=>e.dataset.tab),['simulator','expedition','stats','diamond','heroes']);
 for(const [id,page] of [['accountArtifacts','simulator'],['partyCount','simulator'],['mapSelect','expedition'],['simulateBtn','expedition'],['simulationResults','expedition'],['recordDashboard','stats'],['diamondStart','diamond']])assert.equal($(id).closest('.tab-panel').id,'tab-'+page);
 for(const page of ['expedition','diamond','stats','simulator']){w.document.querySelector(`[data-tab="${page}"]`).click();assert.equal(w.document.querySelectorAll('.tab-panel.active').length,1);assert.equal(w.document.querySelector('.tab-panel.active').id,'tab-'+page);}
 assert.match($('runConfigSummary').textContent,/隊長/);assert.equal($('recordOverview').querySelectorAll('tbody tr').length,14);

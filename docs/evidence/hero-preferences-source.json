@@ -1,0 +1,746 @@
+{
+  "heroes": [
+    {
+      "index": 13,
+      "key": "idunn",
+      "rarity": 5,
+      "lovedInheritanceIds": [
+        305001003,
+        0,
+        0
+      ],
+      "favoriteInheritanceIds": [
+        305001004,
+        305001012,
+        305001019
+      ]
+    },
+    {
+      "index": 16,
+      "key": "siegfried",
+      "rarity": 5,
+      "lovedInheritanceIds": [
+        305001022,
+        0,
+        0
+      ],
+      "favoriteInheritanceIds": [
+        305001011,
+        305001023,
+        305001027
+      ]
+    },
+    {
+      "index": 19,
+      "key": "randgrid",
+      "rarity": 5,
+      "lovedInheritanceIds": [
+        305001010,
+        305001012,
+        0
+      ],
+      "favoriteInheritanceIds": [
+        305001006,
+        305001027,
+        305001001
+      ]
+    },
+    {
+      "index": 21,
+      "key": "uni",
+      "rarity": 5,
+      "lovedInheritanceIds": [
+        305001013,
+        305001017,
+        305001005
+      ],
+      "favoriteInheritanceIds": [
+        305001018,
+        305001014,
+        305001008
+      ]
+    },
+    {
+      "index": 22,
+      "key": "idunn_water",
+      "rarity": 5,
+      "lovedInheritanceIds": [
+        305001016,
+        0,
+        0
+      ],
+      "favoriteInheritanceIds": [
+        305001004,
+        305001012,
+        305001019
+      ]
+    },
+    {
+      "index": 23,
+      "key": "siegfried_water",
+      "rarity": 5,
+      "lovedInheritanceIds": [
+        305001022,
+        0,
+        0
+      ],
+      "favoriteInheritanceIds": [
+        305001011,
+        305001008,
+        305001027
+      ]
+    },
+    {
+      "index": 27,
+      "key": "flowsvan",
+      "rarity": 5,
+      "lovedInheritanceIds": [
+        305001009,
+        0,
+        0
+      ],
+      "favoriteInheritanceIds": [
+        305001011,
+        305001002,
+        305001016
+      ]
+    },
+    {
+      "index": 32,
+      "key": "valentine_queen",
+      "rarity": 5,
+      "lovedInheritanceIds": [
+        305001019,
+        0,
+        0
+      ],
+      "favoriteInheritanceIds": [
+        305001007,
+        305001012,
+        305001016
+      ]
+    },
+    {
+      "index": 33,
+      "key": "beyla",
+      "rarity": 5,
+      "lovedInheritanceIds": [
+        305001015,
+        305001012,
+        0
+      ],
+      "favoriteInheritanceIds": [
+        305001002,
+        305001006,
+        305001009
+      ]
+    },
+    {
+      "index": 34,
+      "key": "akasha",
+      "rarity": 5,
+      "lovedInheritanceIds": [
+        305001024,
+        305001013,
+        305001015
+      ],
+      "favoriteInheritanceIds": [
+        305001008,
+        305001009,
+        305001000
+      ]
+    },
+    {
+      "index": 39,
+      "key": "bahra",
+      "rarity": 5,
+      "lovedInheritanceIds": [
+        305001005,
+        305001006,
+        305001014
+      ],
+      "favoriteInheritanceIds": [
+        305001004,
+        305001001,
+        0
+      ]
+    },
+    {
+      "index": 43,
+      "key": "randgrid_dagger",
+      "rarity": 5,
+      "lovedInheritanceIds": [
+        305001010,
+        305001012,
+        0
+      ],
+      "favoriteInheritanceIds": [
+        305001011,
+        305001027,
+        305001001
+      ]
+    },
+    {
+      "index": 44,
+      "key": "catgirl_bard",
+      "rarity": 5,
+      "lovedInheritanceIds": [
+        305001005,
+        305001014,
+        0
+      ],
+      "favoriteInheritanceIds": [
+        305001006,
+        305001012,
+        305001003
+      ]
+    },
+    {
+      "index": 45,
+      "key": "bandit_leader_wolf",
+      "rarity": 5,
+      "lovedInheritanceIds": [
+        305001023,
+        0,
+        0
+      ],
+      "favoriteInheritanceIds": [
+        305001000,
+        305001022,
+        305001001
+      ]
+    },
+    {
+      "index": 46,
+      "key": "orphia",
+      "rarity": 5,
+      "lovedInheritanceIds": [
+        305001021,
+        0,
+        0
+      ],
+      "favoriteInheritanceIds": [
+        305001000,
+        305001010,
+        305001013
+      ]
+    },
+    {
+      "index": 47,
+      "key": "idunn_xmas",
+      "rarity": 5,
+      "lovedInheritanceIds": [
+        305001003,
+        0,
+        0
+      ],
+      "favoriteInheritanceIds": [
+        305001004,
+        305001012,
+        305001019
+      ]
+    },
+    {
+      "index": 51,
+      "key": "eir",
+      "rarity": 5,
+      "lovedInheritanceIds": [
+        305001004,
+        305001007,
+        305001003
+      ],
+      "favoriteInheritanceIds": [
+        305001002,
+        305001006,
+        305001012
+      ]
+    },
+    {
+      "index": 52,
+      "key": "shion",
+      "rarity": 5,
+      "lovedInheritanceIds": [
+        305001011,
+        305001015,
+        0
+      ],
+      "favoriteInheritanceIds": [
+        305001000,
+        305001006,
+        305001007
+      ]
+    },
+    {
+      "index": 53,
+      "key": "valentine_queen_water",
+      "rarity": 5,
+      "lovedInheritanceIds": [
+        305001019,
+        0,
+        0
+      ],
+      "favoriteInheritanceIds": [
+        305001007,
+        305001012,
+        305001016
+      ]
+    },
+    {
+      "index": 54,
+      "key": "akasha_water",
+      "rarity": 5,
+      "lovedInheritanceIds": [
+        305001024,
+        305001013,
+        0
+      ],
+      "favoriteInheritanceIds": [
+        305001008,
+        305001015,
+        305001009
+      ]
+    },
+    {
+      "index": 58,
+      "key": "kolga",
+      "rarity": 5,
+      "lovedInheritanceIds": [
+        305001004,
+        305001023,
+        0
+      ],
+      "favoriteInheritanceIds": [
+        305001001,
+        305001006,
+        305001017
+      ]
+    },
+    {
+      "index": 59,
+      "key": "freya",
+      "rarity": 5,
+      "lovedInheritanceIds": [
+        305001027,
+        0,
+        0
+      ],
+      "favoriteInheritanceIds": [
+        305001012,
+        305001017,
+        305001019
+      ]
+    },
+    {
+      "index": 60,
+      "key": "frigg",
+      "rarity": 5,
+      "lovedInheritanceIds": [
+        305001012,
+        0,
+        0
+      ],
+      "favoriteInheritanceIds": [
+        305001006,
+        305001014,
+        305001016
+      ]
+    }
+  ],
+  "items": [
+    {
+      "rewardId": 305000000,
+      "key": "i_hp",
+      "commonPreference": 1,
+      "exceptionLovedUniqueIndices": [],
+      "exceptionFavoriteUniqueIndices": [],
+      "exceptionNormalUniqueIndices": []
+    },
+    {
+      "rewardId": 305000001,
+      "key": "i_atk",
+      "commonPreference": 1,
+      "exceptionLovedUniqueIndices": [],
+      "exceptionFavoriteUniqueIndices": [],
+      "exceptionNormalUniqueIndices": []
+    },
+    {
+      "rewardId": 305000002,
+      "key": "i_walk_spd",
+      "commonPreference": 1,
+      "exceptionLovedUniqueIndices": [],
+      "exceptionFavoriteUniqueIndices": [],
+      "exceptionNormalUniqueIndices": []
+    },
+    {
+      "rewardId": 305000003,
+      "key": "i_attack_range",
+      "commonPreference": 1,
+      "exceptionLovedUniqueIndices": [],
+      "exceptionFavoriteUniqueIndices": [],
+      "exceptionNormalUniqueIndices": []
+    },
+    {
+      "rewardId": 305000004,
+      "key": "i_multiple_range",
+      "commonPreference": 1,
+      "exceptionLovedUniqueIndices": [],
+      "exceptionFavoriteUniqueIndices": [],
+      "exceptionNormalUniqueIndices": []
+    },
+    {
+      "rewardId": 305000005,
+      "key": "i_attack_spd",
+      "commonPreference": 1,
+      "exceptionLovedUniqueIndices": [],
+      "exceptionFavoriteUniqueIndices": [],
+      "exceptionNormalUniqueIndices": []
+    },
+    {
+      "rewardId": 305000006,
+      "key": "i_knock_back",
+      "commonPreference": 1,
+      "exceptionLovedUniqueIndices": [],
+      "exceptionFavoriteUniqueIndices": [],
+      "exceptionNormalUniqueIndices": []
+    },
+    {
+      "rewardId": 305000007,
+      "key": "i_weight",
+      "commonPreference": 1,
+      "exceptionLovedUniqueIndices": [],
+      "exceptionFavoriteUniqueIndices": [],
+      "exceptionNormalUniqueIndices": []
+    },
+    {
+      "rewardId": 305000008,
+      "key": "i_stamina",
+      "commonPreference": 1,
+      "exceptionLovedUniqueIndices": [],
+      "exceptionFavoriteUniqueIndices": [],
+      "exceptionNormalUniqueIndices": []
+    },
+    {
+      "rewardId": 305000009,
+      "key": "i_base_cost",
+      "commonPreference": 1,
+      "exceptionLovedUniqueIndices": [],
+      "exceptionFavoriteUniqueIndices": [],
+      "exceptionNormalUniqueIndices": []
+    },
+    {
+      "rewardId": 305000010,
+      "key": "i_growSpeed",
+      "commonPreference": 1,
+      "exceptionLovedUniqueIndices": [],
+      "exceptionFavoriteUniqueIndices": [],
+      "exceptionNormalUniqueIndices": []
+    },
+    {
+      "rewardId": 305000011,
+      "key": "i_ap",
+      "commonPreference": 1,
+      "exceptionLovedUniqueIndices": [],
+      "exceptionFavoriteUniqueIndices": [],
+      "exceptionNormalUniqueIndices": []
+    },
+    {
+      "rewardId": 305000012,
+      "key": "i_status_point",
+      "commonPreference": 1,
+      "exceptionLovedUniqueIndices": [],
+      "exceptionFavoriteUniqueIndices": [],
+      "exceptionNormalUniqueIndices": []
+    },
+    {
+      "rewardId": 305000013,
+      "key": "i_life_span",
+      "commonPreference": 1,
+      "exceptionLovedUniqueIndices": [],
+      "exceptionFavoriteUniqueIndices": [],
+      "exceptionNormalUniqueIndices": []
+    },
+    {
+      "rewardId": 305000020,
+      "key": "i_status_point_chocolate",
+      "commonPreference": 2,
+      "exceptionLovedUniqueIndices": [],
+      "exceptionFavoriteUniqueIndices": [],
+      "exceptionNormalUniqueIndices": []
+    },
+    {
+      "rewardId": 305000021,
+      "key": "i_ap_halloween_candy",
+      "commonPreference": 2,
+      "exceptionLovedUniqueIndices": [],
+      "exceptionFavoriteUniqueIndices": [],
+      "exceptionNormalUniqueIndices": []
+    },
+    {
+      "rewardId": 305000022,
+      "key": "i_ap_xmas_cake",
+      "commonPreference": 2,
+      "exceptionLovedUniqueIndices": [],
+      "exceptionFavoriteUniqueIndices": [],
+      "exceptionNormalUniqueIndices": []
+    },
+    {
+      "rewardId": 305000023,
+      "key": "i_weight_xmas_chicken",
+      "commonPreference": 2,
+      "exceptionLovedUniqueIndices": [],
+      "exceptionFavoriteUniqueIndices": [],
+      "exceptionNormalUniqueIndices": []
+    },
+    {
+      "rewardId": 305000024,
+      "key": "i_life_span_kibi_dango",
+      "commonPreference": 2,
+      "exceptionLovedUniqueIndices": [],
+      "exceptionFavoriteUniqueIndices": [],
+      "exceptionNormalUniqueIndices": []
+    },
+    {
+      "rewardId": 305000025,
+      "key": "i_rum",
+      "commonPreference": 2,
+      "exceptionLovedUniqueIndices": [],
+      "exceptionFavoriteUniqueIndices": [],
+      "exceptionNormalUniqueIndices": []
+    },
+    {
+      "rewardId": 305001000,
+      "key": "i_affection_mushroom",
+      "commonPreference": 0,
+      "exceptionLovedUniqueIndices": [],
+      "exceptionFavoriteUniqueIndices": [],
+      "exceptionNormalUniqueIndices": []
+    },
+    {
+      "rewardId": 305001001,
+      "key": "i_affection_feather",
+      "commonPreference": 0,
+      "exceptionLovedUniqueIndices": [],
+      "exceptionFavoriteUniqueIndices": [],
+      "exceptionNormalUniqueIndices": []
+    },
+    {
+      "rewardId": 305001002,
+      "key": "i_affection_dayflower",
+      "commonPreference": 0,
+      "exceptionLovedUniqueIndices": [],
+      "exceptionFavoriteUniqueIndices": [],
+      "exceptionNormalUniqueIndices": []
+    },
+    {
+      "rewardId": 305001003,
+      "key": "i_affection_milk",
+      "commonPreference": 0,
+      "exceptionLovedUniqueIndices": [],
+      "exceptionFavoriteUniqueIndices": [],
+      "exceptionNormalUniqueIndices": []
+    },
+    {
+      "rewardId": 305001004,
+      "key": "i_affection_honey",
+      "commonPreference": 0,
+      "exceptionLovedUniqueIndices": [],
+      "exceptionFavoriteUniqueIndices": [],
+      "exceptionNormalUniqueIndices": []
+    },
+    {
+      "rewardId": 305001005,
+      "key": "i_affection_ocarina",
+      "commonPreference": 0,
+      "exceptionLovedUniqueIndices": [],
+      "exceptionFavoriteUniqueIndices": [],
+      "exceptionNormalUniqueIndices": []
+    },
+    {
+      "rewardId": 305001006,
+      "key": "i_affection_silk",
+      "commonPreference": 0,
+      "exceptionLovedUniqueIndices": [],
+      "exceptionFavoriteUniqueIndices": [],
+      "exceptionNormalUniqueIndices": []
+    },
+    {
+      "rewardId": 305001007,
+      "key": "i_affection_snowdrop",
+      "commonPreference": 0,
+      "exceptionLovedUniqueIndices": [],
+      "exceptionFavoriteUniqueIndices": [],
+      "exceptionNormalUniqueIndices": []
+    },
+    {
+      "rewardId": 305001008,
+      "key": "i_affection_chessboard",
+      "commonPreference": 0,
+      "exceptionLovedUniqueIndices": [],
+      "exceptionFavoriteUniqueIndices": [],
+      "exceptionNormalUniqueIndices": []
+    },
+    {
+      "rewardId": 305001009,
+      "key": "i_affection_liquor_bottle",
+      "commonPreference": 0,
+      "exceptionLovedUniqueIndices": [],
+      "exceptionFavoriteUniqueIndices": [],
+      "exceptionNormalUniqueIndices": []
+    },
+    {
+      "rewardId": 305001010,
+      "key": "i_affection_driftwood",
+      "commonPreference": 0,
+      "exceptionLovedUniqueIndices": [],
+      "exceptionFavoriteUniqueIndices": [],
+      "exceptionNormalUniqueIndices": []
+    },
+    {
+      "rewardId": 305001011,
+      "key": "i_affection_obsidian",
+      "commonPreference": 0,
+      "exceptionLovedUniqueIndices": [],
+      "exceptionFavoriteUniqueIndices": [],
+      "exceptionNormalUniqueIndices": []
+    },
+    {
+      "rewardId": 305001012,
+      "key": "i_affection_perfume",
+      "commonPreference": 0,
+      "exceptionLovedUniqueIndices": [],
+      "exceptionFavoriteUniqueIndices": [],
+      "exceptionNormalUniqueIndices": []
+    },
+    {
+      "rewardId": 305001013,
+      "key": "i_affection_fountain_pen",
+      "commonPreference": 0,
+      "exceptionLovedUniqueIndices": [],
+      "exceptionFavoriteUniqueIndices": [],
+      "exceptionNormalUniqueIndices": []
+    },
+    {
+      "rewardId": 305001014,
+      "key": "i_affection_music_box",
+      "commonPreference": 0,
+      "exceptionLovedUniqueIndices": [],
+      "exceptionFavoriteUniqueIndices": [],
+      "exceptionNormalUniqueIndices": []
+    },
+    {
+      "rewardId": 305001015,
+      "key": "i_affection_celestial_globe",
+      "commonPreference": 0,
+      "exceptionLovedUniqueIndices": [],
+      "exceptionFavoriteUniqueIndices": [],
+      "exceptionNormalUniqueIndices": []
+    },
+    {
+      "rewardId": 305001016,
+      "key": "i_affection_phantom_flower",
+      "commonPreference": 0,
+      "exceptionLovedUniqueIndices": [],
+      "exceptionFavoriteUniqueIndices": [],
+      "exceptionNormalUniqueIndices": []
+    },
+    {
+      "rewardId": 305001017,
+      "key": "i_affection_parchment",
+      "commonPreference": 0,
+      "exceptionLovedUniqueIndices": [],
+      "exceptionFavoriteUniqueIndices": [],
+      "exceptionNormalUniqueIndices": []
+    },
+    {
+      "rewardId": 305001018,
+      "key": "i_affection_diary",
+      "commonPreference": 0,
+      "exceptionLovedUniqueIndices": [],
+      "exceptionFavoriteUniqueIndices": [],
+      "exceptionNormalUniqueIndices": []
+    },
+    {
+      "rewardId": 305001019,
+      "key": "i_affection_love_letter",
+      "commonPreference": 0,
+      "exceptionLovedUniqueIndices": [],
+      "exceptionFavoriteUniqueIndices": [],
+      "exceptionNormalUniqueIndices": []
+    },
+    {
+      "rewardId": 305001020,
+      "key": "i_affection_unknown_key",
+      "commonPreference": 0,
+      "exceptionLovedUniqueIndices": [],
+      "exceptionFavoriteUniqueIndices": [],
+      "exceptionNormalUniqueIndices": []
+    },
+    {
+      "rewardId": 305001021,
+      "key": "i_affection_medicine_bottle",
+      "commonPreference": 0,
+      "exceptionLovedUniqueIndices": [],
+      "exceptionFavoriteUniqueIndices": [],
+      "exceptionNormalUniqueIndices": []
+    },
+    {
+      "rewardId": 305001022,
+      "key": "i_affection_wine",
+      "commonPreference": 0,
+      "exceptionLovedUniqueIndices": [],
+      "exceptionFavoriteUniqueIndices": [],
+      "exceptionNormalUniqueIndices": []
+    },
+    {
+      "rewardId": 305001023,
+      "key": "i_affection_dried_meat",
+      "commonPreference": 0,
+      "exceptionLovedUniqueIndices": [],
+      "exceptionFavoriteUniqueIndices": [],
+      "exceptionNormalUniqueIndices": []
+    },
+    {
+      "rewardId": 305001024,
+      "key": "i_affection_ancient_book",
+      "commonPreference": 0,
+      "exceptionLovedUniqueIndices": [],
+      "exceptionFavoriteUniqueIndices": [],
+      "exceptionNormalUniqueIndices": []
+    },
+    {
+      "rewardId": 305001025,
+      "key": "i_affection_magic_stone_fragment",
+      "commonPreference": 0,
+      "exceptionLovedUniqueIndices": [],
+      "exceptionFavoriteUniqueIndices": [],
+      "exceptionNormalUniqueIndices": []
+    },
+    {
+      "rewardId": 305001026,
+      "key": "i_affection_pipe_leaf",
+      "commonPreference": 0,
+      "exceptionLovedUniqueIndices": [],
+      "exceptionFavoriteUniqueIndices": [],
+      "exceptionNormalUniqueIndices": []
+    },
+    {
+      "rewardId": 305001027,
+      "key": "i_affection_corpse_flower_pepper",
+      "commonPreference": 0,
+      "exceptionLovedUniqueIndices": [],
+      "exceptionFavoriteUniqueIndices": [],
+      "exceptionNormalUniqueIndices": []
+    }
+  ],
+  "evidence": {
+    "tablePathId": 76187,
+    "tableSha256": "467a936502c6ee9dbcb8d840aa18989d49800e26aaa91ecf30832e30b3d96773",
+    "tableRows": 64,
+    "metadataSha256": "93f3432a65cce1a4e4027f0a0a8f348f60a4d3992b84222e5ad160522306c2e9",
+    "rarityValue": 5,
+    "commonPreferenceMethod": "0x2e7dccc",
+    "assignmentMethod": "0x2d3e894",
+    "getPreferenceMethod": "0x2dcf66c",
+    "sixStarRandomFill": false
+  }
+}
