@@ -47,7 +47,7 @@
   function renderHero() {
     const pool = ui.bondPool.value;
     const previous = ui.bondHero.value;
-    ui.bondHero.replaceChildren(new Option("自行輸入／未指定", ""));
+    ui.bondHero.replaceChildren(new Option("3～5 星英靈名稱待補（可直接試抽）", ""));
     const matching = Object.entries(heroes).filter(([, value]) => (value.pools || []).some((p) => p.key === pool));
     matching.sort((a,b) => Number(a[0])-Number(b[0]));
     for (const [id, details] of matching) {
@@ -208,7 +208,8 @@
   });
   const embedded = window.DFCHBond30Data;
   if (embedded && embedded.optional && embedded.all) {
-    setHeroData(embedded.acquisition || {});
+    // 現有 hero-acquisition.json 僅是六星角色對照，不可當成 3～5 星角色名錄。
+    setHeroData({heroes: embedded.heroes?.eligibleHeroes || {}});
     fixedByHero = embedded.heroes?.fixedByHero || {};
     names = embedded.heroes?.abilityNames || {};
     acceptPoolData(embedded.optional, "網頁內建資料，無需匯入");
