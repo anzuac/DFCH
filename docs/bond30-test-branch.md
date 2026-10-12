@@ -6,12 +6,12 @@
 1. 進入 GitHub 測試分支，下載該分支 ZIP。
 2. 解壓後以靜態伺服器執行，例如 `python -m http.server 8000`。
 3. 開啟 `http://localhost:8000/`，頂部左右滑到「⑦ 羈絆30等抽選 BETA」。
-4. 選擇招募池，系統會自動載入 `data/bond30-pools-3.16.1.json` 的 540 筆 Optional 候選。也支援匯入相同格式 JSON。
+4. 選擇招募池，系統會自動載入 `data/bond30-pools-3.16.1.json` 的 540 筆 Optional 候選，並讀取 `data/bond30-all-pools-3.16.1.json` 所收錄的完整三種類型共 762 筆。也支援匯入相同格式 JSON。
 5. 選擇英靈（目前只按來源池對照 ID，完整名稱與固定技能仍待補），勾選現有技能；有需要可手動輸入固定技能 ID。查看機率後試抽。
 
 ## 來源與限制
 - APK 版本為 3.16.1，對應 `UniqueSoldierGachaTable` 與 `UniqueAffectionRandomRewardLogic`。
-- 候選取 chooseGroupType=1 (Optional)，使用原始候選 weight 加權。
+- 羈絆新能力候選取 chooseGroupType=1 (Optional)，使用原始候選 weight 加權。原始招募池另含 chooseGroupType 2 攻擊增益與 3 HP 增益，僅供記錄既有能力與資料核對，絕不併入 30 等 NewAbility 的抽選池。
 - 現有技能採 ID 排除；排他群組排除為實驗模式，預設關閉。
 - 權重百分比為該技能權重除以所有有效候選權重總和。
 - JSON 從二進位模式比對獲得，尚須完整序列化層級確認；不是保證百分之百一致的官方模擬。
@@ -26,8 +26,27 @@
 
 ## 變更檔案
 - 新增 `bond30-engine.js`、`bond30-view.js`、`bond30.css`。
-- 新增 `data/bond30-pools-3.16.1.json`、`data/bond30-heroes.json`、`tests/bond30.test.cjs`。
+- 新增 `data/bond30-pools-3.16.1.json`（540）、`data/bond30-all-pools-3.16.1.json`（762）、`data/bond30-heroes.json`、`tests/bond30.test.cjs`、`tests/bond30-pools.test.cjs`。
 - 僅在本分支修改 `index.html` 新增「⑦」分頁，原有五頁內容不變；第六項未在目前主導覽列實作。
 - `node tests/bond30.test.cjs` 可測基本抽選權重與排除。
 
 公開 GitHub 分支的程式碼仍可被他人查看，但不代表已部署給正式網站玩家。待使用者明確確認之後才考慮合併到正式分支。
+
+## 九池原始候選統計
+
+| 招募池 | 自由 Optional | 攻擊增益 | HP 增益 | 合計 |
+|---|---:|---:|---:|---:|
+| default_gacha | 54 | 12 | 12 | 78 |
+| multi_strike_pickup | 60 | 13 | 13 | 86 |
+| sea_pickup | 57 | 12 | 12 | 81 |
+| snow_solider_pickup | 59 | 13 | 13 | 85 |
+| wizard_pickup | 59 | 13 | 13 | 85 |
+| caravan_pickup | 61 | 12 | 12 | 85 |
+| xmas_pickup | 71 | 12 | 12 | 95 |
+| 2026_sea_pickup | 57 | 12 | 12 | 81 |
+| 2026_aniv_pickup | 62 | 12 | 12 | 86 |
+| **合計** | **540** | **111** | **111** | **762** |
+
+注意：目前能力主要以內部 ID 顯示；尚未補完繁中名稱、圖示和 3/4/5 星固定技能對照。以上數字為目前抽出的候選記錄數，非實際抽到機率、非特定英靈的有效候選數。
+
+驗證指令：`node tests/bond30.test.cjs && node tests/bond30-pools.test.cjs`。
