@@ -25,12 +25,38 @@
   const t=(i,vars={})=>Object.entries(vars).reduce((v,[k,x])=>v.replaceAll('{'+k+'}',x),ui[lang][i]);
   const normalize=value=>value.normalize('NFKC').trim().toLocaleLowerCase();
   function node(tag,text,cls){const e=document.createElement(tag);if(text)e.textContent=text;if(cls)e.className=cls;return e;}
-  function chips(ids){const list=node('ul',null,'gift-list');for(const id of ids){const entry=node('li'),icon=node('img',null,'gift-icon');icon.src=`./assets/gifts/${id}.webp`;icon.alt='';icon.width=36;icon.height=36;icon.loading='lazy';icon.addEventListener('error',()=>icon.remove(),{once:true});entry.append(icon,node('span',names.get(id)));if(!source.items.find(i=>i.id===id).translations[lang])entry.title=t(15);list.append(entry);}return list;}
+  const bondUI={
+    zh_tw:{heading:'送禮加成',owns:'擁有',note:'以下為贈送 1 個道具的羈絆提升量；僅計入喜好與此神器，小數無條件捨去。',gain:'羈絆',base:'基礎',artifact:'神器',favorite:'喜愛',loved:'最愛'},
+    ja:{heading:'贈り物ボーナス',owns:'所持',note:'贈り物1個あたりの絆上昇量。好みとこのアーティファクトのみを計算し、小数点以下は切り捨てます。',gain:'絆',base:'基礎',artifact:'アーティファクト',favorite:'好き',loved:'大好き'},
+    en:{heading:'Gift bonus',owns:'Own',note:'Bond gained per gift, including preference and this artifact only. Fractions are rounded down.',gain:'Bond',base:'Base',artifact:'Artifact',favorite:'Liked',loved:'Loved'},
+    ko:{heading:'선물 보너스',owns:'보유',note:'선물 1개당 인연 상승량입니다. 선호도와 이 아티팩트만 적용하며 소수점 이하는 버립니다.',gain:'인연',base:'기본',artifact:'아티팩트',favorite:'좋아함',loved:'매우 좋아함'}
+  };
+  let ownsBondStatue=false;
+  try{ownsBondStatue=localStorage.getItem('dfch-hero-bond-statue')==='true';}catch{}
+  function chips(ids,preference='favorite'){
+    const list=node('ul',null,'gift-list'),text=bondUI[lang],rules=source.bondGains;
+    for(const id of ids){
+      const entry=node('li'),icon=node('img',null,'gift-icon'),detail=node('span',null,'gift-detail');
+      icon.src=`./assets/gifts/${id}.webp`;icon.alt='';icon.width=36;icon.height=36;icon.loading='lazy';icon.addEventListener('error',()=>icon.remove(),{once:true});
+      const base=rules.baseValues[id],multiplier=rules.preferenceMultipliers[preference],artifact=ownsBondStatue?rules.artifact.multiplier:1;
+      const gain=Math.floor(base*multiplier*artifact);
+      entry.dataset.gift=id;entry.dataset.bondGain=gain;
+      detail.append(node('span',names.get(id),'gift-name'),node('strong',`${text.gain} +${gain}`,'gift-bond-gain'),node('small',`${text.base} ${base} × ${text[preference]} ${multiplier}`+(ownsBondStatue?` × ${text.artifact} ${artifact}`:''),'gift-bond-formula'));
+      entry.append(icon,detail);if(!source.items.find(i=>i.id===id).translations[lang])entry.title=t(15);list.append(entry);
+    }
+    return list;
+  }
+
   const panel=$('heroPreferenceTitle').closest('.hero-preferences-panel'),languageLabel=node('label',null,'field hero-language'),language=node('select');language.id='heroLanguage';languageLabel.append(node('span','Language / 語言'),language);panel.querySelector('.panel-head').after(languageLabel);
+  const bondPanel=node('section',null,'hero-bond-settings'),bondHeading=node('h3'),bondLabel=node('label',null,'hero-bond-toggle'),bondCheckbox=node('input'),bondLabelText=node('span'),bondNote=node('p',null,'unit-note');
+  bondCheckbox.type='checkbox';bondCheckbox.id='heroBondStatue';bondCheckbox.checked=ownsBondStatue;
+  bondLabel.append(bondCheckbox,bondLabelText);bondPanel.append(bondHeading,bondLabel,bondNote);languageLabel.after(bondPanel);
+  bondCheckbox.addEventListener('change',()=>{ownsBondStatue=bondCheckbox.checked;try{localStorage.setItem('dfch-hero-bond-statue',String(ownsBondStatue));}catch{}$('heroCommonGifts').replaceChildren(chips(data.commonFavorite));render();});
   for(const [key,name] of visibleLanguages.map(key=>[key,source.languages[key]])){const o=node('option',name);o.value=key;language.append(o);}language.value=lang;
   function options(id,items,empty){const e=$(id),value=e.value;e.replaceChildren();const first=node('option',empty);first.value='';e.append(first);for(const [key,label] of items){const o=node('option',label);o.value=key;e.append(o);}e.value=value;}
   function applyLanguage(){
     data={...source,heroes:source.heroes.map(h=>{const tr=h.translations[lang],ja=h.translations.ja;return {...h,name:tr.name||ja.name,title:tr.title||ja.title,fallback:!tr.name||!tr.title};}),items:source.items.map(i=>({...i,name:i.translations[lang]||i.translations.ja}))};names=new Map(data.items.map(i=>[i.id,i.name]));
+    bondHeading.textContent=bondUI[lang].heading;bondLabelText.textContent=`${bondUI[lang].owns} ${source.bondGains.artifact.translations[lang]}（×${source.bondGains.artifact.multiplier}）`;bondNote.textContent=bondUI[lang].note;
     panel.lang=lang.replace('_','-');$('heroPreferenceTitle').textContent=t(0);
     for(const [id,i] of [['heroSearch',1],['heroSelect',2],['heroItemFilter',4],['heroPreferenceFilter',6]])$(id).previousElementSibling.textContent=t(i);
     $('heroSearch').placeholder=t(1);$('heroClearFilters').textContent=t(10);panel.querySelector('.hero-common-gifts h3').textContent=t(11);
@@ -57,7 +83,7 @@
       portrait.addEventListener('error',()=>{const fallback=node('span','圖片暫時無法載入','hero-portrait-fallback');portrait.replaceWith(fallback);},{once:true});
       identity.append(node('p',h.title,'hero-title'),node('h3',h.name),node('span','★★★★★★','hero-stars'));header.append(portrait,identity);const acquisition=acquisitionInfo(h);if(acquisition)header.append(acquisition);card.append(header);
       if(h.fallback)card.append(node('p',t(15),'unit-note'));
-      const loved=node('section',null,'gift-group loved');loved.append(node('h4',t(12)),h.loved.length?chips(h.loved):node('p',t(19)));card.append(loved);
+      const loved=node('section',null,'gift-group loved');loved.append(node('h4',t(12)),h.loved.length?chips(h.loved,'loved'):node('p',t(19)));card.append(loved);
       const favorite=node('section',null,'gift-group favorite'),specific=h.favorite.filter(id=>!common.has(id));
       favorite.append(node('h4',t(13)),specific.length?chips(specific):node('p',t(18)),node('p',t(16,{n:common.size}),'unit-note'));card.append(favorite);root.append(card);
     }

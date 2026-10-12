@@ -1183,3 +1183,12 @@ input,select{border-color:#9fbccc35!important;border-radius:9px!important;backgr
 .hero-acquisition dt{font-size:11px;color:var(--muted);margin-bottom:3px}
 .hero-acquisition dd{margin:0;font-size:13px;line-height:1.5}
 @container(max-width:450px){.hero-acquisition{flex:1 1 100%;margin:0;display:flex;gap:16px}.hero-acquisition>div{min-width:0}.hero-acquisition>div+div{margin-top:0}}
+
+.hero-bond-settings{padding:16px;border:1px solid var(--line);border-radius:12px;background:var(--panel-2);margin:0 0 20px}
+.hero-bond-settings h3{margin:0 0 10px;font-size:16px}
+.hero-bond-toggle{display:flex;align-items:center;gap:10px;cursor:pointer;line-height:1.5}
+.hero-bond-toggle input{width:20px;height:20px;flex:0 0 20px;accent-color:var(--teal)}
+.hero-bond-settings .unit-note{margin:10px 0 0}
+.gift-detail{display:flex;flex-direction:column;gap:3px;min-width:0}
+.gift-bond-gain{color:var(--teal-2);font-size:13px}
+.gift-bond-formula{color:var(--muted);font-size:11px;line-height:1.5}
