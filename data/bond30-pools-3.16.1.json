@@ -1,0 +1,3822 @@
+{
+  "game": "Rogue with the Dead",
+  "package": "net.room6.horizon",
+  "version": "3.16.1",
+  "source": "assets.zip/assets/bin/Data/datapack.unity3d -> sharedassets1.assets -> UniqueSoldierGachaTable",
+  "codeEvidence": {
+    "meta": "global-metadata.dat",
+    "binary": "config.arm64_v8a.apk/lib/arm64-v8a/libil2cpp.so",
+    "methods": {
+      "ResolveGachaMaster": "0x02D4663C",
+      "BuildNewAbilityCandidatePool": "0x02D46924",
+      "BuildChoosableNewAbilityCandidates": "0x02D46AB0",
+      "ChooseNewAbility": "0x02D46C68",
+      "CanChooseGachaContent": "0x02D3FFEC",
+      "AssignNewAbilitySlots": "0x02D46498"
+    },
+    "eligibility": "ChooseGroupType Optional (enum value 1) is required by BuildNewAbilityCandidatePool",
+    "weight": "Original UniqueSoldierGachaContent.weight is copied to eligible weighted candidate list in BuildChoosableNewAbilityCandidates",
+    "exclusions": "Existing skills, excluded IDs, and exclusiveGroupId can affect eligibility via CanChooseGachaContent"
+  },
+  "warning": "Candidate rows were extracted by binary pattern matching and need full serialisation-level auditing for completeness. Player-specific filters are not applied. Weights are raw weights, not final probabilities.",
+  "pools": {
+    "default_gacha": [
+      {
+        "abilityId": 303000001,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000002,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000003,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000004,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000005,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000200,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000201,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000202,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000300,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000310,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000311,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000312,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000313,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000314,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000315,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000316,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000400,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000401,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000402,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000403,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000404,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000405,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000406,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000407,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000408,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000409,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000500,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000501,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000502,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000503,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000504,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000505,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000506,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000602,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000603,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000700,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000701,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000702,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000703,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000704,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000705,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000706,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000707,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000708,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000709,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000710,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000800,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000801,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000802,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000803,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000804,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000805,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000900,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000902,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      }
+    ],
+    "multi_strike_pickup": [
+      {
+        "abilityId": 303000001,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000002,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000003,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000005,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000200,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000201,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000202,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000203,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000204,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000300,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000310,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000311,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000312,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000313,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000314,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000315,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000316,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000400,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000401,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000402,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000403,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000404,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000405,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000406,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000407,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000408,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000409,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000410,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000411,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 1
+      },
+      {
+        "abilityId": 303000412,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000413,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000414,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000415,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 1
+      },
+      {
+        "abilityId": 303000416,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 1
+      },
+      {
+        "abilityId": 303000500,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000501,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000502,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000503,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000504,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000505,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000506,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000602,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000603,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000700,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000701,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000702,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000703,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000704,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000705,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000706,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000707,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000708,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000709,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000710,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000711,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 1
+      },
+      {
+        "abilityId": 303000712,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 1
+      },
+      {
+        "abilityId": 303000900,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000901,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000902,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000915,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 1
+      }
+    ],
+    "sea_pickup": [
+      {
+        "abilityId": 303000001,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000002,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000003,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000004,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000005,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000200,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000201,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000202,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000300,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000310,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000311,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000312,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000313,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000314,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000315,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000316,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000400,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000401,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000402,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000403,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000404,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000405,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000406,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000407,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000408,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000409,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000500,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000501,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000502,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000503,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000504,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000505,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000506,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000602,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000603,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000700,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000701,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000702,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000703,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000704,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000705,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000706,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000707,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000708,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000709,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000710,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000713,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 66,
+        "isNewRaw": 1
+      },
+      {
+        "abilityId": 303000800,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000801,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000802,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000803,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000804,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000805,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000900,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000913,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000915,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000917,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      }
+    ],
+    "snow_solider_pickup": [
+      {
+        "abilityId": 303000001,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000002,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000003,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000004,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000005,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000200,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000201,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000202,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000205,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 1
+      },
+      {
+        "abilityId": 303000206,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 1
+      },
+      {
+        "abilityId": 303000209,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 1
+      },
+      {
+        "abilityId": 303000210,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 1
+      },
+      {
+        "abilityId": 303000251,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 1
+      },
+      {
+        "abilityId": 303000300,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000310,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000311,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000312,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000313,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000314,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 200,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000315,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 200,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000316,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 200,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000319,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 1
+      },
+      {
+        "abilityId": 303000321,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 33,
+        "isNewRaw": 1
+      },
+      {
+        "abilityId": 303000400,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000401,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000402,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000403,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000404,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000405,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000406,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000407,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000408,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000409,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000500,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000501,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000502,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000503,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000504,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000505,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000506,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000602,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000603,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000604,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 1
+      },
+      {
+        "abilityId": 303000702,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000703,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000709,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 25,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000715,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 66,
+        "isNewRaw": 1
+      },
+      {
+        "abilityId": 303000716,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 33,
+        "isNewRaw": 1
+      },
+      {
+        "abilityId": 303000800,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000801,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000802,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000803,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000804,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000805,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000900,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 25,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000901,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000902,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000913,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000914,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      }
+    ],
+    "wizard_pickup": [
+      {
+        "abilityId": 303000001,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000002,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000003,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000004,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000005,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000200,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000201,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000202,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000300,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000310,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000311,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000312,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000313,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000314,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000315,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000316,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000400,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000401,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000402,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000403,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000404,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000405,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000406,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000407,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000408,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000409,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000500,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000501,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000502,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000503,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 150,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000504,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000505,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000506,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000507,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 50,
+        "isNewRaw": 1
+      },
+      {
+        "abilityId": 303000509,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 33,
+        "isNewRaw": 1
+      },
+      {
+        "abilityId": 303000510,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 25,
+        "isNewRaw": 1
+      },
+      {
+        "abilityId": 303000511,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 50,
+        "isNewRaw": 1
+      },
+      {
+        "abilityId": 303000600,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 50,
+        "isNewRaw": 1
+      },
+      {
+        "abilityId": 303000601,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 10,
+        "isNewRaw": 1
+      },
+      {
+        "abilityId": 303000602,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000603,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000607,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 33,
+        "isNewRaw": 1
+      },
+      {
+        "abilityId": 303000708,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000709,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 33,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000710,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000718,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 1
+      },
+      {
+        "abilityId": 303000719,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 1
+      },
+      {
+        "abilityId": 303000720,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 1
+      },
+      {
+        "abilityId": 303000721,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 1
+      },
+      {
+        "abilityId": 303000800,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000801,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000802,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 150,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000804,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 50,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000805,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 50,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000900,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 150,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000901,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000902,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000903,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 25,
+        "isNewRaw": 1
+      },
+      {
+        "abilityId": 303000917,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 1
+      }
+    ],
+    "caravan_pickup": [
+      {
+        "abilityId": 303000001,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 150,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000003,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 150,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000004,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000005,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 150,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000007,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 200,
+        "isNewRaw": 1
+      },
+      {
+        "abilityId": 303000200,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000201,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000202,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000300,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000310,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000311,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000312,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000313,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000314,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000315,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000316,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000400,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000401,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000402,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000403,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000404,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000405,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000406,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000407,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000408,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000409,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000500,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000501,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000502,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000503,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000504,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000505,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000506,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000602,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000603,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000604,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 50,
+        "isNewRaw": 1
+      },
+      {
+        "abilityId": 303000700,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000701,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000702,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000703,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000704,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 125,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000705,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 125,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000706,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000707,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000708,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000710,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000713,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 50,
+        "isNewRaw": 1
+      },
+      {
+        "abilityId": 303000714,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 25,
+        "isNewRaw": 1
+      },
+      {
+        "abilityId": 303000722,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 75,
+        "isNewRaw": 1
+      },
+      {
+        "abilityId": 303000723,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 33,
+        "isNewRaw": 1
+      },
+      {
+        "abilityId": 303000724,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 33,
+        "isNewRaw": 1
+      },
+      {
+        "abilityId": 303000800,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000801,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000802,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000803,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000804,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 125,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000805,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 125,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000900,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000913,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000915,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000917,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      }
+    ],
+    "xmas_pickup": [
+      {
+        "abilityId": 303000001,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000002,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000003,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000004,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000005,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000200,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000201,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000202,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000205,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000206,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000209,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000210,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000300,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000310,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000311,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000312,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000313,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000314,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000315,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000316,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000400,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000401,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000402,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000403,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000404,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000405,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000406,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000407,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000408,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000409,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000500,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000501,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000502,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000503,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000504,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000505,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000506,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000600,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 50,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000601,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 25,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000602,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000603,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000604,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000700,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000701,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000702,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000703,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000704,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000705,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000706,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000707,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000708,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000709,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 125,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000710,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000718,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 1
+      },
+      {
+        "abilityId": 303000719,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 1
+      },
+      {
+        "abilityId": 303000725,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 1
+      },
+      {
+        "abilityId": 303000726,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 25,
+        "isNewRaw": 1
+      },
+      {
+        "abilityId": 303000728,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 1
+      },
+      {
+        "abilityId": 303000729,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 50,
+        "isNewRaw": 1
+      },
+      {
+        "abilityId": 303000800,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000801,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000802,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000803,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 50,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000804,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 50,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000805,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 50,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000900,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 125,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000902,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000913,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000915,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000917,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000919,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 25,
+        "isNewRaw": 1
+      }
+    ],
+    "2026_sea_pickup": [
+      {
+        "abilityId": 303000001,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000003,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000004,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000005,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000007,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 1
+      },
+      {
+        "abilityId": 303000200,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000201,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000202,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000300,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000310,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000311,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000312,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000313,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000400,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000401,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000402,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000403,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000404,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000405,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000406,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000407,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000408,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000409,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000500,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000501,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000502,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000503,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000504,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000505,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000506,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000602,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000603,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000700,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000701,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000702,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000703,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000704,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000705,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000706,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000707,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000708,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000709,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 1,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000710,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000711,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 1
+      },
+      {
+        "abilityId": 303000712,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 1
+      },
+      {
+        "abilityId": 303000715,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000716,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 1
+      },
+      {
+        "abilityId": 303000722,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 1,
+        "weight": 25,
+        "isNewRaw": 1
+      },
+      {
+        "abilityId": 303000728,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 1
+      },
+      {
+        "abilityId": 303000800,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000801,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000802,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000803,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 50,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000804,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000805,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000900,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 125,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000902,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      }
+    ],
+    "2026_aniv_pickup": [
+      {
+        "abilityId": 303000001,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000003,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000005,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 150,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000200,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000201,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000202,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000300,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000310,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000311,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000312,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000313,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000314,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000315,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000316,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000400,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000401,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000402,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000403,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000404,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000405,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000406,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000407,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000408,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000409,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000500,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000501,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000502,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000503,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000504,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000505,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000506,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000600,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000601,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 33,
+        "isNewRaw": 1
+      },
+      {
+        "abilityId": 303000602,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000603,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000700,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000701,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000702,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000703,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000704,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000705,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000706,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000707,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000708,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000710,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000722,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 75,
+        "isNewRaw": 1
+      },
+      {
+        "abilityId": 303000723,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 25,
+        "isNewRaw": 1
+      },
+      {
+        "abilityId": 303000724,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 25,
+        "isNewRaw": 1
+      },
+      {
+        "abilityId": 303000800,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000801,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000802,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000803,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000804,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000805,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000900,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 125,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000903,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 25,
+        "isNewRaw": 1
+      },
+      {
+        "abilityId": 303000906,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 33,
+        "isNewRaw": 1
+      },
+      {
+        "abilityId": 303000913,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000914,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 100,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000915,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 50,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000917,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 50,
+        "isNewRaw": 0
+      },
+      {
+        "abilityId": 303000919,
+        "chooseGroupType": 1,
+        "exclusiveGroupIdRaw": 0,
+        "weight": 50,
+        "isNewRaw": 1
+      }
+    ]
+  }
+}
