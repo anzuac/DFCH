@@ -82,6 +82,11 @@ for supplement in json.loads((root/'data/hero-gift-supplements.json').read_text(
   if item['id'] not in hero['favorite']:hero['favorite'].append(item['id'])
  if item['id'] not in {i['rewardId'] for i in source['items']}:source['items'].append(raw_item)
  data['giftSupplementVersion']=supplement['gameVersion']
+# Card source metadata is independent of gift preferences.
+acquisition=json.loads((root/'data/hero-acquisition.json').read_text())
+for hero in data['heroes']:
+ hero['acquisition']=acquisition['heroes'].get(str(hero['index']),{})
+data['acquisitionVersion']=acquisition['gameVersion']
 (root/'data/hero-preferences.json').write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n')
 (root/'hero-preferences-data.js').write_text('window.DFCHHeroPreferences = '+json.dumps(data,ensure_ascii=False,separators=(',',':'))+';\n')
 source['evidence']={'tablePathId':76187,'tableSha256':hashlib.sha256(raw).hexdigest(),'tableRows':count,'metadataSha256':hashlib.sha256(metadata).hexdigest(),'rarityValue':5,'commonPreferenceMethod':'0x2e7dccc','assignmentMethod':'0x2d3e894','getPreferenceMethod':'0x2dcf66c','sixStarRandomFill':False}

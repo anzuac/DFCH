@@ -1173,3 +1173,13 @@ input,select{border-color:#9fbccc35!important;border-radius:9px!important;backgr
 .gift-list li span{overflow-wrap:anywhere;min-width:0}
 
 .hero-language{max-width:260px;margin:0 0 18px}.hero-language select{width:100%}
+
+/* Source details stay beside the identity when the card has room. */
+.hero-preference-card{container-type:inline-size}
+.hero-card-header{flex-wrap:wrap}
+.hero-identity{flex:1 1 110px}
+.hero-acquisition{flex:0 1 145px;margin:0 0 0 auto;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:#0d1b2780;min-width:0;overflow-wrap:anywhere}
+.hero-acquisition>div+div{margin-top:9px}
+.hero-acquisition dt{font-size:11px;color:var(--muted);margin-bottom:3px}
+.hero-acquisition dd{margin:0;font-size:13px;line-height:1.5}
+@container(max-width:450px){.hero-acquisition{flex:1 1 100%;margin:0;display:flex;gap:16px}.hero-acquisition>div{min-width:0}.hero-acquisition>div+div{margin-top:0}}

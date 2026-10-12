@@ -1,0 +1,263 @@
+{
+  "gameVersion": "3.16.1",
+  "heroes": {
+    "13": {
+      "version": "original",
+      "paidPack": false,
+      "pools": [
+        {
+          "id": 0,
+          "key": "default_gacha",
+          "translations": {
+            "zh_tw": "通常召喚",
+            "ja": "通常選定",
+            "en": "Normal summoning",
+            "ko": "통상 선정"
+          }
+        }
+      ]
+    },
+    "16": {
+      "version": "original",
+      "paidPack": false,
+      "pools": []
+    },
+    "19": {
+      "version": "original",
+      "paidPack": false,
+      "pools": [
+        {
+          "id": 1,
+          "key": "multi_strike_pickup",
+          "translations": {
+            "zh_tw": "魔嵐的弓術士們",
+            "ja": "魔嵐の弓術士たち",
+            "en": "Gale Archers",
+            "ko": "마폭의 궁술사들"
+          }
+        }
+      ]
+    },
+    "21": {
+      "version": null,
+      "paidPack": false,
+      "pools": []
+    },
+    "22": {
+      "version": "swimsuit",
+      "paidPack": false,
+      "pools": [
+        {
+          "id": 2,
+          "key": "sea_pickup",
+          "translations": {
+            "zh_tw": "海裝的英傑們",
+            "ja": "海装の英傑たち",
+            "en": "Ocean heroes",
+            "ko": "대해의 영웅들"
+          }
+        }
+      ]
+    },
+    "23": {
+      "version": "swimsuit",
+      "paidPack": false,
+      "pools": [
+        {
+          "id": 2,
+          "key": "sea_pickup",
+          "translations": {
+            "zh_tw": "海裝的英傑們",
+            "ja": "海装の英傑たち",
+            "en": "Ocean heroes",
+            "ko": "대해의 영웅들"
+          }
+        }
+      ]
+    },
+    "27": {
+      "version": null,
+      "paidPack": false,
+      "pools": [
+        {
+          "id": 3,
+          "key": "snow_solider_pickup",
+          "translations": {
+            "zh_tw": "雪嶺的守護者們",
+            "ja": "雪嶺の守護者たち",
+            "en": "White Peak Defenders",
+            "ko": "설산의 수호자들"
+          }
+        }
+      ]
+    },
+    "32": {
+      "version": "original",
+      "paidPack": true,
+      "pools": []
+    },
+    "33": {
+      "version": null,
+      "paidPack": true,
+      "pools": []
+    },
+    "34": {
+      "version": "original",
+      "paidPack": false,
+      "pools": [
+        {
+          "id": 4,
+          "key": "wizard_pickup",
+          "translations": {
+            "zh_tw": "齊聚天之書架的魔導士們",
+            "ja": "天の書架に集いし魔導士たち",
+            "en": "Wizards of the Heavenly Bibliotheca",
+            "ko": "하늘의 서가에 모인 마도사들"
+          }
+        }
+      ]
+    },
+    "39": {
+      "version": null,
+      "paidPack": true,
+      "pools": []
+    },
+    "43": {
+      "version": "journey",
+      "paidPack": false,
+      "pools": [
+        {
+          "id": 5,
+          "key": "caravan_pickup",
+          "translations": {
+            "zh_tw": "異鄉巡遊的明星們",
+            "ja": "異郷を巡る明星たち",
+            "en": "Journeying Otherworldly Stars",
+            "ko": "허공을 떠도는 별들"
+          }
+        }
+      ]
+    },
+    "44": {
+      "version": null,
+      "paidPack": false,
+      "pools": [
+        {
+          "id": 5,
+          "key": "caravan_pickup",
+          "translations": {
+            "zh_tw": "異鄉巡遊的明星們",
+            "ja": "異郷を巡る明星たち",
+            "en": "Journeying Otherworldly Stars",
+            "ko": "허공을 떠도는 별들"
+          }
+        }
+      ]
+    },
+    "45": {
+      "version": null,
+      "paidPack": false,
+      "pools": []
+    },
+    "46": {
+      "version": null,
+      "paidPack": true,
+      "pools": []
+    },
+    "47": {
+      "version": "christmas",
+      "paidPack": false,
+      "pools": [
+        {
+          "id": 6,
+          "key": "xmas_pickup",
+          "translations": {
+            "zh_tw": "閃耀聖夜的星英們",
+            "ja": "聖夜に輝く星英たち",
+            "en": "Holy Night Star Heroes",
+            "ko": "성야에 빛나는 영웅들"
+          }
+        }
+      ]
+    },
+    "51": {
+      "version": null,
+      "paidPack": true,
+      "pools": []
+    },
+    "52": {
+      "version": null,
+      "paidPack": true,
+      "pools": []
+    },
+    "53": {
+      "version": "swimsuit",
+      "paidPack": false,
+      "pools": [
+        {
+          "id": 7,
+          "key": "2026_sea_pickup",
+          "translations": {
+            "zh_tw": "夏日憩息的海裝英傑們",
+            "ja": "夏に憩う海装の英傑たち",
+            "en": "Heroes at Sea",
+            "ko": "여름을 즐기는 수영복 영웅들"
+          }
+        }
+      ]
+    },
+    "54": {
+      "version": "swimsuit",
+      "paidPack": false,
+      "pools": [
+        {
+          "id": 7,
+          "key": "2026_sea_pickup",
+          "translations": {
+            "zh_tw": "夏日憩息的海裝英傑們",
+            "ja": "夏に憩う海装の英傑たち",
+            "en": "Heroes at Sea",
+            "ko": "여름을 즐기는 수영복 영웅들"
+          }
+        }
+      ]
+    },
+    "58": {
+      "version": null,
+      "paidPack": true,
+      "pools": []
+    },
+    "59": {
+      "version": null,
+      "paidPack": false,
+      "pools": [
+        {
+          "id": 8,
+          "key": "2026_aniv_pickup",
+          "translations": {
+            "zh_tw": "緣絲交織的聖銳們",
+            "ja": "縁糸紡ぎし聖鋭たち",
+            "en": "Warriors of Woven Bonds",
+            "ko": "운명의 실을 잣는 성스러운 예리한 자들"
+          }
+        }
+      ]
+    },
+    "60": {
+      "version": null,
+      "paidPack": false,
+      "pools": [
+        {
+          "id": 8,
+          "key": "2026_aniv_pickup",
+          "translations": {
+            "zh_tw": "緣絲交織的聖銳們",
+            "ja": "縁糸紡ぎし聖鋭たち",
+            "en": "Warriors of Woven Bonds",
+            "ko": "운명의 실을 잣는 성스러운 예리한 자들"
+          }
+        }
+      ]
+    }
+  }
+}

@@ -479,6 +479,22 @@
           "name": "Idun",
           "title": "Người bảo vệ Quả táo vàng"
         }
+      },
+      "acquisition": {
+        "version": "original",
+        "paidPack": false,
+        "pools": [
+          {
+            "id": 0,
+            "key": "default_gacha",
+            "translations": {
+              "zh_tw": "通常召喚",
+              "ja": "通常選定",
+              "en": "Normal summoning",
+              "ko": "통상 선정"
+            }
+          }
+        ]
       }
     },
     {
@@ -532,6 +548,11 @@
           "name": "Siegfried",
           "title": "Tiên tộc bất lão"
         }
+      },
+      "acquisition": {
+        "version": "original",
+        "paidPack": false,
+        "pools": []
       }
     },
     {
@@ -586,6 +607,22 @@
           "name": "Landgris",
           "title": "Người bảo vệ"
         }
+      },
+      "acquisition": {
+        "version": "original",
+        "paidPack": false,
+        "pools": [
+          {
+            "id": 1,
+            "key": "multi_strike_pickup",
+            "translations": {
+              "zh_tw": "魔嵐的弓術士們",
+              "ja": "魔嵐の弓術士たち",
+              "en": "Gale Archers",
+              "ko": "마폭의 궁술사들"
+            }
+          }
+        ]
       }
     },
     {
@@ -641,6 +678,11 @@
           "name": "nhím biển",
           "title": "Nàng tiên du hành"
         }
+      },
+      "acquisition": {
+        "version": null,
+        "paidPack": false,
+        "pools": []
       }
     },
     {
@@ -667,7 +709,7 @@
       ],
       "translations": {
         "zh_tw": {
-          "name": "伊茲",
+          "name": "伊茲（泳裝）",
           "title": "海寶的蘋果射手"
         },
         "zh_cn": {
@@ -694,6 +736,22 @@
           "name": "Idun",
           "title": "Cung thủ táo kho báu biển"
         }
+      },
+      "acquisition": {
+        "version": "swimsuit",
+        "paidPack": false,
+        "pools": [
+          {
+            "id": 2,
+            "key": "sea_pickup",
+            "translations": {
+              "zh_tw": "海裝的英傑們",
+              "ja": "海装の英傑たち",
+              "en": "Ocean heroes",
+              "ko": "대해의 영웅들"
+            }
+          }
+        ]
       }
     },
     {
@@ -720,7 +778,7 @@
       ],
       "translations": {
         "zh_tw": {
-          "name": "齊格菲",
+          "name": "齊格菲（泳裝）",
           "title": "海波的精靈"
         },
         "zh_cn": {
@@ -747,6 +805,22 @@
           "name": "Siegfried",
           "title": "Tiên sóng biển"
         }
+      },
+      "acquisition": {
+        "version": "swimsuit",
+        "paidPack": false,
+        "pools": [
+          {
+            "id": 2,
+            "key": "sea_pickup",
+            "translations": {
+              "zh_tw": "海裝的英傑們",
+              "ja": "海装の英傑たち",
+              "en": "Ocean heroes",
+              "ko": "대해의 영웅들"
+            }
+          }
+        ]
       }
     },
     {
@@ -800,6 +874,22 @@
           "name": "Flasvan",
           "title": "Người tuyển chọn những tâm hồn dũng cảm"
         }
+      },
+      "acquisition": {
+        "version": null,
+        "paidPack": false,
+        "pools": [
+          {
+            "id": 3,
+            "key": "snow_solider_pickup",
+            "translations": {
+              "zh_tw": "雪嶺的守護者們",
+              "ja": "雪嶺の守護者たち",
+              "en": "White Peak Defenders",
+              "ko": "설산의 수호자들"
+            }
+          }
+        ]
       }
     },
     {
@@ -853,6 +943,11 @@
           "name": "Công chúa của trái tim",
           "title": "Công chúa tình yêu"
         }
+      },
+      "acquisition": {
+        "version": "original",
+        "paidPack": true,
+        "pools": []
       }
     },
     {
@@ -907,6 +1002,11 @@
           "name": "Bale",
           "title": "Nữ thần đền thờ xanh vĩnh cửu"
         }
+      },
+      "acquisition": {
+        "version": null,
+        "paidPack": true,
+        "pools": []
       }
     },
     {
@@ -962,6 +1062,22 @@
           "name": "Akasha",
           "title": "Vị thần mù toàn tri"
         }
+      },
+      "acquisition": {
+        "version": "original",
+        "paidPack": false,
+        "pools": [
+          {
+            "id": 4,
+            "key": "wizard_pickup",
+            "translations": {
+              "zh_tw": "齊聚天之書架的魔導士們",
+              "ja": "天の書架に集いし魔導士たち",
+              "en": "Wizards of the Heavenly Bibliotheca",
+              "ko": "하늘의 서가에 모인 마도사들"
+            }
+          }
+        ]
       }
     },
     {
@@ -1016,6 +1132,11 @@
           "name": "Barra",
           "title": "Nữ hoàng của âm thanh sóng biển"
         }
+      },
+      "acquisition": {
+        "version": null,
+        "paidPack": true,
+        "pools": []
       }
     },
     {
@@ -1043,7 +1164,7 @@
       ],
       "translations": {
         "zh_tw": {
-          "name": "蘭德格里茲",
+          "name": "蘭德格里茲（異鄉）",
           "title": "勇躍壯途的先鋒"
         },
         "zh_cn": {
@@ -1070,6 +1191,22 @@
           "name": "Landgris",
           "title": "Một người tiên phong dũng cảm trên một hành trình vĩ đại"
         }
+      },
+      "acquisition": {
+        "version": "journey",
+        "paidPack": false,
+        "pools": [
+          {
+            "id": 5,
+            "key": "caravan_pickup",
+            "translations": {
+              "zh_tw": "異鄉巡遊的明星們",
+              "ja": "異郷を巡る明星たち",
+              "en": "Journeying Otherworldly Stars",
+              "ko": "허공을 떠도는 별들"
+            }
+          }
+        ]
       }
     },
     {
@@ -1124,6 +1261,22 @@
           "name": "Mặt trăng",
           "title": "Một người kể chuyện với trái tim nhân hậu"
         }
+      },
+      "acquisition": {
+        "version": null,
+        "paidPack": false,
+        "pools": [
+          {
+            "id": 5,
+            "key": "caravan_pickup",
+            "translations": {
+              "zh_tw": "異鄉巡遊的明星們",
+              "ja": "異郷を巡る明星たち",
+              "en": "Journeying Otherworldly Stars",
+              "ko": "허공을 떠도는 별들"
+            }
+          }
+        ]
       }
     },
     {
@@ -1177,6 +1330,11 @@
           "name": "Thủ lĩnh băng cướp sói (dự kiến)",
           "title": "Một người anh trai đáng tin cậy của bọn trộm (dự kiến)"
         }
+      },
+      "acquisition": {
+        "version": null,
+        "paidPack": false,
+        "pools": []
       }
     },
     {
@@ -1230,6 +1388,11 @@
           "name": "Orfia",
           "title": "Phù thủy ngồi trên ghế quỷ"
         }
+      },
+      "acquisition": {
+        "version": null,
+        "paidPack": true,
+        "pools": []
       }
     },
     {
@@ -1256,7 +1419,7 @@
       ],
       "translations": {
         "zh_tw": {
-          "name": "伊茲",
+          "name": "伊茲（聖夜）",
           "title": "奏響聖夜之光的音色"
         },
         "zh_cn": {
@@ -1283,6 +1446,22 @@
           "name": "Idun",
           "title": "Âm thanh của đêm Giáng sinh được tái hiện bởi ánh đèn."
         }
+      },
+      "acquisition": {
+        "version": "christmas",
+        "paidPack": false,
+        "pools": [
+          {
+            "id": 6,
+            "key": "xmas_pickup",
+            "translations": {
+              "zh_tw": "閃耀聖夜的星英們",
+              "ja": "聖夜に輝く星英たち",
+              "en": "Holy Night Star Heroes",
+              "ko": "성야에 빛나는 영웅들"
+            }
+          }
+        ]
       }
     },
     {
@@ -1338,6 +1517,11 @@
           "name": "Eir",
           "title": "Nữ thần chữa bệnh với những bông hoa thảo mộc"
         }
+      },
+      "acquisition": {
+        "version": null,
+        "paidPack": true,
+        "pools": []
       }
     },
     {
@@ -1392,6 +1576,11 @@
           "name": "",
           "title": ""
         }
+      },
+      "acquisition": {
+        "version": null,
+        "paidPack": true,
+        "pools": []
       }
     },
     {
@@ -1418,7 +1607,7 @@
       ],
       "translations": {
         "zh_tw": {
-          "name": "戀心公主",
+          "name": "戀心公主（泳裝）",
           "title": "奔馳沙灘的戀愛公主"
         },
         "zh_cn": {
@@ -1445,6 +1634,22 @@
           "name": "",
           "title": ""
         }
+      },
+      "acquisition": {
+        "version": "swimsuit",
+        "paidPack": false,
+        "pools": [
+          {
+            "id": 7,
+            "key": "2026_sea_pickup",
+            "translations": {
+              "zh_tw": "夏日憩息的海裝英傑們",
+              "ja": "夏に憩う海装の英傑たち",
+              "en": "Heroes at Sea",
+              "ko": "여름을 즐기는 수영복 영웅들"
+            }
+          }
+        ]
       }
     },
     {
@@ -1472,7 +1677,7 @@
       ],
       "translations": {
         "zh_tw": {
-          "name": "阿卡夏",
+          "name": "阿卡夏（泳裝）",
           "title": "守望航路的盲目之神"
         },
         "zh_cn": {
@@ -1499,6 +1704,22 @@
           "name": "",
           "title": ""
         }
+      },
+      "acquisition": {
+        "version": "swimsuit",
+        "paidPack": false,
+        "pools": [
+          {
+            "id": 7,
+            "key": "2026_sea_pickup",
+            "translations": {
+              "zh_tw": "夏日憩息的海裝英傑們",
+              "ja": "夏に憩う海装の英傑たち",
+              "en": "Heroes at Sea",
+              "ko": "여름을 즐기는 수영복 영웅들"
+            }
+          }
+        ]
       }
     },
     {
@@ -1553,6 +1774,11 @@
           "name": "",
           "title": ""
         }
+      },
+      "acquisition": {
+        "version": null,
+        "paidPack": true,
+        "pools": []
       }
     },
     {
@@ -1606,6 +1832,22 @@
           "name": "",
           "title": ""
         }
+      },
+      "acquisition": {
+        "version": null,
+        "paidPack": false,
+        "pools": [
+          {
+            "id": 8,
+            "key": "2026_aniv_pickup",
+            "translations": {
+              "zh_tw": "緣絲交織的聖銳們",
+              "ja": "縁糸紡ぎし聖鋭たち",
+              "en": "Warriors of Woven Bonds",
+              "ko": "운명의 실을 잣는 성스러운 예리한 자들"
+            }
+          }
+        ]
       }
     },
     {
@@ -1659,6 +1901,22 @@
           "name": "",
           "title": ""
         }
+      },
+      "acquisition": {
+        "version": null,
+        "paidPack": false,
+        "pools": [
+          {
+            "id": 8,
+            "key": "2026_aniv_pickup",
+            "translations": {
+              "zh_tw": "緣絲交織的聖銳們",
+              "ja": "縁糸紡ぎし聖鋭たち",
+              "en": "Warriors of Woven Bonds",
+              "ko": "운명의 실을 잣는 성스러운 예리한 자들"
+            }
+          }
+        ]
       }
     }
   ],
@@ -1671,5 +1929,6 @@
     "th": "ไทย",
     "vi": "Tiếng Việt"
   },
-  "giftSupplementVersion": "3.16.1"
+  "giftSupplementVersion": "3.16.1",
+  "acquisitionVersion": "3.16.1"
 }
