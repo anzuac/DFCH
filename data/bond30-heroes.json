@@ -1,0 +1,6 @@
+{
+  "gameVersion": "3.16.1",
+  "description": "尚未完成 3/4/5 星英靈的固定技能與在地化名稱校驗。請勿將空白對照解讀成沒有固定技能。",
+  "fixedByHero": {},
+  "abilityNames": {}
+}
