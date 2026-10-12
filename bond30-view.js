@@ -5,7 +5,7 @@
   if (!root) return;
   const engine = window.DFCHBond30Engine;
   if (!engine) return;
-  const ids = ["bondPool","bondHero","bondHeroName","bondFixed","bondImport","bondSearch","bondAbilities","bondApplyGroups","bondCandidateRows","bondPoolStatus","bondHeroStatus","bondEligibleStatus","bondDraw","bondDrawStatus","bondDrawHistory","bondClear"];
+  const ids = ["bondPool","bondHero","bondHeroName","bondFixed","bondImport","bondSearch","bondAbilities","bondApplyGroups","bondCandidateRows","bondPoolStatus","bondPoolBreakdown","bondPoolOverview","bondHeroStatus","bondEligibleStatus","bondDraw","bondDrawStatus","bondDrawHistory","bondClear"];
   const ui = Object.fromEntries(ids.map((id) => [id, document.getElementById(id)]));
   const poolLabels = {
     default_gacha:"一般召喚", multi_strike_pickup:"魔嵐的弓術士們",
@@ -15,6 +15,7 @@
     "2026_aniv_pickup":"緣絲交織的聖銳們"
   };
   let pools = {};
+  let allPools = {};
   let heroes = {};
   let fixedByHero = {};
   let names = {};
@@ -64,9 +65,49 @@
       text(ui.bondHeroStatus, "尚無該英靈已驗證的固定能力對照。可在下方填入現有固定能力 ID；未核對前不宣稱結果與官方相同。");
     }
   }
+  function updatePoolOverview() {
+    const summary = Object.keys(poolLabels).map((key) => {
+      const records = allPools[key] || [];
+      const counts = {1:0,2:0,3:0};
+      for (const row of records) if (Object.hasOwn(counts, row.chooseGroupType)) counts[row.chooseGroupType]++;
+      const available = records.length > 0;
+      return {key, records, counts, available};
+    });
+    const chosen = summary.find((v) => v.key === ui.bondPool.value);
+    if (chosen && chosen.available) {
+      const c = chosen.counts;
+      text(ui.bondPoolBreakdown, `本池原始候選 ${chosen.records.length} 筆：自由 ${c[1]}、攻擊增益 ${c[2]}、HP 增益 ${c[3]}。羈絆 30 等目前只使用自由技能權重；固定能力仍依英靈資料判定。`);
+    } else text(ui.bondPoolBreakdown, "尚未取得完整三類型候選資料。");
+    ui.bondPoolOverview.replaceChildren();
+    for (const row of summary) {
+      const tr = element("tr");
+      const poolName = element("td", poolLabels[row.key]);
+      tr.append(poolName, element("td", row.available ? row.counts[1] : "—"),
+        element("td", row.available ? row.counts[2] : "—"),
+        element("td", row.available ? row.counts[3] : "—"),
+        element("td", row.available ? row.records.length : "—"));
+      ui.bondPoolOverview.append(tr);
+    }
+  }
+  function acceptAllPoolData(data) {
+    if (!data || !data.pools || typeof data.pools !== "object") throw new Error("三類型候選資料不完整");
+    const parsed = {};
+    for (const key of Object.keys(poolLabels)) {
+      const records = data.pools[key];
+      if (!Array.isArray(records)) throw new Error("缺少招募池：" + key);
+      parsed[key] = records.map((r) => ({
+        abilityId:Number(r.abilityId),
+        chooseGroupType:Number(r.chooseGroupType),
+        weight:Number(r.weight),
+        exclusiveGroupIdRaw:Number(r.exclusiveGroupIdRaw)||0
+      })).filter((r) => Number.isSafeInteger(r.abilityId) && r.abilityId > 0 && [1,2,3].includes(r.chooseGroupType) && r.weight > 0);
+    }
+    allPools = parsed;
+    updatePoolOverview();renderAbilities();updateCandidates();
+  }
   function renderAbilities() {
     const query = ui.bondSearch.value.trim().toLowerCase();
-    const records = engine.normalizePool(poolRows()).filter((row) => String(row.abilityId).includes(query) || labelFor(row.abilityId).toLowerCase().includes(query));
+    const records = (allPools[ui.bondPool.value] || poolRows()).filter((row) => String(row.abilityId).includes(query) || labelFor(row.abilityId).toLowerCase().includes(query));
     ui.bondAbilities.replaceChildren();
     if (!records.length) {
       ui.bondAbilities.append(element("p", Object.keys(pools).length ? "此條件沒有技能" : "先匯入 3.16.1 的候選池 JSON，才能選擇能力。", "bond30-muted"));
@@ -82,7 +123,9 @@
         if (checkbox.checked) owned.add(record.abilityId); else owned.delete(record.abilityId);
         updateCandidates();
       });
-      item.append(checkbox, element("span", labelFor(record.abilityId)), element("small", "權重 " + record.weight));
+      const group = Number(record.chooseGroupType);
+      const groupName = ({1:"自由",2:"攻擊增益",3:"HP 增益"})[group] || "其他";
+      item.append(checkbox, element("span", labelFor(record.abilityId)), element("small", groupName + " · 權重 " + record.weight));
       ui.bondAbilities.append(item);
     }
   }
@@ -109,7 +152,7 @@
   function switchPool() {
     owned.clear(); history = [];
     text(ui.bondDrawStatus, "尚未抽選");
-    renderHero(); renderAbilities(); updateCandidates(); renderHistory();
+    renderHero(); renderAbilities(); updatePoolOverview(); updateCandidates(); renderHistory();
   }
   function renderHistory() {
     ui.bondDrawHistory.replaceChildren();
@@ -172,8 +215,9 @@
   Promise.all([
     optionalJSON("./data/hero-acquisition.json"),
     optionalJSON("./data/bond30-heroes.json"),
-    optionalJSON("./data/bond30-pools-3.16.1.json")
-  ]).then(([acquisition, fixed, candidateData]) => {
+    optionalJSON("./data/bond30-pools-3.16.1.json"),
+    optionalJSON("./data/bond30-all-pools-3.16.1.json")
+  ]).then(([acquisition, fixed, candidateData, allPoolData]) => {
     if (acquisition) setHeroData(acquisition);
     if (fixed) {
       fixedByHero = fixed.fixedByHero || {};
@@ -183,6 +227,10 @@
       try { acceptPoolData(candidateData, "倉庫測試資料"); }
       catch (error) { text(ui.bondPoolStatus, "資料驗證失敗：" + error.message); }
     }
-    renderHero(); renderAbilities(); updateCandidates();
+    if (allPoolData) {
+      try { acceptAllPoolData(allPoolData); }
+      catch(error) { text(ui.bondPoolBreakdown, "所有池資料讀取失敗：" + error.message); }
+    }
+    renderHero(); renderAbilities(); updatePoolOverview(); updateCandidates();
   });
 })();
