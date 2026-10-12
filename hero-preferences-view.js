@@ -36,13 +36,15 @@
   function chips(ids,preference='favorite'){
     const list=node('ul',null,'gift-list'),text=bondUI[lang],rules=source.bondGains;
     for(const id of ids){
-      const entry=node('li'),icon=node('img',null,'gift-icon'),detail=node('span',null,'gift-detail');
+      const entry=node('li',null,'gift-shortcut-item'),jump=node('button',null,'gift-shortcut'),icon=node('img',null,'gift-icon'),detail=node('span',null,'gift-detail');
+      jump.type='button';jump.setAttribute('aria-label',`${names.get(id)} → ${locationUI[lang][1]}`);
+      jump.addEventListener('click',()=>openGiftLocation(id));
       icon.src=`./assets/gifts/${id}.webp`;icon.alt='';icon.width=36;icon.height=36;icon.loading='lazy';icon.addEventListener('error',()=>icon.remove(),{once:true});
       const base=rules.baseValues[id],multiplier=rules.preferenceMultipliers[preference],artifact=ownsBondStatue?rules.artifact.multiplier:1;
       const gain=Math.floor(base*multiplier*artifact);
       entry.dataset.gift=id;entry.dataset.bondGain=gain;
       detail.append(node('span',names.get(id),'gift-name'),node('strong',`${text.gain} +${gain}`,'gift-bond-gain'));
-      entry.append(icon,detail);if(!source.items.find(i=>i.id===id).translations[lang])entry.title=t(15);list.append(entry);
+      jump.append(icon,detail);entry.append(jump);if(!source.items.find(i=>i.id===id).translations[lang])entry.title=t(15);list.append(entry);
     }
     return list;
   }
@@ -53,38 +55,66 @@
   bondLabel.append(bondCheckbox,bondLabelText);bondPanel.append(bondLabel);languageLabel.after(bondPanel);
   bondCheckbox.addEventListener('change',()=>{ownsBondStatue=bondCheckbox.checked;try{localStorage.setItem('dfch-hero-bond-statue',String(ownsBondStatue));}catch{}$('heroCommonGifts').replaceChildren(chips(data.commonFavorite));render();});
   const locationUI={
-    zh_tw:['英靈喜好','羈絆道具取得方式','搜尋道具／遠征地圖','全部遠征地圖','遠征地圖','找不到符合條件的道具'],
-    ja:['英霊の好み','贈り物の入手方法','贈り物・遠征先を検索','すべての遠征先','遠征先','該当する贈り物がありません'],
-    en:['Hero preferences','Where to find gifts','Search gift / sortie map','All sortie maps','Sortie maps','No matching gifts'],
-    ko:['영령 선호도','선물 획득 방법','선물 / 원정 지도 검색','모든 원정 지도','원정 지도','일치하는 선물이 없습니다']
+    zh_tw:['英靈喜好','羈絆道具取得方式','搜尋道具／遠征地圖','全部遠征地圖','遠征地圖','找不到符合條件的道具','指定羈絆道具','全部羈絆道具','目前未收錄此道具的遠征地圖取得來源。'],
+    ja:['英霊の好み','贈り物の入手方法','贈り物・遠征先を検索','すべての遠征先','遠征先','該当する贈り物がありません','贈り物を指定','すべての贈り物','この贈り物の遠征先での入手情報は未収録です。'],
+    en:['Hero preferences','Where to find gifts','Search gift / sortie map','All sortie maps','Sortie maps','No matching gifts','Choose a gift','All gifts','No expedition acquisition location is listed for this gift.'],
+    ko:['영령 선호도','선물 획득 방법','선물 / 원정 지도 검색','모든 원정 지도','원정 지도','일치하는 선물이 없습니다','선물 지정','모든 선물','이 선물의 원정 지도 획득 정보는 아직 등록되지 않았습니다.']
   };
   const guideBody=node('div'),locationBody=node('section'),guideNav=node('nav',null,'hero-guide-tabs'),heroTab=node('button'),locationTab=node('button');
   guideBody.id='heroGuideContent';locationBody.id='heroGiftLocations';locationBody.hidden=true;
   const children=[...panel.children];for(const child of children){if(child!==panel.querySelector('.panel-head')&&child!==languageLabel)guideBody.append(child);}
-  for(const [button,target] of [[heroTab,guideBody],[locationTab,locationBody]]){button.type='button';button.setAttribute('aria-controls',target.id);button.setAttribute('aria-pressed',String(button===heroTab));button.addEventListener('click',()=>{guideBody.hidden=button!==heroTab;locationBody.hidden=button!==locationTab;heroTab.setAttribute('aria-pressed',String(button===heroTab));locationTab.setAttribute('aria-pressed',String(button===locationTab));});guideNav.append(button);}
+  function showGuideTab(target){
+    const locationsActive=target===locationBody;
+    guideBody.hidden=locationsActive;locationBody.hidden=!locationsActive;
+    heroTab.setAttribute('aria-pressed',String(!locationsActive));
+    locationTab.setAttribute('aria-pressed',String(locationsActive));
+  }
+  for(const [button,target] of [[heroTab,guideBody],[locationTab,locationBody]]){button.type='button';button.setAttribute('aria-controls',target.id);button.setAttribute('aria-pressed',String(button===heroTab));button.addEventListener('click',()=>showGuideTab(target));guideNav.append(button);}
   panel.append(guideNav,guideBody,locationBody);
-  const locationFilters=node('div',null,'hero-preference-filters'),locationSearchLabel=node('label',null,'field'),locationSearch=node('input'),locationMapLabel=node('label',null,'field'),locationMap=node('select'),locationList=node('div',null,'hero-preference-grid');
-  locationSearch.type='search';locationSearch.id='giftLocationSearch';locationMap.id='giftLocationMap';locationList.id='giftLocationResults';
-  locationSearchLabel.append(node('span'),locationSearch);locationMapLabel.append(node('span'),locationMap);locationFilters.append(locationSearchLabel,locationMapLabel);locationBody.append(locationFilters,locationList);
+  const locationFilters=node('div',null,'hero-preference-filters'),locationSearchLabel=node('label',null,'field'),locationSearch=node('input'),locationItemLabel=node('label',null,'field'),locationItem=node('select'),locationMapLabel=node('label',null,'field'),locationMap=node('select'),locationList=node('div',null,'hero-preference-grid');
+  locationSearch.type='search';locationSearch.id='giftLocationSearch';locationItem.id='giftLocationItem';locationMap.id='giftLocationMap';locationList.id='giftLocationResults';
+  locationSearchLabel.append(node('span'),locationSearch);locationItemLabel.append(node('span'),locationItem);locationMapLabel.append(node('span'),locationMap);locationFilters.append(locationSearchLabel,locationItemLabel,locationMapLabel);locationBody.append(locationFilters,locationList);
+  // Include all gifts shown on hero cards, even when expedition drop locations are unknown.
+  const locationGiftChoices=[...new Map([...source.giftLocations.items,...source.items].map(item=>[item.id,item])).values()];
   function renderLocations(){
-    const labels=locationUI[lang],query=normalize(locationSearch.value),selected=Number(locationMap.value),locations=source.giftLocations;
+    const labels=locationUI[lang],query=normalize(locationSearch.value),selectedMap=Number(locationMap.value),selectedGift=Number(locationItem.value),locations=source.giftLocations;
     locationList.replaceChildren();
-    for(const item of locations.items){
+    for(const item of locationGiftChoices){
+      if(selectedGift&&item.id!==selectedGift)continue;
       const name=item.translations[lang]||item.translations.ja,maps=locations.maps.filter(m=>m.gifts.includes(item.id));
-      if(selected&&!maps.some(m=>m.id===selected))continue;
+      if(!maps.length&&!selectedGift&&!query)continue;
+      if(selectedMap&&!maps.some(m=>m.id===selectedMap))continue;
       if(query&&!normalize([name,...maps.map(m=>m.translations[lang]||m.translations.ja)].join(' ')).includes(query))continue;
       const card=node('article',null,'hero-preference-card gift-location-card'),header=node('div',null,'gift-location-header'),icon=node('img',null,'gift-icon');
-      icon.src=`./assets/gifts/${item.id}.webp`;icon.alt='';icon.width=48;icon.height=48;icon.loading='lazy';header.append(icon,node('h3',name));card.append(header,node('h4',labels[4]));
-      const list=node('ul',null,'gift-location-maps');for(const map of maps)list.append(node('li',map.translations[lang]||map.translations.ja));card.append(list);locationList.append(card);
+      icon.src=`./assets/gifts/${item.id}.webp`;icon.alt='';icon.width=48;icon.height=48;icon.loading='lazy';icon.addEventListener('error',()=>icon.remove(),{once:true});header.append(icon,node('h3',name));card.append(header);
+      if(maps.length){
+        card.append(node('h4',labels[4]));
+        const list=node('ul',null,'gift-location-maps');for(const map of maps)list.append(node('li',map.translations[lang]||map.translations.ja));card.append(list);
+      }else{
+        card.append(node('p',labels[8],'gift-location-unlisted'));
+      }
+      locationList.append(card);
     }
     if(!locationList.children.length)locationList.append(node('p',labels[5],'hero-empty'));
   }
   function applyLocationLanguage(){
-    const labels=locationUI[lang],selected=locationMap.value;heroTab.textContent=labels[0];locationTab.textContent=labels[1];guideNav.setAttribute('aria-label',labels[1]);
-    locationSearchLabel.firstChild.textContent=labels[2];locationSearch.placeholder=labels[2];locationMapLabel.firstChild.textContent=labels[4];locationMap.replaceChildren();
-    const all=node('option',labels[3]);all.value='';locationMap.append(all);for(const map of source.giftLocations.maps){const option=node('option',map.translations[lang]||map.translations.ja);option.value=map.id;locationMap.append(option);}locationMap.value=selected;renderLocations();
+    const labels=locationUI[lang],selectedMap=locationMap.value,selectedItem=locationItem.value;heroTab.textContent=labels[0];locationTab.textContent=labels[1];guideNav.setAttribute('aria-label',labels[1]);
+    locationSearchLabel.firstChild.textContent=labels[2];locationSearch.placeholder=labels[2];
+    locationItemLabel.firstChild.textContent=labels[6];locationItem.replaceChildren();const allItems=node('option',labels[7]);allItems.value='';locationItem.append(allItems);
+    for(const item of [...locationGiftChoices].sort((a,b)=>(a.translations[lang]||a.translations.ja).localeCompare(b.translations[lang]||b.translations.ja))){
+      const option=node('option',item.translations[lang]||item.translations.ja);option.value=item.id;locationItem.append(option);
+    }
+    locationItem.value=selectedItem;
+    locationMapLabel.firstChild.textContent=labels[4];locationMap.replaceChildren();
+    const allMaps=node('option',labels[3]);allMaps.value='';locationMap.append(allMaps);for(const map of source.giftLocations.maps){const option=node('option',map.translations[lang]||map.translations.ja);option.value=map.id;locationMap.append(option);}locationMap.value=selectedMap;renderLocations();
   }
-  locationSearch.addEventListener('input',renderLocations);locationMap.addEventListener('change',renderLocations);
+  function openGiftLocation(id){
+    locationSearch.value='';locationMap.value='';locationItem.value=String(id);
+    showGuideTab(locationBody);renderLocations();
+    const reducedMotion=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    guideNav.scrollIntoView({behavior:reducedMotion?'auto':'smooth',block:'start'});
+  }
+  locationSearch.addEventListener('input',renderLocations);locationItem.addEventListener('change',renderLocations);locationMap.addEventListener('change',renderLocations);
   for(const [key,name] of visibleLanguages.map(key=>[key,source.languages[key]])){const o=node('option',name);o.value=key;language.append(o);}language.value=lang;
   function options(id,items,empty){const e=$(id),value=e.value;e.replaceChildren();const first=node('option',empty);first.value='';e.append(first);for(const [key,label] of items){const o=node('option',label);o.value=key;e.append(o);}e.value=value;}
   function applyLanguage(){
