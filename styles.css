@@ -1206,3 +1206,10 @@ input,select{border-color:#9fbccc35!important;border-radius:9px!important;backgr
 
 .guide-footer{margin:28px 0 12px;padding:16px 0;border-top:1px solid var(--line);text-align:center;color:var(--muted);font-size:12px;line-height:1.8}
 .guide-footer p{margin:2px 0}
+
+/* Hero gift shortcuts: open the matching acquisition location from any gift chip. */
+.gift-list li.gift-shortcut-item{padding:0}
+.gift-shortcut{display:inline-flex;align-items:center;gap:8px;min-width:0;width:100%;padding:7px 10px;border:0;border-radius:8px;background:transparent;color:inherit;font:inherit;text-align:left;cursor:pointer}
+.gift-shortcut:hover{background:rgba(105,214,191,.13)}
+.gift-shortcut:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+.gift-location-unlisted{font-size:13px;color:var(--muted);margin:12px 0 0}
