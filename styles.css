@@ -1171,3 +1171,5 @@ input,select{border-color:#9fbccc35!important;border-radius:9px!important;backgr
 .gift-list li{display:inline-flex;align-items:center;gap:8px;max-width:100%}
 .gift-icon{width:36px;height:36px;flex:0 0 36px;object-fit:contain}
 .gift-list li span{overflow-wrap:anywhere;min-width:0}
+
+.hero-language{max-width:260px;margin:0 0 18px}.hero-language select{width:100%}

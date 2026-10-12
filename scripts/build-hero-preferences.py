@@ -60,6 +60,18 @@ used={id for h in out for id in h['loved']+h['favorite']}
 common=[i['rewardId'] for i in items if all(preference(h,i)==2 for h in six)]
 source={'heroes':[{'index':h['index'],'key':h['key'],'rarity':h['rarity'],'lovedInheritanceIds':h['lovedInheritanceIds'],'favoriteInheritanceIds':h['favoriteInheritanceIds']} for h in six], 'items':[{k:i[k] for k in ['rewardId','key','commonPreference','exceptionLovedUniqueIndices','exceptionFavoriteUniqueIndices','exceptionNormalUniqueIndices']} for i in items]}
 data={'gameVersion':'3.16.0','commonFavorite':common,'items':[{'id':i['rewardId'],'name':label('r-name-'+i['key'])[0]} for i in items if i['rewardId'] in used],'heroes':out}
+# Official localization columns; screenshot-confirmed Traditional Chinese overrides.
+languages={'zh_tw':'繁體中文','zh_cn':'简体中文','ja':'日本語','en':'English','ko':'한국어','th':'ไทย','vi':'Tiếng Việt'}
+overrides={'freya':('弗雷雅','探求不滅之愛的黑色女神'),'frigg':('芙麗嘉','凝視羈絆的白色女神')}
+data['languages']=languages
+for hero in data['heroes']:
+ hero['translations']={lang:{'name':loc['unique-chara-name-'+hero['key']][lang].strip(),'title':loc['nick-name-'+hero['key']][lang].strip()} for lang in languages}
+ if hero['key'] in overrides:
+  name,title=overrides[hero['key']];hero.update(name=name,title=title,nameLanguage='zh_tw',titleLanguage='zh_tw')
+  hero['translations']['zh_tw']={'name':name,'title':title}
+for item in data['items']:
+ key=next(i['key'] for i in items if i['rewardId']==item['id'])
+ item['translations']={lang:loc['r-name-'+key][lang].strip() for lang in languages}
 (root/'data/hero-preferences.json').write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n')
 (root/'hero-preferences-data.js').write_text('window.DFCHHeroPreferences = '+json.dumps(data,ensure_ascii=False,separators=(',',':'))+';\n')
 source['evidence']={'tablePathId':76187,'tableSha256':hashlib.sha256(raw).hexdigest(),'tableRows':count,'metadataSha256':hashlib.sha256(metadata).hexdigest(),'rarityValue':5,'commonPreferenceMethod':'0x2e7dccc','assignmentMethod':'0x2d3e894','getPreferenceMethod':'0x2dcf66c','sixStarRandomFill':False}

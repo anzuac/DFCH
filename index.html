@@ -3,7 +3,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#0b1420">
   <title>DFCH 遠征模擬器 · V2.2.0</title>
-  <link rel="stylesheet" href="./styles.css?v=2.2.2">
+  <link rel="stylesheet" href="./styles.css?v=2.3.0">
 </head>
 <body>
   <div class="app-shell">
@@ -298,7 +298,7 @@
       <div class="diamond-controls"><button id="diamondStart" type="button">開始抽取</button><button id="diamondStop" type="button" disabled="">揭曉獎勵</button></div>
       <p id="diamondAnimationNote" class="hint">開始時已依機率決定本輪獎勵。閃光由上往下循環，只作顯示；按揭曉後停在預先抽定的獎勵，點擊時機不影響結果。</p>
       <details><summary>本模式最近結果</summary><p id="diamondHistoryEmpty" class="hint">尚未抽取。</p><ol id="diamondHistory"></ol><p id="diamondStorageNote" class="hint"></p></details>
-    </div></section></section><section id="tab-heroes" class="tab-panel"><section class="panel hero-preferences-panel" aria-labelledby="heroPreferenceTitle"><div class="panel-head"><div><p class="eyebrow">HERO GIFT GUIDE</p><h2 id="heroPreferenceTitle">六星英靈喜好</h2><a class="hero-standalone-link" href="./heroes.html">開啟獨立圖鑑 ↗</a></div><span class="status-chip">官方資料 3.16.0</span></div><p class="helper">依英靈名稱、稱號或物品查找喜愛與最愛。同名的不同版本分開列出。</p><div class="hero-preference-filters"><label class="field"><span>搜尋英靈／稱號／物品</span><input id="heroSearch" type="search" placeholder="例如：伊茲、巧克力" autocomplete="off"></label><label class="field"><span>指定英靈</span><select id="heroSelect"><option value="">全部六星英靈</option></select></label><label class="field"><span>找出喜歡這個物品的英靈</span><select id="heroItemFilter"><option value="">全部物品</option></select></label><label class="field"><span>喜好範圍</span><select id="heroPreferenceFilter"><option value="">喜愛與最愛</option><option value="loved">只查最愛</option><option value="favorite">只查喜愛</option></select></label></div><div class="hero-filter-status"><p id="heroPreferenceCount" role="status" aria-live="polite"></p><button id="heroClearFilters" type="button" class="secondary-btn">清除篩選</button></div><section class="hero-common-gifts"><h3>所有六星皆喜愛的通用物品</h3><div id="heroCommonGifts"></div><p class="unit-note">以下英靈的喜愛項目皆包含這些物品；各卡片另外列出個別喜好。</p></section><div id="heroPreferenceResults" class="hero-preference-grid"></div><p class="unit-note">僅列出這份官方資料中的六星英靈；尚無繁中名稱者保留日文原名。喜好清單不會修改遠征掉落。</p><a href="./docs/hero-preferences.md" target="_blank" rel="noopener">查看資料來源與對應規則</a></section></section>
+    </div></section></section><section id="tab-heroes" class="tab-panel"><section class="panel hero-preferences-panel" aria-labelledby="heroPreferenceTitle"><div class="panel-head"><div><p class="eyebrow">HERO GIFT GUIDE</p><h2 id="heroPreferenceTitle">六星英靈喜好</h2><a class="hero-standalone-link" href="./heroes.html">開啟獨立圖鑑 ↗</a></div><span class="status-chip">官方資料 3.16.0</span></div><p class="helper">依英靈名稱、稱號或物品查找喜愛與最愛。同名的不同版本分開列出。</p><div class="hero-preference-filters"><label class="field"><span>搜尋英靈／稱號／物品</span><input id="heroSearch" type="search" placeholder="例如：伊茲、巧克力" autocomplete="off"></label><label class="field"><span>指定英靈</span><select id="heroSelect"><option value="">全部六星英靈</option></select></label><label class="field"><span>找出喜歡這個物品的英靈</span><select id="heroItemFilter"><option value="">全部物品</option></select></label><label class="field"><span>喜好範圍</span><select id="heroPreferenceFilter"><option value="">喜愛與最愛</option><option value="loved">只查最愛</option><option value="favorite">只查喜愛</option></select></label></div><div class="hero-filter-status"><p id="heroPreferenceCount" role="status" aria-live="polite"></p><button id="heroClearFilters" type="button" class="secondary-btn">清除篩選</button></div><section class="hero-common-gifts"><h3>所有六星皆喜愛的通用物品</h3><div id="heroCommonGifts"></div><p class="unit-note">以下英靈的喜愛項目皆包含這些物品；各卡片另外列出個別喜好。</p></section><div id="heroPreferenceResults" class="hero-preference-grid"></div><p class="unit-note">僅列出這份官方資料中的六星英靈；缺少所選語言翻譯時保留日文原名。喜好清單不會修改遠征掉落。</p><a href="./docs/hero-preferences.md" target="_blank" rel="noopener">查看資料來源與對應規則</a></section></section>
 
 
     <details class="site-help"><summary>版本、資料來源與模擬範圍</summary><section class="panel release-notes"><span class="eyebrow">VERSION 2.2.0</span><p>五頁流程：遠征配置 → 開始遠征 → 統計資料 → 鑽石模擬器 → 六星英靈喜好。快速連抽以指定獎品單次命中為目標。</p><h2>讓設定、預覽與模擬用同一套規則</h2><p>官方資料 3.16.0 · 保留 V1.6.0 鑽石抽取與獎勵輪盤。</p><div class="release-grid"><article><h3>共用帳號配置</h3><p>六種遠征神器、全部地圖 100% 或各圖探索率。設定自動保存，連續模式新取得神器跨地圖共用。</p></article><article><h3>有效掉落預覽</h3><p>預覽與模擬共用神器及探索加成，顯示轉換後的獎勵數量。魂之果物獨立於羈絆贈禮。</p></article><article><h3>保留你的紀錄</h3><p>舊版統計持續保留。不同版本或配置累積在一起時，平均值代表混合結果；需要比較時先匯出備份，再重置統計。</p></article></div><details><summary>模擬範圍</summary><p>無敵必勝、戰鬥 0 秒、陷阱免傷；可用無限耐力或自訂隊伍最終耐力。活動倍率、其他角色專屬事件、經驗、年齡、寶箱開箱及跨日重置尚未接入。面板步行速度換算為估算，不能當作原版逐種子重播。</p></details><a href="./docs/v2.1.0.md" target="_blank" rel="noopener">查看 V2.1.0 更新與驗證</a></section></details></main>
@@ -325,7 +325,7 @@
   <script src="./simulation-view.js?v=2.2.0"></script>
   <script src="./records.js?v=2.2.0"></script>
   <script src="./record-view.js?v=2.2.0"></script>
-  <script src="./hero-preferences-data.js?v=2.2.0"></script><script src="./hero-preferences-view.js?v=2.2.2"></script><script src="./app.js?v=2.2.0"></script>
+  <script src="./hero-preferences-data.js?v=2.3.0"></script><script src="./hero-preferences-view.js?v=2.3.0"></script><script src="./app.js?v=2.2.0"></script>
 
 
 

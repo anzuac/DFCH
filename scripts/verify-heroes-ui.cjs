@@ -8,7 +8,7 @@ w.document.querySelector('[data-tab="heroes"]').click();assert.equal(w.document.
 change('heroSearch','伊茲');assert.equal(count(),3);$('heroClearFilters').click();assert.equal(count(),23);
 change('heroItemFilter','305000020');assert.equal(count(),23);change('heroPreferenceFilter','loved');assert.equal(count(),0);assert.match($('heroPreferenceResults').textContent,/找不到/);
 $('heroClearFilters').click();change('heroSelect','13');assert.equal(count(),1);assert.match($('heroPreferenceResults').textContent,/黃金蘋果/);
-change('heroSelect','59');assert.match($('heroPreferenceResults').textContent,/フレイヤ/);assert.match($('heroPreferenceResults').textContent,/日文原名/);
+change('heroSelect','59');assert.match($('heroPreferenceResults').textContent,/弗雷雅/);
 change('heroSearch','不存在的英靈');assert.equal(count(),0);$('heroClearFilters').click();assert.equal(count(),23);
 const ids=[...w.document.querySelectorAll('[id]')].map(e=>e.id);assert.equal(ids.length,new Set(ids).size);
 w.close();console.log('Hero UI: fifth tab, hero/name/item/preference filters, reset, same-name variants, Japanese fallback and empty state passed');

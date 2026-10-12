@@ -12,5 +12,7 @@ for(const h of data.heroes){
  assert.deepEqual(h.loved,expected.loved);assert.deepEqual(h.favorite,expected.favorite);assert.ok(h.loved.every(id=>!h.favorite.includes(id)));
  assert.ok([...h.loved,...h.favorite].every(id=>names.has(id)));assert.ok(h.name&&h.title);
 }
-const idunn=data.heroes.find(h=>h.index===13),water=data.heroes.find(h=>h.index===22);assert.equal(idunn.name,water.name);assert.notEqual(idunn.title,water.title);assert.deepEqual(idunn.loved,[305001003]);assert.deepEqual(water.loved,[305001016]);assert.equal(data.heroes.filter(h=>h.nameLanguage==='ja').length,2);
+const idunn=data.heroes.find(h=>h.index===13),water=data.heroes.find(h=>h.index===22);assert.equal(idunn.name,water.name);assert.notEqual(idunn.title,water.title);assert.deepEqual(idunn.loved,[305001003]);assert.deepEqual(water.loved,[305001016]);assert.equal(data.heroes.filter(h=>h.nameLanguage==='ja').length,0);
 console.log('Hero preferences: all 23 source mappings, six common favorites, distinct variants, localization and browser data parity passed');
+
+assert.equal(data.heroes.find(h=>h.key==='freya').name,'弗雷雅');assert.equal(data.heroes.find(h=>h.key==='frigg').name,'芙麗嘉');

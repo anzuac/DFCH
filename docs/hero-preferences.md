@@ -42,3 +42,11 @@
 ## 2.2.2 羈絆道具圖片
 
 通用、最愛與個別喜愛清單均顯示道具圖片與名稱。圖鑑使用的 31 種道具依 rewardId 對應官方 key，再精確配對 startup bundle 的 `icon-{key}` Sprite，轉為最長邊 96px 的透明 WebP。來源見 `docs/evidence/gift-images-source.json`；執行 `python DFCH/scripts/extract-gift-images.py` 可重建。圖片採延遲載入，載入失敗仍保留名稱；原頁與獨立頁共用渲染。
+
+## 2.3.0 圖鑑語言
+
+提供官方語言表的繁中、簡中、日文、英文、韓文、泰文及越南文選項。角色名、稱號、物品名讀取官方 localize_master/localize_master2；空白欄位回退日文，角色卡標明缺少翻譯。介面文字為網站自行翻譯，並非聲稱出自遊戲 UI。語言偏好以獨立 localStorage key dfch-hero-language 保存，只影響圖鑑。
+
+使用者提供的遊戲繁中截圖確認：frigg 為「芙麗嘉／凝視羈絆的白色女神」，freya 為「弗雷雅／探求不滅之愛的黑色女神」。以明確覆寫補足原 3.16.0 表內空白；其餘語言不據此推造譯名。
+
+所有翻譯仍包在既有 hero-preferences-data.js 與 view.js，Cloudflare build 白名單不需更改；公開輸出維持只有圖鑑。
