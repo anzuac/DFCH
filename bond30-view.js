@@ -39,7 +39,7 @@
   function allCandidates() {
     const rows = poolRows();
     const exclusions = existingIds();
-    const blockedGroups = rows.filter((row) => exclusions.includes(Number(row.abilityId)) && Number(row.exclusiveGroupIdRaw) > 0).map((row) => Number(row.exclusiveGroupIdRaw));
+    const blockedGroups = rows.filter((row) => exclusions.includes(Number(row.abilityId)) && Number(row.exclusiveGroupId) > 0).map((row) => Number(row.exclusiveGroupId));
     return engine.withRates(engine.eligible(rows, {excludedIds:exclusions,blockedGroups,applyGroupExclusions:ui.bondApplyGroups.checked}));
   }
   function labelFor(id) { return names[String(id)] || "技能 ID " + id; }
