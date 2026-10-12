@@ -5,7 +5,7 @@
   if (!root) return;
   const engine = window.DFCHBond30Engine;
   if (!engine) return;
-  const ids = ["bondPool","bondHero","bondHeroName","bondFixed","bondImport","bondSearch","bondAbilities","bondApplyGroups","bondCandidateRows","bondPoolStatus","bondPoolBreakdown","bondPoolOverview","bondHeroStatus","bondEligibleStatus","bondDraw","bondDrawStatus","bondDrawHistory","bondClear"];
+  const ids = ["bondPool","bondHero","bondHeroName","bondFixed","bondImport","bondSearch","bondAbilities","bondApplyGroups","bondCandidateRows","bondPoolStatus","bondQuickTest","bondPoolBreakdown","bondPoolOverview","bondHeroStatus","bondEligibleStatus","bondDraw","bondDrawStatus","bondDrawHistory","bondClear"];
   const ui = Object.fromEntries(ids.map((id) => [id, document.getElementById(id)]));
   const poolLabels = {
     default_gacha:"一般召喚", multi_strike_pickup:"魔嵐的弓術士們",
@@ -34,7 +34,7 @@
     return Array.isArray(fixedByHero[id]) ? engine.parseIdList(fixedByHero[id].join(",")) : [];
   }
   function existingIds() {
-    return [...new Set([...owned, ...heroFixedIds(), ...engine.parseIdList(ui.bondFixed.value)])];
+    return [...new Set([...owned, ...heroFixedIds()])];
   }
   function poolRows() { return pools[ui.bondPool.value] || []; }
   function allCandidates() {
@@ -43,7 +43,7 @@
     const blockedGroups = rows.filter((row) => exclusions.includes(Number(row.abilityId)) && Number(row.exclusiveGroupId) > 0).map((row) => Number(row.exclusiveGroupId));
     return engine.withRates(engine.eligible(rows, {excludedIds:exclusions,blockedGroups,applyGroupExclusions:ui.bondApplyGroups.checked}));
   }
-  function labelFor(id) { return names[String(id)] || "技能 ID " + id; }
+  function labelFor(id) { return names[String(id)] || "能力 #" + String(id).slice(-5) + "（名稱待補）"; }
   function renderHero() {
     const pool = ui.bondPool.value;
     const previous = ui.bondHero.value;
@@ -51,7 +51,7 @@
     const matching = Object.entries(heroes).filter(([, value]) => (value.pools || []).some((p) => p.key === pool));
     matching.sort((a,b) => Number(a[0])-Number(b[0]));
     for (const [id, details] of matching) {
-      const label = details.translations?.zh_tw || details.name || "英靈 ID " + id;
+      const label = window.DFCHBond30HeroLabels?.[id] || details.translations?.zh_tw || details.name || "英靈（名稱待補）";
       ui.bondHero.add(new Option(label + "（ID " + id + "）", id));
     }
     if ([...ui.bondHero.options].some((opt) => opt.value === previous)) ui.bondHero.value = previous;
@@ -62,7 +62,7 @@
     if (fixed.length) {
       text(ui.bondHeroStatus, "已依驗證資料綁定 " + fixed.length + " 個固定能力：" + fixed.map(labelFor).join("、"));
     } else {
-      text(ui.bondHeroStatus, "尚無該英靈已驗證的固定能力對照。可在下方填入現有固定能力 ID；未核對前不宣稱結果與官方相同。");
+      text(ui.bondHeroStatus, "該英靈的固定能力尚未完成對照，這階段只能測試抽選流程，不代表官方最終可抽技能。");
     }
   }
   function updatePoolOverview() {
@@ -181,18 +181,8 @@
   ui.bondPool.addEventListener("change", switchPool);
   ui.bondHero.addEventListener("change", () => { updateHeroStatus(); updateCandidates(); });
   ui.bondSearch.addEventListener("input", renderAbilities);
-  ui.bondFixed.addEventListener("input", updateCandidates);
+
   ui.bondApplyGroups.addEventListener("change", updateCandidates);
-  ui.bondImport.addEventListener("change", async () => {
-    const file = ui.bondImport.files?.[0];
-    if (!file) return;
-    try {
-      if (file.size > 5 * 1024 * 1024) throw new Error("檔案不得超過 5 MB");
-      acceptPoolData(JSON.parse(await file.text()), file.name);
-    } catch(error) {
-      text(ui.bondPoolStatus, "匯入失敗：" + error.message);
-    } finally { ui.bondImport.value = ""; }
-  });
   ui.bondDraw.addEventListener("click", () => {
     const record = engine.choose(allCandidates());
     if (!record) return;
@@ -202,35 +192,28 @@
     renderHistory();
   });
   ui.bondClear.addEventListener("click", () => {
-    history = []; owned.clear(); ui.bondFixed.value = ""; ui.bondSearch.value = "";
+    history = []; owned.clear(); ui.bondSearch.value = "";
     text(ui.bondDrawStatus, "尚未抽選");
     renderHistory(); renderAbilities(); updateCandidates();
   });
-  async function optionalJSON(path) {
-    try {
-      const response = await fetch(path, {cache:"no-cache"});
-      return response.ok ? await response.json() : null;
-    } catch (_) { return null; }
-  }
-  Promise.all([
-    optionalJSON("./data/hero-acquisition.json"),
-    optionalJSON("./data/bond30-heroes.json"),
-    optionalJSON("./data/bond30-pools-3.16.1.json"),
-    optionalJSON("./data/bond30-all-pools-3.16.1.json")
-  ]).then(([acquisition, fixed, candidateData, allPoolData]) => {
-    if (acquisition) setHeroData(acquisition);
-    if (fixed) {
-      fixedByHero = fixed.fixedByHero || {};
-      names = fixed.abilityNames || {};
-    }
-    if (candidateData) {
-      try { acceptPoolData(candidateData, "倉庫測試資料"); }
-      catch (error) { text(ui.bondPoolStatus, "資料驗證失敗：" + error.message); }
-    }
-    if (allPoolData) {
-      try { acceptAllPoolData(allPoolData); }
-      catch(error) { text(ui.bondPoolBreakdown, "所有池資料讀取失敗：" + error.message); }
-    }
-    renderHero(); renderAbilities(); updatePoolOverview(); updateCandidates();
+  // 只供流程測試的示範技能組合，不是英靈正式九格規則。
+  ui.bondQuickTest.addEventListener("click", () => {
+    const options = engine.normalizePool(poolRows());
+    const picks = [...options].sort(() => Math.random() - 0.5).slice(0, 5);
+    owned = new Set(picks.map((item) => item.abilityId));
+    history = [];
+    text(ui.bondDrawStatus, "已產生五個自由能力的示範配置（不是官方實際招募結果）。");
+    renderAbilities(); updateCandidates(); renderHistory();
   });
+  const embedded = window.DFCHBond30Data;
+  if (embedded && embedded.optional && embedded.all) {
+    setHeroData(embedded.acquisition || {});
+    fixedByHero = embedded.heroes?.fixedByHero || {};
+    names = embedded.heroes?.abilityNames || {};
+    acceptPoolData(embedded.optional, "網頁內建資料，無需匯入");
+    acceptAllPoolData(embedded.all);
+    renderHero(); renderAbilities(); updatePoolOverview(); updateCandidates();
+  } else {
+    text(ui.bondPoolStatus, "找不到內建資料。請確認 bond30-data.js 與 index.html 在同一個資料夾。");
+  }
 })();
