@@ -72,6 +72,16 @@ for hero in data['heroes']:
 for item in data['items']:
  key=next(i['key'] for i in items if i['rewardId']==item['id'])
  item['translations']={lang:loc['r-name-'+key][lang].strip() for lang in languages}
+# Versioned gift additions verified separately from the base hero table.
+for supplement in json.loads((root/'data/hero-gift-supplements.json').read_text()):
+ item=supplement['item'];raw_item=supplement['source']
+ assert raw_item['commonPreference']==2 and not any(raw_item[k] for k in ['exceptionNormalUniqueIndices','exceptionFavoriteUniqueIndices','exceptionLovedUniqueIndices'])
+ if item['id'] not in {i['id'] for i in data['items']}:data['items'].append(item)
+ if item['id'] not in data['commonFavorite']:data['commonFavorite'].append(item['id'])
+ for hero in data['heroes']:
+  if item['id'] not in hero['favorite']:hero['favorite'].append(item['id'])
+ if item['id'] not in {i['rewardId'] for i in source['items']}:source['items'].append(raw_item)
+ data['giftSupplementVersion']=supplement['gameVersion']
 (root/'data/hero-preferences.json').write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n')
 (root/'hero-preferences-data.js').write_text('window.DFCHHeroPreferences = '+json.dumps(data,ensure_ascii=False,separators=(',',':'))+';\n')
 source['evidence']={'tablePathId':76187,'tableSha256':hashlib.sha256(raw).hexdigest(),'tableRows':count,'metadataSha256':hashlib.sha256(metadata).hexdigest(),'rarityValue':5,'commonPreferenceMethod':'0x2e7dccc','assignmentMethod':'0x2d3e894','getPreferenceMethod':'0x2dcf66c','sixStarRandomFill':False}

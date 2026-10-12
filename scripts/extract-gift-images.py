@@ -16,6 +16,9 @@ records=[]
 keys={i['rewardId']:i['key'] for i in json.loads((root/'docs/evidence/hero-preferences-source.json').read_text())['items']}
 for item in json.loads((root/'data/hero-preferences.json').read_text())['items']:
  name='icon-'+keys[item['id']]
+ if name not in sprites and item['id']==305000026:
+  assert (output/'305000026.webp').is_file(),'Run extract-pumpkin-image.py first'
+  continue
  assert name in sprites,name
  path_id,sprite=sprites[name]
  image=sprite.image.convert('RGBA');image.thumbnail((96,96))

@@ -730,6 +730,27 @@
       "exceptionLovedUniqueIndices": [],
       "exceptionFavoriteUniqueIndices": [],
       "exceptionNormalUniqueIndices": []
+    },
+    {
+      "key": "i_affection_pumpkin_pie",
+      "rewardId": 305000026,
+      "rarityType": 5,
+      "rewardType": 305,
+      "itemDisplayType": 5,
+      "excludeGeneral": false,
+      "overrideMasterIconKey": "",
+      "iconBackGroundKey": "",
+      "iconParentFolder": "",
+      "index": 26,
+      "type": 105,
+      "overrideEffectValue": 0,
+      "affectionValue": 40,
+      "genres": 8388609,
+      "commonPreference": 2,
+      "exceptionNormalUniqueIndices": [],
+      "exceptionFavoriteUniqueIndices": [],
+      "exceptionLovedUniqueIndices": [],
+      "seasonType": 1
     }
   ],
   "evidence": {

@@ -1,0 +1,42 @@
+[
+  {
+    "gameVersion": "3.16.1",
+    "source": {
+      "key": "i_affection_pumpkin_pie",
+      "rewardId": 305000026,
+      "rarityType": 5,
+      "rewardType": 305,
+      "itemDisplayType": 5,
+      "excludeGeneral": false,
+      "overrideMasterIconKey": "",
+      "iconBackGroundKey": "",
+      "iconParentFolder": "",
+      "index": 26,
+      "type": 105,
+      "overrideEffectValue": 0,
+      "affectionValue": 40,
+      "genres": 8388609,
+      "commonPreference": 2,
+      "exceptionNormalUniqueIndices": [],
+      "exceptionFavoriteUniqueIndices": [],
+      "exceptionLovedUniqueIndices": [],
+      "seasonType": 1
+    },
+    "item": {
+      "id": 305000026,
+      "name": "幽靈南瓜塔",
+      "translations": {
+        "zh_tw": "幽靈南瓜塔",
+        "zh_cn": "",
+        "ja": "パンプキンパイ仮",
+        "en": "",
+        "ko": "",
+        "th": "",
+        "vi": ""
+      }
+    },
+    "nameSource": "Traditional Chinese name from user gameplay screenshot; Japanese placeholder from 3.16.1 localize_master2/master; other translations unavailable.",
+    "tablePathId": 76279,
+    "tableSha256": "9636c366c6f4e8d6d87af8440e46fca4478c5b2d844beccd5a0cf95614b97d64"
+  }
+]

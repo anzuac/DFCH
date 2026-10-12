@@ -1,6 +1,6 @@
 const assert=require('node:assert/strict'),fs=require('node:fs');
 const data=require('../data/hero-preferences.json'),source=require('../docs/evidence/hero-preferences-source.json');global.window={};require('../hero-preferences-data.js');assert.deepEqual(window.DFCHHeroPreferences,data);
-assert.equal(data.heroes.length,23);assert.equal(source.evidence.tableRows,64);assert.equal(data.commonFavorite.length,6);
+assert.equal(data.heroes.length,23);assert.equal(source.evidence.tableRows,64);assert.equal(data.commonFavorite.length,7);
 const names=new Map(data.items.map(r=>[r.id,r.name]));assert.equal(names.size,data.items.length);assert.ok(data.items.every(r=>r.name.trim()));
 for(const h of data.heroes){
  const raw=source.heroes.find(r=>r.index===h.index);assert.equal(raw.rarity,5);

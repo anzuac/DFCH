@@ -3,7 +3,7 @@ const root=path.resolve(__dirname,'..'),dom=new JSDOM(fs.readFileSync(path.join(
 for(const script of w.document.querySelectorAll('script[src]'))w.eval(fs.readFileSync(path.join(root,script.getAttribute('src').split('?')[0]),'utf8'));
 const change=(id,value)=>{$(id).value=value;$(id).dispatchEvent(new w.Event(id==='heroSearch'?'input':'change'));};
 const count=()=>$('heroPreferenceResults').querySelectorAll('article').length;
-assert.equal(count(),23);assert.equal($('heroCommonGifts').querySelectorAll('li').length,6);
+assert.equal(count(),23);assert.equal($('heroCommonGifts').querySelectorAll('li').length,7);
 w.document.querySelector('[data-tab="heroes"]').click();assert.equal(w.document.querySelector('.tab-panel.active').id,'tab-heroes');assert.equal($('heroSelect').options.length,24);
 change('heroSearch','伊茲');assert.equal(count(),3);$('heroClearFilters').click();assert.equal(count(),23);
 change('heroItemFilter','305000020');assert.equal(count(),23);change('heroPreferenceFilter','loved');assert.equal(count(),0);assert.match($('heroPreferenceResults').textContent,/找不到/);

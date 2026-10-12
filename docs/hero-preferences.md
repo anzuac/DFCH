@@ -50,3 +50,9 @@
 使用者提供的遊戲繁中截圖確認：frigg 為「芙麗嘉／凝視羈絆的白色女神」，freya 為「弗雷雅／探求不滅之愛的黑色女神」。以明確覆寫補足原 3.16.0 表內空白；其餘語言不據此推造譯名。
 
 所有翻譯仍包在既有 hero-preferences-data.js 與 view.js，Cloudflare build 白名單不需更改；公開輸出維持只有圖鑑。
+
+## 2.3.2 幽靈南瓜塔補充
+
+以 3.16.1（1923）UniqueSoldierInheritanceStatusTable（pathID 76279）補入 rewardId 305000026 / i_affection_pumpkin_pie，affectionValue=40、commonPreference=2、三組例外皆空。全部 23 位六星都列為喜愛，通用清單增為 7 種、物品選單增為 32 種。原六星資料仍來自 3.16.0，未宣稱完成新版全表更新。
+
+繁中名稱採使用者提供的遊戲截圖「幽靈南瓜塔」。3.16.1 本地翻譯表只有日文暫名「パンプキンパイ仮」，其他語言維持缺漏回退，未自行冒充官方譯名。補充來源及原始欄位保存在 data/hero-gift-supplements.json，重建腳本會套用。圖片取自新版 datapack 的同名 Sprite（pathID 3306），可用 scripts/extract-pumpkin-image.py 重建。
