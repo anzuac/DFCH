@@ -88,6 +88,7 @@ for hero in data['heroes']:
  hero['acquisition']=acquisition['heroes'].get(str(hero['index']),{})
 data['acquisitionVersion']=acquisition['gameVersion']
 data['bondGains']=json.loads((root/'data/hero-bond-gains.json').read_text())
+data['giftLocations']=json.loads((root/'data/hero-gift-locations.json').read_text())
 (root/'data/hero-preferences.json').write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n')
 (root/'hero-preferences-data.js').write_text('window.DFCHHeroPreferences = '+json.dumps(data,ensure_ascii=False,separators=(',',':'))+';\n')
 source['evidence']={'tablePathId':76187,'tableSha256':hashlib.sha256(raw).hexdigest(),'tableRows':count,'metadataSha256':hashlib.sha256(metadata).hexdigest(),'rarityValue':5,'commonPreferenceMethod':'0x2e7dccc','assignmentMethod':'0x2d3e894','getPreferenceMethod':'0x2dcf66c','sixStarRandomFill':False}

@@ -41,7 +41,7 @@
       const base=rules.baseValues[id],multiplier=rules.preferenceMultipliers[preference],artifact=ownsBondStatue?rules.artifact.multiplier:1;
       const gain=Math.floor(base*multiplier*artifact);
       entry.dataset.gift=id;entry.dataset.bondGain=gain;
-      detail.append(node('span',names.get(id),'gift-name'),node('strong',`${text.gain} +${gain}`,'gift-bond-gain'),node('small',`${text.base} ${base} × ${text[preference]} ${multiplier}`+(ownsBondStatue?` × ${text.artifact} ${artifact}`:''),'gift-bond-formula'));
+      detail.append(node('span',names.get(id),'gift-name'),node('strong',`${text.gain} +${gain}`,'gift-bond-gain'));
       entry.append(icon,detail);if(!source.items.find(i=>i.id===id).translations[lang])entry.title=t(15);list.append(entry);
     }
     return list;
@@ -50,23 +50,56 @@
   const panel=$('heroPreferenceTitle').closest('.hero-preferences-panel'),languageLabel=node('label',null,'field hero-language'),language=node('select');language.id='heroLanguage';languageLabel.append(node('span','Language / 語言'),language);panel.querySelector('.panel-head').after(languageLabel);
   const bondPanel=node('section',null,'hero-bond-settings'),bondHeading=node('h3'),bondLabel=node('label',null,'hero-bond-toggle'),bondCheckbox=node('input'),bondLabelText=node('span'),bondNote=node('p',null,'unit-note');
   bondCheckbox.type='checkbox';bondCheckbox.id='heroBondStatue';bondCheckbox.checked=ownsBondStatue;
-  bondLabel.append(bondCheckbox,bondLabelText);bondPanel.append(bondHeading,bondLabel,bondNote);languageLabel.after(bondPanel);
+  bondLabel.append(bondCheckbox,bondLabelText);bondPanel.append(bondLabel);languageLabel.after(bondPanel);
   bondCheckbox.addEventListener('change',()=>{ownsBondStatue=bondCheckbox.checked;try{localStorage.setItem('dfch-hero-bond-statue',String(ownsBondStatue));}catch{}$('heroCommonGifts').replaceChildren(chips(data.commonFavorite));render();});
+  const locationUI={
+    zh_tw:['英靈喜好','羈絆道具取得方式','搜尋道具／遠征地圖','全部遠征地圖','遠征地圖','找不到符合條件的道具'],
+    ja:['英霊の好み','贈り物の入手方法','贈り物・遠征先を検索','すべての遠征先','遠征先','該当する贈り物がありません'],
+    en:['Hero preferences','Where to find gifts','Search gift / sortie map','All sortie maps','Sortie maps','No matching gifts'],
+    ko:['영령 선호도','선물 획득 방법','선물 / 원정 지도 검색','모든 원정 지도','원정 지도','일치하는 선물이 없습니다']
+  };
+  const guideBody=node('div'),locationBody=node('section'),guideNav=node('nav',null,'hero-guide-tabs'),heroTab=node('button'),locationTab=node('button');
+  guideBody.id='heroGuideContent';locationBody.id='heroGiftLocations';locationBody.hidden=true;
+  const children=[...panel.children];for(const child of children){if(child!==panel.querySelector('.panel-head')&&child!==languageLabel)guideBody.append(child);}
+  for(const [button,target] of [[heroTab,guideBody],[locationTab,locationBody]]){button.type='button';button.setAttribute('aria-controls',target.id);button.setAttribute('aria-pressed',String(button===heroTab));button.addEventListener('click',()=>{guideBody.hidden=button!==heroTab;locationBody.hidden=button!==locationTab;heroTab.setAttribute('aria-pressed',String(button===heroTab));locationTab.setAttribute('aria-pressed',String(button===locationTab));});guideNav.append(button);}
+  panel.append(guideNav,guideBody,locationBody);
+  const locationFilters=node('div',null,'hero-preference-filters'),locationSearchLabel=node('label',null,'field'),locationSearch=node('input'),locationMapLabel=node('label',null,'field'),locationMap=node('select'),locationList=node('div',null,'hero-preference-grid');
+  locationSearch.type='search';locationSearch.id='giftLocationSearch';locationMap.id='giftLocationMap';locationList.id='giftLocationResults';
+  locationSearchLabel.append(node('span'),locationSearch);locationMapLabel.append(node('span'),locationMap);locationFilters.append(locationSearchLabel,locationMapLabel);locationBody.append(locationFilters,locationList);
+  function renderLocations(){
+    const labels=locationUI[lang],query=normalize(locationSearch.value),selected=Number(locationMap.value),locations=source.giftLocations;
+    locationList.replaceChildren();
+    for(const item of locations.items){
+      const name=item.translations[lang]||item.translations.ja,maps=locations.maps.filter(m=>m.gifts.includes(item.id));
+      if(selected&&!maps.some(m=>m.id===selected))continue;
+      if(query&&!normalize([name,...maps.map(m=>m.translations[lang]||m.translations.ja)].join(' ')).includes(query))continue;
+      const card=node('article',null,'hero-preference-card gift-location-card'),header=node('div',null,'gift-location-header'),icon=node('img',null,'gift-icon');
+      icon.src=`./assets/gifts/${item.id}.webp`;icon.alt='';icon.width=48;icon.height=48;icon.loading='lazy';header.append(icon,node('h3',name));card.append(header,node('h4',labels[4]));
+      const list=node('ul',null,'gift-location-maps');for(const map of maps)list.append(node('li',map.translations[lang]||map.translations.ja));card.append(list);locationList.append(card);
+    }
+    if(!locationList.children.length)locationList.append(node('p',labels[5],'hero-empty'));
+  }
+  function applyLocationLanguage(){
+    const labels=locationUI[lang],selected=locationMap.value;heroTab.textContent=labels[0];locationTab.textContent=labels[1];guideNav.setAttribute('aria-label',labels[1]);
+    locationSearchLabel.firstChild.textContent=labels[2];locationSearch.placeholder=labels[2];locationMapLabel.firstChild.textContent=labels[4];locationMap.replaceChildren();
+    const all=node('option',labels[3]);all.value='';locationMap.append(all);for(const map of source.giftLocations.maps){const option=node('option',map.translations[lang]||map.translations.ja);option.value=map.id;locationMap.append(option);}locationMap.value=selected;renderLocations();
+  }
+  locationSearch.addEventListener('input',renderLocations);locationMap.addEventListener('change',renderLocations);
   for(const [key,name] of visibleLanguages.map(key=>[key,source.languages[key]])){const o=node('option',name);o.value=key;language.append(o);}language.value=lang;
   function options(id,items,empty){const e=$(id),value=e.value;e.replaceChildren();const first=node('option',empty);first.value='';e.append(first);for(const [key,label] of items){const o=node('option',label);o.value=key;e.append(o);}e.value=value;}
   function applyLanguage(){
     data={...source,heroes:source.heroes.map(h=>{const tr=h.translations[lang],ja=h.translations.ja;return {...h,name:tr.name||ja.name,title:tr.title||ja.title,fallback:!tr.name||!tr.title};}),items:source.items.map(i=>({...i,name:i.translations[lang]||i.translations.ja}))};names=new Map(data.items.map(i=>[i.id,i.name]));
-    bondHeading.textContent=bondUI[lang].heading;bondLabelText.textContent=`${bondUI[lang].owns} ${source.bondGains.artifact.translations[lang]}（×${source.bondGains.artifact.multiplier}）`;bondNote.textContent=bondUI[lang].note;
+    bondHeading.textContent=bondUI[lang].heading;bondLabelText.textContent=`${bondUI[lang].owns} ${source.bondGains.artifact.translations[lang]}`;bondNote.textContent=bondUI[lang].note;
     panel.lang=lang.replace('_','-');$('heroPreferenceTitle').textContent=t(0);
     for(const [id,i] of [['heroSearch',1],['heroSelect',2],['heroItemFilter',4],['heroPreferenceFilter',6]])$(id).previousElementSibling.textContent=t(i);
     $('heroSearch').placeholder=t(1);$('heroClearFilters').textContent=t(10);panel.querySelector('.hero-common-gifts h3').textContent=t(11);
     options('heroSelect',data.heroes.map(h=>[h.index,`${h.name}｜${h.title}`]),t(3));options('heroItemFilter',[...data.items].sort((a,b)=>a.name.localeCompare(b.name)).map(i=>[i.id,i.name]),t(5));options('heroPreferenceFilter',[['loved',t(8)],['favorite',t(9)]],t(7));
     $('heroCommonGifts').replaceChildren(chips(data.commonFavorite));
     // Secondary explanatory text is Chinese-only, so hide it in other languages.
-    for(const e of panel.querySelectorAll(':scope > .helper,:scope > .unit-note,.hero-common-gifts > .unit-note'))e.hidden=lang!=='zh_tw';
+    for(const e of guideBody.querySelectorAll(':scope > .helper,:scope > .unit-note,.hero-common-gifts > .unit-note'))e.hidden=lang!=='zh_tw';
     panel.querySelector('.status-chip').textContent='3.16.0';
     const header=document.querySelector('.hero-guide-header');if(header){header.querySelector('h1').textContent=t(0);header.querySelector('.helper').hidden=lang!=='zh_tw';document.title=t(0);document.documentElement.lang=lang.replace('_','-');}
-    render();
+    applyLocationLanguage();render();
   }
   function render(){
     const query=normalize($('heroSearch').value),selected=$('heroSelect').value,item=Number($('heroItemFilter').value),kind=$('heroPreferenceFilter').value;

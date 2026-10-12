@@ -19,7 +19,7 @@
         "ja": "チョコレート",
         "en": "Chocolate",
         "ko": "초콜릿",
-        "th": "ช็อคโกแลต",
+        "th": "ช็อคโกแลต.",
         "vi": "sôcôla"
       }
     },
@@ -1982,5 +1982,463 @@
         "ko": "★인연의 조각상"
       }
     }
+  },
+  "giftLocations": {
+    "maps": [
+      {
+        "id": 1,
+        "translations": {
+          "zh_tw": "米維克威茲 外緣部",
+          "ja": "ミュルクヴィズ 外縁部",
+          "en": "Mirkwood Periphery",
+          "ko": "빌레못 외곽부"
+        },
+        "gifts": [
+          305001000,
+          305001004,
+          305001026
+        ]
+      },
+      {
+        "id": 2,
+        "translations": {
+          "zh_tw": "希敏約格 湖畔",
+          "ja": "ヒミンビョルグ 湖畔",
+          "en": "Himinbjorg Lake",
+          "ko": "히민뵤르그 호숫가"
+        },
+        "gifts": [
+          305001000,
+          305001001,
+          305001002,
+          305001003
+        ]
+      },
+      {
+        "id": 3,
+        "translations": {
+          "zh_tw": "世界樹 樹海",
+          "ja": "ユグドラシル 樹海",
+          "en": "Yggdrasil woods",
+          "ko": "유그드라실 수해"
+        },
+        "gifts": [
+          305001004,
+          305001005,
+          305001006,
+          305001007
+        ]
+      },
+      {
+        "id": 4,
+        "translations": {
+          "zh_tw": "阿斯嘉特 邊境",
+          "ja": "アースガルド 辺境",
+          "en": "Asgard Periphery",
+          "ko": "아스가르드 변경"
+        },
+        "gifts": [
+          305001003,
+          305001006,
+          305001007,
+          305001008,
+          305001009
+        ]
+      },
+      {
+        "id": 5,
+        "translations": {
+          "zh_tw": "赫爾海姆 支川",
+          "ja": "ヘルヘイム 支川",
+          "en": "Helheim Tributary",
+          "ko": "헬헤임 지류"
+        },
+        "gifts": [
+          305001010,
+          305001011,
+          305001027
+        ]
+      },
+      {
+        "id": 6,
+        "translations": {
+          "zh_tw": "學術都市 露克斯・艾特納",
+          "ja": "学術都市 ルクス・エテルナ",
+          "en": "Lux Aeterna, City of Scholars",
+          "ko": "학술 도시 룩스 에텔나"
+        },
+        "gifts": [
+          305001002,
+          305001012,
+          305001013,
+          305001014,
+          305001015,
+          305001024
+        ]
+      },
+      {
+        "id": 7,
+        "translations": {
+          "zh_tw": "金倫加鴻溝",
+          "ja": "ギンヌンガガプ",
+          "en": "Ginnungagap",
+          "ko": "긴눙가가프"
+        },
+        "gifts": [
+          305001003,
+          305001011,
+          305001016
+        ]
+      },
+      {
+        "id": 8,
+        "translations": {
+          "zh_tw": "昔日的米德加爾德",
+          "ja": "昔日のミッドガルド",
+          "en": "Midgard of Yore",
+          "ko": "옛날의 미드가르드"
+        },
+        "gifts": [
+          305001012,
+          305001013,
+          305001017,
+          305001018,
+          305001019,
+          305001023
+        ]
+      },
+      {
+        "id": 9,
+        "translations": {
+          "zh_tw": "不歸的牢獄 庫・努・吉亞",
+          "ja": "不帰の牢獄 クル・ヌ・ギア",
+          "en": "Kigal of the Forever Damned",
+          "ko": "불귀의 감옥 크루누기아"
+        },
+        "gifts": [
+          305001010,
+          305001018,
+          305001020,
+          305001021,
+          305001027
+        ]
+      },
+      {
+        "id": 10,
+        "translations": {
+          "zh_tw": "雪嶺孤城 烏沃貝爾克",
+          "ja": "雪嶺の孤城 ウォーベルク",
+          "en": "Snow Peak Castle Wahlburg",
+          "ko": "설산의 고성 워베르크"
+        },
+        "gifts": [
+          305001019,
+          305001022,
+          305001023
+        ]
+      },
+      {
+        "id": 11,
+        "translations": {
+          "zh_tw": "巨大迷宮探索 上層",
+          "ja": "巨大迷宮探索 上層",
+          "en": "Giant Maze Search, Upper Floors",
+          "ko": "거대 미궁 탐사 상층"
+        },
+        "gifts": [
+          305001000,
+          305001008,
+          305001013,
+          305001021,
+          305001024
+        ]
+      },
+      {
+        "id": 12,
+        "translations": {
+          "zh_tw": "巨大迷宮探索 下層",
+          "ja": "巨大迷宮探索 下層",
+          "en": "Giant Maze Search, Lower Floors",
+          "ko": "거대 미궁 탐사 하층"
+        },
+        "gifts": [
+          305001000,
+          305001013,
+          305001015,
+          305001017,
+          305001018
+        ]
+      },
+      {
+        "id": 13,
+        "translations": {
+          "zh_tw": "決戰魔王",
+          "ja": "魔王決戦",
+          "en": "Demon Lord Fight",
+          "ko": "마왕 결전"
+        },
+        "gifts": [
+          305001011,
+          305001019,
+          305001021,
+          305001025,
+          305001026
+        ]
+      }
+    ],
+    "items": [
+      {
+        "id": 305001000,
+        "translations": {
+          "zh_tw": "發光蘑菇",
+          "ja": "発光するキノコ",
+          "en": "Bioluminescent mushroom",
+          "ko": "빛을 내는 버섯"
+        }
+      },
+      {
+        "id": 305001001,
+        "translations": {
+          "zh_tw": "水鳥的羽毛",
+          "ja": "水鳥の羽根",
+          "en": "Waterfowl feather",
+          "ko": "물새의 깃털"
+        }
+      },
+      {
+        "id": 305001002,
+        "translations": {
+          "zh_tw": "朝露鴨跖草",
+          "ja": "朝露のツユクサ",
+          "en": "Dewy dayflower",
+          "ko": "아침 이슬의 물망초"
+        }
+      },
+      {
+        "id": 305001003,
+        "translations": {
+          "zh_tw": "靈山羊的濃厚牛奶",
+          "ja": "霊山羊の濃厚ミルク",
+          "en": "Ghost goat milk",
+          "ko": "늙은 산양의 진한 밀크"
+        }
+      },
+      {
+        "id": 305001004,
+        "translations": {
+          "zh_tw": "琥珀色的蜂蜜",
+          "ja": "琥珀色のハチミツ",
+          "en": "Amber honey",
+          "ko": "호박색 꿀"
+        }
+      },
+      {
+        "id": 305001005,
+        "translations": {
+          "zh_tw": "靈木的陶笛",
+          "ja": "霊木のオカリナ",
+          "en": "Sacred tree ocarina",
+          "ko": "신목의 오카리나"
+        }
+      },
+      {
+        "id": 305001006,
+        "translations": {
+          "zh_tw": "精靈的絹絲",
+          "ja": "精霊の絹糸",
+          "en": "Fairy silk",
+          "ko": "정령의 비단실"
+        }
+      },
+      {
+        "id": 305001007,
+        "translations": {
+          "zh_tw": "雪見草",
+          "ja": "雪見草",
+          "en": "Snowleaf",
+          "ko": "설견초"
+        }
+      },
+      {
+        "id": 305001008,
+        "translations": {
+          "zh_tw": "髒污的西洋棋盤",
+          "ja": "薄汚れたチェス盤",
+          "en": "Dirty chessboard",
+          "ko": "낡은 체스판"
+        }
+      },
+      {
+        "id": 305001009,
+        "translations": {
+          "zh_tw": "神聖的酒瓶",
+          "ja": "神々しい酒瓶",
+          "en": "Majestic liquor bottle",
+          "ko": "신성한 술병"
+        }
+      },
+      {
+        "id": 305001010,
+        "translations": {
+          "zh_tw": "冥府的漂流木",
+          "ja": "冥府の流木",
+          "en": "Underworld driftwood",
+          "ko": "명부의 유목"
+        }
+      },
+      {
+        "id": 305001011,
+        "translations": {
+          "zh_tw": "黑曜石",
+          "ja": "黒曜石",
+          "en": "Obsidian shard",
+          "ko": "흑요석"
+        }
+      },
+      {
+        "id": 305001012,
+        "translations": {
+          "zh_tw": "花香香水",
+          "ja": "花の香水",
+          "en": "Flower perfume",
+          "ko": "꽃 향수"
+        }
+      },
+      {
+        "id": 305001013,
+        "translations": {
+          "zh_tw": "陳年鋼筆",
+          "ja": "年代物の万年筆",
+          "en": "Antique fountain pen",
+          "ko": "오래된 만년필"
+        }
+      },
+      {
+        "id": 305001014,
+        "translations": {
+          "zh_tw": "星之音樂盒",
+          "ja": "星のオルゴール",
+          "en": "Star music box",
+          "ko": "별의 오르골"
+        }
+      },
+      {
+        "id": 305001015,
+        "translations": {
+          "zh_tw": "古代天球儀",
+          "ja": "古代の天球儀",
+          "en": "Ancient globe",
+          "ko": "고대의 천구의"
+        }
+      },
+      {
+        "id": 305001016,
+        "translations": {
+          "zh_tw": "冰炎的幻花",
+          "ja": "氷炎の幻花",
+          "en": "Iceflame phantom flower",
+          "ko": "빙염의 환상 꽃"
+        }
+      },
+      {
+        "id": 305001017,
+        "translations": {
+          "zh_tw": "高級羊皮紙",
+          "ja": "上質な羊皮紙",
+          "en": "Luxury parchment",
+          "ko": "고급 양피지"
+        }
+      },
+      {
+        "id": 305001018,
+        "translations": {
+          "zh_tw": "破舊的日記本",
+          "ja": "ボロボロの日記帳",
+          "en": "Tattered journal",
+          "ko": "누더기 같은 일기장"
+        }
+      },
+      {
+        "id": 305001019,
+        "translations": {
+          "zh_tw": "被撕破的情書",
+          "ja": "破かれたラブレター",
+          "en": "Torn love letter",
+          "ko": "찢어진 연애 편지"
+        }
+      },
+      {
+        "id": 305001020,
+        "translations": {
+          "zh_tw": "用途不明的鑰匙",
+          "ja": "用途不明の鍵",
+          "en": "Key of unknown use",
+          "ko": "용도불명의 열쇠"
+        }
+      },
+      {
+        "id": 305001021,
+        "translations": {
+          "zh_tw": "可疑的藥瓶",
+          "ja": "怪しい薬瓶",
+          "en": "Suspicious vial",
+          "ko": "수상한 약병"
+        }
+      },
+      {
+        "id": 305001022,
+        "translations": {
+          "zh_tw": "橡木桶釀造葡萄酒",
+          "ja": "樽仕込みのワイン",
+          "en": "Barrel-aged wine",
+          "ko": "통에 담긴 와인"
+        }
+      },
+      {
+        "id": 305001023,
+        "translations": {
+          "zh_tw": "野獸肉乾",
+          "ja": "獣の干し肉",
+          "en": "Beastly jerky",
+          "ko": "짐승의 육포"
+        }
+      },
+      {
+        "id": 305001024,
+        "translations": {
+          "zh_tw": "神秘古代書",
+          "ja": "謎の古代書",
+          "en": "Mysterious ancient book",
+          "ko": "수수께끼의 고대서"
+        }
+      },
+      {
+        "id": 305001025,
+        "translations": {
+          "zh_tw": "魔石的碎片",
+          "ja": "魔石の欠片",
+          "en": "Magic stone fragment",
+          "ko": "마석의 조각"
+        }
+      },
+      {
+        "id": 305001026,
+        "translations": {
+          "zh_tw": "獵人的煙斗葉",
+          "ja": "狩人のパイプ葉",
+          "en": "Hunter's pipe leaf",
+          "ko": "사냥꾼의 파이프잎"
+        }
+      },
+      {
+        "id": 305001027,
+        "translations": {
+          "zh_tw": "冥界骸花椒",
+          "ja": "冥界の骸花椒",
+          "en": "Underworld carcass pepper",
+          "ko": "명계의 해골 후추"
+        }
+      }
+    ]
   }
 }

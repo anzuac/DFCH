@@ -1192,3 +1192,14 @@ input,select{border-color:#9fbccc35!important;border-radius:9px!important;backgr
 .gift-detail{display:flex;flex-direction:column;gap:3px;min-width:0}
 .gift-bond-gain{color:var(--teal-2);font-size:13px}
 .gift-bond-formula{color:var(--muted);font-size:11px;line-height:1.5}
+
+.hero-guide-tabs{display:flex;gap:8px;overflow-x:auto;margin:0 0 20px;padding-bottom:4px}
+.hero-guide-tabs button{flex:1 0 auto;border:1px solid var(--line);border-radius:10px;padding:12px 16px;background:var(--panel-2);color:var(--muted);cursor:pointer;font:inherit}
+.hero-guide-tabs button[aria-pressed="true"]{background:#173f40;color:var(--teal-2);border-color:var(--teal-2)}
+#heroGiftLocations[hidden],#heroGuideContent[hidden]{display:none}
+#giftLocationResults{margin-top:20px}
+.gift-location-header{display:flex;align-items:center;gap:12px}
+.gift-location-header .gift-icon{width:48px;height:48px;flex-basis:48px}
+.gift-location-header h3{font-size:18px}
+.gift-location-card h4{font-size:13px;color:var(--muted);margin:16px 0 8px}
+.gift-location-maps{margin:0;padding-left:20px;line-height:1.8;font-size:14px}

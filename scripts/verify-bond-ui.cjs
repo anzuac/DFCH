@@ -8,9 +8,9 @@ for(const page of ['heroes.html','index.html']){
  assert.equal(gain(milk),80);assert.equal(gain(pumpkin),60);
  toggle.click();assert.equal(gain(milk),120);assert.equal(gain(pumpkin),90);assert.equal(w.localStorage.getItem('dfch-hero-bond-statue'),'true');
  assert([...d.querySelectorAll('.favorite [data-bond-gain]')].some(e=>e.dataset.bondGain==='67'));
- const search=d.getElementById('heroSearch');search.value='伊茲';search.dispatchEvent(new w.Event('input'));assert.equal(d.querySelectorAll('.hero-preference-card').length,3);
+ const search=d.getElementById('heroSearch');search.value='伊茲';search.dispatchEvent(new w.Event('input'));assert.equal(d.querySelectorAll('#heroPreferenceResults .hero-preference-card').length,3);
  for(const lang of ['en','ja','ko','zh_tw']){const e=d.getElementById('heroLanguage');e.value=lang;e.dispatchEvent(new w.Event('change'));assert(toggle.checked);assert.equal(gain(pumpkin),90);assert(d.querySelector('.hero-bond-toggle').textContent.includes(w.DFCHHeroPreferences.bondGains.artifact.translations[lang]));}
- d.getElementById('heroClearFilters').click();assert(toggle.checked);assert.equal(d.querySelectorAll('.hero-preference-card').length,23);
+ d.getElementById('heroClearFilters').click();assert(toggle.checked);assert.equal(d.querySelectorAll('#heroPreferenceResults .hero-preference-card').length,23);
  toggle.click();assert.equal(gain(milk),80);assert.equal(gain(pumpkin),60);w.close();
  const restored=make(true);assert(restored.document.getElementById('heroBondStatue').checked);assert.equal(restored.document.querySelector(milk).dataset.bondGain,'120');restored.close();
 }
