@@ -17,7 +17,10 @@
     if(!result.length){root.append(node('p','找不到符合條件的英靈，請調整搜尋或按「清除篩選」。','hero-empty'));return;}
     for(const h of result){
       const card=node('article',null,'hero-preference-card');card.dataset.hero=h.index;
-      card.append(node('p',h.title,'hero-title'),node('h3',h.name),node('span','★★★★★★','hero-stars'));
+      const header=node('div',null,'hero-card-header'),portrait=node('img',null,'hero-portrait'),identity=node('div',null,'hero-identity');
+      portrait.src=`./assets/heroes/${h.key}.webp`;portrait.alt=`${h.title} ${h.name}`;portrait.width=112;portrait.height=112;portrait.loading='lazy';portrait.decoding='async';
+      portrait.addEventListener('error',()=>{const fallback=node('span','圖片暫時無法載入','hero-portrait-fallback');portrait.replaceWith(fallback);},{once:true});
+      identity.append(node('p',h.title,'hero-title'),node('h3',h.name),node('span','★★★★★★','hero-stars'));header.append(portrait,identity);card.append(header);
       if(h.nameLanguage!=='zh_tw'||h.titleLanguage!=='zh_tw')card.append(node('p','官方繁中名稱尚未提供，顯示日文原名。','unit-note'));
       const loved=node('section',null,'gift-group loved');loved.append(node('h4','最愛'),h.loved.length?chips(h.loved):node('p','未設定固定最愛物品'));card.append(loved);
       const favorite=node('section',null,'gift-group favorite'),specific=h.favorite.filter(id=>!common.has(id));

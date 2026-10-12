@@ -1156,3 +1156,14 @@ input,select{border-color:#9fbccc35!important;border-radius:9px!important;backgr
 .gift-list li { background:#0d1b2780;border:1px solid var(--line);border-radius:8px;padding:7px 10px;font-size:13px;overflow-wrap:anywhere; }
 .loved .gift-list li { border-color:#ffb2c845; }.hero-empty { grid-column:1/-1;padding:32px 12px;color:var(--muted);text-align:center; }
 @media(max-width:650px){.hero-preference-grid,.hero-preference-filters{grid-template-columns:1fr}.tabs .tab{min-width:118px;padding:12px 14px;font-size:13px}.hero-preference-card{padding:16px}}
+
+/* Shared portraits and the standalone six-star gift guide. */
+.hero-card-header{display:flex;align-items:center;gap:16px;margin-bottom:18px}
+.hero-portrait{width:112px;height:112px;flex:0 0 112px;object-fit:contain;background:radial-gradient(ellipse at center,rgba(213,189,121,.15),transparent 72%);border:1px solid var(--line);border-radius:14px}
+.hero-identity{min-width:0;overflow-wrap:anywhere}
+.hero-portrait-fallback{width:112px;flex:0 0 112px;font-size:12px;color:var(--muted)}
+.hero-guide-header{margin-bottom:28px}
+.hero-guide-header h1{font-size:clamp(25px,5vw,38px);margin:8px 0}
+.heroes-standalone .app-shell{max-width:1120px}
+.hero-standalone-link{display:inline-block;margin-top:8px;font-size:13px;color:var(--teal-2)}
+@media(max-width:400px){.hero-card-header{gap:12px}.hero-portrait{width:88px;height:88px;flex-basis:88px}.hero-preference-card h3{font-size:20px}}

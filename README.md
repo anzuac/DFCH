@@ -62,3 +62,7 @@ node scripts/verify-diamond-ui.cjs
 | `diamond-draw.js`、`diamond-view.js` | 獨立鑽石抽取及輪盤 |
 
 歷次地圖與公式核對紀錄保留於 `docs/`。
+
+### 六星英靈獨立圖鑑
+
+直接開啟 [heroes.html](./heroes.html)，只顯示六星英靈、官方角色圖片與喜好查詢。原本第五頁也提供此入口。

@@ -32,3 +32,9 @@
 - `scripts/verify-heroes-ui.cjs` 檢查第五頁、篩選交集、清除、空結果與名稱回退；另執行既有頁面回歸。
 
 範圍限使用者提供的 3.16.0 資料，不宣稱含後續新增角色。尚未進行真實手機瀏覽器截圖驗收。
+
+## 2.2.1 官方圖片與獨立入口
+
+`heroes.html` 可直接開啟六星英靈喜好圖鑑，僅載入喜好資料與查詢介面，不載入遠征、統計或鑽石模擬器。原第五頁提供獨立入口，兩頁共用同一套資料與渲染程式。
+
+23 張角色圖片取自所提供 assets.zip 的 `assets/aa/Android/startup_.bundle`，依角色 key 精確配對 `prf_unique_{key}_2d` Sprite，包含泳裝及聖誕版本。轉為最長邊 384px 的透明 WebP，介面採延遲載入。來源 pathID、尺寸與 bundle SHA-256 見 `docs/evidence/hero-images-source.json`。執行 `python DFCH/scripts/extract-hero-images.py` 可重建；不需要 individual bundle。

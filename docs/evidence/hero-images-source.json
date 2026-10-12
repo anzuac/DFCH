@@ -1,0 +1,237 @@
+{
+  "gameVersion": "3.16.0",
+  "bundle": "assets/aa/Android/startup_.bundle",
+  "bundleSha256": "12404a9e5571b501c4318f366e53bdcfd9106ae00212f96d37b921756aa04dde",
+  "portraits": [
+    {
+      "key": "idunn",
+      "sprite": "prf_unique_idunn_2d",
+      "pathId": 712418693560756490,
+      "size": [
+        230,
+        240
+      ],
+      "file": "assets/heroes/idunn.webp"
+    },
+    {
+      "key": "siegfried",
+      "sprite": "prf_unique_siegfried_2d",
+      "pathId": 9116267490458427665,
+      "size": [
+        256,
+        240
+      ],
+      "file": "assets/heroes/siegfried.webp"
+    },
+    {
+      "key": "randgrid",
+      "sprite": "prf_unique_randgrid_2d",
+      "pathId": -3252001476758104206,
+      "size": [
+        256,
+        256
+      ],
+      "file": "assets/heroes/randgrid.webp"
+    },
+    {
+      "key": "uni",
+      "sprite": "prf_unique_uni_2d",
+      "pathId": -9106126753434679370,
+      "size": [
+        243,
+        239
+      ],
+      "file": "assets/heroes/uni.webp"
+    },
+    {
+      "key": "idunn_water",
+      "sprite": "prf_unique_idunn_water_2d",
+      "pathId": -3893444684262464338,
+      "size": [
+        256,
+        256
+      ],
+      "file": "assets/heroes/idunn_water.webp"
+    },
+    {
+      "key": "siegfried_water",
+      "sprite": "prf_unique_siegfried_water_2d",
+      "pathId": 5575832560209817054,
+      "size": [
+        256,
+        256
+      ],
+      "file": "assets/heroes/siegfried_water.webp"
+    },
+    {
+      "key": "flowsvan",
+      "sprite": "prf_unique_flowsvan_2d",
+      "pathId": 891768280567816872,
+      "size": [
+        256,
+        256
+      ],
+      "file": "assets/heroes/flowsvan.webp"
+    },
+    {
+      "key": "valentine_queen",
+      "sprite": "prf_unique_valentine_queen_2d",
+      "pathId": 6531891634541073112,
+      "size": [
+        256,
+        254
+      ],
+      "file": "assets/heroes/valentine_queen.webp"
+    },
+    {
+      "key": "beyla",
+      "sprite": "prf_unique_beyla_2d",
+      "pathId": 2281430388651157732,
+      "size": [
+        256,
+        247
+      ],
+      "file": "assets/heroes/beyla.webp"
+    },
+    {
+      "key": "akasha",
+      "sprite": "prf_unique_akasha_2d",
+      "pathId": 8229767674145492444,
+      "size": [
+        256,
+        249
+      ],
+      "file": "assets/heroes/akasha.webp"
+    },
+    {
+      "key": "bahra",
+      "sprite": "prf_unique_bahra_2d",
+      "pathId": 2924096605103867044,
+      "size": [
+        256,
+        256
+      ],
+      "file": "assets/heroes/bahra.webp"
+    },
+    {
+      "key": "randgrid_dagger",
+      "sprite": "prf_unique_randgrid_dagger_2d",
+      "pathId": -8648754591595406002,
+      "size": [
+        256,
+        241
+      ],
+      "file": "assets/heroes/randgrid_dagger.webp"
+    },
+    {
+      "key": "catgirl_bard",
+      "sprite": "prf_unique_catgirl_bard_2d",
+      "pathId": -2255358994375773578,
+      "size": [
+        256,
+        256
+      ],
+      "file": "assets/heroes/catgirl_bard.webp"
+    },
+    {
+      "key": "bandit_leader_wolf",
+      "sprite": "prf_unique_bandit_leader_wolf_2d",
+      "pathId": -5144126045643132618,
+      "size": [
+        256,
+        256
+      ],
+      "file": "assets/heroes/bandit_leader_wolf.webp"
+    },
+    {
+      "key": "orphia",
+      "sprite": "prf_unique_orphia_2d",
+      "pathId": -9033453260415039532,
+      "size": [
+        256,
+        256
+      ],
+      "file": "assets/heroes/orphia.webp"
+    },
+    {
+      "key": "idunn_xmas",
+      "sprite": "prf_unique_idunn_xmas_2d",
+      "pathId": -8416468612365961319,
+      "size": [
+        256,
+        256
+      ],
+      "file": "assets/heroes/idunn_xmas.webp"
+    },
+    {
+      "key": "eir",
+      "sprite": "prf_unique_eir_2d",
+      "pathId": 3084637013106570669,
+      "size": [
+        256,
+        256
+      ],
+      "file": "assets/heroes/eir.webp"
+    },
+    {
+      "key": "shion",
+      "sprite": "prf_unique_shion_2d",
+      "pathId": -5036855157662968012,
+      "size": [
+        256,
+        256
+      ],
+      "file": "assets/heroes/shion.webp"
+    },
+    {
+      "key": "valentine_queen_water",
+      "sprite": "prf_unique_valentine_queen_water_2d",
+      "pathId": 6123571646416703641,
+      "size": [
+        256,
+        253
+      ],
+      "file": "assets/heroes/valentine_queen_water.webp"
+    },
+    {
+      "key": "akasha_water",
+      "sprite": "prf_unique_akasha_water_2d",
+      "pathId": 5690582100008510112,
+      "size": [
+        256,
+        247
+      ],
+      "file": "assets/heroes/akasha_water.webp"
+    },
+    {
+      "key": "kolga",
+      "sprite": "prf_unique_kolga_2d",
+      "pathId": -6457257335045069774,
+      "size": [
+        256,
+        256
+      ],
+      "file": "assets/heroes/kolga.webp"
+    },
+    {
+      "key": "freya",
+      "sprite": "prf_unique_freya_2d",
+      "pathId": -8442347195786836483,
+      "size": [
+        231,
+        245
+      ],
+      "file": "assets/heroes/freya.webp"
+    },
+    {
+      "key": "frigg",
+      "sprite": "prf_unique_frigg_2d",
+      "pathId": -3024688188978758914,
+      "size": [
+        256,
+        256
+      ],
+      "file": "assets/heroes/frigg.webp"
+    }
+  ]
+}
