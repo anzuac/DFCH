@@ -306,8 +306,8 @@
   <div class="bond30-page">
     <section class="panel" aria-labelledby="bondTitle">
       <div class="panel-head"><div><p class="eyebrow">BOND 30 · TEST ONLY</p><h2 id="bondTitle">羈絆 30 等新能力模擬器</h2></div><span class="status-chip">測試分支 · APK 3.16.1</span></div>
-      <p class="bond30-intro">先指定來源招募池與英靈，再標記現有技能。系統使用剩餘候選的相對權重抽選；此功能仍在驗證排他群組與固定技能，不代表官方最終機率。</p>
-      <p class="bond30-warning"><strong>測試版：</strong>還原的招募候選目前透過 JSON 匯入；固定技能對照尚未補齊。與遊戲實際數值不同的狀況請以原版為準。</p>
+      <p class="bond30-intro">選擇來源池、英靈和已持有的自由能力，即可試算羈絆 30 等新能力。九個招募池資料已內建，無須上傳官方檔案或查詢任何代碼。</p>
+      <p class="bond30-warning"><strong>測試版：</strong>已內建原始候選與權重，但技能名稱、圖片及五星固定技能的完整對照尚待補齊。現階段適合測試介面和加權抽選，不可視為實際英靈的最終官方機率。</p>
       <div class="bond30-steps" aria-label="抽選流程">
         <div class="bond30-step">① 來源池／英靈<small>辨識抽出的來源</small></div>
         <div class="bond30-step">② 現有技能<small>固定格與自由格排除</small></div>
@@ -325,19 +325,18 @@
           <option value="2026_aniv_pickup">緣絲交織的聖銳們</option>
         </select></label>
         <label class="bond30-field"><span>英靈（依來源池篩選，未完成固定能力對照）</span><select id="bondHero"><option value="">自行輸入／未指定</option></select></label>
-        <label class="bond30-field"><span>英靈名稱備註（選填）</span><input id="bondHeroName" type="text" maxlength="100" placeholder="例如：你遊戲中的英靈名稱" autocomplete="off"></label>
-        <label class="bond30-field"><span>匯入官方資料擷取的候選池 JSON</span><input id="bondImport" type="file" accept=".json,application/json"></label>
       </div>
-      <p id="bondPoolStatus" class="bond30-muted" role="status">尚未載入技能候選。請匯入 bond30_optional_pool_raw_3_16_1.json。</p>
+      <p id="bondPoolStatus" class="bond30-muted" role="status">正在讀取內建招募池資料。</p>
       <p id="bondPoolBreakdown" class="bond30-muted"></p>
       <details><summary>查看全部九池的候選分類統計</summary><div class="bond30-scroll"><table class="bond30-table"><thead><tr><th>招募池</th><th>自由</th><th>攻擊</th><th>HP</th><th>總計</th></tr></thead><tbody id="bondPoolOverview"></tbody></table></div></details>
       <p id="bondHeroStatus" class="bond30-muted">等待英靈資料。</p>
     </section>
     <section class="panel">
       <div class="panel-head"><div><h3>第二步 · 設定現有技能</h3></div></div>
-      <label class="bond30-field"><span>固定能力 ID（以逗號分隔；官方對照確認後將自動綁定）</span><input id="bondFixed" type="text" placeholder="例如 303000001, 303000004" autocomplete="off"></label>
-      <p class="bond30-muted">下方勾選的是英靈原有的自由技能；抽選時會從候選池排除相同 ID。已驗證的固定能力將來可自動套用。</p>
-      <label class="bond30-field"><span>尋找現有技能</span><input id="bondSearch" type="search" placeholder="輸入技能 ID 或名稱"></label>
+      <p class="bond30-muted">直接勾選已擁有的能力，不需要輸入 ID。想先試用整個流程，也可一鍵產生五個自由能力的<strong>示範配置</strong>。</p>
+      <div class="bond30-actions"><button id="bondQuickTest" class="secondary-btn" type="button">一鍵產生測試技能組合</button></div>
+      <p class="bond30-warning">尚未補齊遊戲中所有技能名稱、圖片與固定技能，因此目前的能力清單以簡短編號標示；這是方便測試計算器的過渡設計，不能用來準確重建自己持有的英靈。</p>
+      <label class="bond30-field"><span>尋找現有技能</span><input id="bondSearch" type="search" placeholder="搜尋候選能力（名稱補齊後可直接搜尋中文）"></label>
       <div id="bondAbilities" class="bond30-grid" aria-label="可勾選的技能清單"></div>
       <label class="bond30-option"><input id="bondApplyGroups" type="checkbox">試算排他群組排除（實際群組判定仍待完整驗證，預設關閉）</label>
     </section>
@@ -378,7 +377,7 @@
   <script src="./simulation-view.js?v=2.2.0"></script>
   <script src="./records.js?v=2.2.0"></script>
   <script src="./record-view.js?v=2.2.0"></script>
-  <script src="./hero-preferences-data.js?v=2.3.2"></script><script src="./hero-preferences-view.js?v=2.3.2"></script><script src="./app.js?v=2.2.0"></script><script src="./bond30-engine.js?v=0.1.0"></script><script src="./bond30-view.js?v=0.1.0"></script>
+  <script src="./hero-preferences-data.js?v=2.3.2"></script><script src="./hero-preferences-view.js?v=2.3.2"></script><script src="./app.js?v=2.2.0"></script><script src="./bond30-engine.js?v=0.1.0"></script><script src="./bond30-data.js?v=0.2.0"></script><script src="./bond30-view.js?v=0.2.0"></script>
 
 
 
