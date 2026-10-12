@@ -1,0 +1,28 @@
+/* Bond 30 test area. Kept separate from the player-facing stylesheet. */
+.bond30-page { display:grid; gap:18px; }
+.bond30-page .bond30-intro { color:var(--muted); line-height:1.7; margin:0; }
+.bond30-page .bond30-warning { border:1px solid #96764a; background:rgba(164,123,56,.12); padding:12px 14px; border-radius:12px; line-height:1.7; }
+.bond30-page .bond30-steps { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; }
+.bond30-page .bond30-step { border:1px solid var(--line); background:var(--panel-2); border-radius:12px; padding:12px; font-weight:700; }
+.bond30-page .bond30-step small {display:block; color:var(--muted); margin-top:4px; font-weight:400;}
+.bond30-page .bond30-fields { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
+.bond30-page .bond30-field {display:flex; flex-direction:column; gap:6px; font-weight:600;}
+.bond30-page .bond30-field > span {color:var(--muted);font-size:.92rem;}
+.bond30-page input[type=text],.bond30-page input[type=search],.bond30-page select { width:100%; min-width:0; border:1px solid var(--line-strong);background:var(--bg-2);border-radius:9px;color:var(--text);padding:11px; }
+.bond30-page input[type=file] {max-width:100%;}
+.bond30-page .bond30-muted {font-size:.91rem;color:var(--muted);line-height:1.65;margin:6px 0;}
+.bond30-page .bond30-grid {display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px;max-height:295px;overflow:auto;padding:6px;}
+.bond30-page .bond30-skill {display:flex;gap:9px;align-items:center;padding:10px;background:var(--panel-2);border:1px solid var(--line);border-radius:10px;cursor:pointer;}
+.bond30-page .bond30-skill span {flex:1;overflow-wrap:anywhere;font-size:.88rem;}
+.bond30-page .bond30-skill small {color:var(--muted);white-space:nowrap;}
+.bond30-page input[type=checkbox] {accent-color:var(--teal);width:18px;height:18px;flex-shrink:0;}
+.bond30-page .bond30-option {display:flex;gap:8px;align-items:flex-start;line-height:1.5;}
+.bond30-page .bond30-scroll {overflow:auto;max-height:350px;border:1px solid var(--line);border-radius:10px;}
+.bond30-page .bond30-table {width:100%; border-collapse:collapse;min-width:450px;}
+.bond30-page .bond30-table th,.bond30-page .bond30-table td {padding:9px 12px;border-bottom:1px solid var(--line);text-align:left; font-variant-numeric:tabular-nums;}
+.bond30-page .bond30-table thead {position:sticky;top:0;background:var(--panel-2);}
+.bond30-page .bond30-result {font-weight:700;color:var(--gold-2);min-height:1.4em;}
+.bond30-page .bond30-actions {display:flex;flex-wrap:wrap;gap:10px;align-items:center;}
+.bond30-page .bond30-actions .primary-btn:disabled {opacity:.55;cursor:not-allowed;}
+.bond30-page .bond30-history {margin:0;padding-left:1.5em;max-height:180px;overflow:auto;}
+@media(max-width:720px){.bond30-page .bond30-fields {grid-template-columns:1fr;}.bond30-page .bond30-steps {grid-template-columns:1fr;}.bond30-page .bond30-grid {grid-template-columns:1fr;}}
