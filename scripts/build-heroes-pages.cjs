@@ -19,6 +19,7 @@ const outputDir = path.join(repoRoot, 'dist-heroes');
 const guideFiles = [
   'heroes.html',
   'guide-footer.js',
+  'display-settings.js',
   'styles.css',
   'hero-preferences-data.js',
   'hero-preferences-view.js',
