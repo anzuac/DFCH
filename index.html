@@ -307,7 +307,7 @@
     <section class="panel" aria-labelledby="bondTitle">
       <div class="panel-head"><div><p class="eyebrow">BOND 30 · TEST ONLY</p><h2 id="bondTitle">羈絆 30 等新能力模擬器</h2></div><span class="status-chip">測試分支 · APK 3.16.1</span></div>
       <p class="bond30-intro">選擇來源池、英靈和已持有的自由能力，即可試算羈絆 30 等新能力。九個招募池資料已內建，無須上傳官方檔案或查詢任何代碼。</p>
-      <p class="bond30-warning"><strong>測試版：</strong>已內建原始候選與權重，但技能名稱、圖片及五星固定技能的完整對照尚待補齊。現階段適合測試介面和加權抽選，不可視為實際英靈的最終官方機率。</p>
+      <p class="bond30-warning"><strong>測試版：</strong>已內建原始候選與權重，但官方繁中技能名稱、圖片及五星固定技能的完整對照尚待補齊。現階段適合測試介面和加權抽選，不可視為實際英靈的最終官方機率。</p>
       <div class="bond30-steps" aria-label="抽選流程">
         <div class="bond30-step">① 來源池／英靈<small>辨識抽出的來源</small></div>
         <div class="bond30-step">② 現有技能<small>固定格與自由格排除</small></div>
@@ -335,7 +335,7 @@
       <div class="panel-head"><div><h3>第二步 · 設定現有技能</h3></div></div>
       <p class="bond30-muted">直接勾選已擁有的能力，不需要輸入 ID。想先試用整個流程，也可一鍵產生五個自由能力的<strong>示範配置</strong>。</p>
       <div class="bond30-actions"><button id="bondQuickTest" class="secondary-btn" type="button">一鍵產生測試技能組合</button></div>
-      <p class="bond30-warning">尚未補齊遊戲中所有技能名稱、圖片與固定技能，因此目前的能力清單以簡短編號標示；這是方便測試計算器的過渡設計，不能用來準確重建自己持有的英靈。</p>
+      <p class="bond30-warning">已從 APK 對照到多數原始技能名稱鍵，顯示為方便辨認的「暫譯名稱」（不是官方繁中）。官方圖片及完整固定技能仍待補，不能據此認定已準確還原自己的英靈。</p>
       <label class="bond30-field"><span>尋找現有技能</span><input id="bondSearch" type="search" placeholder="搜尋候選能力（名稱補齊後可直接搜尋中文）"></label>
       <div id="bondAbilities" class="bond30-grid" aria-label="可勾選的技能清單"></div>
       <label class="bond30-option"><input id="bondApplyGroups" type="checkbox">試算排他群組排除（實際群組判定仍待完整驗證，預設關閉）</label>
@@ -377,7 +377,7 @@
   <script src="./simulation-view.js?v=2.2.0"></script>
   <script src="./records.js?v=2.2.0"></script>
   <script src="./record-view.js?v=2.2.0"></script>
-  <script src="./hero-preferences-data.js?v=2.3.2"></script><script src="./hero-preferences-view.js?v=2.3.2"></script><script src="./app.js?v=2.2.0"></script><script src="./bond30-engine.js?v=0.1.0"></script><script src="./bond30-data.js?v=0.2.0"></script><script src="./bond30-view.js?v=0.2.0"></script>
+  <script src="./hero-preferences-data.js?v=2.3.2"></script><script src="./hero-preferences-view.js?v=2.3.2"></script><script src="./app.js?v=2.2.0"></script><script src="./bond30-engine.js?v=0.1.0"></script><script src="./bond30-data.js?v=0.2.0"></script><script src="./bond30-ability-labels.js?v=0.3.0"></script><script src="./bond30-view.js?v=0.3.0"></script>
 
 
 
