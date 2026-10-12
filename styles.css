@@ -1203,3 +1203,6 @@ input,select{border-color:#9fbccc35!important;border-radius:9px!important;backgr
 .gift-location-header h3{font-size:18px}
 .gift-location-card h4{font-size:13px;color:var(--muted);margin:16px 0 8px}
 .gift-location-maps{margin:0;padding-left:20px;line-height:1.8;font-size:14px}
+
+.guide-footer{margin:28px 0 12px;padding:16px 0;border-top:1px solid var(--line);text-align:center;color:var(--muted);font-size:12px;line-height:1.8}
+.guide-footer p{margin:2px 0}
