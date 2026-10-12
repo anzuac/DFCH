@@ -21,7 +21,6 @@ const guideFiles = [
   'styles.css',
   'hero-preferences-data.js',
   'hero-preferences-view.js',
-  'docs/hero-preferences.md',
 ];
 
 const imageDirectories = [
@@ -74,4 +73,4 @@ fs.writeFileSync(
 );
 
 console.log('Cloudflare Pages: six-star hero guide output prepared in dist-heroes/');
-console.log('Published: guide HTML, its CSS/JavaScript, reference document, and hero/gift images.');
+console.log('Published: guide HTML, its CSS/JavaScript, and hero/gift images.');
