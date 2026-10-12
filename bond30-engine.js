@@ -12,7 +12,7 @@
       .map((record) => ({
         abilityId: asId(record.abilityId),
         weight: Number(record.weight),
-        exclusiveGroupId: Number(record.exclusiveGroupIdRaw) || 0,
+        exclusiveGroupId: Number(record.exclusiveGroupIdRaw ?? record.exclusiveGroupId) || 0,
         chooseGroupType: 1
       }))
       .filter((record) => record.abilityId && Number.isFinite(record.weight) && record.weight > 0);
@@ -46,7 +46,7 @@
     return records[records.length - 1];
   }
   function parseIdList(value) {
-    return [...new Set(String(value || "").split(/[\\s,，、;；]+/).map(asId).filter(Boolean))];
+    return [...new Set(String(value || "").split(/[\s,，、;；]+/).map(asId).filter(Boolean))];
   }
   return Object.freeze({ normalizePool, eligible, withRates, choose, parseIdList });
 });
