@@ -43,7 +43,7 @@
     const blockedGroups = rows.filter((row) => exclusions.includes(Number(row.abilityId)) && Number(row.exclusiveGroupId) > 0).map((row) => Number(row.exclusiveGroupId));
     return engine.withRates(engine.eligible(rows, {excludedIds:exclusions,blockedGroups,applyGroupExclusions:ui.bondApplyGroups.checked}));
   }
-  function labelFor(id) { return names[String(id)] || "能力 #" + String(id).slice(-5) + "（名稱待補）"; }
+  function labelFor(id) { return names[String(id)] || window.DFCHBond30AbilityLabels?.[String(id)] || "未命名能力 #" + String(id).slice(-5); }
   function renderHero() {
     const pool = ui.bondPool.value;
     const previous = ui.bondHero.value;
@@ -126,6 +126,7 @@
       const group = Number(record.chooseGroupType);
       const groupName = ({1:"自由",2:"攻擊增益",3:"HP 增益"})[group] || "其他";
       item.append(checkbox, element("span", labelFor(record.abilityId)), element("small", groupName + " · 權重 " + record.weight));
+      item.title = "APK 內部名稱鍵：" + (window.DFCHBond30AbilityKeys?.[record.abilityId] || "待確認");
       ui.bondAbilities.append(item);
     }
   }
