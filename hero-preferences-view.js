@@ -3,7 +3,7 @@
   const data=window.DFCHHeroPreferences,$=id=>document.getElementById(id),names=new Map(data.items.map(i=>[i.id,i.name])),common=new Set(data.commonFavorite);
   const normalize=value=>value.normalize('NFKC').trim().toLocaleLowerCase();
   function node(tag,text,cls){const e=document.createElement(tag);if(text)e.textContent=text;if(cls)e.className=cls;return e;}
-  function chips(ids){const list=node('ul',null,'gift-list');for(const id of ids)list.append(node('li',names.get(id)));return list;}
+  function chips(ids){const list=node('ul',null,'gift-list');for(const id of ids){const entry=node('li'),icon=node('img',null,'gift-icon');icon.src=`./assets/gifts/${id}.webp`;icon.alt='';icon.width=36;icon.height=36;icon.loading='lazy';icon.decoding='async';icon.addEventListener('error',()=>icon.remove(),{once:true});entry.append(icon,node('span',names.get(id)));list.append(entry);}return list;}
   $('heroCommonGifts').append(chips(data.commonFavorite));
   for(const h of data.heroes){const option=node('option',`${h.name}｜${h.title}`);option.value=String(h.index);$('heroSelect').append(option);}
   for(const item of [...data.items].sort((a,b)=>a.name.localeCompare(b.name,'zh-Hant'))){const option=node('option',item.name);option.value=String(item.id);$('heroItemFilter').append(option);}

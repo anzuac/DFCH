@@ -1167,3 +1167,7 @@ input,select{border-color:#9fbccc35!important;border-radius:9px!important;backgr
 .heroes-standalone .app-shell{max-width:1120px}
 .hero-standalone-link{display:inline-block;margin-top:8px;font-size:13px;color:var(--teal-2)}
 @media(max-width:400px){.hero-card-header{gap:12px}.hero-portrait{width:88px;height:88px;flex-basis:88px}.hero-preference-card h3{font-size:20px}}
+
+.gift-list li{display:inline-flex;align-items:center;gap:8px;max-width:100%}
+.gift-icon{width:36px;height:36px;flex:0 0 36px;object-fit:contain}
+.gift-list li span{overflow-wrap:anywhere;min-width:0}

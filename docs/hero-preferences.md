@@ -38,3 +38,7 @@
 `heroes.html` 可直接開啟六星英靈喜好圖鑑，僅載入喜好資料與查詢介面，不載入遠征、統計或鑽石模擬器。原第五頁提供獨立入口，兩頁共用同一套資料與渲染程式。
 
 23 張角色圖片取自所提供 assets.zip 的 `assets/aa/Android/startup_.bundle`，依角色 key 精確配對 `prf_unique_{key}_2d` Sprite，包含泳裝及聖誕版本。轉為最長邊 384px 的透明 WebP，介面採延遲載入。來源 pathID、尺寸與 bundle SHA-256 見 `docs/evidence/hero-images-source.json`。執行 `python DFCH/scripts/extract-hero-images.py` 可重建；不需要 individual bundle。
+
+## 2.2.2 羈絆道具圖片
+
+通用、最愛與個別喜愛清單均顯示道具圖片與名稱。圖鑑使用的 31 種道具依 rewardId 對應官方 key，再精確配對 startup bundle 的 `icon-{key}` Sprite，轉為最長邊 96px 的透明 WebP。來源見 `docs/evidence/gift-images-source.json`；執行 `python DFCH/scripts/extract-gift-images.py` 可重建。圖片採延遲載入，載入失敗仍保留名稱；原頁與獨立頁共用渲染。

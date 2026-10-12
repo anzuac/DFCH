@@ -1,0 +1,348 @@
+{
+  "gameVersion": "3.16.0",
+  "bundle": "assets/aa/Android/startup_.bundle",
+  "bundleSha256": "12404a9e5571b501c4318f366e53bdcfd9106ae00212f96d37b921756aa04dde",
+  "items": [
+    {
+      "id": 305000020,
+      "key": "i_status_point_chocolate",
+      "sprite": "icon-i_status_point_chocolate",
+      "pathId": -426345974304563274,
+      "size": [
+        96,
+        92
+      ],
+      "file": "assets/gifts/305000020.webp"
+    },
+    {
+      "id": 305000021,
+      "key": "i_ap_halloween_candy",
+      "sprite": "icon-i_ap_halloween_candy",
+      "pathId": 1525441605697439906,
+      "size": [
+        84,
+        96
+      ],
+      "file": "assets/gifts/305000021.webp"
+    },
+    {
+      "id": 305000022,
+      "key": "i_ap_xmas_cake",
+      "sprite": "icon-i_ap_xmas_cake",
+      "pathId": -1554920680079919771,
+      "size": [
+        96,
+        89
+      ],
+      "file": "assets/gifts/305000022.webp"
+    },
+    {
+      "id": 305000023,
+      "key": "i_weight_xmas_chicken",
+      "sprite": "icon-i_weight_xmas_chicken",
+      "pathId": -6296548341534643287,
+      "size": [
+        96,
+        87
+      ],
+      "file": "assets/gifts/305000023.webp"
+    },
+    {
+      "id": 305000024,
+      "key": "i_life_span_kibi_dango",
+      "sprite": "icon-i_life_span_kibi_dango",
+      "pathId": 3151050993029614113,
+      "size": [
+        96,
+        57
+      ],
+      "file": "assets/gifts/305000024.webp"
+    },
+    {
+      "id": 305000025,
+      "key": "i_rum",
+      "sprite": "icon-i_rum",
+      "pathId": 1646430318089334868,
+      "size": [
+        76,
+        96
+      ],
+      "file": "assets/gifts/305000025.webp"
+    },
+    {
+      "id": 305001000,
+      "key": "i_affection_mushroom",
+      "sprite": "icon-i_affection_mushroom",
+      "pathId": -6614420000786941585,
+      "size": [
+        94,
+        96
+      ],
+      "file": "assets/gifts/305001000.webp"
+    },
+    {
+      "id": 305001001,
+      "key": "i_affection_feather",
+      "sprite": "icon-i_affection_feather",
+      "pathId": 6010176030514473653,
+      "size": [
+        91,
+        96
+      ],
+      "file": "assets/gifts/305001001.webp"
+    },
+    {
+      "id": 305001002,
+      "key": "i_affection_dayflower",
+      "sprite": "icon-i_affection_dayflower",
+      "pathId": 5786408084454870526,
+      "size": [
+        80,
+        96
+      ],
+      "file": "assets/gifts/305001002.webp"
+    },
+    {
+      "id": 305001003,
+      "key": "i_affection_milk",
+      "sprite": "icon-i_affection_milk",
+      "pathId": 7500148453149143183,
+      "size": [
+        63,
+        96
+      ],
+      "file": "assets/gifts/305001003.webp"
+    },
+    {
+      "id": 305001004,
+      "key": "i_affection_honey",
+      "sprite": "icon-i_affection_honey",
+      "pathId": -3308823482643839858,
+      "size": [
+        76,
+        96
+      ],
+      "file": "assets/gifts/305001004.webp"
+    },
+    {
+      "id": 305001005,
+      "key": "i_affection_ocarina",
+      "sprite": "icon-i_affection_ocarina",
+      "pathId": -9044291229261484070,
+      "size": [
+        96,
+        78
+      ],
+      "file": "assets/gifts/305001005.webp"
+    },
+    {
+      "id": 305001006,
+      "key": "i_affection_silk",
+      "sprite": "icon-i_affection_silk",
+      "pathId": -3268017160365625386,
+      "size": [
+        87,
+        96
+      ],
+      "file": "assets/gifts/305001006.webp"
+    },
+    {
+      "id": 305001007,
+      "key": "i_affection_snowdrop",
+      "sprite": "icon-i_affection_snowdrop",
+      "pathId": -2524266241833002906,
+      "size": [
+        79,
+        96
+      ],
+      "file": "assets/gifts/305001007.webp"
+    },
+    {
+      "id": 305001008,
+      "key": "i_affection_chessboard",
+      "sprite": "icon-i_affection_chessboard",
+      "pathId": 2929077785175457809,
+      "size": [
+        96,
+        83
+      ],
+      "file": "assets/gifts/305001008.webp"
+    },
+    {
+      "id": 305001009,
+      "key": "i_affection_liquor_bottle",
+      "sprite": "icon-i_affection_liquor_bottle",
+      "pathId": 39479847428459748,
+      "size": [
+        57,
+        96
+      ],
+      "file": "assets/gifts/305001009.webp"
+    },
+    {
+      "id": 305001010,
+      "key": "i_affection_driftwood",
+      "sprite": "icon-i_affection_driftwood",
+      "pathId": 4440568436052201928,
+      "size": [
+        92,
+        96
+      ],
+      "file": "assets/gifts/305001010.webp"
+    },
+    {
+      "id": 305001011,
+      "key": "i_affection_obsidian",
+      "sprite": "icon-i_affection_obsidian",
+      "pathId": -8928379105179846597,
+      "size": [
+        67,
+        96
+      ],
+      "file": "assets/gifts/305001011.webp"
+    },
+    {
+      "id": 305001012,
+      "key": "i_affection_perfume",
+      "sprite": "icon-i_affection_perfume",
+      "pathId": -7213526333550801366,
+      "size": [
+        67,
+        96
+      ],
+      "file": "assets/gifts/305001012.webp"
+    },
+    {
+      "id": 305001013,
+      "key": "i_affection_fountain_pen",
+      "sprite": "icon-i_affection_fountain_pen",
+      "pathId": -8151801132338344642,
+      "size": [
+        91,
+        96
+      ],
+      "file": "assets/gifts/305001013.webp"
+    },
+    {
+      "id": 305001014,
+      "key": "i_affection_music_box",
+      "sprite": "icon-i_affection_music_box",
+      "pathId": 8001562085511684814,
+      "size": [
+        70,
+        96
+      ],
+      "file": "assets/gifts/305001014.webp"
+    },
+    {
+      "id": 305001015,
+      "key": "i_affection_celestial_globe",
+      "sprite": "icon-i_affection_celestial_globe",
+      "pathId": 2001146129525059479,
+      "size": [
+        85,
+        96
+      ],
+      "file": "assets/gifts/305001015.webp"
+    },
+    {
+      "id": 305001016,
+      "key": "i_affection_phantom_flower",
+      "sprite": "icon-i_affection_phantom_flower",
+      "pathId": 158535866340952145,
+      "size": [
+        96,
+        96
+      ],
+      "file": "assets/gifts/305001016.webp"
+    },
+    {
+      "id": 305001017,
+      "key": "i_affection_parchment",
+      "sprite": "icon-i_affection_parchment",
+      "pathId": -8019672235687319888,
+      "size": [
+        96,
+        96
+      ],
+      "file": "assets/gifts/305001017.webp"
+    },
+    {
+      "id": 305001018,
+      "key": "i_affection_diary",
+      "sprite": "icon-i_affection_diary",
+      "pathId": -7731795095795460362,
+      "size": [
+        89,
+        96
+      ],
+      "file": "assets/gifts/305001018.webp"
+    },
+    {
+      "id": 305001019,
+      "key": "i_affection_love_letter",
+      "sprite": "icon-i_affection_love_letter",
+      "pathId": 7132026895692588370,
+      "size": [
+        96,
+        88
+      ],
+      "file": "assets/gifts/305001019.webp"
+    },
+    {
+      "id": 305001021,
+      "key": "i_affection_medicine_bottle",
+      "sprite": "icon-i_affection_medicine_bottle",
+      "pathId": -1081514607872361035,
+      "size": [
+        60,
+        96
+      ],
+      "file": "assets/gifts/305001021.webp"
+    },
+    {
+      "id": 305001022,
+      "key": "i_affection_wine",
+      "sprite": "icon-i_affection_wine",
+      "pathId": -2378853416366431266,
+      "size": [
+        84,
+        96
+      ],
+      "file": "assets/gifts/305001022.webp"
+    },
+    {
+      "id": 305001023,
+      "key": "i_affection_dried_meat",
+      "sprite": "icon-i_affection_dried_meat",
+      "pathId": -453026813218088543,
+      "size": [
+        96,
+        96
+      ],
+      "file": "assets/gifts/305001023.webp"
+    },
+    {
+      "id": 305001024,
+      "key": "i_affection_ancient_book",
+      "sprite": "icon-i_affection_ancient_book",
+      "pathId": -8495761396034271576,
+      "size": [
+        96,
+        96
+      ],
+      "file": "assets/gifts/305001024.webp"
+    },
+    {
+      "id": 305001027,
+      "key": "i_affection_corpse_flower_pepper",
+      "sprite": "icon-i_affection_corpse_flower_pepper",
+      "pathId": -3986476138508787367,
+      "size": [
+        96,
+        88
+      ],
+      "file": "assets/gifts/305001027.webp"
+    }
+  ]
+}
