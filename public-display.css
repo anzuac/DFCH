@@ -202,3 +202,43 @@ html[data-guide-theme="green"] .dfch-public-nav a[aria-current="page"]{backgroun
 html[data-guide-theme="light"] .bond30-public :is(.completion,.result){color:var(--gold)}
 .bond30-public :is(.completion,.result){color:var(--gold)}
 @media(max-width:620px){.dfch-public-links a{font-size:calc(12px * var(--guide-font-multiplier,1))}}
+
+/* Bond30 typography follows the shared 80%-150% slider without compressing the 3×3 board. */
+.bond30-public .slot{
+  min-height:calc(112px * var(--guide-font-multiplier,1));
+  padding-block:10px;
+}
+.bond30-public .slot strong{line-height:1.4;overflow-wrap:anywhere}
+.bond30-public .slot small{line-height:1.35;overflow-wrap:anywhere}
+.bond30-public .skill{min-height:calc(64px * var(--guide-font-multiplier,1))}
+.bond30-public .skill .weight{
+  font-size:calc(12px * var(--guide-font-multiplier,1));
+  max-width:100%;overflow-wrap:anywhere;
+}
+.bond30-public .result-line,.bond30-public .rate{min-width:0}
+.bond30-public .rate b{overflow-wrap:anywhere}
+.bond30-public .skill .info{min-width:0}
+@media(max-width:680px){
+ .bond30-public :is(select,input[type="search"]){
+   font-size:max(16px,calc(13px * var(--guide-font-multiplier,1)));
+   min-height:44px;
+ }
+ .bond30-public .metric strong{
+   font-size:clamp(18px,calc(21px * var(--guide-font-multiplier,1)),30px);
+ }
+ .bond30-public .auto-draw .button,.bond30-public .actions .button{
+   min-height:48px;white-space:normal;
+ }
+ .bond30-public .slot .glyph{max-width:calc(46px + 5px * (var(--guide-font-multiplier,1) - 1))}
+}
+@media(max-width:430px){
+ .bond30-public .masthead{grid-template-columns:minmax(0,1fr);row-gap:8px}
+ .bond30-public .masthead>div:first-child{grid-column:1;grid-row:2}
+ .bond30-public .masthead>.dfch-settings-trigger{grid-column:1;grid-row:1}
+ .bond30-public .slot strong{font-size:calc(11px * var(--guide-font-multiplier,1))}
+ .bond30-public .slot small{font-size:calc(10px * var(--guide-font-multiplier,1))}
+ .bond30-public .result-line strong{font-size:calc(16px * var(--guide-font-multiplier,1))}
+ .bond30-public .masthead h1{
+   font-size:clamp(calc(23px * var(--guide-font-multiplier,1)),6vw,calc(30px * var(--guide-font-multiplier,1)));
+ }
+}
