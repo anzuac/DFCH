@@ -181,3 +181,11 @@ html[data-guide-theme="green"] .bond30-public{
  .bond30-public .slot strong{font-size:calc(11px * var(--guide-font-multiplier,1))}
 }
 @media(max-width:350px){.dfch-settings-themes{grid-template-columns:1fr}}
+
+/* Bond30 does not load the six-star site's --panel-2 variable. Bind the same settings panel to its palette. */
+.bond30-public .dfch-settings-panel{background:var(--panel);color:var(--text);border-color:var(--line)}
+.bond30-public :is(.dfch-settings-trigger,.dfch-settings-step,.dfch-settings-close,.dfch-settings-theme,.dfch-settings-language,.dfch-settings-reset){
+  background:var(--panel2);color:var(--text);border-color:var(--line)
+}
+.bond30-public .dfch-settings-theme:has(input:checked){background:var(--guide-tab-active);border-color:var(--teal)}
+.bond30-public .dfch-settings-note{color:var(--muted)}
