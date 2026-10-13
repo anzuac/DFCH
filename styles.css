@@ -1502,3 +1502,169 @@ html[data-guide-theme="green"] .heroes-standalone {
     padding:8px 6px;
   }
 }
+
+
+/* Compact gift priority: group by actual bond gain, not one tall card per hero.
+ * Portraits are the direct links to the existing preference tab.
+ * A/B candidate selection, score calculations and artwork are unchanged.
+ */
+.hero-preferences-panel .gift-rank-list{
+  display:grid;
+  gap:12px;
+  min-width:0;
+}
+.hero-preferences-panel .gift-rank-group{
+  min-width:0;
+  border:1px solid var(--line);
+  border-radius:13px;
+  background:var(--panel-2);
+  overflow:hidden;
+}
+.hero-preferences-panel .gift-rank-group-best{
+  border-color:var(--teal);
+}
+.hero-preferences-panel .gift-rank-group-toggle{
+  display:flex;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:6px 13px;
+  width:100%;
+  min-height:60px;
+  padding:12px 16px;
+  background:transparent;
+  color:var(--text);
+  border:0;
+  font:inherit;
+  text-align:left;
+  cursor:pointer;
+}
+.hero-preferences-panel .gift-rank-group-toggle:hover{
+  background:var(--guide-hover,rgba(105,214,191,.10));
+}
+.hero-preferences-panel .gift-rank-group-toggle:focus-visible,
+.hero-preferences-panel .gift-rank-avatar:focus-visible,
+.hero-preferences-panel .gift-rank-show-more:focus-visible{
+  outline:2px solid var(--teal);
+  outline-offset:-3px;
+}
+.hero-preferences-panel .gift-rank-group-gain{
+  font-size:calc(18px * var(--guide-font-multiplier,1));
+  color:var(--teal-2);
+  font-variant-numeric:tabular-nums;
+  overflow-wrap:anywhere;
+}
+.hero-preferences-panel .gift-rank-group-count,
+.hero-preferences-panel .gift-rank-group-position{
+  font-size:calc(12px * var(--guide-font-multiplier,1));
+  color:var(--muted);
+  overflow-wrap:anywhere;
+}
+.hero-preferences-panel .gift-rank-group-position{color:var(--gold-2)}
+.hero-preferences-panel .gift-rank-group-arrow{
+  margin-left:auto;
+  flex:0 0 auto;
+  font-size:calc(20px * var(--guide-font-multiplier,1));
+  color:var(--teal-2);
+  line-height:1;
+}
+.hero-preferences-panel .gift-rank-group-content{
+  padding:4px 14px 14px;
+  border-top:1px solid var(--line);
+}
+.hero-preferences-panel .gift-rank-group-content[hidden],
+.hero-preferences-panel .gift-rank-avatar[hidden]{
+  display:none!important;
+}
+.hero-preferences-panel .gift-rank-avatar-grid{
+  display:grid;
+  grid-template-columns:repeat(8,minmax(0,1fr));
+  gap:10px 7px;
+  padding-top:12px;
+}
+.hero-preferences-panel .gift-rank-avatar{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:flex-start;
+  gap:7px;
+  min-width:0;
+  min-height:98px;
+  padding:8px 3px;
+  border:1px solid transparent;
+  border-radius:10px;
+  background:transparent;
+  color:var(--text);
+  text-align:center;
+  font:inherit;
+  cursor:pointer;
+}
+.hero-preferences-panel .gift-rank-avatar:hover{
+  border-color:var(--line-strong);
+  background:var(--guide-hover,rgba(105,214,191,.10));
+}
+.hero-preferences-panel .gift-rank-avatar-photo{
+  display:block;
+  width:clamp(44px,100%,64px);
+  height:64px;
+  max-width:100%;
+  object-fit:contain;
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:10px;
+}
+.hero-preferences-panel .gift-rank-avatar-name{
+  display:block;
+  width:100%;
+  min-width:0;
+  font-size:calc(12px * var(--guide-font-multiplier,1));
+  line-height:1.35;
+  overflow-wrap:anywhere;
+  word-break:normal;
+}
+.hero-preferences-panel .gift-rank-show-more{
+  display:block;
+  width:100%;
+  min-height:44px;
+  margin-top:10px;
+  padding:9px 12px;
+  border:1px solid var(--line-strong);
+  border-radius:9px;
+  background:var(--panel);
+  color:var(--teal-2);
+  font:inherit;
+  font-size:calc(13px * var(--guide-font-multiplier,1));
+  cursor:pointer;
+}
+.hero-preferences-panel .gift-rank-show-more:hover{
+  background:var(--guide-hover,rgba(105,214,191,.10));
+}
+@media(max-width:1050px){
+  .hero-preferences-panel .gift-rank-avatar-grid{
+    grid-template-columns:repeat(6,minmax(0,1fr));
+  }
+}
+@media(max-width:680px){
+  .hero-preferences-panel .gift-rank-avatar-grid{
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    gap:8px 5px;
+  }
+  .hero-preferences-panel .gift-rank-group-toggle{
+    padding:11px 12px;
+  }
+  .hero-preferences-panel .gift-rank-group-content{
+    padding:4px 8px 12px;
+  }
+  .hero-preferences-panel .gift-rank-avatar{
+    padding:8px 2px;
+    min-height:88px;
+  }
+  .hero-preferences-panel .gift-rank-avatar-photo{
+    height:56px;
+    width:min(56px,100%);
+  }
+}
+@media(max-width:350px){
+  .hero-preferences-panel .gift-rank-avatar-grid{
+    grid-template-columns:repeat(3,minmax(0,1fr));
+  }
+}
