@@ -1,7 +1,7 @@
 (() => {
   'use strict';
   // Only player-visible skill descriptions and rewards are used in this client-side view.
-  const DATA_URL = './data/sixstar-visible-abilities.json?v=1.2.0';
+  const DATA_URL = './data/sixstar-visible-abilities.json?v=1.3.0';
   const STORAGE = 'dfch-sixstar-abilities-v1';
   const maxBond = 50;
   let dataPromise = null;
@@ -16,6 +16,13 @@
     en: {kicker:'Six-star · Abilities & bond',bond:'Bond level',reward:'Bond rewards',skills:'Abilities',cap:'Unlocked level cap',next:'Next reward',max:'Max all',reset:'Reset to Lv.1',obtained:'Unlocked',upcoming:'Next reward',notYet:'Locked',locked:'Not obtained',evolved:'Evolved',close:'Close',loading:'Loading abilities…',failed:'Unable to display abilities.',noEffect:'—',finish:'Complete'},
     ko: {kicker:'6성 · 능력과 인연',bond:'인연 레벨',reward:'인연 보상',skills:'능력',cap:'해방한 레벨 상한',next:'다음 보상',max:'전체 최대',reset:'Lv.1 초기화',obtained:'달성',upcoming:'다음 보상',notYet:'미달성',locked:'미획득',evolved:'능력 진화',close:'닫기',loading:'능력을 불러오는 중…',failed:'능력을 표시할 수 없습니다.',noEffect:'—',finish:'완료'}
   };
+  const progressLabels = {
+    zh_tw: {current:'目前等級羈絆值',remaining:'距離下一等還需要',cumulative:'目前累積羈絆值',nextLevel:'升至 Lv.',needed:'的累積需求',maximum:'滿級累積需求',maxed:'已滿級',progress:'羈絆進度'},
+    ja: {current:'現在のレベル内の絆値',remaining:'次のレベルまで',cumulative:'累計絆値',nextLevel:'Lv.',needed:'の累計必要値',maximum:'最大レベルの必要値',maxed:'最大レベル',progress:'絆の進捗'},
+    en: {current:'Bond points at this level',remaining:'Points to next level',cumulative:'Total bond points',nextLevel:'Total for Lv.',needed:'',maximum:'Max-level total',maxed:'Max level',progress:'Bond progress'},
+    ko: {current:'현재 레벨의 인연 수치',remaining:'다음 레벨까지',cumulative:'누적 인연 수치',nextLevel:'Lv.',needed:' 누적 필요 수치',maximum:'최대 레벨 필요 수치',maxed:'최고 레벨',progress:'인연 진행도'}
+  };
+  const pretty = number => Number(number).toLocaleString('en-US');
   const $ = (selector) => dialog.querySelector(selector);
   const node = (tag, text, className) => {
     const el = document.createElement(tag);
@@ -39,6 +46,10 @@
         return response.json();
       }).then(doc => {
         if (!doc || !Array.isArray(doc.heroes) || doc.heroes.length !== 23 || !Array.isArray(doc.bondRewards)) throw new Error('Incomplete');
+        if (!Array.isArray(doc.bondThresholds) || doc.bondThresholds.length !== 51 ||
+            !doc.bondThresholds.every((value,index,values) => Number.isSafeInteger(value) && value >= 0 && (!index || value > values[index-1]))) {
+          throw new Error('Invalid bond thresholds');
+        }
         return doc;
       }).catch(error => { dataPromise = null; throw error; });
     }
@@ -73,6 +84,23 @@
               '<input type="range" class="s6-bond-range" min="1" max="50" step="1" aria-label="羈絆等級">',
               '<button class="s6-action s6-plus-bond" type="button" aria-label="增加羈絆等級">＋</button>',
             '</div>',
+              '<div class="s6-progress">',
+              '<div class="s6-progress-input-row">',
+              '<label class="s6-progress-label" for="sixstarBondProgress"></label>',
+              '<div class="s6-progress-input-unit">',
+              '<input id="sixstarBondProgress" class="s6-progress-input" type="number" min="0" step="1" inputmode="numeric">',
+              '<span class="s6-progress-cap"></span>',
+              '</div>',
+              '</div>',
+              '<div class="s6-progress-track" role="progressbar" aria-valuemin="0">',
+              '<div class="s6-progress-fill"></div>',
+              '</div>',
+              '<div class="s6-progress-metrics">',
+              '<div><small class="s6-progress-remaining-label"></small><strong class="s6-progress-remaining"></strong></div>',
+              '<div><small class="s6-progress-cumulative-label"></small><strong class="s6-progress-cumulative"></strong></div>',
+              '</div>',
+              '<p class="s6-progress-target"></p>',
+              '</div>',
             '<div class="s6-stats">',
               '<div><small class="s6-cap-label"></small><strong class="s6-total-cap"></strong></div>',
               '<div><small class="s6-next-label"></small><strong class="s6-next-bond"></strong></div>',
@@ -95,6 +123,11 @@
     $('.s6-minus-bond').addEventListener('click', () => updateBond(active?.bond - 1));
     $('.s6-plus-bond').addEventListener('click', () => updateBond(active?.bond + 1));
     $('.s6-bond-range').addEventListener('input', event => updateBond(event.target.value));
+    $('.s6-progress-input').addEventListener('input', event => {
+      if (!active?.hero) return;
+      drawProgress(true, event.target.value);
+    });
+    $('.s6-progress-input').addEventListener('change', commitProgress);
     $('.s6-all-max').addEventListener('click', () => {
       if (!active?.hero) return;
       active.hero.skills.forEach((skill,i) => {const c = skillCap(skill); if (c) active.levels[i] = c;});
@@ -108,18 +141,65 @@
   }
   function saveCurrent() {
     if (!active) return;
-    stored[active.slug] = {bond:active.bond, levels:active.levels};
+    stored[active.slug] = {bond:active.bond, levels:active.levels, progress:active.progress};
     remember();
   }
   function skillCap(skill) {
     if (!active || active.bond < skill.unlockAt) return 0;
     return active.bond >= skill.evolveAt && skill.evolveAt !== null ? skill.fullCap : skill.baseCap;
   }
+  function currentCapacity() {
+    if (!active?.doc || active.bond >= maxBond) return 0;
+    const values = active.doc.bondThresholds;
+    return values[active.bond + 1] - values[active.bond];
+  }
+  function drawProgress(preserveInput=false, typedValue=null) {
+    if (!active?.doc) return;
+    const labels = progressLabels[active.language] || progressLabels.zh_tw;
+    const input = $('.s6-progress-input'), values = active.doc.bondThresholds;
+    const capacity = currentCapacity();
+    const maxed = active.bond === maxBond;
+    const preview = preserveInput && typedValue !== null ? Number(typedValue) : active.progress;
+    const points = maxed ? 0 : Math.min(capacity,Math.max(0,Number.isFinite(preview) ? Math.floor(preview) : 0));
+    $('.s6-progress-label').textContent = labels.current;
+    $('.s6-progress-remaining-label').textContent = labels.remaining;
+    $('.s6-progress-cumulative-label').textContent = labels.cumulative;
+    input.disabled = maxed;
+    input.max = String(capacity);
+    input.setAttribute('aria-label', labels.current);
+    if (!preserveInput) input.value = String(maxed ? 0 : active.progress);
+    $('.s6-progress-cap').textContent = '/ ' + pretty(capacity);
+    const percentage = maxed ? 100 : capacity ? points / capacity * 100 : 0;
+    $('.s6-progress-fill').style.width = percentage + '%';
+    $('.s6-progress-track').setAttribute('aria-label', labels.progress);
+    $('.s6-progress-track').setAttribute('aria-valuemax',String(capacity));
+    $('.s6-progress-track').setAttribute('aria-valuenow',String(points));
+    $('.s6-progress-remaining').textContent = maxed ? labels.maxed : pretty(capacity - points);
+    $('.s6-progress-cumulative').textContent = pretty(values[active.bond] + points);
+    $('.s6-progress-target').textContent = maxed
+      ? labels.maximum + '：' + pretty(values[maxBond])
+      : labels.nextLevel + (active.bond + 1) + labels.needed + '：' + pretty(values[active.bond+1])
+          + ' · ' + labels.maximum + '：' + pretty(values[maxBond]);
+  }
+  function commitProgress() {
+    if (!active?.hero) return;
+    const raw = Number($('.s6-progress-input').value);
+    const points = Number.isFinite(raw) ? Math.max(0,Math.floor(raw)) : 0;
+    const totals = active.doc.bondThresholds;
+    const target = Math.min(totals[maxBond],totals[active.bond] + points);
+    let level = active.bond;
+    while (level < maxBond && target >= totals[level + 1]) level += 1;
+    active.bond = level;
+    active.progress = level === maxBond ? 0 : target - totals[level];
+    saveCurrent();
+    draw();
+  }
   function updateBond(value) {
     if (!active?.hero) return;
     const next = clamp(value, 1, maxBond);
     if (next === active.bond) return;
     active.bond = next;
+    active.progress = 0;
     saveCurrent();
     draw();
   }
@@ -130,6 +210,7 @@
     $('.s6-bond-range').value = String(active.bond);
     $('.s6-minus-bond').disabled = active.bond === 1;
     $('.s6-plus-bond').disabled = active.bond === 50;
+    drawProgress();
     const currentReward = active.doc.bondRewards.find(r => r.level === active.bond);
     $('.s6-total-cap').textContent = '×' + (currentReward?.totalBreakthrough || 0);
     const combined = [];
@@ -225,8 +306,13 @@
       active = {
         slug:heroKey, hero, doc, t,
         bond:clamp(saved.bond || 1, 1, maxBond),
-        levels: saved.levels && typeof saved.levels === 'object' ? saved.levels : {}
+        levels: saved.levels && typeof saved.levels === 'object' ? saved.levels : {},
+        language:lang,
+        progress: 0
       };
+      const thresholds = doc.bondThresholds;
+      const capacity = active.bond === maxBond ? 0 : thresholds[active.bond+1] - thresholds[active.bond];
+      active.progress = capacity ? clamp(saved.progress ?? 0, 0, capacity-1) : 0;
       $('#sixstarAbilityTitle').textContent = heroName || hero.name;
       $('.s6-subtitle').textContent = heroTitle || hero.title;
       draw();
