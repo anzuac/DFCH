@@ -23,6 +23,21 @@ const guideFiles = [
   'styles.css',
   'hero-preferences-data.js',
   'hero-preferences-view.js',
+  'public-nav.js',
+  'public-nav.css',
+  'site-counter.js',
+  'diamond-draw.js',
+  'diamond-view.js',
+  'diamond-public.css',
+];
+
+// Bond30 uses an independent directory; only player-facing files are published.
+const bondFiles = [
+  'Bond30/index.html',
+  'Bond30/css/style.css',
+  'Bond30/js/app.js',
+  'Bond30/js/data.js',
+  'Bond30/embed-height.js',
 ];
 
 const imageDirectories = [
@@ -31,7 +46,7 @@ const imageDirectories = [
 ];
 
 // Validate sources before deleting an existing output directory.
-for (const relativePath of [...guideFiles, ...imageDirectories]) {
+for (const relativePath of [...guideFiles, ...bondFiles, ...imageDirectories, 'Bond30/assets/icons', 'index.html']) {
   if (!fs.existsSync(path.join(repoRoot, relativePath))) {
     throw new Error(`Missing guide source: ${relativePath}`);
   }
@@ -51,6 +66,53 @@ for (const relativePath of imageDirectories) {
     recursive: true,
   });
 }
+
+// Publish Bond30's player UI, algorithm, data and icons without internal notes.
+for (const relativePath of bondFiles) {
+  const dest = path.join(outputDir, relativePath.replace(/^Bond30\//, 'bond30/'));
+  fs.mkdirSync(path.dirname(dest), { recursive: true });
+  fs.copyFileSync(path.join(repoRoot,relativePath),dest);
+}
+fs.cpSync(
+  path.join(repoRoot,'Bond30/assets/icons'),
+  path.join(outputDir,'bond30/assets/icons'),
+  { recursive:true }
+);
+const bondHtmlPath=path.join(outputDir,'bond30/index.html');
+let bondHtml=fs.readFileSync(bondHtmlPath,'utf8');
+bondHtml=bondHtml.replace('</head>',
+  '<link rel="stylesheet" href="../public-nav.css?v=1.0.0"><script src="../public-nav.js?v=1.0.0" defer></script></head>');
+bondHtml=bondHtml.replace('</body>', '<script src="../site-counter.js?v=1.0.0"></script></body>');
+fs.writeFileSync(bondHtmlPath,bondHtml);
+
+// Extract the live Diamond controls from the internal page: no duplicate probability tables.
+const expeditionHtml=fs.readFileSync(path.join(repoRoot,'index.html'),'utf8');
+const diamondStart=expeditionHtml.indexOf('<section class="tab-panel" id="tab-diamond">');
+const diamondEnd=expeditionHtml.indexOf('<section id="tab-heroes"',diamondStart);
+if(diamondStart<0||diamondEnd<=diamondStart)throw new Error('Diamond markup anchors changed');
+const diamondMarkup=expeditionHtml.slice(diamondStart,diamondEnd)
+  .replace('class="tab-panel"','class="tab-panel active"');
+const diamondPage=[
+  '<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8">',
+  '<meta name="viewport" content="width=device-width,initial-scale=1">',
+  '<meta name="description" content="非官方鑽石及獎勵輪盤抽取模擬器">',
+  '<title>鑽石抽取模擬器｜DFCH</title>',
+  '<link rel="stylesheet" href="../styles.css?v=2.4.1">',
+  '<link rel="stylesheet" href="../public-nav.css?v=1.0.0">',
+  '<link rel="stylesheet" href="../diamond-public.css?v=1.0.0">',
+  '<script src="../public-nav.js?v=1.0.0" defer></script>',
+  '</head><body class="public-diamond">',
+  '<div class="app-shell"><header class="hero-guide-header"><p class="eyebrow">DFCH · DIAMOND SIMULATOR</p>',
+  '<h1>鑽石抽取模擬器</h1><p class="helper">鑽石與獎勵輪盤抽選，在瀏覽器內直接執行。</p></header>',
+  '<main>'+diamondMarkup+'</main>',
+  '<footer class="guide-footer">非官方機率試算工具，結果不影響遊戲帳號。</footer></div>',
+  '<script src="../diamond-draw.js?v=2.2.0"></script>',
+  '<script src="../diamond-view.js?v=2.2.0"></script>',
+  '<script src="../site-counter.js?v=1.0.0"></script>',
+  '</body></html>'
+].join('\n');
+fs.mkdirSync(path.join(outputDir,'diamond'),{recursive:true});
+fs.writeFileSync(path.join(outputDir,'diamond/index.html'),diamondPage);
 
 // The Cloudflare homepage is the hero guide, not the expedition simulator.
 // Preserve heroes.html so existing /heroes or /heroes.html links continue to work.
@@ -79,12 +141,12 @@ fs.writeFileSync(
     '<title>找不到頁面｜六星英靈喜好圖鑑</title>',
     '</head><body>',
     '<main><h1>找不到此頁面</h1>',
-    '<p>這個網站只提供六星英靈喜好圖鑑。</p>',
+    '<p>本站提供六星英靈喜好、羈絆能力及鑽石抽取模擬器。</p>',
     '<p><a href="/">返回六星英靈圖鑑</a></p></main>',
     '</body></html>',
   ].join('\n'),
   'utf8',
 );
 
-console.log('Cloudflare Pages: six-star hero guide output prepared in dist-heroes/');
-console.log('Published: guide HTML, its CSS/JavaScript, and hero/gift images.');
+console.log('Cloudflare Pages: three public tools output prepared in dist-heroes/');
+console.log('Published: six-star guide, Bond30, Diamond and whitelisted assets.');
