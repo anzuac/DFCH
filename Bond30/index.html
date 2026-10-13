@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="選擇英靈來源招募池、配置九格能力，模擬羈絆 30 等抽選與鑽石花費。">
+  <title>英靈羈絆 30 等抽選模擬器</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/data.js" defer></script>
+  <script src="js/app.js" defer></script>
+</head>
+<body>
+  <main class="container">
+    <header class="masthead">
+      <div><p class="eyebrow">DFCH · 英靈模擬器</p><h1>羈絆 30 等抽選模擬器</h1><p class="subheading">設定英靈能力，模擬新能力抽選與鑽石花費。</p></div>
+    </header>
+
+    <section class="panel" aria-labelledby="step1">
+      <h2 id="step1"><span class="step">1</span>選擇英靈</h2>
+      <div class="fields">
+        <label>來源招募池<select id="pool"></select></label>
+        <label>英靈星級<select id="star"><option value="3">★★★ 3 星</option><option value="4" selected>★★★★ 4 星</option><option value="5">★★★★★ 5 星</option></select></label>
+      </div>
+      <div class="hero-selector">
+        <label>英靈<select id="fiveHero"></select></label>
+        <p id="heroStatus" class="hint" aria-live="polite"></p>
+      </div>
+      <fieldset class="artifact-settings">
+        <legend>神器設定</legend>
+        <div class="artifact-grid">
+          <label class="toggle"><input type="checkbox" id="artifactEye"><span><strong>小惡魔的眼球</strong><small>頭部射擊 I～III</small></span></label>
+          <label class="toggle"><input type="checkbox" id="artifactSword"><span><strong>魔劍丹因斯萊夫</strong><small>必殺斬 I～III</small></span></label>
+        </div>
+        <p class="hint">勾選會影響自動填入九格的技能選擇；不影響羈絆 30 等的固定排除規則。手動設定九格仍可選擇相關能力。</p>
+      </fieldset>
+    </section>
+
+    <section class="panel" aria-labelledby="step2">
+      <h2 id="step2"><span class="step">2</span>配置原有九格能力</h2>
+      <p id="fixedRequiredNotice" class="rule-notice" hidden></p>
+      <div id="slots" class="slots" aria-label="英靈九格能力"></div>
+      <div id="completion" class="completion" aria-live="polite"><span id="completionText"></span><div class="progress"><div id="completionBar" class="progress-fill"></div></div></div>
+      <div class="actions">
+        <button type="button" id="autofill" class="button secondary">隨機填滿可選格</button>
+        <button type="button" id="reset" class="button secondary">清空可選格</button>
+        <button type="button" id="clearSlot" class="button ghost">清除目前格子</button>
+      </div>
+      <div class="ability-picker">
+        <div class="picker-title"><strong id="pickerTitle">選擇自由能力</strong><span id="activeLabel" class="hint"></span></div>
+        <label>搜尋技能<input id="search" type="search" placeholder="輸入技能名稱"></label>
+        <p id="searchInfo" class="hint"></p>
+        <div id="skills" class="skills" aria-label="可選能力"></div>
+      </div>
+    </section>
+
+    <section class="panel locked-panel" id="bondGate" aria-live="polite">
+      <h2><span class="step">3</span>羈絆 30 等抽選</h2>
+      <p id="bondGateMessage" class="hint">請先完成全部九格能力配置，才可以開始抽選。</p>
+    </section>
+
+    <section class="panel" id="bondStage" aria-labelledby="step3" hidden>
+      <h2 id="step3"><span class="step">3</span>羈絆 30 等抽選</h2>
+      <div class="metrics">
+        <div class="metric"><small>可抽能力</small><strong id="valid">—</strong></div>
+        <div class="metric"><small>有效權重</small><strong id="weights">—</strong></div>
+        <div class="metric"><small>目前自由格</small><strong id="owned">—</strong></div>
+      </div>
+      <div class="draw-panel">
+        <button id="draw" class="button primary full" type="button">單次抽選 · 500 鑽石</button>
+        <div class="auto-draw">
+          <label>指定想抽到的能力<select id="targetAbility"></select></label>
+          <p id="targetProbability" class="hint"></p>
+          <button id="autoDraw" type="button" class="button accent full">快速抽選直到取得指定能力</button>
+        </div>
+      </div>
+      <div id="result" class="result" role="status" aria-live="polite">尚未抽選。</div>
+      <h3>抽選統計</h3>
+      <div class="metrics stats">
+        <div class="metric"><small>累計抽選次數</small><strong id="totalDraws">0</strong></div>
+        <div class="metric"><small>累計鑽石花費</small><strong id="totalDiamonds">0</strong></div>
+        <div class="metric"><small>本次抽選</small><strong id="lastDraws">—</strong></div>
+      </div>
+      <button type="button" id="resetCount" class="button ghost reset-counter">重置抽取次數與紀錄</button>
+      <details class="collapsible"><summary>查看可抽能力與機率</summary><div id="rates" class="rate-list"></div></details>
+      <details class="collapsible"><summary>查看抽選紀錄</summary><ol id="history" class="history"></ol></details>
+    </section>
+    <footer>本工具為非官方模擬器，僅供抽選機率及鑽石花費試算。</footer>
+  </main>
+</body>
+</html>
