@@ -23,6 +23,7 @@ const guideFiles = [
   'public-display.css',
   'styles.css',
   'hero-preferences-data.js',
+  'hero-gift-ranking.js',
   'hero-preferences-view.js',
   'public-nav.js',
   'public-nav.css',
