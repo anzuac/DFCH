@@ -25,6 +25,10 @@ const guideFiles = [
   'hero-preferences-data.js',
   'hero-gift-ranking.js',
   'hero-preferences-view.js',
+  // Player-visible six-star bond and ability modal resources.
+  'sixstar-abilities.js',
+  'sixstar-abilities.css',
+  'data/sixstar-visible-abilities.json',
   'frigg-abilities.js',
   'public-nav.js',
   'public-nav.css',
