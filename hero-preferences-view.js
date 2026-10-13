@@ -387,7 +387,16 @@
       const header=node('div',null,'hero-card-header'),portrait=node('img',null,'hero-portrait'),identity=node('div',null,'hero-identity');
       portrait.src=`./assets/heroes/${h.key}.webp`;portrait.alt=`${h.title} ${h.name}`;portrait.width=112;portrait.height=112;portrait.loading='lazy';portrait.decoding='async';
       portrait.addEventListener('error',()=>{const fallback=node('span','圖片暫時無法載入','hero-portrait-fallback');portrait.replaceWith(fallback);},{once:true});
-      identity.append(node('p',h.title,'hero-title'),node('h3',h.name),node('span','★★★★★★','hero-stars'));header.append(portrait,identity);const acquisition=acquisitionInfo(h);if(acquisition)header.append(acquisition);card.append(header);
+      identity.append(node('p',h.title,'hero-title'),node('h3',h.name),node('span','★★★★★★','hero-stars'));
+      if(h.key==='frigg'){
+        const trigger=node('button',null,'frigg-avatar-trigger');trigger.type='button';
+        const text={zh_tw:'能力測試',ja:'能力テスト',en:'Ability test',ko:'능력 테스트'}[lang]||'能力測試';
+        trigger.setAttribute('aria-label',h.name+' · '+text);
+        trigger.append(portrait,node('span',text,'frigg-avatar-trigger-label'));
+        trigger.addEventListener('click',()=>window.DFCHFriggAbility?.open({lang}));
+        header.append(trigger,identity);
+      }else header.append(portrait,identity);
+      const acquisition=acquisitionInfo(h);if(acquisition)header.append(acquisition);card.append(header);
       if(h.fallback)card.append(node('p',t(15),'unit-note'));
       const loved=node('section',null,'gift-group loved');loved.append(node('h4',t(12)),h.loved.length?chips(h.loved,'loved'):node('p',t(19)));card.append(loved);
       const favorite=node('section',null,'gift-group favorite'),specific=h.favorite.filter(id=>!common.has(id));
