@@ -1,0 +1,76 @@
+
+/* Six-star hero portraits: clicking opens the matching ability dialog. */
+.sixstar-avatar-trigger{position:relative;display:inline-grid;place-items:center;flex-shrink:0;padding:0;border:2px solid var(--teal-2,#6bd2c0);border-radius:16px;background:transparent;color:inherit;cursor:pointer;overflow:hidden}
+.sixstar-avatar-trigger .hero-portrait{display:block;border-radius:13px}
+.sixstar-avatar-trigger-label{position:absolute;bottom:0;left:0;right:0;padding:4px 2px;background:rgba(4,22,28,.88);font-size:.76rem;line-height:1.3;font-weight:700;text-align:center;color:#e2f6ef}
+.sixstar-avatar-trigger:hover{border-color:var(--gold-2,#ecd394)}
+.sixstar-avatar-trigger:focus-visible{outline:3px solid var(--gold-2,#ecd394);outline-offset:3px}
+.sixstar-ability-dialog{box-sizing:border-box;width:min(1010px,calc(100vw - 28px));max-width:1010px;height:min(88dvh,880px);max-height:88dvh;margin:auto;padding:0;border:1px solid rgba(199,185,129,.44);border-radius:19px;background:#112233;color:#eaf5f3;box-shadow:0 24px 76px rgba(0,0,0,.65);overflow:hidden}
+.sixstar-ability-dialog::backdrop{background:rgba(0,8,14,.78);backdrop-filter:blur(5px)}
+.sixstar-ability-dialog *{box-sizing:border-box}
+.sixstar-ability-dialog button,.sixstar-ability-dialog input{font:inherit}
+.s6-root{display:flex;flex-direction:column;height:100%;min-height:0}
+.s6-header{display:flex;gap:14px;align-items:center;position:relative;padding:16px 58px 16px 18px;background:linear-gradient(108deg,#122b39,#172c40);border-bottom:1px solid #315264}
+.s6-portrait{width:72px;height:72px;object-fit:cover;flex-shrink:0;border-radius:12px;border:1px solid #547588;background:#263b4b}
+.s6-identity{min-width:0}
+.s6-kicker{margin:0 0 4px;color:#83d9cb;font-size:12px;letter-spacing:.02em}
+.s6-identity h2{margin:0;font-size:clamp(20px,2.4vw,25px);line-height:1.4}
+.s6-subtitle{margin:3px 0 0;color:#b4cacc;font-size:13px}
+.s6-close{position:absolute;right:14px;top:13px;display:grid;place-items:center;width:40px;height:40px;border:1px solid #35596b;border-radius:11px;background:#1c3447;color:#e8f6f5;font-size:29px!important;cursor:pointer}
+.s6-close:hover{background:#29495b}
+.s6-body{display:grid;grid-template-columns:minmax(290px,.9fr) minmax(360px,1.1fr);gap:13px;padding:14px;flex:1;min-height:0;overflow:hidden;background:#122638}
+.s6-panel{display:flex;flex-direction:column;min-width:0;min-height:0;border:1px solid #345367;border-radius:14px;background:#172b3b;overflow:hidden}
+.s6-heading{display:flex;align-items:center;justify-content:space-between;gap:9px;flex-wrap:wrap;margin:0;padding:15px 15px 10px}
+.s6-heading h3{font-size:17px;font-weight:700;margin:0}
+.s6-bond-number{font-size:20px;color:#f0d69b;font-variant-numeric:tabular-nums}
+.s6-bond-controls{display:flex;align-items:center;gap:9px;padding:0 14px}
+.s6-bond-range{flex:1;min-width:0;accent-color:#81dbc9}
+.s6-action{background:#1a3547;color:#e7f5f2;border:1px solid #436b7b;border-radius:9px;padding:7px 11px;cursor:pointer;white-space:nowrap}
+.s6-action:hover:not(:disabled){background:#284a5b}
+.s6-action:disabled{opacity:.4;cursor:default}
+.s6-action:focus-visible,.s6-close:focus-visible{outline:3px solid #f0d69b;outline-offset:2px}
+.s6-bond-controls>.s6-action{width:36px;height:36px;padding:0;font-size:21px}
+.s6-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:15px 14px;padding:13px;background:#193b42;border:1px solid #2a5b62;border-radius:10px}
+.s6-stats small{display:block;color:#a9c9c5;font-size:11px}
+.s6-stats strong{display:block;margin-top:4px;font-size:21px;color:#f0d69b;font-variant-numeric:tabular-nums}
+.s6-rewards{overflow:auto;min-height:0;padding:3px 10px 13px;overscroll-behavior:contain}
+.s6-reward{display:flex;align-items:flex-start;gap:9px;padding:10px 8px;border-bottom:1px solid #284354}
+.s6-reward:last-child{border-bottom:0}
+.s6-reward-level{flex:0 0 43px;text-align:center;padding:4px 6px;border:1px solid #537468;border-radius:26px;background:#1d3c39;color:#daefdd;font-size:13px;font-variant-numeric:tabular-nums}
+.s6-reward-content{min-width:0}
+.s6-reward-content strong{display:block;line-height:1.55;font-size:13px;font-weight:650;overflow-wrap:anywhere}
+.s6-reward-content small{display:block;color:#90abb1;font-size:11px;margin-top:2px}
+.s6-reward.s6-next{background:#293b37;border-radius:9px}
+.s6-next .s6-reward-level{color:#f0d69b;border-color:#af995e}
+.s6-future{opacity:.65}
+.s6-skill-heading{border-bottom:1px solid #2d4555}
+.s6-actions{display:flex;flex-wrap:wrap;gap:6px}
+.s6-actions .s6-action{font-size:12px;padding:6px 9px}
+.s6-skills{display:grid;align-content:start;gap:10px;overflow:auto;min-height:0;padding:12px;overscroll-behavior:contain}
+.s6-skill{display:flex;align-items:flex-start;gap:12px;padding:12px;border:1px solid #2c4b60;border-radius:11px;background:#1b3343}
+.s6-skill.s6-locked{opacity:.67}
+.s6-icon{display:grid;place-items:center;flex:0 0 54px;height:54px;width:54px;background:#263f55;border:1px solid #53758d;border-radius:9px;color:#98c8c7;font-size:25px;overflow:hidden}
+.s6-icon img{width:100%;height:100%;object-fit:contain}
+.s6-skill-content{min-width:0;flex:1}
+.s6-skill-title{display:flex;align-items:center;flex-wrap:wrap;gap:6px}
+.s6-skill-title strong{font-size:14px;line-height:1.45;overflow-wrap:anywhere}
+.s6-tag{font-size:11px;color:#ead4a6;border:1px solid #776343;border-radius:16px;padding:1px 7px}
+.s6-skill-meter{display:flex;gap:8px;align-items:center;margin-top:8px}
+.s6-skill-meter strong{font-size:13px;color:#f0d69b;font-variant-numeric:tabular-nums}
+.s6-skill-meter .s6-action{padding:1px 9px;font-size:18px;line-height:1.4}
+.s6-effect{font-size:13px;line-height:1.65;margin:8px 0 0;overflow-wrap:anywhere;color:#deece6}
+.s6-effect.s6-muted{color:#93adb2}
+.s6-loading{margin:12px;color:#bed2d3;font-size:14px}
+@media(max-width:760px){
+ .sixstar-ability-dialog{width:100vw;max-width:none;height:100dvh;max-height:100dvh;border-radius:0;border:0}
+ .s6-header{padding:11px 55px 11px 11px;gap:10px}
+ .s6-portrait{height:60px;width:60px}
+ .s6-identity h2{font-size:19px}
+ .s6-body{display:block;overflow-y:auto;overscroll-behavior:contain;padding:10px}
+ .s6-panel{min-height:auto;margin-bottom:12px;overflow:visible}
+ .s6-rewards{max-height:300px;overflow:auto;padding-bottom:12px}
+ .s6-skills{overflow:visible;padding:8px}
+ .s6-skill{gap:9px;padding:10px}
+ .s6-icon{width:47px;height:47px;flex-basis:47px}
+}
+@media(prefers-reduced-motion:reduce){.sixstar-avatar-trigger,.s6-action{scroll-behavior:auto}}
