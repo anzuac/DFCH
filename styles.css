@@ -1412,3 +1412,93 @@ html[data-guide-theme="green"] .heroes-standalone {
  .gift-rank-card{grid-template-columns:52px 42px minmax(0,1fr)}
  .gift-rank-portrait{width:42px;height:42px}
 }
+
+
+/* Gift cards: keep the acquisition link, bond gain and new ranking shortcut aligned.
+ * The previous flex-wrap layout sized each <li> to its content; on mobile the
+ * rank button moved to a separate row and left large empty spaces.
+ * Use full-width grid cards instead. Scoped to the six-star preference module.
+ */
+.hero-preferences-panel .gift-list{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));
+  gap:8px;
+  min-width:0;
+  align-items:stretch;
+}
+.hero-preferences-panel .gift-list li.gift-shortcut-item{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  align-items:center;
+  column-gap:6px;
+  width:100%;
+  min-width:0;
+  max-width:100%;
+  margin:0;
+  padding:0;
+  border-radius:10px;
+}
+.hero-preferences-panel .gift-list li.gift-shortcut-item .gift-shortcut{
+  display:flex;
+  flex:none;
+  align-items:center;
+  gap:8px;
+  width:100%;
+  min-width:0;
+  padding:10px;
+  line-height:1.45;
+}
+.hero-preferences-panel .gift-list li.gift-shortcut-item .gift-icon{
+  flex:0 0 36px;
+  width:36px;
+  height:36px;
+}
+.hero-preferences-panel .gift-list li.gift-shortcut-item .gift-detail{
+  flex:1 1 auto;
+  min-width:0;
+  max-width:100%;
+}
+.hero-preferences-panel .gift-list li.gift-shortcut-item .gift-name,
+.hero-preferences-panel .gift-list li.gift-shortcut-item .gift-bond-gain{
+  display:block;
+  overflow-wrap:anywhere;
+}
+.hero-preferences-panel .gift-list li.gift-shortcut-item .gift-rank-shortcut{
+  justify-self:end;
+  flex:none;
+  width:auto;
+  min-width:76px;
+  max-width:112px;
+  min-height:44px;
+  margin:6px 8px 6px 0;
+  padding:8px 9px;
+  text-align:center;
+  line-height:1.4;
+  white-space:normal;
+}
+@media(max-width:650px){
+  .hero-preferences-panel .gift-list{
+    grid-template-columns:minmax(0,1fr);
+  }
+}
+@media(max-width:420px){
+  .hero-preferences-panel .gift-list li.gift-shortcut-item{
+    column-gap:4px;
+  }
+  .hero-preferences-panel .gift-list li.gift-shortcut-item .gift-shortcut{
+    padding:9px 8px;
+    gap:7px;
+  }
+  .hero-preferences-panel .gift-list li.gift-shortcut-item .gift-icon{
+    flex-basis:32px;
+    width:32px;
+    height:32px;
+  }
+  .hero-preferences-panel .gift-list li.gift-shortcut-item .gift-rank-shortcut{
+    min-width:72px;
+    max-width:94px;
+    min-height:44px;
+    margin:5px 6px 5px 0;
+    padding:8px 6px;
+  }
+}
