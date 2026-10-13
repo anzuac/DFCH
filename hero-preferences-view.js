@@ -97,6 +97,13 @@
     en:{tab:'Gift priority',heading:'Gift-giving efficiency ranking',chooseGift:'Choose a gift',all:'All six-star heroes',personal:'My training targets',chosen:'{n} selected heroes',hint:'Ranked by bond points gained per gift; ties share a rank. Not a combat-strength ranking.',pick:'Select the heroes you want to train. Recommendations automatically rank only those heroes by gift efficiency.',clear:'Clear selection',allHeroes:'Select all',noSelection:'Select at least one hero to see your personal recommendation.',noBase:'No verified bond base value is available for this gift.',best:'Best bond gain +{gain}; {n} heroes tied for first.',personalBest:'Among your {count} selected heroes, best gain +{gain}; {n} tied for first.',preferenceNormal:'Normal',preferenceFavorite:'Liked',preferenceLoved:'Loved',gain:'Bond +{gain}',rank:'Rank {n}',toGuide:'View hero gifts',toLocation:'Where to find',fromLocation:'See gift ranking',shortcut:'Who to give',selectedGift:'Gift: {name}'},
     ko:{tab:'선물 추천 순위',heading:'선물 효율 순위',chooseGift:'선물 선택',all:'전체 영령',personal:'내 육성 영령',chosen:'육성 영령 {n}명 선택',hint:'선물 1개당 인연 증가량 순위입니다. 동점은 공동 순위이며, 전투력 순위가 아닙니다.',pick:'육성할 영령을 선택하면 선택한 영령 중 선물 효율이 가장 좋은 대상을 추천합니다.',clear:'선택 해제',allHeroes:'전체 선택',noSelection:'육성할 영령을 한 명 이상 선택하세요.',noBase:'이 선물의 공식 기본 인연 수치가 없습니다.',best:'최대 인연 +{gain}, {n}명이 공동 1위입니다.',personalBest:'선택한 {count}명 중 최대 인연 +{gain}, {n}명이 공동 1위입니다.',preferenceNormal:'일반',preferenceFavorite:'좋아함',preferenceLoved:'매우 좋아함',gain:'인연 +{gain}',rank:'{n}위',toGuide:'영령 선호도 보기',toLocation:'획득 방법 보기',fromLocation:'추천 순위 보기',shortcut:'추천 대상',selectedGift:'선물: {name}'}
   };
+  const rankGroupUI={
+    zh_tw:{count:'{n} 位英靈',more:'顯示剩餘 {n} 位',less:'收合多餘頭像',avatar:'查看 {name} 的英靈喜好',toggle:'展開或收合這個羈絆數值分類'},
+    ja:{count:'英霊 {n} 体',more:'残り {n} 体を表示',less:'表示を減らす',avatar:'{name} の好みを見る',toggle:'この絆上昇量のグループを開閉'},
+    en:{count:'{n} heroes',more:'Show {n} more',less:'Show fewer',avatar:'View {name} gift preferences',toggle:'Expand or collapse this bond-gain group'},
+    ko:{count:'영령 {n}명',more:'나머지 {n}명 보기',less:'접기',avatar:'{name} 선호도 보기',toggle:'이 인연 증가량 그룹 펼치기 또는 접기'}
+  };
+  const RANK_PREVIEW_LIMIT=8;
   const ranking=node('section',null,'gift-rank-wrapper'),
     rankHeader=node('div',null,'gift-rank-header'),
     rankHeading=node('h3'),
@@ -210,21 +217,79 @@
     rankSummary.textContent=textRank(personal?'personalBest':'best',{
       count:chosenHeroes.size,gain:ranked.best,n:ranked.winners.length
     });
+    // A single +bond value represents a rank; show the heroes as a compact portrait grid.
+    // Keep ties together and only reveal the best group by default.
+    const groups=new Map();
     for(const row of ranked.rows){
-      const hero=row.hero,article=node('article',null,'gift-rank-card');
-      if(row.rank===1)article.classList.add('gift-rank-top');
-      const rankNumber=node('span',textRank('rank',{n:row.rank}),'gift-rank-number'),
-        portrait=node('img',null,'gift-rank-portrait'),
-        details=node('div',null,'gift-rank-details'),
-        title=node('strong',hero.name),
-        sub=node('span',hero.title,'gift-rank-subtitle'),
-        badge=node('span',labels['preference'+row.kind[0].toUpperCase()+row.kind.slice(1)],'gift-rank-preference gift-rank-'+row.kind),
-        gain=node('strong',textRank('gain',{gain:row.gain}),'gift-rank-gain'),
-        jump=node('button',labels.toGuide,'gift-rank-to-guide');
-      portrait.src='./assets/heroes/'+hero.key+'.webp';portrait.width=52;portrait.height=52;portrait.alt='';portrait.loading='lazy';
-      portrait.addEventListener('error',()=>portrait.remove(),{once:true});
-      details.append(title,sub,badge);jump.type='button';jump.addEventListener('click',()=>viewRankHero(hero));
-      article.append(rankNumber,portrait,details,gain,jump);rankList.append(article);
+      if(!groups.has(row.gain))groups.set(row.gain,{rank:row.rank,rows:[]});
+      groups.get(row.gain).rows.push(row);
+    }
+    const groupLabels=rankGroupUI[lang];
+    const groupText=(key,vars={})=>Object.entries(vars).reduce(
+      (value,[name,text])=>value.replaceAll('{'+name+'}',String(text)),groupLabels[key]
+    );
+    let groupIndex=0;
+    for(const [gain,group] of groups){
+      const section=node('section',null,'gift-rank-group');
+      if(groupIndex===0)section.classList.add('gift-rank-group-best');
+      const toggle=node('button',null,'gift-rank-group-toggle');
+      toggle.type='button';
+      toggle.setAttribute('aria-label',groupLabels.toggle+': '+textRank('gain',{gain}));
+      toggle.setAttribute('aria-expanded',String(groupIndex===0));
+      const groupContent=node('div',null,'gift-rank-group-content');
+      groupContent.id='giftRankGroup'+groupIndex;
+      groupContent.hidden=groupIndex!==0;
+      toggle.setAttribute('aria-controls',groupContent.id);
+      const arrow=node('span',groupIndex===0?'▾':'▸','gift-rank-group-arrow');
+      arrow.setAttribute('aria-hidden','true');
+      toggle.append(
+        node('strong',textRank('gain',{gain}),'gift-rank-group-gain'),
+        node('span',groupText('count',{n:group.rows.length}),'gift-rank-group-count'),
+        node('span',textRank('rank',{n:group.rank}),'gift-rank-group-position'),
+        arrow
+      );
+      toggle.addEventListener('click',()=>{
+        groupContent.hidden=!groupContent.hidden;
+        toggle.setAttribute('aria-expanded',String(!groupContent.hidden));
+        arrow.textContent=groupContent.hidden?'▸':'▾';
+      });
+      const portraits=node('div',null,'gift-rank-avatar-grid');
+      const hiddenPortraits=[];
+      for(const [index,row] of group.rows.entries()){
+        const hero=row.hero;
+        const avatar=node('button',null,'gift-rank-avatar');
+        avatar.type='button';
+        avatar.title=hero.title+' · '+labels['preference'+row.kind[0].toUpperCase()+row.kind.slice(1)];
+        avatar.setAttribute('aria-label',groupText('avatar',{name:hero.name}));
+        const portrait=node('img',null,'gift-rank-avatar-photo');
+        portrait.src='./assets/heroes/'+hero.key+'.webp';
+        portrait.width=64;portrait.height=64;portrait.alt='';
+        portrait.loading='lazy';portrait.decoding='async';
+        portrait.addEventListener('error',()=>portrait.remove(),{once:true});
+        avatar.append(portrait,node('span',hero.name,'gift-rank-avatar-name'));
+        avatar.addEventListener('click',()=>viewRankHero(hero));
+        if(index>=RANK_PREVIEW_LIMIT){
+          avatar.hidden=true;hiddenPortraits.push(avatar);
+        }
+        portraits.append(avatar);
+      }
+      groupContent.append(portraits);
+      if(hiddenPortraits.length){
+        const more=node('button',groupText('more',{n:hiddenPortraits.length}),'gift-rank-show-more');
+        more.type='button';
+        let expanded=false;
+        more.setAttribute('aria-expanded','false');
+        more.addEventListener('click',()=>{
+          expanded=!expanded;
+          for(const avatar of hiddenPortraits)avatar.hidden=!expanded;
+          more.textContent=expanded?groupLabels.less:groupText('more',{n:hiddenPortraits.length});
+          more.setAttribute('aria-expanded',String(expanded));
+        });
+        groupContent.append(more);
+      }
+      section.append(toggle,groupContent);
+      rankList.append(section);
+      groupIndex++;
     }
   }
   rankAllButton.addEventListener('click',()=>{
