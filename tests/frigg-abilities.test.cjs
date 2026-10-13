@@ -4,33 +4,49 @@ const assert=require('node:assert/strict');
 const fs=require('node:fs');
 const path=require('node:path');
 const vm=require('node:vm');
-const moduleSource=fs.readFileSync(path.resolve(__dirname,'../frigg-abilities.js'),'utf8');
-const make=values=>{
-  const storage=new Map(Object.entries(values||{}));
+const text=fs.readFileSync(path.resolve(__dirname,'../frigg-abilities.js'),'utf8');
+function make(values={}){
+  const store=new Map(Object.entries(values));
   const window={};
-  vm.runInNewContext(moduleSource,{window,localStorage:{
-    getItem:key=>storage.get(key)??null,
-    setItem:(key,value)=>storage.set(key,String(value))
+  vm.runInNewContext(text,{window,localStorage:{
+    getItem:key=>store.get(key)??null,
+    setItem:(key,value)=>store.set(key,String(value))
   }});
   return window.DFCHFriggAbility;
-};
-test('Only Frigg is exposed as a stand-alone UI module; no official formula is fabricated',()=>{
-  const app=make();
-  assert.equal(typeof app.open,'function');
-  assert.equal(app.referenceSkills.length,5);
-  assert.equal(app.defaultState().bond,50);
-  assert.equal(app.defaultState().mode,'max');
-  assert.equal(app.defaultState().levels['reference-cheer-all'],30);
+}
+test('Screenshot source includes five real entries and unknown raw IDs are not invented',()=>{
+  const x=make(),skills=x.screenshotSkills;
+  assert.equal(skills.length,5);
+  assert.equal(skills[0].name,'高級聲援（全員）IV+');
+  assert.equal(skills[0].observed,1);
+  assert.equal(skills[0].max,30);
+  assert.equal(skills[1].name,'貪欲 III');
+  assert.equal(skills[1].observed,6);
+  assert.equal(skills[1].max,6);
+  assert.match(skills[1].effect,/15%/);
+  assert.ok(skills.every(s=>s.abilityId===null && s.icon===null));
 });
-test('Bond levels are clamped to 1–50 even when local state is invalid',()=>{
-  assert.equal(make({'dfch-frigg-ability-preview-v1':'{"bond":501,"mode":"custom","levels":{"reference-cheer-all":999}}'}).readState().bond,50);
-  assert.equal(make({'dfch-frigg-ability-preview-v1':'{"bond":-5,"mode":"custom"}'}).readState().bond,1);
-  assert.equal(make({'dfch-frigg-ability-preview-v1':'not JSON'}).readState().bond,50);
+test('Bond level is bounded 1 to 50 and defaults to 50',()=>{
+  assert.equal(make().readState().bond,50);
+  assert.equal(make({'dfch-frigg-bond-query-v2':'{"bond":999}'}).readState().bond,50);
+  assert.equal(make({'dfch-frigg-bond-query-v2':'{"bond":-999}'}).readState().bond,1);
 });
-test('Custom skill levels cannot exceed screenshot reference bounds',()=>{
-  const app=make({'dfch-frigg-ability-preview-v1':'{"bond":45,"mode":"custom","levels":{"reference-cheer-all":999,"reference-greed":-2}}'});
-  const state=app.readState();
-  assert.equal(state.mode,'custom');
-  assert.equal(state.levels['reference-cheer-all'],30);
-  assert.equal(state.levels['reference-greed'],1);
+test('Screenshot and max modes are distinct from unverified intermediate levels',()=>{
+  assert.equal(make().readState().levels['all-hp'],1);
+  assert.equal(make({'dfch-frigg-bond-query-v2':'{"mode":"max"}'}).readState().levels['all-hp'],30);
+  const c=make({'dfch-frigg-bond-query-v2':'{"bond":22,"mode":"custom","levels":{"all-hp":999,"greed-3":-90}}'}).readState();
+  assert.equal(c.bond,22);
+  assert.equal(c.levels['all-hp'],30);
+  assert.equal(c.levels['greed-3'],1);
+});
+test('Prior pilot bond choice is retained without retaining fake ability values',()=>{
+  const x=make({'dfch-frigg-ability-preview-v1':'{"bond":32,"mode":"custom","levels":{"reference-cheer-all":16}}'}).readState();
+  assert.equal(x.bond,32);
+  assert.equal(x.mode,'screenshot');
+  assert.equal(x.levels['all-hp'],1);
+});
+test('No six-star random reward generation is present',()=>{
+  assert.ok(!text.includes('friggNewHeading'));
+  assert.ok(!text.includes('friggNewBody'));
+  assert.ok(!text.includes('Math.random('));
 });
