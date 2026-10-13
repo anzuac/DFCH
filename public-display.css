@@ -189,3 +189,16 @@ html[data-guide-theme="green"] .bond30-public{
 }
 .bond30-public .dfch-settings-theme:has(input:checked){background:var(--guide-tab-active);border-color:var(--teal)}
 .bond30-public .dfch-settings-note{color:var(--muted)}
+
+/* Navigation participates in the same saved color/font settings on all three tools. */
+.dfch-public-nav{font-size:calc(14px * var(--guide-font-multiplier,1))}
+html[data-guide-theme="light"] .dfch-public-nav{background:#fff;color:#203842;border-color:#9fc2c7}
+html[data-guide-theme="light"] .dfch-public-nav a{background:#eaf4f5;color:#21414b}
+html[data-guide-theme="light"] .dfch-public-nav a[aria-current="page"]{background:#d1ece5;border-color:#18816f;color:#155d54}
+html[data-guide-theme="blue"] .dfch-public-nav{background:#142c48;color:#eff7ff;border-color:#6296c6}
+html[data-guide-theme="blue"] .dfch-public-nav a[aria-current="page"]{background:#235577;border-color:#8dd2f9}
+html[data-guide-theme="green"] .dfch-public-nav{background:#203b2b;color:#e9f5e3;border-color:#779f7b}
+html[data-guide-theme="green"] .dfch-public-nav a[aria-current="page"]{background:#335843;border-color:#adddb3}
+html[data-guide-theme="light"] .bond30-public :is(.completion,.result){color:var(--gold)}
+.bond30-public :is(.completion,.result){color:var(--gold)}
+@media(max-width:620px){.dfch-public-links a{font-size:calc(12px * var(--guide-font-multiplier,1))}}
