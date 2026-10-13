@@ -1,19 +1,38 @@
 (() => {
   'use strict';
+  const labels={
+    zh_tw:{brand:'DFCH · 英靈工具站',guide:'六星英靈喜好',bond30:'羈絆 30 等抽選',diamond:'鑽石抽取模擬器'},
+    ja:{brand:'DFCH · 英霊ツール',guide:'六星英霊の好み',bond30:'絆 Lv.30 抽選',diamond:'ダイヤ抽選'},
+    en:{brand:'DFCH · Hero tools',guide:'Six-star gifts',bond30:'Bond Lv.30 draw',diamond:'Diamond simulator'},
+    ko:{brand:'DFCH · 영령 도구',guide:'6성 영령 선물',bond30:'인연 Lv.30 추첨',diamond:'다이아 추첨'}
+  };
+  let brand,links=[];
+  function language(){
+    try{const stored=localStorage.getItem('dfch-hero-language');if(labels[stored])return stored;}catch(_){}
+    return 'zh_tw';
+  }
+  function translate(next){
+    const t=labels[next]||labels.zh_tw;
+    if(!brand)return;
+    brand.textContent=t.brand;
+    for(const [key,a] of links)a.textContent=t[key];
+  }
   function init(){
     const path=location.pathname.toLowerCase();
     const current=path.startsWith('/bond30/')?'bond30':path.startsWith('/diamond/')?'diamond':'guide';
     const nav=document.createElement('nav');
     nav.className='dfch-public-nav';
-    nav.setAttribute('aria-label','DFCH 工具導覽');
-    const title=document.createElement('strong');title.textContent='DFCH · 英靈工具站';nav.append(title);
-    const links=document.createElement('div');links.className='dfch-public-links';
-    for(const [key,url,label] of [['guide','/','六星英靈喜好'],['bond30','/bond30/','羈絆 30 等抽選'],['diamond','/diamond/','鑽石抽取模擬器']]){
-      const a=document.createElement('a');a.href=url;a.textContent=label;
+    nav.setAttribute('aria-label','DFCH tools / 工具導覽');
+    brand=document.createElement('strong');nav.append(brand);
+    const group=document.createElement('div');group.className='dfch-public-links';
+    for(const [key,url] of [['guide','/'],['bond30','/bond30/'],['diamond','/diamond/']]){
+      const a=document.createElement('a');a.href=url;
       if(key===current)a.setAttribute('aria-current','page');
-      links.append(a);
+      group.append(a);links.push([key,a]);
     }
-    nav.append(links);document.body.prepend(nav);
+    nav.append(group);document.body.prepend(nav);translate(language());
   }
+  window.addEventListener('dfch:language-change',event=>translate(event.detail?.language));
+  window.addEventListener('storage',event=>{if(event.key==='dfch-hero-language')translate(language());});
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
 })();
