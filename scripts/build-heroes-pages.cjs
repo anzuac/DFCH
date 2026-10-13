@@ -25,6 +25,7 @@ const guideFiles = [
   'hero-preferences-data.js',
   'hero-gift-ranking.js',
   'hero-preferences-view.js',
+  'frigg-abilities.js',
   'public-nav.js',
   'public-nav.css',
   'site-counter.js',
