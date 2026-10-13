@@ -1,0 +1,12 @@
+/* Standalone public diamond tool. Draw engine is imported unchanged. */
+.public-diamond .app-shell{max-width:1000px;padding-top:24px}
+.public-diamond .hero-guide-header{margin-bottom:18px}
+.public-diamond .tab-panel{display:block}
+.public-diamond .diamond-page{width:100%;max-width:860px;margin:0 auto;min-width:0}
+.public-diamond .diamond-dialog-body{padding:0}
+.public-diamond .diamond-dialog-body>details{margin-top:12px}
+.public-diamond .diamond-dialog-body summary{cursor:pointer;padding:12px 0;color:var(--gold-2)}
+.public-diamond #diamondSimple[hidden],.public-diamond #diamondRoulette[hidden],.public-diamond #diamondWheel[hidden],.public-diamond #diamondStop[hidden],.public-diamond #diamondAnimationNote[hidden]{display:none!important}
+.public-diamond .diamond-auto-input select{background:var(--panel-2);color:var(--text);border:1px solid var(--line)}
+.public-diamond #diamondAutoStatus,.public-diamond .diamond-result{overflow-wrap:anywhere}
+@media(max-width:520px){.public-diamond .diamond-auto-input{flex-direction:column}.public-diamond .diamond-auto-input select{width:100%;min-height:44px}.public-diamond .diamond-controls{flex-wrap:wrap}.public-diamond .diamond-controls button{min-width:120px}}
