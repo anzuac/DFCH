@@ -136,9 +136,12 @@
     if(Array.isArray(old))chosenHeroes=new Set(old.filter(id=>Number.isInteger(id)&&heroIndices.has(id)));
     rankMode=localStorage.getItem(rankModeStorage)==='personal'?'personal':'all';
   }catch(_){}
-  try{const saved=Number(localStorage.getItem(rankItemStorage));if(rankGiftChoices.some(item=>item.id===saved))rankGift.value=String(saved);}catch(_){}
   const firstRankGift=rankGiftChoices.find(item=>!common.has(item.id))||rankGiftChoices[0];
-  let rankedGiftId=Number(rankGift.value)||firstRankGift?.id||0;
+  let rankedGiftId=firstRankGift?.id||0;
+  try{
+    const saved=Number(localStorage.getItem(rankItemStorage));
+    if(rankGiftChoices.some(item=>item.id===saved))rankedGiftId=saved;
+  }catch(_){};
   function textRank(key,vars={}){
     return Object.entries(vars).reduce((s,[name,value])=>s.replaceAll('{'+name+'}',String(value)),rankingUI[lang][key]);
   }
@@ -263,9 +266,12 @@
       }else{
         card.append(node('p',labels[8],'gift-location-unlisted'));
       }
-      const rankLink=node('button',rankingUI[lang].fromLocation,'gift-location-rank-link');
-      rankLink.type='button';rankLink.addEventListener('click',()=>openGiftRank(item.id));
-      card.append(rankLink);locationList.append(card);
+      if(rankGiftChoices.some(gift=>gift.id===item.id)){
+        const rankLink=node('button',rankingUI[lang].fromLocation,'gift-location-rank-link');
+        rankLink.type='button';rankLink.addEventListener('click',()=>openGiftRank(item.id));
+        card.append(rankLink);
+      }
+      locationList.append(card);
     }
     if(!locationList.children.length)locationList.append(node('p',labels[5],'hero-empty'));
   }
