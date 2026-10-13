@@ -51,8 +51,8 @@
     const head=node('header',null,'frigg-ability-head');
     const avatar=node('img',null,'frigg-ability-avatar');avatar.src='./assets/heroes/frigg.webp';avatar.alt='';avatar.width=76;avatar.height=76;
     const identity=node('div',null,'frigg-ability-identity');
-    identity.append(node('p',l.subtitle,'frigg-ability-kicker'),node('h2',l.heading));
-    identity.querySelector('h2').id='friggFixedTitle';
+    const heading=node('h2',l.heading);heading.id='friggFixedTitle';
+    identity.append(node('p',l.subtitle,'frigg-ability-kicker'),heading);
     const close=node('button','×','frigg-ability-close');close.type='button';close.setAttribute('aria-label',l.close);
     head.append(avatar,identity,close);
     const scroll=node('div',null,'frigg-ability-scroll');
