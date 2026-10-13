@@ -1,0 +1,9 @@
+/* Shared navigation for the public DFCH tools. */
+.dfch-public-nav{z-index:10;position:relative;width:min(1120px,calc(100% - 28px));margin:16px auto 10px;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px 18px;background:#172c32;border:1px solid rgba(165,208,199,.3);border-radius:14px;color:#eff8f6;font:500 14px/1.5 system-ui,"Noto Sans TC",sans-serif}
+.dfch-public-nav strong{font-weight:800}
+.dfch-public-links{display:flex;flex-wrap:wrap;gap:6px}
+.dfch-public-links a{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:8px 12px;border:1px solid transparent;border-radius:9px;text-decoration:none;color:#e9f6f4;background:rgba(255,255,255,.04);text-align:center;overflow-wrap:anywhere}
+.dfch-public-links a[aria-current="page"]{border-color:#7bd3bf;background:#225053;color:white;font-weight:800}
+.dfch-public-links a:hover{border-color:#7bd3bf}
+.dfch-public-links a:focus-visible{outline:2px solid #93ecda;outline-offset:3px}
+@media(max-width:620px){.dfch-public-nav{flex-direction:column;align-items:stretch}.dfch-public-links{display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}.dfch-public-links a{font-size:12px;padding:8px 5px}}
