@@ -44,7 +44,13 @@
       const gain=Math.floor(base*multiplier*artifact);
       entry.dataset.gift=id;entry.dataset.bondGain=gain;
       detail.append(node('span',names.get(id),'gift-name'),node('strong',`${text.gain} +${gain}`,'gift-bond-gain'));
-      jump.append(icon,detail);entry.append(jump);if(!source.items.find(i=>i.id===id).translations[lang])entry.title=t(15);list.append(entry);
+      jump.append(icon,detail);entry.append(jump);
+      const recommendation=node('button',rankingUI[lang].shortcut,'gift-rank-shortcut');
+      recommendation.type='button';
+      recommendation.addEventListener('click',()=>openGiftRank(id));
+      entry.append(recommendation);
+      if(!source.items.find(i=>i.id===id).translations[lang])entry.title=t(15);
+      list.append(entry);
     }
     return list;
   }
@@ -53,27 +59,191 @@
   const bondPanel=node('section',null,'hero-bond-settings'),bondHeading=node('h3'),bondLabel=node('label',null,'hero-bond-toggle'),bondCheckbox=node('input'),bondLabelText=node('span'),bondNote=node('p',null,'unit-note');
   bondCheckbox.type='checkbox';bondCheckbox.id='heroBondStatue';bondCheckbox.checked=ownsBondStatue;
   bondLabel.append(bondCheckbox,bondLabelText);bondPanel.append(bondLabel);languageLabel.after(bondPanel);
-  bondCheckbox.addEventListener('change',()=>{ownsBondStatue=bondCheckbox.checked;try{localStorage.setItem('dfch-hero-bond-statue',String(ownsBondStatue));}catch{}$('heroCommonGifts').replaceChildren(chips(data.commonFavorite));render();});
+  bondCheckbox.addEventListener('change',()=>{ownsBondStatue=bondCheckbox.checked;try{localStorage.setItem('dfch-hero-bond-statue',String(ownsBondStatue));}catch{}$('heroCommonGifts').replaceChildren(chips(data.commonFavorite));render();renderRank();});
   const locationUI={
     zh_tw:['英靈喜好','羈絆道具取得方式','搜尋道具／遠征地圖','全部遠征地圖','遠征地圖','找不到符合條件的道具','指定羈絆道具','全部羈絆道具','目前未收錄此道具的遠征地圖取得來源。'],
     ja:['英霊の好み','贈り物の入手方法','贈り物・遠征先を検索','すべての遠征先','遠征先','該当する贈り物がありません','贈り物を指定','すべての贈り物','この贈り物の遠征先での入手情報は未収録です。'],
     en:['Hero preferences','Where to find gifts','Search gift / sortie map','All sortie maps','Sortie maps','No matching gifts','Choose a gift','All gifts','No expedition acquisition location is listed for this gift.'],
     ko:['영령 선호도','선물 획득 방법','선물 / 원정 지도 검색','모든 원정 지도','원정 지도','일치하는 선물이 없습니다','선물 지정','모든 선물','이 선물의 원정 지도 획득 정보는 아직 등록되지 않았습니다.']
   };
-  const guideBody=node('div'),locationBody=node('section'),guideNav=node('nav',null,'hero-guide-tabs'),heroTab=node('button'),locationTab=node('button');
-  guideBody.id='heroGuideContent';locationBody.id='heroGiftLocations';locationBody.hidden=true;
-  const children=[...panel.children];for(const child of children){if(child!==panel.querySelector('.panel-head')&&child!==languageLabel)guideBody.append(child);}
-  function showGuideTab(target){
-    const locationsActive=target===locationBody;
-    guideBody.hidden=locationsActive;locationBody.hidden=!locationsActive;
-    heroTab.setAttribute('aria-pressed',String(!locationsActive));
-    locationTab.setAttribute('aria-pressed',String(locationsActive));
+  const guideBody=node('div'),locationBody=node('section'),rankBody=node('section'),guideNav=node('nav',null,'hero-guide-tabs'),heroTab=node('button'),locationTab=node('button'),rankTab=node('button');
+  guideBody.id='heroGuideContent';locationBody.id='heroGiftLocations';rankBody.id='heroGiftRanking';
+  locationBody.hidden=true;rankBody.hidden=true;
+  // Shared statue selection stays above all three tabs rather than disappearing outside the first.
+  const children=[...panel.children];for(const child of children){
+    if(child!==panel.querySelector('.panel-head')&&child!==languageLabel&&child!==bondPanel)guideBody.append(child);
   }
-  for(const [button,target] of [[heroTab,guideBody],[locationTab,locationBody]]){button.type='button';button.setAttribute('aria-controls',target.id);button.setAttribute('aria-pressed',String(button===heroTab));button.addEventListener('click',()=>showGuideTab(target));guideNav.append(button);}
-  panel.append(guideNav,guideBody,locationBody);
+  function showGuideTab(target){
+    for(const [button,body] of [[heroTab,guideBody],[locationTab,locationBody],[rankTab,rankBody]]){
+      body.hidden=target!==body;
+      button.setAttribute('aria-pressed',String(target===body));
+    }
+  }
+  for(const [button,target] of [[heroTab,guideBody],[locationTab,locationBody],[rankTab,rankBody]]){
+    button.type='button';button.setAttribute('aria-controls',target.id);button.setAttribute('aria-pressed',String(button===heroTab));
+    button.addEventListener('click',()=>showGuideTab(target));guideNav.append(button);
+  }
+  panel.append(guideNav,guideBody,locationBody,rankBody);
   const locationFilters=node('div',null,'hero-preference-filters'),locationSearchLabel=node('label',null,'field'),locationSearch=node('input'),locationItemLabel=node('label',null,'field'),locationItem=node('select'),locationMapLabel=node('label',null,'field'),locationMap=node('select'),locationList=node('div',null,'hero-preference-grid');
   locationSearch.type='search';locationSearch.id='giftLocationSearch';locationItem.id='giftLocationItem';locationMap.id='giftLocationMap';locationList.id='giftLocationResults';
   locationSearchLabel.append(node('span'),locationSearch);locationItemLabel.append(node('span'),locationItem);locationMapLabel.append(node('span'),locationMap);locationFilters.append(locationSearchLabel,locationItemLabel,locationMapLabel);locationBody.append(locationFilters,locationList);
+
+  // The universal ranking (A) includes all six-star heroes.
+  // The personal ranking (B) considers only the heroes the player checks.
+  // Both modes use identical 3.16.1 gift-point math and share the statue toggle.
+  const rankingUI={
+    zh_tw:{tab:'贈送優先排名',heading:'羈絆道具贈送優先排名',chooseGift:'指定羈絆道具',all:'全部英靈效率',personal:'我的培養英靈',chosen:'已選 {n} 位培養英靈',hint:'依每次贈送 1 個道具的實際羈絆增加量排序；相同數值並列。並非戰鬥強度排名。',pick:'勾選想優先培養的英靈，系統會從你勾選的角色中推薦最有效率的贈送對象。',clear:'清除選擇',allHeroes:'全選英靈',noSelection:'請先勾選至少一位想培養的英靈，才會產生你的個人推薦。',noBase:'目前缺少這項道具的官方羈絆基礎值，無法計算排名。',best:'最高羈絆 +{gain}，共有 {n} 位英靈並列第一。',personalBest:'在你選擇的 {count} 位中，最高羈絆 +{gain}，共有 {n} 位並列第一。',preferenceNormal:'一般',preferenceFavorite:'喜愛',preferenceLoved:'最愛',gain:'羈絆 +{gain}',rank:'第 {n} 名',toGuide:'查看英靈喜好',toLocation:'查看取得方式',fromLocation:'查看贈送排名',shortcut:'推薦對象',selectedGift:'道具：{name}'},
+    ja:{tab:'贈り物のおすすめ',heading:'贈り物の優先順位',chooseGift:'贈り物を指定',all:'全英霊の効率順',personal:'育成したい英霊',chosen:'育成対象：{n} 体',hint:'贈り物1個あたりの絆上昇量で順位付け。同点は同順位。戦闘性能の評価ではありません。',pick:'育成したい英霊を選ぶと、選択した英霊の中から効率の良い贈り先を提案します。',clear:'選択解除',allHeroes:'すべて選択',noSelection:'先に育成したい英霊を1体以上選んでください。',noBase:'この贈り物の基礎絆値が未収録です。',best:'最大絆 +{gain}：{n} 体が同率1位です。',personalBest:'選択した {count} 体の最大絆 +{gain}：{n} 体が同率1位です。',preferenceNormal:'通常',preferenceFavorite:'好き',preferenceLoved:'大好き',gain:'絆 +{gain}',rank:'{n} 位',toGuide:'英霊の好みを見る',toLocation:'入手方法を見る',fromLocation:'おすすめを表示',shortcut:'おすすめ',selectedGift:'贈り物：{name}'},
+    en:{tab:'Gift priority',heading:'Gift-giving efficiency ranking',chooseGift:'Choose a gift',all:'All six-star heroes',personal:'My training targets',chosen:'{n} selected heroes',hint:'Ranked by bond points gained per gift; ties share a rank. Not a combat-strength ranking.',pick:'Select the heroes you want to train. Recommendations automatically rank only those heroes by gift efficiency.',clear:'Clear selection',allHeroes:'Select all',noSelection:'Select at least one hero to see your personal recommendation.',noBase:'No verified bond base value is available for this gift.',best:'Best bond gain +{gain}; {n} heroes tied for first.',personalBest:'Among your {count} selected heroes, best gain +{gain}; {n} tied for first.',preferenceNormal:'Normal',preferenceFavorite:'Liked',preferenceLoved:'Loved',gain:'Bond +{gain}',rank:'Rank {n}',toGuide:'View hero gifts',toLocation:'Where to find',fromLocation:'See gift ranking',shortcut:'Who to give',selectedGift:'Gift: {name}'},
+    ko:{tab:'선물 추천 순위',heading:'선물 효율 순위',chooseGift:'선물 선택',all:'전체 영령',personal:'내 육성 영령',chosen:'육성 영령 {n}명 선택',hint:'선물 1개당 인연 증가량 순위입니다. 동점은 공동 순위이며, 전투력 순위가 아닙니다.',pick:'육성할 영령을 선택하면 선택한 영령 중 선물 효율이 가장 좋은 대상을 추천합니다.',clear:'선택 해제',allHeroes:'전체 선택',noSelection:'육성할 영령을 한 명 이상 선택하세요.',noBase:'이 선물의 공식 기본 인연 수치가 없습니다.',best:'최대 인연 +{gain}, {n}명이 공동 1위입니다.',personalBest:'선택한 {count}명 중 최대 인연 +{gain}, {n}명이 공동 1위입니다.',preferenceNormal:'일반',preferenceFavorite:'좋아함',preferenceLoved:'매우 좋아함',gain:'인연 +{gain}',rank:'{n}위',toGuide:'영령 선호도 보기',toLocation:'획득 방법 보기',fromLocation:'추천 순위 보기',shortcut:'추천 대상',selectedGift:'선물: {name}'}
+  };
+  const ranking=node('section',null,'gift-rank-wrapper'),
+    rankHeader=node('div',null,'gift-rank-header'),
+    rankHeading=node('h3'),
+    rankIntro=node('p',null,'unit-note'),
+    rankModePicker=node('div',null,'gift-rank-modes'),
+    rankAllButton=node('button',null,'gift-rank-mode'),
+    rankPersonalButton=node('button',null,'gift-rank-mode'),
+    rankGiftLabel=node('label',null,'field gift-rank-gift'),
+    rankGiftText=node('span'),
+    rankGift=node('select'),
+    rankJumpLocation=node('button',null,'gift-rank-location'),
+    rankSelectedPanel=node('section',null,'gift-rank-selected'),
+    rankSelectedTop=node('div',null,'gift-rank-selected-top'),
+    rankSelectedTitle=node('h4'),
+    rankSelectedHint=node('p',null,'unit-note'),
+    rankClearButton=node('button',null,'gift-rank-clear'),
+    rankSelectAll=node('button',null,'gift-rank-clear'),
+    rankHeroChoices=node('div',null,'gift-rank-hero-options'),
+    rankSummary=node('p',null,'gift-rank-summary'),
+    rankList=node('div',null,'gift-rank-list');
+  rankGift.id='giftRankItem';rankAllButton.type='button';rankPersonalButton.type='button';
+  rankJumpLocation.type='button';rankClearButton.type='button';rankSelectAll.type='button';
+  rankSummary.setAttribute('role','status');rankSummary.setAttribute('aria-live','polite');
+  rankHeader.append(rankHeading,rankIntro);rankModePicker.append(rankAllButton,rankPersonalButton);
+  rankGiftLabel.append(rankGiftText,rankGift);
+  rankSelectedTop.append(rankSelectedTitle,rankSelectAll,rankClearButton);
+  rankSelectedPanel.append(rankSelectedTop,rankSelectedHint,rankHeroChoices);
+  ranking.append(rankHeader,rankModePicker,rankGiftLabel,rankJumpLocation,rankSelectedPanel,rankSummary,rankList);
+  rankBody.append(ranking);
+
+  const rankGiftChoices=source.items.filter(item=>Number.isFinite(source.bondGains.baseValues[item.id]));
+  const rankStorage='dfch-sixstar-training-heroes-v1',rankModeStorage='dfch-sixstar-rank-mode-v1',rankItemStorage='dfch-sixstar-rank-gift-v1';
+  const heroIndices=new Set(source.heroes.map(hero=>hero.index));
+  let chosenHeroes=new Set(),rankMode='all';
+  try{
+    const old=JSON.parse(localStorage.getItem(rankStorage));
+    if(Array.isArray(old))chosenHeroes=new Set(old.filter(id=>Number.isInteger(id)&&heroIndices.has(id)));
+    rankMode=localStorage.getItem(rankModeStorage)==='personal'?'personal':'all';
+  }catch(_){}
+  try{const saved=Number(localStorage.getItem(rankItemStorage));if(rankGiftChoices.some(item=>item.id===saved))rankGift.value=String(saved);}catch(_){}
+  const firstRankGift=rankGiftChoices.find(item=>!common.has(item.id))||rankGiftChoices[0];
+  let rankedGiftId=Number(rankGift.value)||firstRankGift?.id||0;
+  function textRank(key,vars={}){
+    return Object.entries(vars).reduce((s,[name,value])=>s.replaceAll('{'+name+'}',String(value)),rankingUI[lang][key]);
+  }
+  function saveTrainingHeroes(){
+    try{localStorage.setItem(rankStorage,JSON.stringify([...chosenHeroes].sort((a,b)=>a-b)));}catch(_){}
+  }
+  function scrollToGuideTabs(){
+    const reduced=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    guideNav.scrollIntoView({behavior:reduced?'auto':'smooth',block:'start'});
+  }
+  function openGiftRank(giftId){
+    const id=Number(giftId);
+    if(!rankGiftChoices.some(item=>item.id===id))return;
+    rankedGiftId=id;rankGift.value=String(id);
+    try{localStorage.setItem(rankItemStorage,String(id));}catch(_){}
+    renderRank();showGuideTab(rankBody);scrollToGuideTabs();
+  }
+  function viewRankHero(hero){
+    $('heroSearch').value='';$('heroSelect').value=String(hero.index);
+    $('heroItemFilter').value='';$('heroPreferenceFilter').value='';
+    showGuideTab(guideBody);render();scrollToGuideTabs();
+  }
+  function renderRankHeroes(){
+    rankHeroChoices.replaceChildren();
+    const tr=rankingUI[lang];
+    for(const hero of data.heroes){
+      const label=node('label',null,'gift-rank-hero-choice'),checkbox=node('input'),photo=node('img',null,'gift-rank-hero-image'),info=node('span',null,'gift-rank-hero-info');
+      checkbox.type='checkbox';checkbox.value=String(hero.index);checkbox.checked=chosenHeroes.has(hero.index);
+      photo.src='./assets/heroes/'+hero.key+'.webp';photo.alt='';photo.width=36;photo.height=36;photo.loading='lazy';photo.addEventListener('error',()=>photo.remove(),{once:true});
+      info.append(node('strong',hero.name),node('small',hero.title));
+      label.append(checkbox,photo,info);rankHeroChoices.append(label);
+      checkbox.addEventListener('change',()=>{
+        if(checkbox.checked)chosenHeroes.add(hero.index);else chosenHeroes.delete(hero.index);
+        saveTrainingHeroes();renderRank();
+      });
+    }
+    rankSelectedTitle.textContent=textRank('chosen',{n:chosenHeroes.size});
+    rankSelectedHint.textContent=tr.pick;
+  }
+  function applyRankLanguage(){
+    const labels=rankingUI[lang],current=rankedGiftId;
+    rankTab.textContent=labels.tab;
+    rankHeading.textContent=labels.heading;rankIntro.textContent=labels.hint;
+    rankAllButton.textContent=labels.all;rankPersonalButton.textContent=labels.personal;
+    rankGiftText.textContent=labels.chooseGift;
+    rankGift.replaceChildren();
+    for(const item of [...rankGiftChoices].sort((a,b)=>(a.translations[lang]||a.translations.ja).localeCompare(b.translations[lang]||b.translations.ja))){
+      const option=node('option',item.translations[lang]||item.translations.ja);option.value=String(item.id);rankGift.append(option);
+    }
+    rankGift.value=String(current);
+    rankJumpLocation.textContent=labels.toLocation;
+    rankClearButton.textContent=labels.clear;rankSelectAll.textContent=labels.allHeroes;
+    renderRankHeroes();renderRank();
+  }
+  function renderRank(){
+    if(!data)return;
+    const labels=rankingUI[lang],personal=rankMode==='personal';
+    rankAllButton.setAttribute('aria-pressed',String(!personal));rankPersonalButton.setAttribute('aria-pressed',String(personal));
+    rankSelectedPanel.hidden=!personal;
+    rankSelectedTitle.textContent=textRank('chosen',{n:chosenHeroes.size});
+    rankList.replaceChildren();
+    const allowed=personal?chosenHeroes:null;
+    const ranked=window.DFCHGiftRanking.evaluate(rankedGiftId,data.heroes,source.bondGains,ownsBondStatue,allowed);
+    if(!ranked){rankSummary.textContent=labels.noBase;return;}
+    if(personal&&!chosenHeroes.size){rankSummary.textContent=labels.noSelection;return;}
+    rankSummary.textContent=textRank(personal?'personalBest':'best',{
+      count:chosenHeroes.size,gain:ranked.best,n:ranked.winners.length
+    });
+    for(const row of ranked.rows){
+      const hero=row.hero,article=node('article',null,'gift-rank-card');
+      if(row.rank===1)article.classList.add('gift-rank-top');
+      const rankNumber=node('span',textRank('rank',{n:row.rank}),'gift-rank-number'),
+        portrait=node('img',null,'gift-rank-portrait'),
+        details=node('div',null,'gift-rank-details'),
+        title=node('strong',hero.name),
+        sub=node('span',hero.title,'gift-rank-subtitle'),
+        badge=node('span',labels['preference'+row.kind[0].toUpperCase()+row.kind.slice(1)],'gift-rank-preference gift-rank-'+row.kind),
+        gain=node('strong',textRank('gain',{gain:row.gain}),'gift-rank-gain'),
+        jump=node('button',labels.toGuide,'gift-rank-to-guide');
+      portrait.src='./assets/heroes/'+hero.key+'.webp';portrait.width=52;portrait.height=52;portrait.alt='';portrait.loading='lazy';
+      portrait.addEventListener('error',()=>portrait.remove(),{once:true});
+      details.append(title,sub,badge);jump.type='button';jump.addEventListener('click',()=>viewRankHero(hero));
+      article.append(rankNumber,portrait,details,gain,jump);rankList.append(article);
+    }
+  }
+  rankAllButton.addEventListener('click',()=>{
+    rankMode='all';try{localStorage.setItem(rankModeStorage,rankMode);}catch(_){}
+    renderRank();
+  });
+  rankPersonalButton.addEventListener('click',()=>{
+    rankMode='personal';try{localStorage.setItem(rankModeStorage,rankMode);}catch(_){}
+    renderRank();
+  });
+  rankGift.addEventListener('change',()=>{
+    rankedGiftId=Number(rankGift.value);
+    try{localStorage.setItem(rankItemStorage,String(rankedGiftId));}catch(_){}
+    renderRank();
+  });
+  rankJumpLocation.addEventListener('click',()=>openGiftLocation(rankedGiftId));
+  rankClearButton.addEventListener('click',()=>{
+    chosenHeroes.clear();saveTrainingHeroes();renderRankHeroes();renderRank();
+  });
+  rankSelectAll.addEventListener('click',()=>{
+    chosenHeroes=new Set(heroIndices);saveTrainingHeroes();renderRankHeroes();renderRank();
+  });
   // Include all gifts shown on hero cards, even when expedition drop locations are unknown.
   const locationGiftChoices=[...new Map([...source.giftLocations.items,...source.items].map(item=>[item.id,item])).values()];
   function renderLocations(){
@@ -93,7 +263,9 @@
       }else{
         card.append(node('p',labels[8],'gift-location-unlisted'));
       }
-      locationList.append(card);
+      const rankLink=node('button',rankingUI[lang].fromLocation,'gift-location-rank-link');
+      rankLink.type='button';rankLink.addEventListener('click',()=>openGiftRank(item.id));
+      card.append(rankLink);locationList.append(card);
     }
     if(!locationList.children.length)locationList.append(node('p',labels[5],'hero-empty'));
   }
@@ -106,7 +278,7 @@
     }
     locationItem.value=selectedItem;
     locationMapLabel.firstChild.textContent=labels[4];locationMap.replaceChildren();
-    const allMaps=node('option',labels[3]);allMaps.value='';locationMap.append(allMaps);for(const map of source.giftLocations.maps){const option=node('option',map.translations[lang]||map.translations.ja);option.value=map.id;locationMap.append(option);}locationMap.value=selectedMap;renderLocations();
+    const allMaps=node('option',labels[3]);allMaps.value='';locationMap.append(allMaps);for(const map of source.giftLocations.maps){const option=node('option',map.translations[lang]||map.translations.ja);option.value=map.id;locationMap.append(option);}locationMap.value=selectedMap;renderLocations();applyRankLanguage();
   }
   function openGiftLocation(id){
     locationSearch.value='';locationMap.value='';locationItem.value=String(id);
