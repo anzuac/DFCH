@@ -1,7 +1,7 @@
 (() => {
   'use strict';
   // Only player-visible skill descriptions and rewards are used in this client-side view.
-  const DATA_URL = './data/sixstar-visible-abilities.json';
+  const DATA_URL = './data/sixstar-visible-abilities.json?v=1.1.0';
   const STORAGE = 'dfch-sixstar-abilities-v1';
   const maxBond = 50;
   let dataPromise = null;
