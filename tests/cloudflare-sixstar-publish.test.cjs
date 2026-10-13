@@ -22,7 +22,7 @@ test('Cloudflare Pages copies the 23-hero modal JavaScript, CSS and public data'
     assert.ok(manifest.has(asset),asset+' is copied to dist-heroes');
   }
   assert.match(build,/fs\.mkdirSync\(path\.dirname\(destination\),\s*\{\s*recursive:\s*true\s*\}\)/);
-  assert.match(build,/fs\.copyFileSync\(path\.join\(repoRoot,relativePath\),\s*destination\)/);
+  assert.match(build,/fs\.copyFileSync\(path\.join\(repoRoot,\s*relativePath\),\s*destination\)/);
 });
 test('Every locally referenced Cloudflare guide script and stylesheet is published',()=>{
   const manifest=guideManifest();
