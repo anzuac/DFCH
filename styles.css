@@ -1722,3 +1722,13 @@ html[data-guide-theme="green"] .heroes-standalone {
  .frigg-ability-row-info{align-self:center}
 }
 @media(prefers-reduced-motion:reduce){.frigg-ability-dialog::backdrop{backdrop-filter:none}}
+
+/* Player-facing verified effects shown only at their referenced screenshot levels. */
+.frigg-ability-effect{margin:3px 0 0;color:var(--text,#edf4f4);font-size:.82rem;line-height:1.6;overflow-wrap:anywhere}
+.frigg-ability-row-info>span{opacity:.85}
+.frigg-ability-bond>.frigg-ability-note{color:var(--teal-2,#8be1d3);font-weight:600}
+.frigg-ability-row:has(.frigg-ability-skill-controls button){grid-template-columns:54px minmax(0,1fr)}
+.frigg-ability-row:has(.frigg-ability-skill-controls button) .frigg-ability-skill-controls{grid-column:2;justify-self:end}
+@media(max-width:560px){
+ .frigg-ability-effect{font-size:.82rem}
+}
