@@ -1331,3 +1331,8 @@ html[data-guide-theme="green"] .heroes-standalone {
  .guide-theme-options{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
 @media(max-width:350px){.guide-theme-options{grid-template-columns:1fr}}
+
+/* Embed the existing 3.16.1 Bond30 page into the expedition tab without changing its draw logic. */
+.bond30-panel{min-width:0;overflow:visible}
+.bond30-embed{display:block;width:100%;height:1450px;min-height:450px;border:0;border-radius:12px;background:#0e191c}
+@media(max-width:650px){.bond30-panel{padding:12px}.bond30-embed{min-height:700px}}
