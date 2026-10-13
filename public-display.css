@@ -229,7 +229,7 @@ html[data-guide-theme="light"] .bond30-public :is(.completion,.result){color:var
  .bond30-public .auto-draw .button,.bond30-public .actions .button{
    min-height:48px;white-space:normal;
  }
- .bond30-public .slot .glyph{max-width:calc(46px + 5px * (var(--guide-font-multiplier,1) - 1))}
+ .bond30-public .slot .glyph{max-width:min(46px,100%)}
 }
 @media(max-width:430px){
  .bond30-public .masthead{grid-template-columns:minmax(0,1fr);row-gap:8px}
