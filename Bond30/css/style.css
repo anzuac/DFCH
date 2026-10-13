@@ -74,6 +74,7 @@ button:focus-visible{outline-offset:3px}
 @media(max-width:430px){
  .container{padding-inline:10px}
  .panel{padding:12px;border-radius:12px}
+ .fields{grid-template-columns:minmax(0,1fr)}
  .slot{min-height:clamp(105px,31vw,145px);padding:8px 4px;gap:5px}
  .slots{gap:6px}
  .slot .glyph{width:clamp(31px,10vw,42px)}
