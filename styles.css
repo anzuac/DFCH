@@ -1336,3 +1336,79 @@ html[data-guide-theme="green"] .heroes-standalone {
 .bond30-panel{min-width:0;overflow:visible}
 .bond30-embed{display:block;width:100%;height:1450px;min-height:450px;border:0;border-radius:12px;background:#0e191c}
 @media(max-width:650px){.bond30-panel{padding:12px}.bond30-embed{min-height:700px}}
+
+/* Six-star gift ranking: 3.16.1 point efficiency, plus optional player-selected candidates.
+ * New classes are isolated from the expedition, Bond30 and Diamond simulators.
+ */
+#heroGiftRanking[hidden],#heroGiftLocations[hidden],#heroGuideContent[hidden]{display:none!important}
+.hero-guide-tabs{scroll-margin-top:16px}
+.hero-guide-tabs button{min-height:48px;min-width:0}
+.gift-rank-wrapper{min-width:0}
+.gift-rank-header h3{font-size:calc(20px * var(--guide-font-multiplier,1));margin:0 0 8px;color:var(--text)}
+.gift-rank-header .unit-note{margin:0 0 16px;color:var(--muted)}
+.gift-rank-modes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:0 0 16px}
+.gift-rank-mode{min-height:48px;padding:10px 12px;border:1px solid var(--line);border-radius:11px;background:var(--panel-2);color:var(--text);font:inherit;font-weight:650;cursor:pointer;overflow-wrap:anywhere}
+.gift-rank-mode[aria-pressed="true"]{border-color:var(--teal);background:var(--guide-tab-active,var(--panel));color:var(--guide-tab-active-text,var(--teal-2))}
+.gift-rank-gift{display:block;max-width:640px}
+.gift-rank-gift>span{display:block;margin-bottom:7px}
+.gift-rank-gift select{display:block;width:100%;max-width:100%;min-width:0;min-height:44px}
+.gift-rank-location,.gift-location-rank-link,.gift-rank-to-guide,.gift-rank-shortcut,.gift-rank-clear{font:inherit;cursor:pointer;border:1px solid var(--line-strong);background:var(--panel-2);color:var(--teal-2);border-radius:9px;padding:9px 12px;overflow-wrap:anywhere}
+.gift-rank-location{margin:10px 0 18px;min-height:44px}
+.gift-rank-location:hover,.gift-location-rank-link:hover,.gift-rank-to-guide:hover,.gift-rank-shortcut:hover,.gift-rank-clear:hover{background:var(--guide-tab-active,var(--panel))}
+.gift-location-rank-link{margin-top:16px;min-height:44px}
+.gift-rank-selected{padding:16px;border-radius:13px;background:var(--panel-2);border:1px solid var(--line);margin:0 0 18px;min-width:0}
+.gift-rank-selected[hidden]{display:none!important}
+.gift-rank-selected-top{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.gift-rank-selected-top h4{margin:0 auto 0 0;font-size:calc(16px * var(--guide-font-multiplier,1));color:var(--text)}
+.gift-rank-clear{min-height:42px}
+.gift-rank-selected .unit-note{margin:9px 0 12px;color:var(--muted)}
+.gift-rank-hero-options{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;max-height:315px;overflow-y:auto;overscroll-behavior:contain;padding:3px 2px}
+.gift-rank-hero-choice{display:flex;align-items:center;gap:8px;padding:10px 8px;min-width:0;min-height:60px;cursor:pointer;border:1px solid var(--line);border-radius:11px;background:var(--panel);color:var(--text);font:inherit}
+.gift-rank-hero-choice:has(input:checked){border-color:var(--teal);background:var(--guide-tab-active,var(--panel-2))}
+.gift-rank-hero-choice input{flex:0 0 18px;width:18px;height:18px;min-height:0;accent-color:var(--teal)}
+.gift-rank-hero-image{width:36px;height:36px;flex:0 0 36px;object-fit:contain;border-radius:7px}
+.gift-rank-hero-info{min-width:0;display:flex;flex-direction:column;gap:2px}
+.gift-rank-hero-info strong{font-size:calc(13px * var(--guide-font-multiplier,1));line-height:1.35;overflow-wrap:anywhere}
+.gift-rank-hero-info small{font-size:calc(11px * var(--guide-font-multiplier,1));line-height:1.3;color:var(--muted);overflow-wrap:anywhere}
+.gift-rank-summary{padding:14px 16px;margin:18px 0;border:1px solid var(--line-strong);border-radius:12px;background:var(--guide-common,var(--panel-2));font-size:calc(15px * var(--guide-font-multiplier,1));font-weight:700;color:var(--text);line-height:1.65;overflow-wrap:anywhere}
+.gift-rank-list{display:grid;gap:10px;min-width:0}
+.gift-rank-card{display:grid;grid-template-columns:78px 52px minmax(0,1fr) auto auto;gap:12px;align-items:center;padding:13px 15px;background:var(--panel-2);border:1px solid var(--line);border-radius:12px;min-width:0}
+.gift-rank-card.gift-rank-top{border-color:var(--teal);box-shadow:inset 3px 0 var(--teal)}
+.gift-rank-number{font-size:calc(12px * var(--guide-font-multiplier,1));font-weight:700;color:var(--gold-2);overflow-wrap:anywhere}
+.gift-rank-portrait{width:52px;height:52px;object-fit:contain;border-radius:9px;background:var(--panel);border:1px solid var(--line)}
+.gift-rank-details{display:flex;flex-direction:column;gap:3px;min-width:0}
+.gift-rank-details>strong{font-size:calc(16px * var(--guide-font-multiplier,1));overflow-wrap:anywhere}
+.gift-rank-subtitle{font-size:calc(12px * var(--guide-font-multiplier,1));color:var(--muted);overflow-wrap:anywhere}
+.gift-rank-preference{font-size:calc(12px * var(--guide-font-multiplier,1));font-weight:700;color:var(--muted)}
+.gift-rank-loved{color:var(--guide-love,#ffb2c8)}
+.gift-rank-favorite{color:var(--teal-2)}
+.gift-rank-gain{font-size:calc(16px * var(--guide-font-multiplier,1));font-variant-numeric:tabular-nums;color:var(--teal-2);white-space:nowrap}
+.gift-rank-to-guide{min-height:44px;font-size:calc(12px * var(--guide-font-multiplier,1))}
+.gift-list li.gift-shortcut-item{display:flex;flex-wrap:wrap;align-items:center}
+.gift-list li.gift-shortcut-item .gift-shortcut{width:auto;flex:1 1 150px}
+.gift-rank-shortcut{min-height:40px;padding:6px 10px;margin:4px 6px 4px 0;font-size:calc(12px * var(--guide-font-multiplier,1));flex:0 0 auto}
+.gift-rank-mode:focus-visible,.gift-rank-location:focus-visible,.gift-rank-clear:focus-visible,.gift-rank-to-guide:focus-visible,.gift-location-rank-link:focus-visible,.gift-rank-shortcut:focus-visible{outline:2px solid var(--teal);outline-offset:3px}
+@media(max-width:800px){
+ .gift-rank-hero-options{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .gift-rank-card{grid-template-columns:64px 48px minmax(0,1fr) auto;gap:10px}
+ .gift-rank-portrait{width:48px;height:48px}
+ .gift-rank-to-guide{grid-column:3/-1;justify-self:end}
+}
+@media(max-width:620px){
+ .hero-guide-tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;overflow:visible}
+ .hero-guide-tabs button{padding:10px 5px;min-height:60px;white-space:normal;overflow-wrap:anywhere;font-size:calc(13px * var(--guide-font-multiplier,1))}
+ .gift-rank-card{grid-template-columns:58px 46px minmax(0,1fr);gap:6px 10px;padding:12px 10px}
+ .gift-rank-number{grid-column:1;grid-row:1/3}
+ .gift-rank-portrait{grid-column:2;grid-row:1/3;width:46px;height:46px}
+ .gift-rank-details{grid-column:3;grid-row:1/3}
+ .gift-rank-gain{grid-column:2/4;grid-row:3;justify-self:start}
+ .gift-rank-to-guide{grid-column:2/4;grid-row:4;justify-self:start}
+ .gift-rank-modes{gap:6px}
+ .gift-rank-mode{padding:10px 8px}
+ .gift-rank-selected{padding:12px}
+}
+@media(max-width:400px){
+ .gift-rank-hero-options{grid-template-columns:minmax(0,1fr)}
+ .gift-rank-card{grid-template-columns:52px 42px minmax(0,1fr)}
+ .gift-rank-portrait{width:42px;height:42px}
+}
