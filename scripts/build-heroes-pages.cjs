@@ -20,6 +20,7 @@ const guideFiles = [
   'heroes.html',
   'guide-footer.js',
   'display-settings.js',
+  'public-display.css',
   'styles.css',
   'hero-preferences-data.js',
   'hero-preferences-view.js',
@@ -80,8 +81,12 @@ fs.cpSync(
 );
 const bondHtmlPath=path.join(outputDir,'bond30/index.html');
 let bondHtml=fs.readFileSync(bondHtmlPath,'utf8');
+bondHtml=bondHtml.replace('<head>', '<head><script src="../display-settings.js?v=2.0.0"></script>');
 bondHtml=bondHtml.replace('</head>',
-  '<link rel="stylesheet" href="../public-nav.css?v=1.0.0"><script src="../public-nav.js?v=1.0.0" defer></script></head>');
+  '<link rel="stylesheet" href="../public-nav.css?v=1.0.0">'
+  +'<link rel="stylesheet" href="../public-display.css?v=1.0.0">'
+  +'<script src="../public-nav.js?v=1.1.0" defer></script></head>');
+bondHtml=bondHtml.replace('<body>', '<body class="bond30-public">');
 bondHtml=bondHtml.replace('</body>', '<script src="../site-counter.js?v=1.0.0"></script></body>');
 fs.writeFileSync(bondHtmlPath,bondHtml);
 
@@ -97,10 +102,12 @@ const diamondPage=[
   '<meta name="viewport" content="width=device-width,initial-scale=1">',
   '<meta name="description" content="非官方鑽石及獎勵輪盤抽取模擬器">',
   '<title>鑽石抽取模擬器｜DFCH</title>',
+  '<script src="../display-settings.js?v=2.0.0"></script>',
   '<link rel="stylesheet" href="../styles.css?v=2.4.1">',
   '<link rel="stylesheet" href="../public-nav.css?v=1.0.0">',
   '<link rel="stylesheet" href="../diamond-public.css?v=1.0.0">',
-  '<script src="../public-nav.js?v=1.0.0" defer></script>',
+  '<link rel="stylesheet" href="../public-display.css?v=1.0.0">',
+  '<script src="../public-nav.js?v=1.1.0" defer></script>',
   '</head><body class="public-diamond">',
   '<div class="app-shell"><header class="hero-guide-header"><p class="eyebrow">DFCH · DIAMOND SIMULATOR</p>',
   '<h1>鑽石抽取模擬器</h1><p class="helper">鑽石與獎勵輪盤抽選，在瀏覽器內直接執行。</p></header>',
