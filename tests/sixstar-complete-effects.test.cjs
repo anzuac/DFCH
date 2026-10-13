@@ -24,7 +24,7 @@ test('All 23 heroes have complete, player-readable ability effects for every sup
     assert.ok(s.levelEffects.every(text=>typeof text==='string'&&text.trim().length>0));
   }
   assert.equal(new Set(data.heroes.flatMap(h=>h.skills.map(s=>s.name))).size,138);
-  assert.doesNotMatch(JSON.stringify(data),/能力名稱核對中|\\b30300\\d{4}\\b/);
+  assert.doesNotMatch(JSON.stringify(data),/能力名稱核對中|\b30300\d{4}\b/);
 });
 test('All missing skills use the matched official player descriptions',()=>{
   assert.match(at('valentine_queen','手作的禮物',4),/額外獲得 4 個荊刺寶箱/);
