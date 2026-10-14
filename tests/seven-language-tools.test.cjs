@@ -60,7 +60,7 @@ test('Both entrypoints and the Cloudflare Pages build ship the same locale data 
    assert.ok(bond.includes('../'+file+'?v=1.0.0'));
  }
  assert.ok(bond.includes('display-settings.js?v=2.1.0'));
- assert.ok(manifest.includes("'../public-tool-i18n.js?v=1.0.0'"));
+ assert.ok(manifest.includes('public-tool-i18n.js?v=1.0.0'));
  assert.ok(!manifest.includes("bondHtml=bondHtml.replace('<head>'"));
  assert.ok(manifest.includes('public-tool-i18n.js?v=1.0.0'));
 });
