@@ -49,9 +49,9 @@ test('Website keeps private original names and numeric ability IDs out of public
 });
 
 test('Both sites load the refreshed 23-hero picture data and Cloudflare publishes it',()=>{
-  assert.match(read('sixstar-abilities.js'),/sixstar-visible-abilities\.json\?v=1\.2\.0/);
+  assert.match(read('sixstar-abilities.js'),/sixstar-visible-abilities\.json\?v=1\.3\.0/);
   for(const entry of ['index.html','heroes.html'])
-    assert.match(read(entry),/sixstar-abilities\.js\?v=1\.2\.0/);
+    assert.match(read(entry),/sixstar-abilities\.js\?v=1\.4\.0/);
   const manifest=read('scripts/build-heroes-pages.cjs');
   assert.match(manifest,/'data\/sixstar-visible-abilities\.json'/);
   assert.match(manifest,/'sixstar-abilities\.js'/);
