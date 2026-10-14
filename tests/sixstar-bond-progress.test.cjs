@@ -124,7 +124,7 @@ test('Submitting a full current level automatically advances levels, clamps max,
 test('Both deployment entrypoints have versioned assets in Cloudflare whitelist',()=>{
   for(const entry of ['index.html','heroes.html']){
     const html=fs.readFileSync(path.join(root,entry),'utf8');
-    assert.match(html,/sixstar-abilities\.js\?v=1\.3\.0/);
+    assert.match(html,/sixstar-abilities\.js\?v=1\.4\.0/);
     assert.match(html,/sixstar-abilities\.css\?v=1\.1\.0/);
   }
   assert.match(source,/sixstar-visible-abilities\.json\?v=1\.3\.0/);
