@@ -242,3 +242,47 @@ html[data-guide-theme="light"] .bond30-public :is(.completion,.result){color:var
    font-size:clamp(calc(23px * var(--guide-font-multiplier,1)),6vw,calc(30px * var(--guide-font-multiplier,1)));
  }
 }
+
+/* Theme contrast audit: all four public tools use readable foregrounds on light
+   and dark surfaces. This is presentation only; no result or probability changes. */
+html[data-guide-theme="light"] .heroes-standalone{
+  --muted:#445b6a;--muted-2:#526776;--teal-2:#075e55;--gold-2:#795114;
+}
+html[data-guide-theme="light"] .public-diamond{
+  --muted:#445b6a;--muted-2:#526776;--teal-2:#075e55;--gold-2:#795114;
+}
+html[data-guide-theme="light"] .bond30-public{
+  --muted:#445b6a;--gold:#795114;--teal:#156b60;--teal-2:#075e55;
+}
+html[data-guide-theme="light"] .bond30-public .button.primary{
+  background:#896016;color:#fff;border-color:#795114;
+}
+html[data-guide-theme="light"] .bond30-public .button.accent{
+  background:#197e72;color:#fff;border-color:#14685f;
+}
+html[data-guide-theme="light"] .bond30-public .step{
+  background:#896016;color:#fff;
+}
+html[data-guide-theme="light"] .bond30-public :is(.metric strong,.skill .weight,.rate b,.picker-title strong){
+  color:#795114;
+}
+html[data-guide-theme="light"] .bond30-public :is(.rule-notice,.completion,.result){
+  color:#795114;
+}
+html[data-guide-theme="light"] .heroes-standalone :is(.hero-guide-tabs button,.hero-preference-card,.gift-rank-hero-choice){
+  color:var(--text);
+}
+html[data-guide-theme="light"] :is(.heroes-standalone,.public-diamond,.bond30-public,.hero-party-public)
+  .dfch-settings-panel .dfch-settings-theme:has(input:checked){
+  color:#153b38;border-color:#147267;
+}
+html[data-guide-theme="light"] :is(.heroes-standalone,.public-diamond,.bond30-public,.hero-party-public)
+  :is(input,select,textarea)::placeholder{
+  color:#506575;opacity:1;
+}
+html[data-guide-theme="light"] .public-diamond :is(.diamond-dialog-head button,.diamond-auto-input button,.diamond-auto-input select){
+  color:var(--text);background:var(--panel-2);
+}
+html[data-guide-theme="light"] .public-diamond :is(.diamond-result,#diamondAutoStatus){
+  color:#075e55;
+}

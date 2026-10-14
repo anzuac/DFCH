@@ -176,3 +176,128 @@ html[data-guide-theme="green"] .hero-party-public{--bg:#14231b;--panel:#1b3025;-
 
 .hero-party-public.party-embedded .dfch-public-nav{display:none!important}
 .hero-party-public.party-embedded .dfch-settings-trigger{display:none!important}
+
+/* v1.15.1: Semantic contrast palette shared by all 4 DFCH background themes.
+   Keep the official-looking rate dialog dark and preserve existing calculations. */
+.hero-party-public{
+  --party-foreground:#edf3ff;--party-secondary:#b6c9df;
+  --party-accent:#acd9ff;--party-gold:#f4d69f;
+  --party-positive:#b7ecc7;--party-warning:#f4cd8a;--party-disabled:#aabbd1;
+  --party-tile-bg:#26344c;--party-help-bg:#222e48;
+  --party-skill-bg:#274a67;--party-skill-text:#bfe8ff;
+  --party-artifact-bg:#4b3c29;--party-artifact-text:#ffe0a5;
+  --party-cap-ok-bg:#314434;--party-cap-ok-text:#d6e9bb;
+  --party-cap-warn-bg:#583c2a;--party-cap-warn-text:#ffdbac;
+  --teal:var(--party-accent);--teal-2:var(--party-accent);
+}
+html[data-guide-theme="light"] .hero-party-public{
+  --party-foreground:#203243;--party-secondary:#445b6a;
+  --party-accent:#155a8a;--party-gold:#795114;
+  --party-positive:#17603b;--party-warning:#875014;--party-disabled:#566977;
+  --party-tile-bg:#e5edf2;--party-help-bg:#ffffff;
+  --party-skill-bg:#e4f2fb;--party-skill-text:#184e70;
+  --party-artifact-bg:#fff2df;--party-artifact-text:#83521a;
+  --party-cap-ok-bg:#e5f1e7;--party-cap-ok-text:#205d39;
+  --party-cap-warn-bg:#fff0df;--party-cap-warn-text:#82450e;
+}
+html[data-guide-theme="blue"] .hero-party-public{
+  --party-foreground:#eef5ff;--party-secondary:#b9d1e8;
+  --party-accent:#b0e3ff;--party-gold:#f1d9a6;
+  --party-positive:#c2f0c7;--party-warning:#f5d7a1;--party-disabled:#a8bfd6;
+  --party-tile-bg:#163452;--party-help-bg:#193852;
+  --party-skill-bg:#234966;--party-skill-text:#cfecff;
+  --party-artifact-bg:#4d402d;--party-artifact-text:#ffe4b0;
+  --party-cap-ok-bg:#315342;--party-cap-ok-text:#d6f0d8;
+  --party-cap-warn-bg:#58402f;--party-cap-warn-text:#ffe1ba;
+}
+html[data-guide-theme="green"] .hero-party-public{
+  --party-foreground:#e6f0df;--party-secondary:#c0d7be;
+  --party-accent:#d4f1cf;--party-gold:#ecdda8;
+  --party-positive:#c9eec5;--party-warning:#f1d49b;--party-disabled:#b4c9b1;
+  --party-tile-bg:#284535;--party-help-bg:#284535;
+  --party-skill-bg:#294b48;--party-skill-text:#daf0e8;
+  --party-artifact-bg:#4c4329;--party-artifact-text:#ffe8b8;
+  --party-cap-ok-bg:#31563c;--party-cap-ok-text:#e0f1d8;
+  --party-cap-warn-bg:#53452e;--party-cap-warn-text:#ffe3ad;
+}
+/* Fixed dark-mode text previously became faint against the light background. */
+.hero-party-public :is(.name,.skillname,.statvalue,.statline,.statpanel h4,.artifact-line label,
+ .artifact-group h3,.artifact-setting-heading h2,.official-stats h3,.fieldrow label,
+ .skill label,.help-content,.help-content>p){
+  color:var(--party-foreground);
+}
+.hero-party-public :is(.autosave-label,.slotno,.slot .title,.label,.level,.statlabel,.statvalue small,
+ .statnote,.statline span,.calc-note,.artifact-line small,.artifact-setting-heading span,
+ .greed-result span,.greed-result .greed-total-label,.greed-result .greed-disclaimer,
+ .note,.help-content li){
+  color:var(--party-secondary);
+}
+.hero-party-public :is(.version-mark,.statvalue strong,.greed-result strong,.official-stats .subheading){
+  color:var(--party-accent);
+}
+.hero-party-public :is(.statline strong,.skilltile-label b,.mini){
+  color:var(--party-gold);
+}
+.hero-party-public :is(.plus,.statvalue .positive){color:var(--party-positive)}
+.hero-party-public :is(.statwarn,.danger){color:var(--party-warning)}
+.hero-party-public .skill label:has(input:disabled){color:var(--party-disabled)}
+.hero-party-public .skilltile-label{color:var(--party-foreground)}
+.hero-party-public .skilltile,
+.hero-party-public .skill-icon{background:var(--party-tile-bg);color:var(--party-foreground);border-color:var(--line)}
+.hero-party-public .slotabilities,
+.hero-party-public :is(.statgroup,.statpanel,.help-content section,.artifact-line){
+  border-color:var(--line);
+}
+/* Keep the animated evolution outline without hard-coded dark interiors. */
+.hero-party-public .skilltile.is-up,
+.hero-party-public .skill-icon.is-up{
+  border:2px solid transparent;
+  background:linear-gradient(var(--party-tile-bg),var(--party-tile-bg)) padding-box,
+    conic-gradient(from var(--rainbow-shift),#fc6d88,#ffdb73,#8af0aa,#81bdff,#ba95ff,#fc6d88) border-box;
+}
+.hero-party-public .rainbow-help{
+  background:linear-gradient(var(--party-help-bg),var(--party-help-bg)) padding-box,
+    conic-gradient(from var(--rainbow-shift),#f88dab,#ffc965,#95efbb,#8bc2ff,#d3a2ff,#f88dab) border-box;
+  color:var(--party-foreground);
+}
+.hero-party-public .help-sparkle{color:var(--party-gold)}
+.hero-party-public .help-content h3{color:var(--party-accent)}
+.hero-party-public .greed-result strong{color:var(--party-positive)}
+.hero-party-public .greed-breakdown .greed-skill{
+  background:var(--party-skill-bg);color:var(--party-skill-text);border-color:var(--line);
+}
+.hero-party-public .greed-breakdown .greed-artifact{
+  background:var(--party-artifact-bg);color:var(--party-artifact-text);border-color:var(--line);
+}
+.hero-party-public :is(.fieldrow input[type=number],.fieldrow select,.artifact-line select,.picker select){
+  color:var(--party-foreground);background:var(--guide-input);border-color:var(--line);
+}
+.hero-party-public :is(.fieldrow input[type=number],.fieldrow select,.artifact-line select,.picker select) option{
+  color:var(--party-foreground);background:var(--guide-input);
+}
+.hero-party-public .artifact-line select.cap-exceeded,
+.hero-party-public .artifact-line select option.is-over-cap,
+.hero-party-public .artifact-ominous .circuit-cap-note.is-over-cap{
+  background:var(--party-cap-warn-bg);color:var(--party-cap-warn-text);
+  border-color:var(--party-warning);
+}
+.hero-party-public .artifact-line select.cap-reached,
+.hero-party-public .artifact-line select option.is-at-cap,
+.hero-party-public .artifact-ominous .circuit-cap-note.is-at-cap{
+  background:var(--party-cap-ok-bg);color:var(--party-cap-ok-text);
+  border-color:var(--party-positive);
+}
+.hero-party-public .artifact-ominous .circuit-cap-note:not(.is-at-cap):not(.is-over-cap){
+  background:var(--guide-accent-bg);color:var(--party-secondary);border:1px solid var(--line);
+}
+/* The rate-guide deliberately stays dark: preserve its light typography. */
+.hero-party-public .rate-guide-body{color:#e2e7eb}
+.hero-party-public .rate-guide-intro{color:#f0f2f4}
+.hero-party-public .rate-guide-lines{color:#ccd6dd}
+
+/* Destructive controls retain their warning meaning in every theme. */
+.hero-party-public{--party-danger:#ffb4be}
+html[data-guide-theme="light"] .hero-party-public{--party-danger:#972b43}
+html[data-guide-theme="blue"] .hero-party-public{--party-danger:#ffc4cd}
+html[data-guide-theme="green"] .hero-party-public{--party-danger:#ffc7cd}
+.hero-party-public .danger{color:var(--party-danger)}
