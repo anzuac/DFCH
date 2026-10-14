@@ -49,10 +49,10 @@
       const next=sourceTranslate(raw,language);
       if(next!==textNode.nodeValue)textNode.nodeValue=next;
     }
-    const elements=root.querySelectorAll?.('[placeholder],[aria-label],[title]') || [];
+    const elements=root.querySelectorAll?.('[placeholder],[aria-label],[title],[alt]') || [];
     for(const element of elements){
       let original=attributes.get(element);
-      if(!original){original={};for(const attr of ['placeholder','aria-label','title'])if(element.hasAttribute(attr))original[attr]=element.getAttribute(attr);attributes.set(element,original);}
+      if(!original){original={};for(const attr of ['placeholder','aria-label','title','alt'])if(element.hasAttribute(attr))original[attr]=element.getAttribute(attr);attributes.set(element,original);}
       for(const [key,value] of Object.entries(original)){
         const next=sourceTranslate(value,language);
         if(element.getAttribute(key)!==next)element.setAttribute(key,next);
