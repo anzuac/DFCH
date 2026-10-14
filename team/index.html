@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="zh-Hant"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="DFCH 英靈編隊・守門人及貪欲能力搭配計算"><title>英靈編隊｜DFCH</title>
+<script src="../display-settings.js?v=2.1.0"></script>
+<script src="../public-official-labels.js?v=1.0.0" defer></script>
+<link rel="stylesheet" href="../public-nav.css?v=1.0.0">
+<link rel="stylesheet" href="../public-display.css?v=1.0.1">
+<link rel="stylesheet" href="./css/style.css?v=1.15.0">
+<script src="../public-nav.js?v=1.3.0" defer></script></head><body class="hero-party-public"><header class="hero-guide-header"><h1>英靈編隊 <span class="version-mark">v1.15</span></h1><div class="toolbar"><span class="pill" id="count">已編隊 0 / 12</span><button class="minor" id="clear">清空編隊</button><span class="autosave-label">內容自動保存在這台瀏覽器</span><button class="rainbow-help" id="helpOpen" type="button" aria-haspopup="dialog" aria-controls="helpOverlay"><span class="help-sparkle" aria-hidden="true">✦</span> 使用說明／注意事項 <span aria-hidden="true">✦</span></button></div></header><main><section class="artifact-settings" aria-labelledby="artifactSettingTitle">
+ <div class="artifact-setting-heading"><h2 id="artifactSettingTitle">神器設定</h2><span>先選神器，再配置英靈；設定會自動保存</span></div>
+ <div class="artifact-setting-grid">
+  <div class="artifact-group artifact-guard"><h3><span class="artifact-dot guard-dot"></span>禁斷守門人</h3>
+   <div class="artifact-line"><label for="crownToggle">★禁斷的王冠 <small>×2</small></label><input type="checkbox" id="crownToggle"></div>
+   <div class="artifact-line"><label for="stoneToggle">通往禁斷的媒介石 <small>×1.1</small></label><input type="checkbox" id="stoneToggle"></div>
+   <div class="artifact-line"><label for="ringLevel">★介入者之咒輪</label><select id="ringLevel" aria-label="介入者之咒輪等級"><option value="0">未持有</option><option value="1">Lv.1 ×1.1</option><option value="2">Lv.2 ×1.2</option><option value="3">Lv.3 ×1.3</option></select></div>
+  </div>
+  <div class="artifact-group artifact-greed"><h3><span class="artifact-dot greed-dot"></span>貪欲・額外寶箱</h3>
+   <div class="artifact-line"><label for="brokenCircuitLevel">☆壞掉的回路</label><select id="brokenCircuitLevel" aria-label="壞掉的回路等級"></select></div>
+   <div class="artifact-line"><label for="mysteriousCircuitToggle">★不可思議的回路 <small>+30%</small></label><input type="checkbox" id="mysteriousCircuitToggle"></div>
+   <div class="artifact-line"><label for="desireMirrorLevel">★欲望之窺視鏡</label><select id="desireMirrorLevel" aria-label="欲望之窺視鏡等級"></select></div>
+   <div class="artifact-line artifact-ominous">
+    <label for="ominousCircuitLevel">☆不祥的迴路</label>
+    <div class="ominous-controls">
+     <select id="ominousCircuitLevel" aria-label="不祥的迴路等級"></select>
+     <select id="ominousDistance" aria-label="最遠距離（每 30）" title="最遠距離（每 30）"></select>
+     <span id="ominousCapNote" class="circuit-cap-note" role="status" aria-live="polite" hidden></span>
+    </div>
+   </div>
+  </div>
+ </div>
+</section><div class="maincols"><div class="grid" id="grid"></div><aside id="officialStats" class="official-stats" aria-live="polite"></aside></div></main><div class="overlay hidden" id="overlay" role="dialog" aria-modal="true" aria-label="英靈設定"><div class="dialog"><div class="dhead"><h2 id="dialogtitle">設定英靈</h2><button class="close" id="close">✕ 關閉</button></div><div class="dbody"><div class="label">選擇英靈（六星角色使用固定技能，「其他」可自行配置）</div><div class="picker"><select id="heroSelect"></select></div><div id="skillSection"><div class="label" id="skillHeading">技能設定</div><div class="rows" id="skills"></div><p class="note" id="note"></p></div></div><div class="dfooter"><button class="minor danger" id="remove">移除這格</button><button class="action" id="save">儲存設定</button></div></div></div><div class="rate-popup-overlay hidden" id="ratePopupOverlay" role="dialog" aria-modal="true" aria-label="關於出現率"><div class="rate-popup" id="ratePopupContent"></div></div><div class="overlay help-overlay hidden" id="helpOverlay" role="dialog" aria-modal="true" aria-labelledby="helpTitle" aria-describedby="helpSummary">
+ <div class="dialog help-dialog">
+  <div class="dhead"><h2 id="helpTitle">使用說明與注意事項</h2><button class="close" id="helpClose" type="button" aria-label="關閉使用說明">✕ 關閉</button></div>
+  <div class="dbody help-content">
+   <p id="helpSummary">先設定神器，再點選英靈卡片配置 12 格編隊，即可查看禁斷守門人的出現率與貪欲／寶箱效果合計。</p>
+   <section><h3>編隊與技能</h3><ul>
+    <li>同名六星英靈不能重複編隊，不同造型也視為同名；「其他」可以配置多格。</li>
+    <li>點選卡片可選擇英靈、查看固定技能並設定突破；點選儲存後回到 12 格總覽。</li>
+    <li>帶彩虹外框的技能代表已勾選突破；無可用突破的技能選項將停用。</li>
+    <li>弗雷雅（黑色女神）的「深淵世界的解放者」使用獨立圖示；芙麗嘉（白色女神）是不同角色。</li>
+   </ul></section>
+   <section><h3>機率與寶箱加成</h3><ul>
+    <li>禁斷守門人的基礎出現率預設為 3%，可自行修改；神器、技能、活動倍率會自動重算。</li>
+    <li>貪欲與寶箱神器的「搭配合計」僅供能力比較，不是單次擊敗 Boss 的實際掉落成功率。</li>
+    <li>不祥的迴路以距離每滿 100 計算一次，該效果最高計入 10%；超出上限的距離會標示不同顏色。</li>
+    <li>計算結果依現有遊戲資料與對照測試製作；特殊活動、關卡與遊戲更新可能造成差異。</li>
+   </ul></section>
+   <section><h3>儲存與圖片</h3><ul>
+    <li>編隊、神器與機率設定儲存在目前瀏覽器的本機儲存空間。清除網站資料或更換瀏覽器可能使設定消失。</li>
+    <li>角色與能力圖片使用 DFCH 官方資料，資料更新時可能有所調整。</li>
+   </ul></section>
+  </div>
+  <div class="dfooter"><button class="action" id="helpConfirm" type="button">我知道了</button></div>
+ </div>
+</div><div class="toast" id="toast"></div>
+<script src="./js/data.js?v=1.15.0"></script><script src="./js/app.js?v=1.15.0"></script><script src="./js/i18n.js?v=1.15.0"></script><script src="./embed-height.js?v=1.0.0"></script></body></html>

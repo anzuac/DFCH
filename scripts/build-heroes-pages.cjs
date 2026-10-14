@@ -49,13 +49,24 @@ const bondFiles = [
   'Bond30/embed-height.js',
 ];
 
+const teamFiles = [
+  'team/index.html',
+  'team/css/style.css',
+  'team/js/app.js',
+  'team/js/data.js',
+  'team/js/i18n.js',
+  'team/embed-height.js',
+  'team/assets/abyss-liberator.png',
+  'team/assets/greed-iii.png',
+];
+
 const imageDirectories = [
   'assets/heroes',
   'assets/gifts',
 ];
 
 // Validate sources before deleting an existing output directory.
-for (const relativePath of [...guideFiles, ...bondFiles, ...imageDirectories, 'Bond30/assets/icons', 'index.html']) {
+for (const relativePath of [...guideFiles, ...bondFiles, ...teamFiles, ...imageDirectories, 'Bond30/assets/icons', 'index.html']) {
   if (!fs.existsSync(path.join(repoRoot, relativePath))) {
     throw new Error(`Missing guide source: ${relativePath}`);
   }
@@ -65,6 +76,13 @@ fs.rmSync(outputDir, { recursive: true, force: true });
 fs.mkdirSync(outputDir, { recursive: true });
 
 for (const relativePath of guideFiles) {
+  const destination = path.join(outputDir, relativePath);
+  fs.mkdirSync(path.dirname(destination), { recursive: true });
+  fs.copyFileSync(path.join(repoRoot, relativePath), destination);
+}
+
+// The public lineup uses the same standalone files as GitHub Pages.
+for (const relativePath of teamFiles) {
   const destination = path.join(outputDir, relativePath);
   fs.mkdirSync(path.dirname(destination), { recursive: true });
   fs.copyFileSync(path.join(repoRoot, relativePath), destination);
@@ -135,7 +153,7 @@ const git=(...args)=>execFileSync('git',args,{cwd:repoRoot,encoding:'utf8',timeo
 let updatedAt='';
 try{
  if(git('rev-parse','--is-shallow-repository')==='true')git('fetch','--unshallow','origin');
- updatedAt=git('log','-1','--format=%cI','--',...guideFiles,...imageDirectories,'data/hero-preferences.json','data/hero-acquisition.json','data/hero-bond-gains.json','data/hero-gift-locations.json','data/hero-gift-supplements.json');
+ updatedAt=git('log','-1','--format=%cI','--',...guideFiles,...teamFiles,...imageDirectories,'data/hero-preferences.json','data/hero-acquisition.json','data/hero-bond-gains.json','data/hero-gift-locations.json','data/hero-gift-supplements.json');
  if(Number.isNaN(Date.parse(updatedAt)))updatedAt='';
 }catch{console.warn('Content timestamp unavailable; showing a dash.');}
 const html=fs.readFileSync(path.join(repoRoot,'heroes.html'),'utf8').replace('</head>',`<meta name="dfch-updated-at" content="${updatedAt}">\n</head>`);
@@ -161,5 +179,5 @@ fs.writeFileSync(
   'utf8',
 );
 
-console.log('Cloudflare Pages: three public tools output prepared in dist-heroes/');
-console.log('Published: six-star guide, Bond30, Diamond and whitelisted assets.');
+console.log('Cloudflare Pages: four public tools output prepared in dist-heroes/');
+console.log('Published: six-star guide, Bond30, Diamond, Hero Lineup and whitelisted assets.');
