@@ -135,6 +135,12 @@
     rankingUI[code]={...rankingUI.zh_tw,...translation.ranking};
     rankGroupUI[code]={...rankGroupUI.zh_tw,...translation.group};
   }
+  Object.assign(rankingUI.zh_cn,{chosen:'已选 {n} 位培养英灵',allHeroes:'全选英灵',best:'最高羁绊 +{gain}，共有 {n} 位英灵并列第一。',personalBest:'在已选 {count} 位中，最高羁绊 +{gain}，共有 {n} 位并列第一。',gain:'羁绊 +{gain}',rank:'第 {n} 名',toGuide:'查看英灵喜好',toLocation:'查看获取方式',selectedGift:'道具：{name}'});
+  Object.assign(rankingUI.th,{chosen:'เลือกวีรชน {n} ตัว',allHeroes:'เลือกทั้งหมด',best:'สายสัมพันธ์สูงสุด +{gain} วีรชน {n} ตัวได้อันดับหนึ่งร่วมกัน',personalBest:'จาก {count} ตัวที่เลือก ค่าสูงสุด +{gain} มี {n} ตัวร่วมอันดับหนึ่ง',gain:'สายสัมพันธ์ +{gain}',rank:'อันดับ {n}',toGuide:'ดูความชอบวีรชน',toLocation:'ดูแหล่งรับ',selectedGift:'ของขวัญ: {name}'});
+  Object.assign(rankingUI.vi,{chosen:'Đã chọn {n} anh linh',allHeroes:'Chọn tất cả',best:'Liên kết cao nhất +{gain}; {n} anh linh đồng hạng nhất.',personalBest:'Trong {count} anh linh đã chọn, cao nhất +{gain}; {n} anh linh đồng hạng nhất.',gain:'Liên kết +{gain}',rank:'Hạng {n}',toGuide:'Xem sở thích anh linh',toLocation:'Xem nguồn nhận',selectedGift:'Quà: {name}'});
+  Object.assign(rankGroupUI.zh_cn,{count:'{n} 位英灵',more:'显示其余 {n} 位',avatar:'查看 {name} 的英灵喜好'});
+  Object.assign(rankGroupUI.th,{count:'วีรชน {n} ตัว',more:'แสดงอีก {n} ตัว',avatar:'ดูความชอบของ {name}'});
+  Object.assign(rankGroupUI.vi,{count:'{n} anh linh',more:'Hiện thêm {n}',avatar:'Xem sở thích của {name}'});
   const RANK_PREVIEW_LIMIT=8;
   const ranking=node('section',null,'gift-rank-wrapper'),
     rankHeader=node('div',null,'gift-rank-header'),
