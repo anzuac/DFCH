@@ -61,7 +61,15 @@
     }
   }
   let scheduled=false;
-  function schedule() {if(scheduled)return;scheduled=true;queueMicrotask(()=>{scheduled=false;translateTree(document.body);});}
+  function targets(){
+    const body=document.body;
+    if(!body)return [];
+    if(['bond30-public','public-diamond','heroes-standalone'].some(cls=>body.classList?.contains(cls)))return [body];
+    const sections=['tab-diamond','tab-heroes'].map(id=>document.getElementById(id)).filter(Boolean);
+    for(const dialog of document.querySelectorAll('.sixstar-ability-dialog'))sections.push(dialog);
+    return sections.length?sections:[body];
+  }
+  function schedule() {if(scheduled)return;scheduled=true;queueMicrotask(()=>{scheduled=false;for(const root of targets())translateTree(root);});}
   function setLanguage(next) {
     language=LANGUAGES.includes(next)?next:'zh_tw';
     document.documentElement.lang=({zh_tw:'zh-Hant',zh_cn:'zh-Hans',ja:'ja',en:'en',ko:'ko',th:'th',vi:'vi'})[language];
