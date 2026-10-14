@@ -10,10 +10,11 @@ const OFFICIAL_SKILL_ICONS={
  '貪欲 I':'../bond30/assets/icons/303000709.png',
  '貪欲 II':'../bond30/assets/icons/303000722.png',
  '貪欲 III':'./assets/greed-iii.png',
- '深淵世界的解放者':'./assets/abyss-liberator.png'
+ '深淵世界的解放者':'./assets/abyss-liberator.png',
+ '大海的支配者':'./assets/ocean-ruler.png'
 };
 function skillImage(name){const path=OFFICIAL_SKILL_ICONS[name]||'./assets/abyss-liberator.svg';return location.hostname.endsWith('.github.io')?path.replace('../bond30/','../Bond30/'):path}
-function tracked(name){return name==='深淵世界的解放者'||/^(禁斷世界(?:的)?介入者\s*(?:I|II|III)|貪欲\s*(?:I|II|III))$/.test(name)}
+function tracked(name){return name==='深淵世界的解放者'||name==='大海的支配者'||/^(禁斷世界(?:的)?介入者\s*(?:I|II|III)|貪欲\s*(?:I|II|III))$/.test(name)}
 function chosenSkills(s,h){if(s.type==='other')return KEYS.filter(k=>s.skills[k]?.selected).map(k=>({name:k,up:!!s.skills[k]?.up})); if(!h)return []; return getSkills(h).filter(x=>tracked(x.name)).map(x=>({name:x.name,up:!!s.skills[x.name]?.up}));}
 function skillTile(name,up,small=false){return `<span class="skilltile ${up?'is-up':''} ${small?'small':''}" title="${enc(name+(up?'+':''))}"><img src="${skillImage(name)}" alt=""><span class="skilltile-label">${enc(name.replace('禁斷世界的介入者','禁斷').replace('禁斷世界介入者','禁斷').replace('深淵世界的解放者','深淵解放者'))}${up?'<b>+</b>':''}</span></span>`}
 const storeKey='hero-layout-phase1-v1';const blank=()=>({type:'',hero:'',skills:{}});let slots=Array.from({length:12},blank);try{const raw=JSON.parse(localStorage.getItem(storeKey));if(Array.isArray(raw)&&raw.length===12)slots=raw.map(s=>({type:s.type||'',hero:s.hero||'',skills:s.skills||{}}));}catch(e){}
@@ -49,7 +50,7 @@ $('#heroSelect').onchange=()=>{draft.skills={};let v=$('#heroSelect').value;draf
 fetch('../data/sixstar-visible-abilities.json',{cache:'force-cache'}).then(r=>{if(!r.ok)throw Error('offline');return r.json()}).then(d=>{if(Array.isArray(d.heroes)){fullData=d;draw();if(current>=0&&!$('#overlay').classList.contains('hidden'))updateSkills();}}).catch(()=>{});
 
 
-function pickedTracked(){let out=[];slots.forEach((s,i)=>{if(!s.type)return;const h=hero(s);const name=s.type==='other'?`第 ${i+1} 格・其他`:`第 ${i+1} 格・${h?.name||'英靈'}`;const chosen=s.type==='other'?KEYS.filter(k=>s.skills[k]?.selected).map(k=>({name:k,up:!!s.skills[k]?.up&&isUpgradeAllowed(s,k)})):getSkills(h||{skills:[]}).filter(x=>/^(禁斷世界(?:的)?介入者|貪欲|深淵世界的解放者)/.test(x.name)).map(x=>({name:x.name,up:!!s.skills[x.name]?.up&&isUpgradeAllowed(s,x.name)}));chosen.forEach(k=>out.push({...k,owner:name}));});return out;}
+function pickedTracked(){let out=[];slots.forEach((s,i)=>{if(!s.type)return;const h=hero(s);const name=s.type==='other'?`第 ${i+1} 格・其他`:`第 ${i+1} 格・${h?.name||'英靈'}`;const chosen=s.type==='other'?KEYS.filter(k=>s.skills[k]?.selected).map(k=>({name:k,up:!!s.skills[k]?.up&&isUpgradeAllowed(s,k)})):getSkills(h||{skills:[]}).filter(x=>/^(禁斷世界(?:的)?介入者|貪欲|深淵世界的解放者|大海的支配者)/.test(x.name)).map(x=>({name:x.name,up:!!s.skills[x.name]?.up&&isUpgradeAllowed(s,x.name)}));chosen.forEach(k=>out.push({...k,owner:name}));});return out;}
 
 const calcStoreKey='hero-layout-phase1-v17-calc';
 const calcSettings={base:3,crown:false,stone:false,ring:0,event:false,brokenCircuit:0,mysteriousCircuit:false,desireMirror:0,ominousCircuit:0,ominousDistance:30};

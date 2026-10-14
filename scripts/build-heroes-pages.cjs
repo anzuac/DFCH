@@ -58,6 +58,7 @@ const teamFiles = [
   'team/embed-height.js',
   'team/assets/abyss-liberator.png',
   'team/assets/greed-iii.png',
+  'team/assets/ocean-ruler.png',
 ];
 
 const imageDirectories = [

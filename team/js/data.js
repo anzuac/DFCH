@@ -9,11 +9,12 @@ const SKILL_RATES={
  '貪欲 I':{levels:[1,2,3,4,5,6],base:5,full:6,kind:'greed',description:'Boss 擊破時寶箱再增加一個的機率'},
  '貪欲 II':{levels:[3,4,5,6,7,8,9],base:6,full:7,kind:'greed',description:'Boss 擊破時寶箱再增加一個的機率'},
  '貪欲 III':{levels:[5,7,9,11,13,15],base:6,full:6,kind:'greed',description:'Boss 擊破時寶箱再增加一個的機率'},
+ '大海的支配者':{levels:[2,4,6,8,10],base:5,full:5,kind:'greed',description:'Boss 擊破時寶箱再增加一個的機率'},
  '深淵世界的解放者':{levels:[2,4,6,8,10,11,12],observer:[1,2,3,4,5,6,7],base:5,full:7,kind:'abyss',description:'禁斷守門人出現機率提升'}
 };
 
 
-const OFFLINE_TRACKED={"valentine_queen":[["貪欲 I",5,6,0]],"akasha":[["禁斷世界的介入者 III",4,4,0]],"randgrid_dagger":[["貪欲 III",6,6,0]],"bandit_leader_wolf":[["貪欲 II",6,7,1]],"orphia":[["禁斷世界的介入者 III",4,4,0]],"akasha_water":[["禁斷世界的介入者 III",4,4,0]],"kolga":[["貪欲 II",6,7,1]],"freya":[["深淵世界的解放者",5,7,1],["貪欲 III",6,6,0]],"frigg":[["貪欲 III",6,6,0]]};
+const OFFLINE_TRACKED={"valentine_queen":[["貪欲 I",5,6,0]],"valentine_queen_water":[["大海的支配者",5,5,0]],"akasha":[["禁斷世界的介入者 III",4,4,0]],"randgrid_dagger":[["貪欲 III",6,6,0]],"bandit_leader_wolf":[["貪欲 II",6,7,1]],"orphia":[["禁斷世界的介入者 III",4,4,0]],"akasha_water":[["禁斷世界的介入者 III",4,4,0],["大海的支配者",5,5,0]],"kolga":[["貪欲 II",6,7,1]],"freya":[["深淵世界的解放者",5,7,1],["貪欲 III",6,6,0]],"frigg":[["貪欲 III",6,6,0]]};
 HEROES.forEach(h=>{for(const [name,baseCap,fullCap,canEvolve] of OFFLINE_TRACKED[h.slug]||[]){
  if(!h.skills.some(s=>s.name===name))h.skills.push({name,baseCap,fullCap,evolvable:!!canEvolve});
 }});
