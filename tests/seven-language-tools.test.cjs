@@ -64,6 +64,16 @@ test('Both entrypoints and the Cloudflare Pages build ship the same locale data 
  assert.ok(!manifest.includes("bondHtml=bondHtml.replace('<head>'"));
  assert.ok(manifest.includes('public-tool-i18n.js?v=1.0.0'));
 });
+test('Bond30 searches both original and officially localized player-facing ability names',()=>{
+ const app=read('Bond30/js/app.js');
+ assert.match(app,/localizedName\s*=\s*id\s*=>/);
+ assert.match(app,/nameOf\(x\.id\)\.toLowerCase\(\)\.includes\(q\)/);
+ assert.match(app,/localizedName\(x\.id\)\.toLowerCase\(\)\.includes\(q\)/);
+ const t=runtime();
+ const localized=t.sourceTranslate('氣力','en');
+ assert.equal(localized.toLowerCase().includes('resolve'),true);
+ assert.equal('氣力'.includes('resolve'),false);
+});
 test('Simulation engines and their weighted randomness remain untouched',()=>{
  assert.match(read('Bond30/js/app.js'),/Math\.random\(\)\s*\*\s*total/);
  assert.match(read('diamond-draw.js'),/return \{tier,index/);
