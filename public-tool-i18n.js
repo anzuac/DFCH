@@ -7,6 +7,7 @@
   const sourceText = new WeakMap();
   const attributes = new WeakMap();
   const langKey = 'dfch-hero-language';
+  const sourceTitle = document.title;
   function current() {
     try { const stored = localStorage.getItem(langKey); if (LANGUAGES.includes(stored)) return stored; }
     catch (_) {}
@@ -64,6 +65,7 @@
   function setLanguage(next) {
     language=LANGUAGES.includes(next)?next:'zh_tw';
     document.documentElement.lang=({zh_tw:'zh-Hant',zh_cn:'zh-Hans',ja:'ja',en:'en',ko:'ko',th:'th',vi:'vi'})[language];
+    if(sourceTitle)document.title=sourceTranslate(sourceTitle,language);
     schedule();
   }
   function start() {
