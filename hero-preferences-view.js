@@ -19,7 +19,7 @@
     for(const [label,value] of rows){const row=node('div');row.append(node('dt',label),node('dd',value));block.append(row);}
     return block;
   }
-  const visibleLanguages=['zh_tw','ja','en','ko'];
+  const visibleLanguages=['zh_tw','zh_cn','ja','en','ko','th','vi'];
   let lang='zh_tw',data,names;
   try{const saved=localStorage.getItem('dfch-hero-language');if(visibleLanguages.includes(saved))lang=saved;else if(saved)localStorage.setItem('dfch-hero-language',lang);}catch{}
   const t=(i,vars={})=>Object.entries(vars).reduce((v,[k,x])=>v.replaceAll('{'+k+'}',x),ui[lang][i]);
@@ -103,6 +103,38 @@
     en:{count:'{n} heroes',more:'Show {n} more',less:'Show fewer',avatar:'View {name} gift preferences',toggle:'Expand or collapse this bond-gain group'},
     ko:{count:'영령 {n}명',more:'나머지 {n}명 보기',less:'접기',avatar:'{name} 선호도 보기',toggle:'이 인연 증가량 그룹 펼치기 또는 접기'}
   };
+  // The guide's original catalog already provides seven-language hero and gift names.
+  // Newer ranking/acquisition panels retain Traditional Chinese when translation is unavailable.
+  const additions={
+    zh_cn:{
+      acquisition:{version:'版本',pool:'卡池',source:'获取来源',paidPack:'付费礼包',original:'原版',swimsuit:'泳装',christmas:'圣诞',journey:'旅装'},
+      bond:{heading:'赠礼加成',owns:'拥有',note:'赠送 1 个道具的羁绊增量；仅计算喜好和此神器，舍去小数。',gain:'羁绊',base:'基础',artifact:'神器',favorite:'喜爱',loved:'最爱'},
+      location:['英灵喜好','羁绊道具获取方式','搜索道具／远征地图','全部远征地图','远征地图','找不到符合条件的道具','指定羁绊道具','全部羁绊道具','暂未收录此道具的远征地图获取来源。'],
+      ranking:{tab:'赠送优先排名',heading:'羁绊道具赠送优先排名',chooseGift:'指定羁绊道具',all:'全部英灵效率',personal:'我的培养英灵',hint:'根据每次赠送一个道具获得的羁绊值排序。相同数值并列。',pick:'选择需要培养的英灵，将推荐最有效率的赠送对象。',clear:'清除选择',noSelection:'请至少选择一位想培养的英灵。',noBase:'缺少此道具的官方羁绊基础值，无法排名。',preferenceNormal:'一般',preferenceFavorite:'喜爱',preferenceLoved:'最爱',fromLocation:'查看赠送排名',shortcut:'推荐对象'},
+      group:{less:'收起多余头像',toggle:'展开或收起此羁绊数值分类'}
+    },
+    th:{
+      acquisition:{version:'เวอร์ชัน',pool:'ตู้สุ่ม',source:'แหล่งที่ได้รับ',paidPack:'แพ็กแบบชำระเงิน',original:'ต้นฉบับ',swimsuit:'ชุดว่ายน้ำ',christmas:'คริสต์มาส',journey:'เดินทาง'},
+      bond:{heading:'โบนัสของขวัญ',owns:'มี',note:'แต้มสายสัมพันธ์ต่อของขวัญ 1 ชิ้น คำนวณจากความชอบและอาร์ติแฟกต์นี้เท่านั้น ปัดเศษลง',gain:'สายสัมพันธ์',base:'พื้นฐาน',artifact:'อาร์ติแฟกต์',favorite:'ชอบ',loved:'ชอบที่สุด'},
+      location:['ความชอบวีรชน','แหล่งหาของขวัญ','ค้นหาของขวัญ / แผนที่','ทุกแผนที่','แผนที่','ไม่พบของขวัญที่ตรงกัน','เลือกของขวัญ','ของขวัญทั้งหมด','ยังไม่มีข้อมูลแหล่งรับของขวัญนี้'],
+      ranking:{tab:'อันดับการให้ของขวัญ',heading:'อันดับประสิทธิภาพการให้ของขวัญ',chooseGift:'เลือกของขวัญ',all:'วีรชนทั้งหมด',personal:'วีรชนที่กำลังพัฒนา',hint:'เรียงตามแต้มสายสัมพันธ์ที่ได้รับต่อของขวัญ 1 ชิ้น แต้มเท่ากันอยู่อันดับเดียวกัน',pick:'เลือกวีรชนที่อยากพัฒนาเพื่อรับคำแนะนำผู้รับของขวัญที่คุ้มที่สุด',clear:'ล้างการเลือก',noSelection:'เลือกวีรชนอย่างน้อย 1 ตัวก่อน',noBase:'ไม่มีค่าพื้นฐานสายสัมพันธ์ของของขวัญนี้',preferenceNormal:'ปกติ',preferenceFavorite:'ชอบ',preferenceLoved:'ชอบที่สุด',fromLocation:'ดูอันดับของขวัญ',shortcut:'แนะนำ'},
+      group:{less:'แสดงน้อยลง',toggle:'แสดงหรือซ่อนกลุ่มคะแนนสายสัมพันธ์'}
+    },
+    vi:{
+      acquisition:{version:'Phiên bản',pool:'Bể triệu hồi',source:'Nguồn nhận',paidPack:'Gói trả phí',original:'Bản gốc',swimsuit:'Đồ bơi',christmas:'Giáng sinh',journey:'Hành trình'},
+      bond:{heading:'Thưởng tặng quà',owns:'Sở hữu',note:'Điểm liên kết từ 1 món quà, chỉ tính sở thích và bảo vật này; làm tròn xuống.',gain:'Liên kết',base:'Cơ bản',artifact:'Bảo vật',favorite:'Thích',loved:'Rất thích'},
+      location:['Sở thích anh linh','Nguồn nhận quà', 'Tìm quà / bản đồ viễn chinh','Tất cả bản đồ','Bản đồ','Không tìm thấy quà phù hợp','Chọn quà liên kết','Tất cả quà','Chưa có nguồn nhận quà này trong các bản đồ.'],
+      ranking:{tab:'Ưu tiên tặng quà',heading:'Xếp hạng hiệu quả tặng quà',chooseGift:'Chọn quà',all:'Tất cả anh linh',personal:'Anh linh đang bồi dưỡng',hint:'Xếp theo điểm liên kết nhận được từ một món quà. Các giá trị bằng nhau đồng hạng.',pick:'Chọn anh linh cần bồi dưỡng để xem đối tượng nhận quà hiệu quả nhất.',clear:'Xóa lựa chọn',noSelection:'Hãy chọn ít nhất một anh linh.',noBase:'Thiếu điểm liên kết cơ bản của vật phẩm này.',preferenceNormal:'Thường',preferenceFavorite:'Thích',preferenceLoved:'Rất thích',fromLocation:'Xem xếp hạng tặng quà',shortcut:'Đề xuất'},
+      group:{less:'Thu gọn',toggle:'Mở rộng hoặc thu gọn nhóm điểm liên kết'}
+    }
+  };
+  for(const [code,translation] of Object.entries(additions)){
+    acquisitionUI[code]=translation.acquisition;
+    bondUI[code]=translation.bond;
+    locationUI[code]=translation.location;
+    rankingUI[code]={...rankingUI.zh_tw,...translation.ranking};
+    rankGroupUI[code]={...rankGroupUI.zh_tw,...translation.group};
+  }
   const RANK_PREVIEW_LIMIT=8;
   const ranking=node('section',null,'gift-rank-wrapper'),
     rankHeader=node('div',null,'gift-rank-header'),
@@ -389,7 +421,7 @@
       portrait.addEventListener('error',()=>{const fallback=node('span','圖片暫時無法載入','hero-portrait-fallback');portrait.replaceWith(fallback);},{once:true});
       identity.append(node('p',h.title,'hero-title'),node('h3',h.name),node('span','★★★★★★','hero-stars'));
       const trigger=node('button',null,'sixstar-avatar-trigger');trigger.type='button';
-      const text={zh_tw:'查看能力',ja:'能力を見る',en:'Abilities',ko:'능력 보기'}[lang]||'查看能力';
+      const text={zh_tw:'查看能力',zh_cn:'查看能力',ja:'能力を見る',en:'Abilities',ko:'능력 보기',th:'ดูความสามารถ',vi:'Xem kỹ năng'}[lang]||'查看能力';
       trigger.setAttribute('aria-label',h.name+' · '+text);
       trigger.append(portrait,node('span',text,'sixstar-avatar-trigger-label'));
       trigger.addEventListener('click',()=>window.DFCHSixstarAbilityModal?.open({heroKey:h.key,lang,heroName:h.name,heroTitle:h.title}));
