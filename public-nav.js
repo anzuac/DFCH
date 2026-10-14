@@ -21,15 +21,16 @@
     for(const [key,a] of links)a.textContent=t[key];
   }
   function init(){
-    const path=location.pathname.toLowerCase();
+    const base=location.hostname.endsWith('.github.io')?'/DFCH/':'/';
+    const path=location.pathname.toLowerCase().replace(/^\/dfch(?=\/)/,'');
     const current=path.startsWith('/bond30/')?'bond30':path.startsWith('/diamond/')?'diamond':'guide';
     const nav=document.createElement('nav');
     nav.className='dfch-public-nav';
     nav.setAttribute('aria-label','DFCH tools / 工具導覽');
     brand=document.createElement('strong');nav.append(brand);
     const group=document.createElement('div');group.className='dfch-public-links';
-    for(const [key,url] of [['guide','/'],['bond30','/bond30/'],['diamond','/diamond/']]){
-      const a=document.createElement('a');a.href=url;
+    for(const [key,url] of [['guide',''],['bond30','bond30/'],['diamond','diamond/']]){
+      const a=document.createElement('a');a.href=base+url;
       if(key===current)a.setAttribute('aria-current','page');
       group.append(a);links.push([key,a]);
     }
