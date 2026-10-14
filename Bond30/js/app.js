@@ -36,6 +36,7 @@
     return e;
   };
   const nameOf = id => D.displayNames[String(id)] || '未知能力';
+  const localizedName = id => window.DFCHToolI18n?.sourceTranslate(nameOf(id),window.DFCHToolI18n.getLanguage()) || nameOf(id);
   const format = n => Number(n || 0).toLocaleString('zh-TW');
   const percent = (w, total) => total > 0 ? (w / total * 100).toFixed(3) + '%' : '0.000%';
   const groupLabel = g => ({ 0: '確定能力', 1: '自由能力', 2: '攻擊增益', 3: 'HP 增益' })[g];
@@ -145,7 +146,7 @@
     const list = $('skills'); list.replaceChildren();
     const q = $('search').value.trim().toLowerCase();
     const group = state.mode === 'free' ? 1 : state.mode === 'attack' ? 2 : 3;
-    const candidates = rows().filter(x => x.group === group && nameOf(x.id).toLowerCase().includes(q))
+    const candidates = rows().filter(x => x.group === group && (nameOf(x.id).toLowerCase().includes(q) || localizedName(x.id).toLowerCase().includes(q)))
       .sort((a, b) => b.weight - a.weight || a.id - b.id);
     $('searchInfo').textContent = groupLabel(group) + ' · ' + candidates.length + ' 項';
     const selected = state.mode === 'free' ? state.chosen[state.active] : state.buffs[group === 2 ? 0 : 1];
