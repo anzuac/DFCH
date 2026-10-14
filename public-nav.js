@@ -4,7 +4,10 @@
     zh_tw:{brand:'DFCH · 英靈工具站',guide:'六星英靈喜好',bond30:'羈絆 30 等抽選',diamond:'鑽石抽取模擬器'},
     ja:{brand:'DFCH · 英霊ツール',guide:'六星英霊の好み',bond30:'絆 Lv.30 抽選',diamond:'ダイヤ抽選'},
     en:{brand:'DFCH · Hero tools',guide:'Six-star gifts',bond30:'Bond Lv.30 draw',diamond:'Diamond simulator'},
-    ko:{brand:'DFCH · 영령 도구',guide:'6성 영령 선물',bond30:'인연 Lv.30 추첨',diamond:'다이아 추첨'}
+    ko:{brand:'DFCH · 영령 도구',guide:'6성 영령 선물',bond30:'인연 Lv.30 추첨',diamond:'다이아 추첨'},
+    zh_cn:{brand:'DFCH · 英灵工具站',guide:'六星英灵喜好',bond30:'羁绊 Lv.30 抽取',diamond:'钻石抽取模拟器'},
+    th:{brand:'DFCH · เครื่องมือวีรชน',guide:'ของขวัญวีรชน 6 ดาว',bond30:'สุ่มสายสัมพันธ์ Lv.30',diamond:'จำลองสุ่มเพชร'},
+    vi:{brand:'DFCH · Công cụ anh linh',guide:'Quà tặng anh linh 6 sao',bond30:'Rút liên kết Lv.30',diamond:'Mô phỏng rút kim cương'}
   };
   let brand,links=[];
   function language(){
@@ -18,15 +21,16 @@
     for(const [key,a] of links)a.textContent=t[key];
   }
   function init(){
-    const path=location.pathname.toLowerCase();
+    const base=location.hostname.endsWith('.github.io')?'/DFCH/':'/';
+    const path=location.pathname.toLowerCase().replace(/^\/dfch(?=\/)/,'');
     const current=path.startsWith('/bond30/')?'bond30':path.startsWith('/diamond/')?'diamond':'guide';
     const nav=document.createElement('nav');
     nav.className='dfch-public-nav';
     nav.setAttribute('aria-label','DFCH tools / 工具導覽');
     brand=document.createElement('strong');nav.append(brand);
     const group=document.createElement('div');group.className='dfch-public-links';
-    for(const [key,url] of [['guide','/'],['bond30','/bond30/'],['diamond','/diamond/']]){
-      const a=document.createElement('a');a.href=url;
+    for(const [key,url] of [['guide',''],['bond30','bond30/'],['diamond','diamond/']]){
+      const a=document.createElement('a');a.href=base+url;
       if(key===current)a.setAttribute('aria-current','page');
       group.append(a);links.push([key,a]);
     }

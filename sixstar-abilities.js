@@ -14,13 +14,19 @@
     zh_tw: {kicker:'六星英靈 · 固定能力與羈絆',bond:'羈絆等級',reward:'羈絆加深',skills:'能力',cap:'已解放等級上限',next:'下一個獎勵',max:'全部滿等',reset:'還原至 Lv.1',obtained:'已達成',upcoming:'下一個獎勵',notYet:'未達成',locked:'尚未取得',evolved:'能力進化',close:'關閉',loading:'能力資料載入中…',failed:'目前無法顯示能力資料。',noEffect:'—',finish:'已完成'},
     ja: {kicker:'星6 · 固定能力と絆',bond:'絆レベル',reward:'絆',skills:'能力',cap:'解放した上限',next:'次の報酬',max:'すべて最大',reset:'Lv.1 に戻す',obtained:'達成済',upcoming:'次の報酬',notYet:'未達成',locked:'未習得',evolved:'能力進化',close:'閉じる',loading:'読み込み中…',failed:'能力データを表示できません。',noEffect:'—',finish:'完了'},
     en: {kicker:'Six-star · Abilities & bond',bond:'Bond level',reward:'Bond rewards',skills:'Abilities',cap:'Unlocked level cap',next:'Next reward',max:'Max all',reset:'Reset to Lv.1',obtained:'Unlocked',upcoming:'Next reward',notYet:'Locked',locked:'Not obtained',evolved:'Evolved',close:'Close',loading:'Loading abilities…',failed:'Unable to display abilities.',noEffect:'—',finish:'Complete'},
-    ko: {kicker:'6성 · 능력과 인연',bond:'인연 레벨',reward:'인연 보상',skills:'능력',cap:'해방한 레벨 상한',next:'다음 보상',max:'전체 최대',reset:'Lv.1 초기화',obtained:'달성',upcoming:'다음 보상',notYet:'미달성',locked:'미획득',evolved:'능력 진화',close:'닫기',loading:'능력을 불러오는 중…',failed:'능력을 표시할 수 없습니다.',noEffect:'—',finish:'완료'}
+    ko: {kicker:'6성 · 능력과 인연',bond:'인연 레벨',reward:'인연 보상',skills:'능력',cap:'해방한 레벨 상한',next:'다음 보상',max:'전체 최대',reset:'Lv.1 초기화',obtained:'달성',upcoming:'다음 보상',notYet:'미달성',locked:'미획득',evolved:'능력 진화',close:'닫기',loading:'능력을 불러오는 중…',failed:'능력을 표시할 수 없습니다.',noEffect:'—',finish:'완료'},
+    zh_cn:{kicker:'六星英灵 · 固定能力与羁绊',bond:'羁绊等级',reward:'羁绊加深',skills:'能力',cap:'已解放等级上限',next:'下一个奖励',max:'全部满级',reset:'恢复至 Lv.1',obtained:'已达成',upcoming:'下一个奖励',notYet:'未达成',locked:'尚未获得',evolved:'能力进化',close:'关闭',loading:'正在加载能力资料…',failed:'暂时无法显示能力资料。',noEffect:'—',finish:'已完成'},
+    th:{kicker:'วีรชน 6 ดาว · ความสามารถและสายสัมพันธ์',bond:'ระดับสายสัมพันธ์',reward:'รางวัลสายสัมพันธ์',skills:'ความสามารถ',cap:'ขีดจำกัดเลเวลที่ปลดล็อก',next:'รางวัลถัดไป',max:'เพิ่มทุกทักษะจนสูงสุด',reset:'กลับเป็น Lv.1',obtained:'สำเร็จแล้ว',upcoming:'รางวัลถัดไป',notYet:'ยังไม่สำเร็จ',locked:'ยังไม่ได้รับ',evolved:'พัฒนาความสามารถ',close:'ปิด',loading:'กำลังโหลดข้อมูล…',failed:'ไม่สามารถแสดงข้อมูลความสามารถได้',noEffect:'—',finish:'เสร็จสิ้น'},
+    vi:{kicker:'Anh linh 6 sao · Kỹ năng và liên kết',bond:'Cấp liên kết',reward:'Phần thưởng liên kết',skills:'Kỹ năng',cap:'Giới hạn cấp đã mở',next:'Phần thưởng tiếp theo',max:'Tăng tất cả lên tối đa',reset:'Đặt về Lv.1',obtained:'Đã đạt',upcoming:'Phần thưởng tiếp theo',notYet:'Chưa đạt',locked:'Chưa nhận',evolved:'Tiến hóa kỹ năng',close:'Đóng',loading:'Đang tải kỹ năng…',failed:'Không thể hiển thị dữ liệu kỹ năng.',noEffect:'—',finish:'Hoàn tất'}
   };
   const progressLabels = {
     zh_tw: {current:'目前等級羈絆值',remaining:'距離下一等還需要',cumulative:'目前累積羈絆值',nextLevel:'升至 Lv.',needed:'的累積需求',maximum:'滿級累積需求',maxed:'已滿級',progress:'羈絆進度'},
     ja: {current:'現在のレベル内の絆値',remaining:'次のレベルまで',cumulative:'累計絆値',nextLevel:'Lv.',needed:'の累計必要値',maximum:'最大レベルの必要値',maxed:'最大レベル',progress:'絆の進捗'},
     en: {current:'Bond points at this level',remaining:'Points to next level',cumulative:'Total bond points',nextLevel:'Total for Lv.',needed:'',maximum:'Max-level total',maxed:'Max level',progress:'Bond progress'},
-    ko: {current:'현재 레벨의 인연 수치',remaining:'다음 레벨까지',cumulative:'누적 인연 수치',nextLevel:'Lv.',needed:' 누적 필요 수치',maximum:'최대 레벨 필요 수치',maxed:'최고 레벨',progress:'인연 진행도'}
+    ko: {current:'현재 레벨의 인연 수치',remaining:'다음 레벨까지',cumulative:'누적 인연 수치',nextLevel:'Lv.',needed:' 누적 필요 수치',maximum:'최대 레벨 필요 수치',maxed:'최고 레벨',progress:'인연 진행도'},
+    zh_cn:{current:'当前等级羁绊值',remaining:'距离下一级还需要',cumulative:'当前累计羁绊值',nextLevel:'升至 Lv.',needed:'的累计需求',maximum:'满级累计需求',maxed:'已满级',progress:'羁绊进度'},
+    th:{current:'ค่าสายสัมพันธ์ในระดับนี้',remaining:'ต้องการอีกเพื่อเลเวลถัดไป',cumulative:'ค่าสายสัมพันธ์สะสม',nextLevel:'ยอดรวมสำหรับ Lv.',needed:'',maximum:'ยอดรวมระดับสูงสุด',maxed:'ระดับสูงสุด',progress:'ความคืบหน้าสายสัมพันธ์'},
+    vi:{current:'Điểm liên kết của cấp hiện tại',remaining:'Cần thêm để lên cấp',cumulative:'Tổng điểm liên kết',nextLevel:'Tổng cần cho Lv.',needed:'',maximum:'Tổng yêu cầu cấp tối đa',maxed:'Đã đạt cấp tối đa',progress:'Tiến độ liên kết'}
   };
   const pretty = number => Number(number).toLocaleString('en-US');
   const $ = (selector) => dialog.querySelector(selector);

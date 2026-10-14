@@ -48,7 +48,7 @@ test('Two-element Flaming Aureola levels split holy and fire growth correctly',(
 });
 test('Main-site and Cloudflare Pages references use the same refreshed ability data',()=>{
   const get=p=>fs.readFileSync(path.join(root,p),'utf8');
-  for(const name of ['index.html','heroes.html'])assert.match(get(name),/sixstar-abilities\.js\?v=1\.1\.0/);
-  assert.match(get('sixstar-abilities.js'),/sixstar-visible-abilities\.json\?v=1\.1\.0/);
+  for(const name of ['index.html','heroes.html'])assert.match(get(name),/sixstar-abilities\.js\?v=1\.4\.0/);
+  assert.match(get('sixstar-abilities.js'),/sixstar-visible-abilities\.json\?v=1\.3\.0/);
   assert.match(get('scripts/build-heroes-pages.cjs'),/'data\/sixstar-visible-abilities\.json'/);
 });
