@@ -5,13 +5,16 @@
 (() => {
   'use strict';
   const KEY='dfch-guide-display-settings-v1', LANG_KEY='dfch-hero-language';
-  const THEMES=['dark','light','blue','green'], LANGUAGES=['zh_tw','ja','en','ko'];
+  const THEMES=['dark','light','blue','green'], LANGUAGES=['zh_tw','zh_cn','ja','en','ko','th','vi'];
   const SIZES={min:80,max:150,step:10};
   const ui={
-    zh_tw:{button:'⚙ 顯示設定',title:'顯示設定',size:'字體大小',smaller:'縮小字體',larger:'放大字體',theme:'背景主題',dark:'深色',light:'淺色',blue:'深藍',green:'護眼綠',language:'語言',note:'六星圖鑑已支援語言切換；羈絆與鑽石模擬器內容目前仍以繁體中文顯示。',reset:'恢復預設',close:'關閉設定'},
-    ja:{button:'⚙ 表示設定',title:'表示設定',size:'文字サイズ',smaller:'文字を小さく',larger:'文字を大きく',theme:'背景テーマ',dark:'ダーク',light:'ライト',blue:'ダークブルー',green:'グリーン',language:'言語',note:'六星英霊図鑑は多言語対応です。絆とダイヤのシミュレーター本文は現在中国語（繁体字）のみです。',reset:'初期設定に戻す',close:'設定を閉じる'},
-    en:{button:'⚙ Display settings',title:'Display settings',size:'Text size',smaller:'Decrease text size',larger:'Increase text size',theme:'Background theme',dark:'Dark',light:'Light',blue:'Deep blue',green:'Soft green',language:'Language',note:'The six-star guide is translated. The Bond30 and Diamond simulator content is currently available in Traditional Chinese only.',reset:'Reset to default',close:'Close settings'},
-    ko:{button:'⚙ 표시 설정',title:'표시 설정',size:'글자 크기',smaller:'글자 축소',larger:'글자 확대',theme:'배경 테마',dark:'다크',light:'라이트',blue:'딥 블루',green:'그린',language:'언어',note:'6성 영령 도감은 다국어를 지원합니다. 인연 및 다이아몬드 시뮬레이터 본문은 현재 번체 중국어만 지원합니다.',reset:'기본값 복원',close:'설정 닫기'}
+    zh_tw:{button:'⚙ 顯示設定',title:'顯示設定',size:'字體大小',smaller:'縮小字體',larger:'放大字體',theme:'背景主題',dark:'深色',light:'淺色',blue:'深藍',green:'護眼綠',language:'語言',note:'六星圖鑑、羈絆抽選及鑽石模擬器提供七種語系；官方缺少翻譯時保留繁體中文。',reset:'恢復預設',close:'關閉設定'},
+    ja:{button:'⚙ 表示設定',title:'表示設定',size:'文字サイズ',smaller:'文字を小さく',larger:'文字を大きく',theme:'背景テーマ',dark:'ダーク',light:'ライト',blue:'ダークブルー',green:'グリーン',language:'言語',note:'3つのツールで7言語に対応。公式訳がない箇所は繁体字中国語で表示します。',reset:'初期設定に戻す',close:'設定を閉じる'},
+    en:{button:'⚙ Display settings',title:'Display settings',size:'Text size',smaller:'Decrease text size',larger:'Increase text size',theme:'Background theme',dark:'Dark',light:'Light',blue:'Deep blue',green:'Soft green',language:'Language',note:'All three tools support seven languages. Text without an official translation falls back to Traditional Chinese.',reset:'Reset to default',close:'Close settings'},
+    ko:{button:'⚙ 표시 설정',title:'표시 설정',size:'글자 크기',smaller:'글자 축소',larger:'글자 확대',theme:'배경 테마',dark:'다크',light:'라이트',blue:'딥 블루',green:'그린',language:'언어',note:'세 도구 모두 7개 언어를 지원합니다. 공식 번역이 없는 문구는 번체 중국어로 표시합니다.',reset:'기본값 복원',close:'설정 닫기'}
+    ,zh_cn:{button:'⚙ 显示设置',title:'显示设置',size:'字体大小',smaller:'缩小字体',larger:'放大字体',theme:'背景主题',dark:'深色',light:'浅色',blue:'深蓝',green:'护眼绿',language:'语言',note:'七种语言现已支持；游戏原文缺少翻译时保留繁体中文。',reset:'恢复默认',close:'关闭设置'}
+    ,th:{button:'⚙ ตั้งค่าการแสดงผล',title:'ตั้งค่าการแสดงผล',size:'ขนาดตัวอักษร',smaller:'ลดขนาดตัวอักษร',larger:'เพิ่มขนาดตัวอักษร',theme:'ธีมพื้นหลัง',dark:'มืด',light:'สว่าง',blue:'น้ำเงินเข้ม',green:'เขียวสบายตา',language:'ภาษา',note:'รองรับ 7 ภาษา ข้อความที่เกมไม่มีคำแปลจะแสดงภาษาจีนตัวเต็ม',reset:'คืนค่าเริ่มต้น',close:'ปิดการตั้งค่า'}
+    ,vi:{button:'⚙ Cài đặt hiển thị',title:'Cài đặt hiển thị',size:'Cỡ chữ',smaller:'Giảm cỡ chữ',larger:'Tăng cỡ chữ',theme:'Chủ đề',dark:'Tối',light:'Sáng',blue:'Xanh đậm',green:'Xanh dịu',language:'Ngôn ngữ',note:'Hỗ trợ 7 ngôn ngữ. Nội dung chưa có bản dịch trong trò chơi sẽ hiển thị tiếng Hoa phồn thể.',reset:'Khôi phục mặc định',close:'Đóng cài đặt'}
   };
   function validSize(value){
     const size=Number(value);
@@ -106,7 +109,7 @@
     const languageSelect=el('select','dfch-settings-language');
     languageSelect.id='dfchSettingsLanguage';
     languageSelect.setAttribute('aria-labelledby',languageText.id);
-    const langNames={zh_tw:'繁體中文',ja:'日本語',en:'English',ko:'한국어'};
+    const langNames={zh_tw:'繁體中文',zh_cn:'简体中文',ja:'日本語',en:'English',ko:'한국어',th:'ภาษาไทย',vi:'Tiếng Việt'};
     for(const value of LANGUAGES){
       const option=el('option',null,langNames[value]);option.value=value;languageSelect.append(option);
     }
