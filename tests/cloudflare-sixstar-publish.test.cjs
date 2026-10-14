@@ -35,6 +35,6 @@ test('Every locally referenced Cloudflare guide script and stylesheet is publish
 });
 test('Cloudflare homepage is built from the guide which includes the 23-hero modal',()=>{
   assert.match(build,/fs\.readFileSync\(path\.join\(repoRoot,'heroes\.html'\),'utf8'\)/);
-  assert.match(get('heroes.html'),/sixstar-abilities\.js\?v=1\.0\.1/);
-  assert.match(get('heroes.html'),/sixstar-abilities\.css\?v=1\.0\.1/);
+  assert.match(get('heroes.html'),/sixstar-abilities\.js\?v=1\.4\.0/);
+  assert.match(get('heroes.html'),/sixstar-abilities\.css\?v=1\.1\.0/);
 });
