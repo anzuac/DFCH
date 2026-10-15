@@ -57,7 +57,7 @@ test('Four theme colors and mobile layout support compact cards',()=>{
  assert.match(css,/--party-foreground/);
  assert.match(html,/style\.css\?v=1\.15\.5/);
  assert.match(html,/app\.js\?v=1\.15\.5/);
- assert.match(html,/i18n\.js\?v=1\.15\.5/);
+ assert.match(html,/i18n\.js\?v=1\.15\.6/);
 });
 test('Seven-language entries cover all new player-facing wording',()=>{
  const s=i18n.slice(i18n.indexOf('const entries={')+'const entries='.length,i18n.indexOf(';\nconst langs='));

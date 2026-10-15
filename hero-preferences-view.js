@@ -19,7 +19,25 @@
     for(const [label,value] of rows){const row=node('div');row.append(node('dt',label),node('dd',value));block.append(row);}
     return block;
   }
-  const visibleLanguages=['zh_tw','zh_cn','ja','en','ko','th','vi'];
+  /* Public notes remain visible in the four supported languages. */
+  const guideCopy={
+    "找到英靈，選對禮物。收錄 23 位六星英靈的固定喜好。":{en:"Find the right gifts for 23 six-star heroes.",ja:"23人の星6英霊が好む贈り物を探せます。",ko:"6성 영령 23명의 선호 선물을 확인하세요."},
+    "依英靈名稱、稱號或物品查找喜愛與最愛。同名的不同版本分開列出。":{en:"Search liked and loved gifts by hero, title, or gift. Different versions appear separately.",ja:"英霊名・称号・贈り物で好みを検索できます。別バージョンは個別に表示します。",ko:"영령 이름, 칭호 또는 선물로 선호도를 검색하세요. 다른 버전은 별도로 표시됩니다."},
+    "以下英靈的喜愛項目皆包含這些物品；各卡片另外列出個別喜好。":{en:"All listed heroes like these common gifts; each card shows individual preferences.",ja:"下記の英霊全員がこれらの贈り物を好みます。個別の好みは各カードをご覧ください。",ko:"아래 영령은 모두 이 공통 선물을 좋아하며, 개별 선호도는 각 카드에 표시됩니다."},
+    "僅列出官方中的六星英靈；缺少所選語言翻譯時保留日文原名。。":{en:"Shows six-star heroes from official data only. Where translations are unavailable, Japanese names are retained.",ja:"公式データに含まれる星6英霊のみ表示します。翻訳がない名前は日本語の原名を使います。",ko:"공식 데이터의 6성 영령만 표시합니다. 번역이 없으면 일본어 원명을 유지합니다."},
+    "僅列出這份官方資料中的六星英靈；缺少所選語言翻譯時保留日文原名。喜好清單不會修改遠征掉落。":{en:"Only six-star heroes in this official dataset are shown. Untranslated names remain in Japanese. Gift preferences do not change expedition drops.",ja:"公式データの星6英霊のみ表示します。未翻訳の名前は日本語のままです。好みの一覧は遠征ドロップに影響しません。",ko:"공식 데이터의 6성 영령만 표시합니다. 미번역 이름은 일본어로 유지하며, 선호도 목록은 원정 드롭을 변경하지 않습니다."},
+    "開啟獨立圖鑑 ↗":{en:"Open standalone guide ↗",ja:"独立図鑑を開く ↗",ko:"별도 도감 열기 ↗"},
+    "圖片暫時無法載入":{en:"Image unavailable",ja:"画像を読み込めません",ko:"이미지를 불러올 수 없습니다"},
+  };
+  const guideSource=new WeakMap();
+  function localizeGuideCopy(element){
+    if(!element)return;
+    let raw=guideSource.get(element);
+    if(raw===undefined){raw=element.textContent;guideSource.set(element,raw);}
+    element.textContent=guideCopy[raw]?.[lang]||raw;
+    element.hidden=false;
+  }
+  const visibleLanguages=['zh_tw','ja','ko','en'];
   let lang='zh_tw',data,names;
   try{const saved=localStorage.getItem('dfch-hero-language');if(visibleLanguages.includes(saved))lang=saved;else if(saved)localStorage.setItem('dfch-hero-language',lang);}catch{}
   const t=(i,vars={})=>Object.entries(vars).reduce((v,[k,x])=>v.replaceAll('{'+k+'}',x),ui[lang][i]);
@@ -398,18 +416,37 @@
   locationSearch.addEventListener('input',renderLocations);locationItem.addEventListener('change',renderLocations);locationMap.addEventListener('change',renderLocations);
   for(const [key,name] of visibleLanguages.map(key=>[key,source.languages[key]])){const o=node('option',name);o.value=key;language.append(o);}language.value=lang;
   function options(id,items,empty){const e=$(id),value=e.value;e.replaceChildren();const first=node('option',empty);first.value='';e.append(first);for(const [key,label] of items){const o=node('option',label);o.value=key;e.append(o);}e.value=value;}
+  /* Untranslated source columns: use confirmed official hero names, then
+     clearly authored UI translations for the remaining titles and gift. */
+  const heroTitleFallback={
+    freya:{en:'Black Goddess Seeking Undying Love',ko:'불멸의 사랑을 찾는 검은 여신'},
+    frigg:{en:'White Goddess Watching Over Bonds',ko:'인연을 지켜보는 하얀 여신'}
+  };
+  const giftNameFallback={
+    305000026:{en:'Ghost Pumpkin Tart',ko:'유령 호박 타르트'}
+  };
   function applyLanguage(){
-    data={...source,heroes:source.heroes.map(h=>{const tr=h.translations[lang],ja=h.translations.ja;return {...h,name:tr.name||ja.name,title:tr.title||ja.title,fallback:!tr.name||!tr.title};}),items:source.items.map(i=>({...i,name:i.translations[lang]||i.translations.ja}))};names=new Map(data.items.map(i=>[i.id,i.name]));
+    const officialNames=window.DFCHOfficialLabels||{};
+    data={...source,heroes:source.heroes.map(h=>{
+      const tr=h.translations[lang]||{},ja=h.translations.ja;
+      const officialName=officialNames[h.translations.zh_tw.name]?.[lang];
+      const name=tr.name||officialName||ja.name;
+      const title=tr.title||heroTitleFallback[h.key]?.[lang]||ja.title;
+      return {...h,name,title,fallback:name===ja.name&&lang!=='ja'||title===ja.title&&lang!=='ja'};
+    }),items:source.items.map(i=>({
+      ...i,name:i.translations[lang]||giftNameFallback[i.id]?.[lang]||i.translations.ja
+    }))};names=new Map(data.items.map(i=>[i.id,i.name]));
     bondHeading.textContent=bondUI[lang].heading;bondLabelText.textContent=`${bondUI[lang].owns} ${source.bondGains.artifact.translations[lang]}`;bondNote.textContent=bondUI[lang].note;
+    languageLabel.querySelector('span').textContent=({zh_tw:'語言',ja:'言語',ko:'언어',en:'Language'})[lang];
     panel.lang=lang.replace('_','-');$('heroPreferenceTitle').textContent=t(0);
     for(const [id,i] of [['heroSearch',1],['heroSelect',2],['heroItemFilter',4],['heroPreferenceFilter',6]])$(id).previousElementSibling.textContent=t(i);
     $('heroSearch').placeholder=t(1);$('heroClearFilters').textContent=t(10);panel.querySelector('.hero-common-gifts h3').textContent=t(11);
     options('heroSelect',data.heroes.map(h=>[h.index,`${h.name}｜${h.title}`]),t(3));options('heroItemFilter',[...data.items].sort((a,b)=>a.name.localeCompare(b.name)).map(i=>[i.id,i.name]),t(5));options('heroPreferenceFilter',[['loved',t(8)],['favorite',t(9)]],t(7));
     $('heroCommonGifts').replaceChildren(chips(data.commonFavorite));
-    // Secondary explanatory text is Chinese-only, so hide it in other languages.
-    for(const e of guideBody.querySelectorAll(':scope > .helper,:scope > .unit-note,.hero-common-gifts > .unit-note'))e.hidden=lang!=='zh_tw';
+    for(const e of guideBody.querySelectorAll(':scope > .helper,:scope > .unit-note,.hero-common-gifts > .unit-note'))localizeGuideCopy(e);
+    localizeGuideCopy(panel.querySelector('.hero-standalone-link'));
     panel.querySelector('.status-chip').textContent='3.16.0';
-    const header=document.querySelector('.hero-guide-header');if(header){header.querySelector('h1').textContent=t(0);header.querySelector('.helper').hidden=lang!=='zh_tw';document.title=t(0);document.documentElement.lang=lang.replace('_','-');}
+    const header=document.querySelector('.hero-guide-header');if(header){header.querySelector('h1').textContent=t(0);localizeGuideCopy(header.querySelector('.helper'));document.title=t(0);document.documentElement.lang=lang.replace('_','-');}
     applyLocationLanguage();render();
   }
   function render(){
@@ -424,7 +461,7 @@
       const card=node('article',null,'hero-preference-card');card.dataset.hero=h.index;
       const header=node('div',null,'hero-card-header'),portrait=node('img',null,'hero-portrait'),identity=node('div',null,'hero-identity');
       portrait.src=`./assets/heroes/${h.key}.webp`;portrait.alt=`${h.title} ${h.name}`;portrait.width=112;portrait.height=112;portrait.loading='lazy';portrait.decoding='async';
-      portrait.addEventListener('error',()=>{const fallback=node('span','圖片暫時無法載入','hero-portrait-fallback');portrait.replaceWith(fallback);},{once:true});
+      portrait.addEventListener('error',()=>{const fallback=node('span',guideCopy['圖片暫時無法載入']?.[lang]||'圖片暫時無法載入','hero-portrait-fallback');portrait.replaceWith(fallback);},{once:true});
       identity.append(node('p',h.title,'hero-title'),node('h3',h.name),node('span','★★★★★★','hero-stars'));
       const trigger=node('button',null,'sixstar-avatar-trigger');trigger.type='button';
       const text={zh_tw:'查看能力',zh_cn:'查看能力',ja:'能力を見る',en:'Abilities',ko:'능력 보기',th:'ดูความสามารถ',vi:'Xem kỹ năng'}[lang]||'查看能力';

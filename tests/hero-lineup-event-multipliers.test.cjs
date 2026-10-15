@@ -80,8 +80,9 @@ test('150% and 200% change only the event multiplier of the existing gatekeeper 
  assert.match(app,/const greedCombined=greedSum\+greedArtifactTotal/);
 });
 test('Cache versions, localized no-event text and accessible radio styles are present',()=>{
- assert.match(html,/v1\.15\.5<\/span>/);
- for(const file of ['app.js','i18n.js'])assert.match(html,new RegExp(file.replace('.','\\.')+'\\?v=1\\.15\\.5'));
+ assert.match(html,/v1\.15\.6<\/span>/);
+ assert.match(html,/app\.js\?v=1\.15\.5/);
+ assert.match(html,/i18n\.js\?v=1\.15\.6/);
  assert.match(html,/style\.css\?v=1\.15\.5/);
  const marker="'無活動':";
  const a=i18n.indexOf(marker);

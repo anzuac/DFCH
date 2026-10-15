@@ -1,8 +1,40 @@
 /* Player-facing translations. Shared DFCH language setting; no separate preference. */
 (()=>{'use strict';
 const LANG=['zh_tw','zh_cn','ja','en','ko','th','vi'];
+const ACTIVE_LANG=['zh_tw','ja','ko','en'];
 /* Key = original Traditional Chinese display phrase. Official ability and hero names also use DFCHOfficialLabels. */
 const entries={
+"選擇英靈（六星角色使用固定技能，「其他」可自行配置）":["選擇英靈（六星角色使用固定技能，「其他」可自行配置）","英霊を選択（星6は固定能力。「その他」は自由設定可能）。","Choose a hero (six-star heroes use fixed abilities; Other is customizable).","영령 선택(6성은 고정 능력, 기타는 사용자 설정 가능).","選擇英靈（六星角色使用固定技能，「其他」可自行配置）","選擇英靈（六星角色使用固定技能，「其他」可自行配置）"],
+"同名六星英靈不能重複編隊，不同造型也視為同名；「其他」可以配置多格。":["同名六星英靈不能重複編隊，不同造型也視為同名；「其他」可以配置多格。","同名の星6英霊は別衣装でも重複編成できません。「その他」は複数枠に配置できます。","Six-star heroes with the same name cannot be selected twice, even across variants. Other can fill multiple slots.","같은 이름의 6성 영령은 다른 버전이라도 중복 편성할 수 없습니다. 기타는 여러 칸에 배치할 수 있습니다.","同名六星英靈不能重複編隊，不同造型也視為同名；「其他」可以配置多格。","同名六星英靈不能重複編隊，不同造型也視為同名；「其他」可以配置多格。"],
+"點選卡片可選擇英靈、查看固定技能並設定突破；點選儲存後回到 12 格總覽。":["點選卡片可選擇英靈、查看固定技能並設定突破；點選儲存後回到 12 格總覽。","カードをタップして英霊・固定能力・進化を設定します。保存すると12枠の編成に戻ります。","Tap a card to choose a hero, view fixed abilities, and configure evolution. Save to return to the 12-slot lineup.","카드를 눌러 영령과 고정 능력을 확인하고 진화를 설정하세요. 저장하면 12칸 편성으로 돌아갑니다.","點選卡片可選擇英靈、查看固定技能並設定突破；點選儲存後回到 12 格總覽。","點選卡片可選擇英靈、查看固定技能並設定突破；點選儲存後回到 12 格總覽。"],
+"帶彩虹外框的技能代表已勾選突破；無可用突破的技能選項將停用。":["帶彩虹外框的技能代表已勾選突破；無可用突破的技能選項將停用。","虹色の枠は進化を選択した能力です。進化できない項目は選択できません。","A rainbow outline indicates an evolved ability. Unavailable evolution options are disabled.","무지개 테두리는 진화를 선택한 능력입니다. 진화할 수 없는 항목은 비활성화됩니다.","帶彩虹外框的技能代表已勾選突破；無可用突破的技能選項將停用。","帶彩虹外框的技能代表已勾選突破；無可用突破的技能選項將停用。"],
+"弗雷雅（黑色女神）的「深淵世界的解放者」使用獨立圖示；芙麗嘉（白色女神）是不同角色。":["弗雷雅（黑色女神）的「深淵世界的解放者」使用獨立圖示；芙麗嘉（白色女神）是不同角色。","フレイヤ（黒の女神）の「深淵世界の解放者」には専用アイコンがあります。フリッグ（白の女神）は別の英霊です。","Freyja (Dark Goddess) has a separate icon for Liberator of the Abyss. Frigg (White Goddess) is a different hero.","프레이야(검은 여신)의 ‘심연 세계의 해방자’는 전용 아이콘을 사용합니다. 프리그(하얀 여신)는 다른 영령입니다.","弗雷雅（黑色女神）的「深淵世界的解放者」使用獨立圖示；芙麗嘉（白色女神）是不同角色。","弗雷雅（黑色女神）的「深淵世界的解放者」使用獨立圖示；芙麗嘉（白色女神）是不同角色。"],
+"禁斷守門人的基礎出現率預設為 3%，可自行修改；神器、技能、活動倍率會自動重算。":["禁斷守門人的基礎出現率預設為 3%，可自行修改；神器、技能、活動倍率會自動重算。","禁断の門番の基本出現率は3%です。調整すると神器・能力・イベント効果が自動で再計算されます。","The Gatekeeper base appearance rate defaults to 3%. Adjust it for your stage; artifact, ability, and event bonuses update automatically.","금단의 문지기 기본 출현율은 3%입니다. 값을 바꾸면 유물·능력·이벤트 보너스가 자동으로 재계산됩니다.","禁斷守門人的基礎出現率預設為 3%，可自行修改；神器、技能、活動倍率會自動重算。","禁斷守門人的基礎出現率預設為 3%，可自行修改；神器、技能、活動倍率會自動重算。"],
+"計算結果依現有遊戲資料與對照測試製作；特殊活動、關卡與遊戲更新可能造成差異。":["計算結果依現有遊戲資料與對照測試製作；特殊活動、關卡與遊戲更新可能造成差異。","現在のゲームデータと検証結果に基づいています。特別イベント・ステージ・更新により差異が生じる場合があります。","Results use available game data and comparison tests. Special events, stages, or game updates may change results.","현재 게임 자료와 대조 테스트를 바탕으로 합니다. 특별 이벤트, 스테이지, 업데이트에 따라 차이가 날 수 있습니다.","計算結果依現有遊戲資料與對照測試製作；特殊活動、關卡與遊戲更新可能造成差異。","計算結果依現有遊戲資料與對照測試製作；特殊活動、關卡與遊戲更新可能造成差異。"],
+"編隊、神器與機率設定儲存在目前瀏覽器的本機儲存空間。清除網站資料或更換瀏覽器可能使設定消失。":["編隊、神器與機率設定儲存在目前瀏覽器的本機儲存空間。清除網站資料或更換瀏覽器可能使設定消失。","編成・神器・確率の設定はこのブラウザーに保存されます。サイトデータを削除したり別のブラウザーを使うと失われます。","Lineup, artifact, and rate settings are saved in this browser. Clearing site data or switching browsers may erase them.","편성·유물·확률 설정은 현재 브라우저에 저장됩니다. 사이트 데이터를 삭제하거나 브라우저를 변경하면 사라질 수 있습니다.","編隊、神器與機率設定儲存在目前瀏覽器的本機儲存空間。清除網站資料或更換瀏覽器可能使設定消失。","編隊、神器與機率設定儲存在目前瀏覽器的本機儲存空間。清除網站資料或更換瀏覽器可能使設定消失。"],
+"角色與能力圖片使用 DFCH 官方資料，資料更新時可能有所調整。":["角色與能力圖片使用 DFCH 官方資料，資料更新時可能有所調整。","英霊と能力の画像はDFCHの公式データを使用し、更新により変更される場合があります。","Hero and ability images use official DFCH data and may change after updates.","영령 및 능력 이미지는 DFCH 공식 자료를 사용하며 업데이트 시 변경될 수 있습니다.","角色與能力圖片使用 DFCH 官方資料，資料更新時可能有所調整。","角色與能力圖片使用 DFCH 官方資料，資料更新時可能有所調整。"],
+"技能預設為一般最高等級，可突破的技能勾選後會套用突破等級。":["技能預設為一般最高等級，可突破的技能勾選後會套用突破等級。","能力は通常の最高レベルが初期値です。進化できる能力を選ぶと進化後のレベルになります。","Abilities default to their normal maximum level. Enable evolution where available to use the evolved level.","능력은 일반 최대 레벨이 기본값입니다. 진화 가능한 능력을 선택하면 진화 후 레벨이 적용됩니다.","技能預設為一般最高等級，可突破的技能勾選後會套用突破等級。","技能預設為一般最高等級，可突破的技能勾選後會套用突破等級。"],
+"有進化能力的技能可勾選突破。":["有進化能力的技能可勾選突破。","進化可能な能力はチェックして進化できます。","Enable evolution for abilities that support it.","진화 가능한 능력은 선택하여 진화시킬 수 있습니다.","有進化能力的技能可勾選突破。","有進化能力的技能可勾選突破。"],
+"此英靈固定技能以現有資料顯示。":["此英靈固定技能以現有資料顯示。","この英霊の固定能力は現在利用できるデータで表示しています。","Fixed abilities are shown from the currently available data.","이 영령의 고정 능력은 현재 사용 가능한 자료를 기준으로 표시됩니다.","此英靈固定技能以現有資料顯示。","此英靈固定技能以現有資料顯示。"],
+"此英靈的完整固定技能需要連線載入。":["此英靈的完整固定技能需要連線載入。","この英霊の固定能力をすべて表示するには接続が必要です。","Connect to load this hero's complete fixed abilities.","이 영령의 전체 고정 능력을 불러오려면 연결이 필요합니다.","此英靈的完整固定技能需要連線載入。","此英靈的完整固定技能需要連線載入。"],
+"確定要清空全部 12 格編隊？":["確定要清空全部 12 格編隊？","12枠の編成をすべて消去しますか？","Clear all 12 lineup slots?","편성된 12칸을 모두 지우시겠습니까?","確定要清空全部 12 格編隊？","確定要清空全部 12 格編隊？"],
+"自訂能力（可同時選多種）":["自訂能力（可同時選多種）","カスタム能力（複数選択可）","Custom abilities (multiple selections allowed)","사용자 지정 능력(여러 개 선택 가능)","自訂能力（可同時選多種）","自訂能力（可同時選多種）"],
+"此技能無可核實的突破進化":["此技能無可核實的突破進化","この能力の進化情報は確認できません","No verified evolution for this ability","이 능력의 진화 정보가 확인되지 않았습니다","此技能無可核實的突破進化","此技能無可核實的突破進化"],
+"無禁斷／貪欲技能":["無禁斷／貪欲技能","禁断・強欲の能力なし","No Forbidden / Greed abilities","금단/탐욕 능력 없음","無禁斷／貪欲技能","無禁斷／貪欲技能"],
+"點擊設定":["點擊設定","タップして設定","Tap to configure","눌러서 설정","點擊設定","點擊設定"],
+"深淵解放者":["深淵解放者","深淵の解放者","Abyss Liberator","심연의 해방자","深淵解放者","深淵解放者"],
+"大海的支配者":["大海的支配者","大海の支配者","Oceanic ruler","대해의 지배자","大海的支配者","大海的支配者"],
+"禁斷世界介入者":["禁斷世界介入者","禁断の世界の介入者","Forbidden world intruder","금단의 세계 개입자","禁斷世界介入者","禁斷世界介入者"],
+"最高等級":["最高等級","最高レベル","Max level","최대 레벨","最高等級","最高等級"],
+"（10% 上限）":["（10% 上限）","（上限10%）","(10% cap)","(최대 10%)","（10% 上限）","（10% 上限）"],
+"預設 3%，可依照目前關卡調整。":["預設 3%，可依照目前關卡調整。","初期値は3%。ステージに合わせて変更できます。","Default 3%; adjust for the selected stage.","기본값은 3%이며 스테이지에 따라 조정할 수 있습니다.","預設 3%，可依照目前關卡調整。","預設 3%，可依照目前關卡調整。"],
+"計算結果超過 100%，請留意遊戲內可能存在其他限制。":["計算結果超過 100%，請留意遊戲內可能存在其他限制。","計算値が100%を超えています。ゲーム内に別の制限がある場合があります。","Result exceeds 100%. The game may apply additional limits.","계산 결과가 100%를 초과했습니다. 게임 내 추가 제한이 있을 수 있습니다.","計算結果超過 100%，請留意遊戲內可能存在其他限制。","計算結果超過 100%，請留意遊戲內可能存在其他限制。"],
+"尚未配置相關技能":["尚未配置相關技能","該当する能力が未設定です","No applicable abilities configured","관련 능력이 설정되지 않았습니다","尚未配置相關技能","尚未配置相關技能"],
+"關閉使用說明":["關閉使用說明","説明を閉じる","Close help","도움말 닫기","關閉使用說明","關閉使用說明"],
+"圖片暫時無法載入":["圖片暫時無法載入","画像を読み込めません","Image unavailable","이미지를 불러올 수 없습니다","圖片暫時無法載入","圖片暫時無法載入"],
+"・禁斷的守門人的出現率，除了秘典的基本出現率外，還會受到神器和能力效果的影響":["・禁斷的守門人的出現率，除了秘典的基本出現率外，還會受到神器和能力效果的影響","禁断の門番の出現率は基本値のほか、神器と能力の効果を受けます。","Gatekeeper appearance is affected by artifacts and abilities in addition to its base rate.","금단의 문지기 출현율은 기본 확률 외에 유물과 능력 효과의 영향을 받습니다.","・禁斷的守門人的出現率，除了秘典的基本出現率外，還會受到神器和能力效果的影響","・禁斷的守門人的出現率，除了秘典的基本出現率外，還會受到神器和能力效果的影響"],
+"禁斷的守門人的出現率，除了秘典的基本出現率外，還會受到神器和能力效果的影響":["禁斷的守門人的出現率，除了秘典的基本出現率外，還會受到神器和能力效果的影響","禁断の門番の出現率は基本値のほか、神器と能力の効果を受けます。","Besides the base rate, artifacts and abilities affect Gatekeeper appearance.","금단의 문지기 출현율은 기본 확률 외에 유물과 능력 효과의 영향을 받습니다.","禁斷的守門人的出現率，除了秘典的基本出現率外，還會受到神器和能力效果的影響","禁斷的守門人的出現率，除了秘典的基本出現率外，還會受到神器和能力效果的影響"],
+
 '無活動':['无活动','イベントなし','No event','이벤트 없음','ไม่มีกิจกรรม','Không có sự kiện'],
 "英靈貪欲":["英灵贪欲","英霊の強欲","Hero greed","영령 탐욕","โลภของวีรชน","Tham lam anh linh"],
 "回路組":["回路组","回路グループ","Circuit group","회로 그룹","กลุ่มวงจร","Nhóm mạch"],
@@ -80,13 +112,40 @@ const entries={
 '芙麗嘉':['芙丽嘉','フリッグ','Frigg','프리그','ฟริกก์','Frigg']
 };
 const langs=['zh_cn','ja','en','ko','th','vi'];
-function current(){try{let v=localStorage.getItem('dfch-hero-language');return LANG.includes(v)?v:'zh_tw'}catch{return 'zh_tw'}}
+function current(){try{let v=localStorage.getItem('dfch-hero-language');return ACTIVE_LANG.includes(v)?v:'zh_tw'}catch{return 'zh_tw'}}
 let language=current();const originals=new WeakMap();const originAttrs=new WeakMap();const sorted=Object.keys(entries).sort((a,b)=>b.length-a.length);let queued=false;
 function gameLabels(){return window.DFCHOfficialLabels||{}}
-function translate(t){if(language==='zh_tw'||!t)return t;const source=String(t);const labels=gameLabels();if(entries[source])return entries[source][langs.indexOf(language)]||source;const exact=labels[source];if(exact?.[language])return exact[language];let out='',i=0;while(i<source.length){let matched=false;for(const key of sorted){if(source.startsWith(key,i)){out+=entries[key][langs.indexOf(language)]||key;i+=key.length;matched=true;break}}if(!matched){out+=source[i++];}}return out}
+let officialRef=null,officialStarts=new Map();
+function officialTokens(labels){
+ if(labels===officialRef)return officialStarts;
+ officialRef=labels;officialStarts=new Map();
+ for(const key of Object.keys(labels)){
+  if(key.length<3||!/[㐀-鿿]/.test(key))continue;
+  const first=key[0];if(!officialStarts.has(first))officialStarts.set(first,[]);
+  officialStarts.get(first).push(key);
+ }
+ for(const items of officialStarts.values())items.sort((a,b)=>b.length-a.length);
+ return officialStarts;
+}
+function translate(t){
+ if(language==='zh_tw'||!t)return t;
+ const source=String(t),labels=gameLabels();
+ if(entries[source])return entries[source][langs.indexOf(language)]||source;
+ if(labels[source]?.[language])return labels[source][language];
+ const officialByFirst=officialTokens(labels);
+ let out='',i=0;
+ while(i<source.length){
+  const custom=sorted.find(key=>source.startsWith(key,i));
+  const official=(officialByFirst.get(source[i])||[]).find(key=>labels[key]?.[language]&&source.startsWith(key,i));
+  if(official&&(!custom||official.length>custom.length)){out+=labels[official][language];i+=official.length;}
+  else if(custom){out+=entries[custom][langs.indexOf(language)]||custom;i+=custom.length;}
+  else out+=source[i++];
+ }
+ return out;
+}
 function refresh(){const body=document.body;if(!body)return;const walker=document.createTreeWalker(body,NodeFilter.SHOW_TEXT);let node;while((node=walker.nextNode())){if(['SCRIPT','STYLE','CODE','PRE','TEXTAREA','OPTION'].includes(node.parentElement?.tagName))continue;let source=originals.get(node);if(source===undefined){source=node.nodeValue;originals.set(node,source);}const value=translate(source);if(node.nodeValue!==value)node.nodeValue=value;}for(const el of body.querySelectorAll('[placeholder],[title],[aria-label]')){let old=originAttrs.get(el);if(!old){old={};for(const attr of ['placeholder','title','aria-label'])if(el.hasAttribute(attr))old[attr]=el.getAttribute(attr);originAttrs.set(el,old)}for(const [k,v] of Object.entries(old)){let changed=translate(v);if(el.getAttribute(k)!==changed)el.setAttribute(k,changed)}}for(const opt of body.querySelectorAll('option')){let raw=originals.get(opt.firstChild);if(opt.firstChild){if(raw===undefined){raw=opt.textContent;originals.set(opt.firstChild,raw);}const translated=translate(raw);if(opt.textContent!==translated)opt.textContent=translated}}}
 function schedule(){if(queued)return;queued=true;queueMicrotask(()=>{queued=false;refresh()})}
-window.addEventListener('dfch:language-change',e=>{language=LANG.includes(e.detail?.language)?e.detail.language:current();schedule()});
+window.addEventListener('dfch:language-change',e=>{language=ACTIVE_LANG.includes(e.detail?.language)?e.detail.language:current();schedule()});
 window.addEventListener('storage',e=>{if(e.key==='dfch-hero-language'){language=current();schedule()}});
 function start(){const obs=new MutationObserver(records=>{if(records.some(x=>x.type==='childList'||(x.type==='characterData'&&!originals.has(x.target))))schedule()});obs.observe(document.body,{subtree:true,childList:true,characterData:true});schedule()}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start,{once:true});else start();

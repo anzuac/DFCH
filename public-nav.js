@@ -11,7 +11,7 @@
   };
   let brand,links=[];
   function language(){
-    try{const stored=localStorage.getItem('dfch-hero-language');if(labels[stored])return stored;}catch(_){}
+    try{const stored=localStorage.getItem('dfch-hero-language');if(['zh_tw','ja','ko','en'].includes(stored))return stored;}catch(_){}
     return 'zh_tw';
   }
   function translate(next){

@@ -16,10 +16,10 @@ function runtime(){
  vm.runInNewContext(toolText,{window,document,localStorage,MutationObserver:class{}});
  return window.DFCHToolI18n;
 }
-test('Seven selectable languages are shared across settings and the six-star catalog',()=>{
+test('Four visible languages are shared across settings and the six-star catalog',()=>{
  const s=read('display-settings.js'),h=read('hero-preferences-view.js');
- assert.match(s,/LANGUAGES=\['zh_tw','zh_cn','ja','en','ko','th','vi'\]/);
- assert.match(h,/visibleLanguages=\['zh_tw','zh_cn','ja','en','ko','th','vi'\]/);
+ assert.match(s,/LANGUAGES=\['zh_tw','ja','ko','en'\]/);
+ assert.match(h,/visibleLanguages=\['zh_tw','ja','ko','en'\]/);
  for(const lang of ['zh_cn','th','vi']){
    assert.ok(s.includes(lang+':{button:'));
    assert.ok(h.includes(lang+':{'));
@@ -54,15 +54,16 @@ test('Official labels, manual controls, dynamic results and untranslated fallbac
 test('Both entrypoints and the Cloudflare Pages build ship the same locale data and runtime',()=>{
  const manifest=read('scripts/build-heroes-pages.cjs'),bond=read('Bond30/index.html');
  for(const file of ['public-official-labels.js','public-tool-i18n.js']) {
+   const version=file==='public-tool-i18n.js'?'1.0.1':'1.0.0';
    assert.ok(manifest.includes("'"+file+"'"));
-   assert.ok(read('heroes.html').includes('./'+file+'?v=1.0.0'));
-   assert.ok(read('index.html').includes('./'+file+'?v=1.0.0'));
-   assert.ok(bond.includes('../'+file+'?v=1.0.0'));
+   assert.ok(read('heroes.html').includes('./'+file+'?v='+version));
+   assert.ok(read('index.html').includes('./'+file+'?v='+version));
+   assert.ok(bond.includes('../'+file+'?v='+version));
  }
- assert.ok(bond.includes('display-settings.js?v=2.1.0'));
- assert.ok(manifest.includes('public-tool-i18n.js?v=1.0.0'));
+ assert.ok(bond.includes('display-settings.js?v=2.1.1'));
+ assert.ok(manifest.includes('public-tool-i18n.js?v=1.0.1'));
  assert.ok(!manifest.includes("bondHtml=bondHtml.replace('<head>'"));
- assert.ok(manifest.includes('public-tool-i18n.js?v=1.0.0'));
+ assert.ok(manifest.includes('public-tool-i18n.js?v=1.0.1'));
 });
 test('Bond30 searches both original and officially localized player-facing ability names',()=>{
  const app=read('Bond30/js/app.js');
