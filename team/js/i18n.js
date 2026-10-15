@@ -112,9 +112,40 @@ const entries={
 '芙麗嘉':['芙丽嘉','フリッグ','Frigg','프리그','ฟริกก์','Frigg']
 };
 const langs=['zh_cn','ja','en','ko','th','vi'];
+
+// Site-authored translations for labels absent from the verified game locale columns.
+// These must not be presented as official terminology.
+const uiFallback={"英靈設定":["英霊設定","Hero settings","영령 설정"],"介入者之咒輪":["介入者の呪輪","Intruder's Cursed Ring","개입자의 저주 고리"],"壞掉的回路":["壊れた回路","Broken Circuit","고장 난 회로"],"欲望之窺視鏡":["欲望の覗き鏡","Mirror of Desire","욕망의 거울"],"不祥的迴路":["不吉な回路","Ominous Circuit","불길한 회로"],"介入者之咒輪等級":["介入者の呪輪のレベル","Intruder's Cursed Ring level","개입자의 저주 고리 레벨"],"壞掉的回路等級":["壊れた回路のレベル","Broken Circuit level","고장 난 회로 레벨"],"欲望之窺視鏡等級":["欲望の覗き鏡のレベル","Mirror of Desire level","욕망의 거울 레벨"],"不祥的迴路等級":["不吉な回路のレベル","Ominous Circuit level","불길한 회로 레벨"],"最遠距離（每 30）":["最大距離（30刻み）","Maximum distance (steps of 30)","최대 거리 (30 단위)"],"第":["第","Slot","제"],"第 ":["第 ","Slot ","제 "]," 格・":[" 枠・"," · ","칸 · "]," 格":[" 枠"," slots","칸"],"｜距離 ":["｜距離 "," | Distance "," | 거리 "],"超過10%":["10%を超過","Exceeds 10%","10% 초과"],"達10%":["10%に到達","Reached 10%","10% 도달"],"原始 ":["元の値 ","Original ","원래 값 "],"上限 10%":["上限10%","10% cap","상한 10%"],"達上限 10%":["上限10%に到達","Reached 10% cap","상한 10% 도달"],"係數 ":["係数 ","Factor ","계수 "],"尚未選擇":["未選択","Not selected","선택 안 함"],"啟用 ":["有効にする: ","Enable ","사용: "],"Boss 擊破時寶箱再增加一個的機率":["ボス撃破時、宝箱がさらに1個増える確率","Chance to gain one extra chest on defeating a boss","보스 격파 시 보물 상자 1개 추가 확률"],"禁斷守門人出現機率增加":["禁断の門番の出現確率が増加","Increased Forbidden Gatekeeper appearance chance","금단의 문지기 등장 확률 증가"],"禁斷守門人出現機率提升":["禁断の門番の出現確率が上昇","Higher Forbidden Gatekeeper appearance chance","금단의 문지기 등장 확률 상승"]};
+for (const [source, values] of Object.entries(uiFallback)) {
+  if (!entries[source]) entries[source] = [source, values[0], values[1], values[2], source, source];
+}
+// Official hero titles are reused from localize_master/localize_master2 data that
+// already powers the standalone six-star guide. Only two blank source locales
+// have explicitly site-authored fallback titles.
+let combinedOfficialLabels;
+function gameLabels(){
+  if(combinedOfficialLabels)return combinedOfficialLabels;
+  const localized={...(window.DFCHOfficialLabels||{})};
+  const missingTitles={
+    freya:{en:'Black Goddess Seeking Undying Love',ko:'불멸의 사랑을 찾는 검은 여신'},
+    frigg:{en:'White Goddess Watching Over Bonds',ko:'인연을 지켜보는 하얀 여신'}
+  };
+  for (const hero of window.DFCHHeroPreferences?.heroes||[]) {
+    const zh=hero.translations?.zh_tw;
+    if(!zh?.title)continue;
+    const item={...(localized[zh.title]||{})};
+    for(const locale of ['ja','en','ko']) {
+      const value=hero.translations?.[locale]?.title||missingTitles[hero.key]?.[locale];
+      if(value)item[locale]=value;
+    }
+    localized[zh.title]=item;
+  }
+  combinedOfficialLabels=localized;
+  return localized;
+}
+
 function current(){try{let v=localStorage.getItem('dfch-hero-language');return ACTIVE_LANG.includes(v)?v:'zh_tw'}catch{return 'zh_tw'}}
 let language=current();const originals=new WeakMap();const originAttrs=new WeakMap();const sorted=Object.keys(entries).sort((a,b)=>b.length-a.length);let queued=false;
-function gameLabels(){return window.DFCHOfficialLabels||{}}
 let officialRef=null,officialStarts=new Map();
 function officialTokens(labels){
  if(labels===officialRef)return officialStarts;
