@@ -78,9 +78,32 @@ test('All published entrypoints refresh caches for the language scripts',()=>{
  const files=['heroes.html','Bond30/index.html','team/index.html','index.html','scripts/build-heroes-pages.cjs'];
  for(const file of files){
   const source=read(file);
-  if(file==='team/index.html')assert.match(source,/\.\/js\/i18n\.js\?v=1\.15\.6/);
+  if(file==='team/index.html')assert.match(source,/\.\/js\/i18n\.js\?v=1\.15\.7/);
   if(file!=='index.html')assert.match(source,/display-settings\.js\?v=2\.1\.1/);
   if(file!=='team/index.html')assert.match(source,/public-tool-i18n\.js\?v=1\.0\.1/);
  }
  for(const file of ['heroes.html','index.html'])assert.match(read(file),/hero-preferences-view\.js\?v=2\.7\.1/);
+});
+
+test('Team titles use official localizations and missing UI strings use explicit fallbacks',()=>{
+ const data=JSON.parse(read('data/hero-preferences.json'));
+ const teamSource=read('team/js/i18n.js');
+ const segment=teamSource.slice(teamSource.indexOf('const LANG='),teamSource.indexOf('function refresh()'));
+ const factory=new Function('window','localStorage',segment+'return translate;');
+ const missing={freya:{en:'Black Goddess Seeking Undying Love',ko:'불멸의 사랑을 찾는 검은 여신'},frigg:{en:'White Goddess Watching Over Bonds',ko:'인연을 지켜보는 하얀 여신'}};
+ const sources={DFCHOfficialLabels:labels,DFCHHeroPreferences:data};
+ assert.match(read('team/index.html'),/hero-preferences-data\.js\?v=2\.3\.2/);
+ for(const lang of ['ja','en','ko']){
+  const translate=factory(sources,{getItem:()=>lang});
+  for(const hero of data.heroes){
+   const expected=hero.translations[lang].title||missing[hero.key]?.[lang];
+   assert.ok(expected,hero.key+' missing '+lang+' title');
+   assert.equal(translate(hero.translations.zh_tw.title),expected,hero.key+' title -> '+lang);
+  }
+  for(const key of ['介入者之咒輪等級','壞掉的回路等級','欲望之窺視鏡等級','不祥的迴路等級','最遠距離（每 30）']){
+   assert.notEqual(translate(key),key,lang+' untranslated '+key);
+  }
+ }
+ const translate=factory(sources,{getItem:()=> 'en'});
+ assert.equal(translate('第 2 格・英靈設定'),'Slot 2 · Hero settings');
 });
