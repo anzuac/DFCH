@@ -126,6 +126,8 @@ let combinedOfficialLabels;
 function gameLabels(){
   if(combinedOfficialLabels)return combinedOfficialLabels;
   const localized={...(window.DFCHOfficialLabels||{})};
+  // Normalise a spacing/punctuation variant to the same verified game locale entry.
+  if(localized['高級聲援 (全員) IV'])localized['高級聲援（全員）IV']=localized['高級聲援 (全員) IV'];
   const missingTitles={
     freya:{en:'Black Goddess Seeking Undying Love',ko:'불멸의 사랑을 찾는 검은 여신'},
     frigg:{en:'White Goddess Watching Over Bonds',ko:'인연을 지켜보는 하얀 여신'}
