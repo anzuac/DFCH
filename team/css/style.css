@@ -312,3 +312,72 @@ html[data-guide-theme="green"] .hero-party-public{--party-danger:#ffc7cd}
 .hero-party-public .greed-more-body ul{margin:5px 0;padding-left:21px}
 .hero-party-public .greed-more-body li{margin:5px 0}
 .hero-party-public .greed-more-body .greed-rule-note{color:var(--party-secondary);font-size:calc(10px * var(--guide-font-multiplier,1));border-top:1px solid var(--line);padding-top:8px;margin-top:10px}
+
+
+/* v1.15.4: four concise bonus groups, without one misleading combined drop rate. */
+.hero-party-public .greed-result{padding:12px;min-width:0;text-align:left}
+.hero-party-public .greed-hero{
+ display:flex;align-items:center;justify-content:space-between;gap:9px;
+ padding:12px;margin-bottom:9px;border:1px solid var(--line);
+ border-radius:10px;background:var(--guide-accent-bg)
+}
+.hero-party-public .greed-hero-label{
+ color:var(--party-foreground);font-weight:750;
+ font-size:calc(13px * var(--guide-font-multiplier,1))
+}
+.hero-party-public .greed-result .greed-hero-value{
+ display:block;color:var(--party-accent);
+ font-size:calc(28px * var(--guide-font-multiplier,1));
+ line-height:1.15;white-space:nowrap
+}
+.hero-party-public .greed-artifacts{
+ display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;
+ margin-bottom:15px
+}
+.hero-party-public .greed-artifact-card{
+ display:flex;min-width:0;flex-direction:column;align-items:center;justify-content:center;
+ gap:5px;padding:10px 3px;border:1px solid var(--line);
+ border-radius:9px;background:var(--guide-accent-bg);text-align:center
+}
+.hero-party-public .greed-artifact-card span{
+ color:var(--party-secondary);
+ font-size:calc(10px * var(--guide-font-multiplier,1));
+ line-height:1.3;overflow-wrap:anywhere
+}
+.hero-party-public .greed-result .greed-artifact-card strong{
+ color:var(--party-gold);font-size:calc(17px * var(--guide-font-multiplier,1));
+ line-height:1.25;overflow-wrap:anywhere
+}
+.hero-party-public .greed-bars-title{
+ font-weight:750;color:var(--party-foreground);
+ font-size:calc(12px * var(--guide-font-multiplier,1));
+ margin-bottom:9px
+}
+.hero-party-public .greed-bars{display:grid;gap:9px;margin:0 0 12px}
+.hero-party-public .greed-meter{--greed-fill:var(--party-accent);min-width:0}
+.hero-party-public .greed-meter-circuit{--greed-fill:var(--party-gold)}
+.hero-party-public .greed-meter-mirror{--greed-fill:var(--party-positive)}
+.hero-party-public .greed-meter-ominous{--greed-fill:var(--party-warning)}
+.hero-party-public .greed-meter-line{
+ display:flex;align-items:center;justify-content:space-between;gap:7px;
+ margin-bottom:4px;color:var(--party-foreground);
+ font-size:calc(11px * var(--guide-font-multiplier,1))
+}
+.hero-party-public .greed-meter-line span{min-width:0;overflow-wrap:anywhere}
+.hero-party-public .greed-result .greed-meter-line strong{
+ color:var(--party-foreground);font-size:calc(11px * var(--guide-font-multiplier,1));
+ line-height:1.35;white-space:nowrap;font-weight:750
+}
+.hero-party-public .greed-meter-track{
+ height:7px;overflow:hidden;border-radius:99px;
+ background:var(--party-tile-bg);border:1px solid var(--line)
+}
+.hero-party-public .greed-meter-fill{
+ height:100%;width:0;border-radius:99px;background:var(--greed-fill)
+}
+.hero-party-public .greed-result .greed-more{margin:12px 0 0}
+@media(max-width:360px){
+ .hero-party-public .greed-artifacts{gap:4px}
+ .hero-party-public .greed-artifact-card{padding:8px 2px}
+ .hero-party-public .greed-result .greed-artifact-card strong{font-size:calc(15px * var(--guide-font-multiplier,1))}
+}

@@ -220,6 +220,13 @@ function initArtifactSettings(){
   };
  }
 }
+function greedMeter(label,value,kind){
+ const fill=Math.min(100,Math.max(0,Number(value)||0));
+ return `<div class="greed-meter greed-meter-${kind}">
+  <div class="greed-meter-line"><span>${enc(label)}</span><strong>+${pct(value)}</strong></div>
+  <div class="greed-meter-track" aria-hidden="true"><div class="greed-meter-fill" style="width:${fill}%"></div></div>
+ </div>`;
+}
 function renderStats(){
  const moreWasOpen=!!$('#officialStats .greed-more')?.open;
  const d=buildCalcData();
@@ -238,12 +245,27 @@ function renderStats(){
  </section>
  <section class="statpanel"><h4>貪欲・寶箱加成</h4>
   <div class="greed-result">
-   <div class="greed-breakdown"><span class="greed-skill">英靈 +${pct(d.greedSum)}</span><span class="greed-artifact">神器 +${pct(d.greedArtifactTotal)}</span></div>
-   <span class="greed-total-label">搭配加成合計</span><strong id="greedTotal">+${pct(d.greedCombined)}</strong>
-   <p class="greed-rule">換算示意：每滿 100% 多 1 個寶箱，餘下百分比為再多 1 個的機率。</p>
+   <div class="greed-hero">
+    <span class="greed-hero-label">英靈貪欲</span>
+    <strong class="greed-hero-value">+${pct(d.greedSum)}</strong>
+   </div>
+   <div class="greed-artifacts" aria-label="神器效果">
+    <div class="greed-artifact-card"><span>回路組</span><strong>+${pct(d.greedCircuitTotal)}</strong></div>
+    <div class="greed-artifact-card"><span>欲望之鏡</span><strong>+${pct(d.greedMirrorTotal)}</strong></div>
+    <div class="greed-artifact-card"><span>不祥迴路</span><strong>+${pct(d.ominous.applied)}</strong></div>
+   </div>
+   <div class="greed-bars-title">各組加成</div>
+   <div class="greed-bars">
+    ${greedMeter('英靈貪欲',d.greedSum,'hero')}
+    ${greedMeter('回路組',d.greedCircuitTotal,'circuit')}
+    ${greedMeter('欲望之鏡',d.greedMirrorTotal,'mirror')}
+    ${greedMeter('不祥迴路',d.ominous.applied,'ominous')}
+   </div>
    <details class="greed-more"><summary>詳細說明</summary><div class="greed-more-body">
-     <p>以合計百分比換算：</p><ul><li>80%：80% 機率額外 1 個</li><li>100%：必定額外 1 個</li><li>150%：必定額外 1 個，再有 50% 機率多 1 個</li><li>200%：必定額外 2 個</li><li>250%：必定額外 2 個，再有 50% 機率多 1 個</li></ul>
-     <p class="greed-rule-note">此處為合計數值的換算示意。貪欲與各寶箱神器的效果類型不完全相同；目前尚未驗證遊戲是否把它們合成同一次掉落判定，請勿視為官方掉落保證。</p>
+    <p>英靈貪欲與神器效果分開顯示，方便查看目前搭配。</p>
+    <p>「回路組」包含壞掉的回路與不可思議的回路；其他神器分別顯示。</p>
+    <p>進度條僅供比較各項寶箱加成，不代表單次掉落機率。</p>
+    <p class="greed-rule-note">實際掉落結果請以遊戲內為準。</p>
    </div></details>
   </div>
  </section>

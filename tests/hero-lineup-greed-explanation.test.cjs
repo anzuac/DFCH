@@ -1,5 +1,5 @@
 'use strict';
-const {test}=require('node:test');
+const test=require('node:test');
 const assert=require('node:assert/strict');
 const fs=require('node:fs');
 const path=require('node:path');
@@ -10,41 +10,69 @@ const css=read('team/css/style.css');
 const i18n=read('team/js/i18n.js');
 const html=read('team/index.html');
 
-test('Greed summary has an accessible expandable conversion explanation',()=>{
- assert.match(app,/<details class="greed-more">\s*<summary>詳細說明<\/summary>/);
- assert.match(app,/每滿 100% 多 1 個寶箱/);
- assert.match(app,/80%：80% 機率額外 1 個/);
- assert.match(app,/100%：必定額外 1 個/);
- assert.match(app,/150%：必定額外 1 個，再有 50% 機率多 1 個/);
- assert.match(app,/200%：必定額外 2 個/);
- assert.match(app,/250%：必定額外 2 個，再有 50% 機率多 1 個/);
- assert.doesNotMatch(app,/不同種類的額外寶箱效果合計僅供搭配比較，不代表單次掉落機率/);
- assert.match(app,/尚未驗證遊戲是否把它們合成同一次掉落判定/);
+const start=app.indexOf('\n <section class="statpanel"><h4>貪欲・寶箱加成</h4>');
+const end=app.indexOf('\n <section class="statpanel"><h4>技能加成明細</h4>',start);
+const view=app.slice(start,end);
+const meterStart=app.indexOf('function greedMeter(label,value,kind){');
+const meterEnd=app.indexOf('function renderStats(){',meterStart);
+const pct=n=>n+'%';
+const meter=new Function('enc','pct',app.slice(meterStart,meterEnd)+'return greedMeter;')(s=>s,pct);
+const render=new Function('d','pct','greedMeter','return '+String.fromCharCode(96)+view+String.fromCharCode(96)+';');
+
+test('Compact four-group card shows no misleading combined drop percentage',()=>{
+ const sample={greedSum:15,greedCircuitTotal:40,greedMirrorTotal:15,ominous:{applied:10},greedArtifactTotal:65,greedCombined:80};
+ const result=render(sample,pct,meter);
+ assert.match(result,/英靈貪欲<\/span>\s*<strong class="greed-hero-value">\+15%<\/strong>/);
+ assert.match(result,/回路組<\/span><strong>\+40%<\/strong>/);
+ assert.match(result,/欲望之鏡<\/span><strong>\+15%<\/strong>/);
+ assert.match(result,/不祥迴路<\/span><strong>\+10%<\/strong>/);
+ assert.equal((result.match(/class="greed-meter greed-meter-/g)||[]).length,4);
+ assert.match(result,/style="width:15%"/);
+ assert.match(result,/style="width:40%"/);
+ assert.doesNotMatch(result,/greedTotal|搭配加成合計|\+80%/);
+ assert.doesNotMatch(result,/每滿 100%|80%：|100%：必定|354|355|358|359|AbilityManager/);
+});
+test('Progress bars clip visually at 100% without changing displayed bonus',()=>{
+ assert.match(meter('英靈貪欲',125,'hero'),/style="width:100%"/);
+ assert.match(meter('英靈貪欲',125,'hero'),/<strong>\+125%<\/strong>/);
+ assert.match(meter('英靈貪欲',0,'hero'),/style="width:0%"/);
+});
+test('Expanded player guide has no internal formulas and ends with in-game disclaimer',()=>{
+ assert.match(view,/<details class="greed-more"><summary>詳細說明<\/summary>/);
+ assert.match(view,/回路組.*壞掉的回路.*不可思議的回路/);
+ assert.match(view,/進度條僅供比較各項寶箱加成/);
+ assert.match(view,/<p class="greed-rule-note">實際掉落結果請以遊戲內為準。<\/p>/);
  assert.match(app,/moreWasOpen/);
+ assert.doesNotMatch(view,/每滿|換算|抽選公式|AbilityType|100%：/);
+ assert.doesNotMatch(html,/每滿 100|每 100%|餘數對應機率/);
 });
-
-test('All descriptions have translations in the six other UI languages',()=>{
- const keys=['詳細說明','80%：80% 機率額外 1 個','100%：必定額外 1 個',
-  '150%：必定額外 1 個，再有 50% 機率多 1 個','200%：必定額外 2 個',
-  '250%：必定額外 2 個，再有 50% 機率多 1 個'];
- for(const key of keys){
-  const anchor=JSON.stringify(key)+':';
-  const from=i18n.indexOf(anchor);
-  assert.ok(from>=0,'Missing localized description: '+key);
-  const match=i18n.slice(from+anchor.length).match(/^(\[[^\n]+\]),/);
-  assert.ok(match,'Translation array exists for '+key);
-  const variants=JSON.parse(match[1]);
-  assert.equal(variants.length,6,'Six locale variants for '+key);
-  assert.ok(variants.every(Boolean));
+test('Four theme colors and mobile layout support compact cards',()=>{
+ for(const className of ['greed-hero','greed-artifacts','greed-artifact-card','greed-meter-track','greed-meter-fill','greed-more']){
+  assert.ok(css.includes('.greed-'+className.replace(/^greed-/,'') )||css.includes('.'+className),'CSS '+className);
  }
+ assert.match(css,/grid-template-columns:repeat\(3,minmax\(0,1fr\)\)/);
+ assert.match(css,/--party-foreground/);
+ assert.match(html,/style\.css\?v=1\.15\.4/);
+ assert.match(html,/app\.js\?v=1\.15\.4/);
+ assert.match(html,/i18n\.js\?v=1\.15\.4/);
 });
-
-test('Styles stay responsive and probabilities remain unchanged',()=>{
- assert.match(css,/\.hero-party-public \.greed-more-body/);
- assert.match(css,/\.hero-party-public \.greed-more summary:focus-visible/);
- assert.match(html,/\.\/js\/app\.js\?v=1\.15\.3/);
- assert.match(html,/\.\/js\/i18n\.js\?v=1\.15\.3/);
- assert.match(html,/\.\/css\/style\.css\?v=1\.15\.3/);
+test('Seven-language entries cover all new player-facing wording',()=>{
+ const s=i18n.slice(i18n.indexOf('const entries={')+'const entries='.length,i18n.indexOf(';\nconst langs='));
+ const entries=new Function('return ('+s+')')();
+ const keys=['英靈貪欲','回路組','欲望之鏡','不祥迴路','各組加成',
+  '英靈貪欲與神器效果分開顯示，方便查看目前搭配。',
+  '「回路組」包含壞掉的回路與不可思議的回路；其他神器分別顯示。',
+  '進度條僅供比較各項寶箱加成，不代表單次掉落機率。',
+  '實際掉落結果請以遊戲內為準。'];
+ for(const key of keys){
+  assert.ok(entries[key],'Missing translation: '+key);
+  assert.equal(entries[key].length,6,key);
+  assert.ok(entries[key].every(Boolean),key);
+ }
+ assert.equal(entries['每滿 100% 多 1 個寶箱'],undefined);
+});
+test('Unrelated gatekeeper / greed calculations remain in their established functions',()=>{
  assert.match(app,/const total=beforeEventTruncated\*eventFactor/);
  assert.match(app,/const greedCombined=greedSum\+greedArtifactTotal/);
+ assert.match(app,/const greedCircuitTotal=calcSettings\.brokenCircuit\+\(calcSettings\.mysteriousCircuit\?30:0\)/);
 });
