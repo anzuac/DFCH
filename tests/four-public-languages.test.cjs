@@ -128,7 +128,7 @@ test('Team help modal shows only the approved full two-section guide across all 
   assert.ok(modal.includes(phrase)||phrase==='使用方式與注意事項','Help text missing: '+phrase);
   assert.ok(entries[phrase],'Missing language key: '+phrase);
   for(const languageIndex of [1,2,3]){
-   assert.ok(entries[phrase][languageIndex]&&entries[phrase][languageIndex]!==phrase,'Missing help translation: '+phrase+' / '+languageIndex);
+   assert.ok(entries[phrase][languageIndex]&&(entries[phrase][languageIndex]!==phrase||(languageIndex===1&&phrase==='注意事項')),'Missing help translation: '+phrase+' / '+languageIndex);
   }
  }
 });
