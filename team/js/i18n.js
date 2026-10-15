@@ -3,6 +3,7 @@
 const LANG=['zh_tw','zh_cn','ja','en','ko','th','vi'];
 /* Key = original Traditional Chinese display phrase. Official ability and hero names also use DFCHOfficialLabels. */
 const entries={
+'無活動':['无活动','イベントなし','No event','이벤트 없음','ไม่มีกิจกรรม','Không có sự kiện'],
 "英靈貪欲":["英灵贪欲","英霊の強欲","Hero greed","영령 탐욕","โลภของวีรชน","Tham lam anh linh"],
 "回路組":["回路组","回路グループ","Circuit group","회로 그룹","กลุ่มวงจร","Nhóm mạch"],
 "欲望之鏡":["欲望之镜","欲望の鏡","Mirror of Desire","욕망의 거울","กระจกแห่งความปรารถนา","Gương dục vọng"],

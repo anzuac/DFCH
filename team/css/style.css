@@ -381,3 +381,37 @@ html[data-guide-theme="green"] .hero-party-public{--party-danger:#ffc7cd}
  .hero-party-public .greed-artifact-card{padding:8px 2px}
  .hero-party-public .greed-result .greed-artifact-card strong{font-size:calc(15px * var(--guide-font-multiplier,1))}
 }
+
+/* v1.15.5: exclusive events and cycling hero greed colors (presentation only). */
+.hero-party-public .event-options{
+ display:flex;align-items:center;gap:7px;flex-wrap:wrap;
+ border:0;min-width:0;padding:0;margin:0
+}
+.hero-party-public .event-options legend{
+ padding:0;margin-bottom:7px;font-size:calc(12px * var(--guide-font-multiplier,1));
+ color:var(--party-secondary);font-weight:700
+}
+.hero-party-public .event-option{
+ display:inline-flex;align-items:center;gap:6px;cursor:pointer;
+ padding:8px 10px;border:1px solid var(--line);border-radius:9px;
+ color:var(--party-foreground);background:var(--guide-accent-bg);
+ font-size:calc(12px * var(--guide-font-multiplier,1));
+}
+.hero-party-public .event-option input{
+ width:16px;height:16px;margin:0;flex:none;accent-color:var(--party-accent);
+}
+.hero-party-public .event-option:has(input:checked){
+ border-color:var(--party-accent);background:var(--panel);
+ box-shadow:inset 0 0 0 1px var(--party-accent)
+}
+.hero-party-public .event-option:focus-within{outline:2px solid var(--party-accent);outline-offset:2px}
+.hero-party-public .greed-result.greed-cycle-0{--hero-cycle:#93caff}
+.hero-party-public .greed-result.greed-cycle-1{--hero-cycle:#d0b5ff}
+.hero-party-public .greed-result.greed-cycle-2{--hero-cycle:#f2cc82}
+.hero-party-public .greed-result.greed-cycle-3{--hero-cycle:#a5e4c3}
+html[data-guide-theme="light"] .hero-party-public .greed-result.greed-cycle-0{--hero-cycle:#155e91}
+html[data-guide-theme="light"] .hero-party-public .greed-result.greed-cycle-1{--hero-cycle:#68469f}
+html[data-guide-theme="light"] .hero-party-public .greed-result.greed-cycle-2{--hero-cycle:#80561c}
+html[data-guide-theme="light"] .hero-party-public .greed-result.greed-cycle-3{--hero-cycle:#1e704b}
+.hero-party-public .greed-result .greed-hero-value{color:var(--hero-cycle)}
+.hero-party-public .greed-result .greed-meter-hero{--greed-fill:var(--hero-cycle)}

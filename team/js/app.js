@@ -52,11 +52,20 @@ fetch('../data/sixstar-visible-abilities.json',{cache:'force-cache'}).then(r=>{i
 
 function pickedTracked(){let out=[];slots.forEach((s,i)=>{if(!s.type)return;const h=hero(s);const name=s.type==='other'?`第 ${i+1} 格・其他`:`第 ${i+1} 格・${h?.name||'英靈'}`;const chosen=s.type==='other'?KEYS.filter(k=>s.skills[k]?.selected).map(k=>({name:k,up:!!s.skills[k]?.up&&isUpgradeAllowed(s,k)})):getSkills(h||{skills:[]}).filter(x=>/^(禁斷世界(?:的)?介入者|貪欲|深淵世界的解放者|大海的支配者)/.test(x.name)).map(x=>({name:x.name,up:!!s.skills[x.name]?.up&&isUpgradeAllowed(s,x.name)}));chosen.forEach(k=>out.push({...k,owner:name}));});return out;}
 
+/* Add future event variants here; all options use one radio group and one saved value. */
+const EVENT_OPTIONS=Object.freeze([
+ {factor:1,label:'無活動'},
+ {factor:1.5,label:'×150%'},
+ {factor:2,label:'×200%'}
+]);
 const calcStoreKey='hero-layout-phase1-v17-calc';
-const calcSettings={base:3,crown:false,stone:false,ring:0,event:false,brokenCircuit:0,mysteriousCircuit:false,desireMirror:0,ominousCircuit:0,ominousDistance:30};
+const calcSettings={base:3,crown:false,stone:false,ring:0,eventMultiplier:1,brokenCircuit:0,mysteriousCircuit:false,desireMirror:0,ominousCircuit:0,ominousDistance:30};
 try{const v=JSON.parse(localStorage.getItem(calcStoreKey));if(v&&typeof v==='object'){
   if(Number.isFinite(Number(v.base))&&Number(v.base)>=0&&Number(v.base)<=100)calcSettings.base=Number(v.base);
-  calcSettings.crown=v.crown===true;calcSettings.stone=v.stone===true;calcSettings.event=v.event===true;
+  calcSettings.crown=v.crown===true;calcSettings.stone=v.stone===true;
+  // Migrate the former checkbox once; an explicit new selection always wins.
+  if(EVENT_OPTIONS.some(o=>o.factor===v.eventMultiplier))calcSettings.eventMultiplier=v.eventMultiplier;
+  else calcSettings.eventMultiplier=v.event===true?1.5:1;
   if(Number.isInteger(+v.ring)&&+v.ring>=0&&+v.ring<=3)calcSettings.ring=+v.ring;
   if(Number.isInteger(v.brokenCircuit)&&v.brokenCircuit>=0&&v.brokenCircuit<=10)calcSettings.brokenCircuit=v.brokenCircuit;
   calcSettings.mysteriousCircuit=v.mysteriousCircuit===true;
@@ -97,7 +106,7 @@ function buildCalcData(){
  const stoneFactor=calcSettings.stone?1.1:1;
  const artifactFactor=crownFactor*stoneFactor;
  const abilityFactor=1+adjusted/100;
- const eventFactor=calcSettings.event?1.5:1;
+ const eventFactor=calcSettings.eventMultiplier??(calcSettings.event?1.5:1);
 
 
  const beforeEvent=calcSettings.base*artifactFactor*abilityFactor;
@@ -220,12 +229,27 @@ function initArtifactSettings(){
   };
  }
 }
+/* Four repeating colors per completed 100% hero-greed milestone (visual only). */
+function greedCycle(value){
+ const n=Math.max(0,Number(value)||0);
+ const milestone=Math.floor(n/100);
+ const remainder=n%100;
+ return {color:milestone%4,fill:n>0&&remainder===0?100:remainder};
+}
 function greedMeter(label,value,kind){
- const fill=Math.min(100,Math.max(0,Number(value)||0));
+ const fill=kind==='hero'?greedCycle(value).fill:Math.min(100,Math.max(0,Number(value)||0));
  return `<div class="greed-meter greed-meter-${kind}">
   <div class="greed-meter-line"><span>${enc(label)}</span><strong>+${pct(value)}</strong></div>
   <div class="greed-meter-track" aria-hidden="true"><div class="greed-meter-fill" style="width:${fill}%"></div></div>
  </div>`;
+}
+function eventOptionsMarkup(){
+ return `<fieldset class="event-options"><legend>活動效果</legend>
+  ${EVENT_OPTIONS.map(({factor,label})=>`<label class="event-option">
+   <input type="radio" name="eventMultiplier" value="${factor}" ${calcSettings.eventMultiplier===factor?'checked':''}>
+   <span>${label}</span>
+  </label>`).join('')}
+ </fieldset>`;
 }
 function renderStats(){
  const moreWasOpen=!!$('#officialStats .greed-more')?.open;
@@ -237,14 +261,14 @@ function renderStats(){
   <p class="calc-note">預設 3%，可依照目前關卡調整。</p>
  </section>
  <section class="statpanel"><h4>活動</h4>
-  <div class="fieldrow"><label for="eventToggle">活動效果 <small>（×150%）</small></label><input type="checkbox" id="eventToggle" ${calcSettings.event?'checked':''}></div>
+  ${eventOptionsMarkup()}
  </section>
  <section class="statpanel"><h4>禁斷的守門人</h4>
   ${gameRateMarkup(d)}
   ${d.total>100?'<p class="statwarn">計算結果超過 100%，請留意遊戲內可能存在其他限制。</p>':''}
  </section>
  <section class="statpanel"><h4>貪欲・寶箱加成</h4>
-  <div class="greed-result">
+  <div class="greed-result greed-cycle-${greedCycle(d.greedSum).color}">
    <div class="greed-hero">
     <span class="greed-hero-label">英靈貪欲</span>
     <strong class="greed-hero-value">+${pct(d.greedSum)}</strong>
@@ -280,7 +304,15 @@ function renderStats(){
   if(e.target.value.trim()===''||!Number.isFinite(value)||value<0||value>100){announce('基礎機率請輸入 0 至 100');e.target.value=calcSettings.base;return;}
   calcSettings.base=value;saveCalcSettings();renderStats();
  };
- $('#eventToggle').onchange=e=>{calcSettings.event=e.target.checked;saveCalcSettings();renderStats()};
+ $('#officialStats').querySelectorAll('input[name="eventMultiplier"]').forEach(input=>{
+  input.onchange=e=>{
+   if(!e.target.checked)return;
+   const value=Number(e.target.value);
+   if(!EVENT_OPTIONS.some(o=>o.factor===value))return;
+   calcSettings.eventMultiplier=value;
+   saveCalcSettings();renderStats();
+  };
+ });
  $('#ratePopupOpen').onclick=openRatePopup;
  if(!$('#ratePopupOverlay').classList.contains('hidden'))updatePopup();
 }
