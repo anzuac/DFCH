@@ -78,7 +78,7 @@ test('All published entrypoints refresh caches for the language scripts',()=>{
  const files=['heroes.html','Bond30/index.html','team/index.html','index.html','scripts/build-heroes-pages.cjs'];
  for(const file of files){
   const source=read(file);
-  if(file==='team/index.html')assert.match(source,/\.\/js\/i18n\.js\?v=1\.15\.7/);
+  if(file==='team/index.html')assert.match(source,/\.\/js\/i18n\.js\?v=1\.15\.8/);
   if(file!=='index.html')assert.match(source,/display-settings\.js\?v=2\.1\.1/);
   if(file!=='team/index.html')assert.match(source,/public-tool-i18n\.js\?v=1\.0\.1/);
  }
@@ -106,4 +106,29 @@ test('Team titles use official localizations and missing UI strings use explicit
  }
  const translate=factory(sources,{getItem:()=> 'en'});
  assert.equal(translate('第 2 格・英靈設定'),'Slot 2 · Hero settings');
+});
+
+test('Team help modal shows only the approved full two-section guide across all four languages',()=>{
+ const html=read('team/index.html');
+ const start=html.indexOf('<div class="overlay help-overlay hidden"');
+ const end=html.indexOf('<div class="toast"',start);
+ assert.ok(start>=0&&end>start);
+ const modal=html.slice(start,end);
+ const headings=[...modal.matchAll(/<h3>(.*?)<\/h3>/g)].map(match=>match[1]);
+ assert.deepEqual(headings,['使用方式','注意事項']);
+ assert.match(modal,/<h2 id="helpTitle">使用方式與注意事項<\/h2>/);
+ assert.equal((modal.match(/<li>/g)||[]).length,8);
+ for(const phrase of ['弗雷雅（黑色女神）','芙麗嘉（白色女神）','儲存與圖片','角色與能力圖片使用 DFCH 官方資料']){
+  assert.ok(!modal.includes(phrase),'Removed help text still present: '+phrase);
+ }
+ const src=team.slice(team.indexOf('const entries='),team.indexOf('const langs='));
+ const entries=new Function(src+'return entries;')();
+ const phrases=["使用方式與注意事項","使用方式","點選任一格卡片，可選擇英靈、查看固定技能，並設定可突破的技能。","調整神器、活動、距離與其他條件後，畫面中的機率與寶箱加成會自動重新計算。","設定完成後，點擊「儲存」即可返回 12 格總覽，並保留目前設定。","如需修改，重新點選該卡片即可再次編輯。","注意事項","本工具為非官方整理與試算頁面，結果僅供參考，實際內容仍以遊戲內表現為準。","不同英靈、技能、神器、活動與距離設定，皆可能影響顯示的機率與加成結果。","編隊與相關設定會儲存在目前瀏覽器的本機空間；若清除瀏覽器資料或更換裝置，設定可能消失。","圖片與資料會依目前版本整理，後續若遊戲更新，部分內容可能再調整。"];
+ for(const phrase of phrases){
+  assert.ok(modal.includes(phrase)||phrase==='使用方式與注意事項','Help text missing: '+phrase);
+  assert.ok(entries[phrase],'Missing language key: '+phrase);
+  for(const languageIndex of [1,2,3]){
+   assert.ok(entries[phrase][languageIndex]&&entries[phrase][languageIndex]!==phrase,'Missing help translation: '+phrase+' / '+languageIndex);
+  }
+ }
 });
