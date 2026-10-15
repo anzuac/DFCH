@@ -301,3 +301,14 @@ html[data-guide-theme="light"] .hero-party-public{--party-danger:#972b43}
 html[data-guide-theme="blue"] .hero-party-public{--party-danger:#ffc4cd}
 html[data-guide-theme="green"] .hero-party-public{--party-danger:#ffc7cd}
 .hero-party-public .danger{color:var(--party-danger)}
+
+/* v1.15.3: extra-chest conversion explanation, accessible on small screens. */
+.hero-party-public .greed-rule{margin:10px 0 5px;line-height:1.6;font-size:calc(11px * var(--guide-font-multiplier,1));color:var(--party-secondary)}
+.hero-party-public .greed-more{width:100%;text-align:left;margin-top:6px;border-top:1px solid var(--line);font-size:calc(11px * var(--guide-font-multiplier,1))}
+.hero-party-public .greed-more summary{cursor:pointer;padding:9px 6px;color:var(--party-accent);font-weight:750;text-align:center;list-style-position:inside}
+.hero-party-public .greed-more summary:focus-visible{outline:2px solid var(--party-accent);outline-offset:2px}
+.hero-party-public .greed-more-body{padding:8px 12px 12px;line-height:1.65;color:var(--party-foreground);background:var(--guide-accent-bg);border:1px solid var(--line);border-radius:9px}
+.hero-party-public .greed-more-body p{margin:5px 0}
+.hero-party-public .greed-more-body ul{margin:5px 0;padding-left:21px}
+.hero-party-public .greed-more-body li{margin:5px 0}
+.hero-party-public .greed-more-body .greed-rule-note{color:var(--party-secondary);font-size:calc(10px * var(--guide-font-multiplier,1));border-top:1px solid var(--line);padding-top:8px;margin-top:10px}

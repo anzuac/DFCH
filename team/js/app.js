@@ -221,6 +221,7 @@ function initArtifactSettings(){
  }
 }
 function renderStats(){
+ const moreWasOpen=!!$('#officialStats .greed-more')?.open;
  const d=buildCalcData();
  $('#officialStats').innerHTML=`
  <h3>編隊能力</h3>
@@ -239,7 +240,11 @@ function renderStats(){
   <div class="greed-result">
    <div class="greed-breakdown"><span class="greed-skill">英靈 +${pct(d.greedSum)}</span><span class="greed-artifact">神器 +${pct(d.greedArtifactTotal)}</span></div>
    <span class="greed-total-label">搭配加成合計</span><strong id="greedTotal">+${pct(d.greedCombined)}</strong>
-   <span class="greed-disclaimer">不同種類的額外寶箱效果合計僅供搭配比較，不代表單次掉落機率。</span>
+   <p class="greed-rule">換算示意：每滿 100% 多 1 個寶箱，餘下百分比為再多 1 個的機率。</p>
+   <details class="greed-more"><summary>詳細說明</summary><div class="greed-more-body">
+     <p>以合計百分比換算：</p><ul><li>80%：80% 機率額外 1 個</li><li>100%：必定額外 1 個</li><li>150%：必定額外 1 個，再有 50% 機率多 1 個</li><li>200%：必定額外 2 個</li><li>250%：必定額外 2 個，再有 50% 機率多 1 個</li></ul>
+     <p class="greed-rule-note">此處為合計數值的換算示意。貪欲與各寶箱神器的效果類型不完全相同；目前尚未驗證遊戲是否把它們合成同一次掉落判定，請勿視為官方掉落保證。</p>
+   </div></details>
   </div>
  </section>
  <section class="statpanel"><h4>技能加成明細</h4>
@@ -247,6 +252,7 @@ function renderStats(){
   <div class="subheading">貪欲</div><div class="skill-summary">${showSkillRows(d.greed)}</div>
   <div class="subheading">寶箱相關神器</div><div class="skill-summary">${showArtifactRows()}</div>
  </section>`;
+ if(moreWasOpen)$('#officialStats .greed-more').open=true;
  $('#baseInput').onchange=e=>{
   const value=Number(e.target.value);
   if(e.target.value.trim()===''||!Number.isFinite(value)||value<0||value>100){announce('基礎機率請輸入 0 至 100');e.target.value=calcSettings.base;return;}
