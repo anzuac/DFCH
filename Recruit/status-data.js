@@ -1,4 +1,4 @@
-/* DFCH Recruit V2.2.0 — 11 initial ability levels from APK 3.16.1.
+/* DFCH Recruit V2.3.0 — 11 initial ability levels from APK 3.16.1.
  * 64 unique hero-specific 11-element arrays; fixed 6-star templates.
  * HumanType: weighted 3/4-star Normal/Rare/OldSoldier/Genius; 5/6-star official templates.
  * Ability 731 and secondary OldSoldier status vector remain out of scope.
@@ -26,12 +26,16 @@
     const u2=clamp(Number(rng()),0,1-Number.EPSILON);
     return Math.sqrt(-2*Math.log(1-u1))*Math.cos(2*Math.PI*u2);
   }
-  function selectHumanType(id,star,rng) {
+  function selectHumanType(id,star,rng,ability731=0) {
     if(star===6 && fixedSix.has(id))return rareFixedSix.has(id)?1:0;
     if(star===5)return 0;
-    // GetHumanTypeWeights, B731=0: Normal 69%, Rare 20%, OldSoldier 10%, Genius 1%.
-    // Artifact/ability 731 remains out of scope for this release.
-    const w=[.69,.20,.10,.01].map(f);
+    // GetHumanTypeWeights VA0x02D55978: genius=(100+B731)*0.01/100,
+    // then Normal=max(0,1-(Rare+OldSoldier+Genius)).
+    const b=Number.isFinite(Number(ability731))?Math.max(0,Number(ability731)):0;
+    const rare=f(.20),old=f(.10);
+    const genius=f(f(f(100+b)*f(.01))/f(100));
+    const ordinary=f(Math.max(0,f(f(1)-f(f(rare+old)+genius))));
+    const w=[ordinary,rare,old,genius];
     const total=w.reduce((a,b)=>a+b,0);
     let roll=Math.max(0,Math.min(1-Number.EPSILON,Number(rng())))*total;
     for(let i=0;i<w.length;i++){roll-=w[i];if(roll<0)return i;}
@@ -87,11 +91,12 @@
     if(index===10)return 'EXP +'+formatReadable(value)+'%';
     return formatReadable(value);
   }
-  function generate(id,star,rng=Math.random){
+  function generate(id,star,rng=Math.random,options={}){
     const i=Number(id);
     if(!Number.isInteger(i)||i<0||i>=64)return null;
     const fixed=Number(star)===6 && fixedSix.has(i);
-    const humanType=selectHumanType(i,Number(star),rng);
+    const ability731=Number(options?.ability731)||0;
+    const humanType=selectHumanType(i,Number(star),rng,ability731);
     const typeBonus=typeBonuses[humanType];
     const stats=levels[i].map((base,index)=>{
       const ignored=(index===4&&ignoreArea.has(i))||(index===6&&ignoreKnockBack.has(i));
@@ -102,7 +107,7 @@
       return {index,key:keys[index],name:names[index],ignored:false,level,value,text:format(index,value),grade:ranks[rank],rank,percent:Math.round(level*1000)/1000};
     });
     const speed=stats[2];
-    return {stats,fixed,humanType,humanTypeName:typeNames[humanType],
+    return {stats,fixed,humanType,humanTypeName:typeNames[humanType],ability731,
       humanTypeMode:Number(star)>=5?'模板指定':'按基礎權重抽選',
       // OldSoldier also writes +3 to a secondary status-level vector.
       // The later consumer of that second vector is not yet verified:
@@ -111,7 +116,7 @@
       speed:{level:speed.level,speed:speed.value,display:speed.text,gradeIndex:speed.rank,grade:speed.grade,fixed,mode:fixed?'六星固定初始值':typeNames[humanType]+'初始值'}
     };
   }
-  window.DFCHRecruitStatus=Object.freeze({version:'2.2.0',generate,valueFromLevel,formatReadable,
+  window.DFCHRecruitStatus=Object.freeze({version:'2.3.0',generate,valueFromLevel,formatReadable,
     names:Object.freeze(names),typeNames:Object.freeze(typeNames),
     fixedSixIds:Object.freeze([...fixedSix]),rareFixedSixIds:Object.freeze([...rareFixedSix])});
 })();
