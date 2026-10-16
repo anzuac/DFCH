@@ -213,13 +213,13 @@
     const p=B.poolArtifact(state.pool);
     $('poolBonusGroup').hidden=!p;
     if(p){
-      $('poolBonusName').textContent=p.name+' · 五、六星權重 +'+p.amount+'%';
+      $('poolBonusName').textContent=p.name+' · 五、六星機率加成 +'+p.amount+'%';
       $('poolBonusOwned').checked=!!state.poolBonusOwned[state.pool];
     }
     const total=B.geniusBonus(state.maneLevel,state.emmaLevel);
-    $('bonusGeniusSummary').textContent='天才基礎權重 '+(1+total/100).toFixed(2)+'%'+
-      (total?'（能力731合計 +'+total+'%）':'（未套用神器加成）')+
-      '；僅影響未被模板固定類型的英靈';
+    $('bonusGeniusSummary').textContent=total?
+      '天才類型加成 +'+total+'% · 適用於隨機決定類型的英靈':
+      '尚未啟用天才類型加成';
   }
   function setRecruitBonus(key,value){
     if(key==='bonusValkyrja')state.bonusValkyrja=!!value;
@@ -267,7 +267,7 @@
           const status=!ownsArtifact(info.condValue)?'未持有'+name:excluded?'已設定排除':'神器條件符合';
           badges.append(el('span',(!ownsArtifact(info.condValue)||excluded)?'ability-blocked':'ability-eligible',status));
         }
-        content.append(badges);row.append(content,el('b','ability-weight','權重 '+r.weight));
+        content.append(badges);row.append(content);
         list.append(row);
       }
       section.append(list);target.append(section);
@@ -383,7 +383,7 @@
       if(!doc)$('detail').append(el('p','desc','技能資料載入中…'));
       else {
         const later=doc.skills.filter(x=>Number(x.unlockAt)>0);
-        if(later.length)$('detail').append(el('p','bond-note','羈絆後續解鎖（不算抽卡固定十格）：'+later.map(x=>x.name+'（羈絆 '+x.unlockAt+'）').join('、')));
+        if(later.length)$('detail').append(el('p','bond-note','羈絆額外解鎖：'+later.map(x=>x.name+'（羈絆 '+x.unlockAt+'）').join('、')));
       }
     }
   }
