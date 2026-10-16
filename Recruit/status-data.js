@@ -1,4 +1,4 @@
-/* DFCH Recruit V2.4.0 — 11 initial ability levels from APK 3.16.1.
+/* DFCH Recruit V2.5.0 — 11 initial ability levels from APK 3.16.1.
  * 64 unique hero-specific 11-element arrays; fixed 6-star templates.
  * HumanType: weighted 3/4-star Normal/Rare/OldSoldier/Genius; 5/6-star official templates.
  * Ability 731 and secondary OldSoldier status vector remain out of scope.
@@ -129,7 +129,47 @@
         mode:fixed?'六星固定初始值':typeNames[humanType]+'初始值'}
     };
   }
-  window.DFCHRecruitStatus=Object.freeze({version:'2.4.0',generate,valueFromLevel,formatReadable,
+  // Normal CDF approximation for aggregate theory only (not for RNG draws).
+  // Accuracy is sufficient for display; Android float32/rounding ties may differ.
+  function normalCdf(z){
+    if(z<=-9)return 0;
+    if(z>=9)return 1;
+    const x=Math.abs(z),t=1/(1+0.2316419*x);
+    const density=0.3989422804014327*Math.exp(-.5*x*x);
+    const tail=density*t*(0.319381530+t*(-0.356563782+t*(1.781477937+t*(-1.821255978+t*1.330274429))));
+    return clamp(z>=0?1-tail:tail,0,1);
+  }
+  function speedProbabilities(id,star,ability731=0){
+    const i=Number(id),s=Number(star);
+    if(!Number.isInteger(i)||i<0||i>=64||![3,4,5,6].includes(s))return null;
+    const fixed=s===6&&fixedSix.has(i);
+    const b=Number.isFinite(Number(ability731))?Math.max(0,Number(ability731)):0;
+    const genius=f(f(f(100+b)*f(.01))/f(100));
+    const regular=f(Math.max(0,f(1-f(f(.2)+f(.1)+genius))));
+    let shares=[regular,f(.20),f(.10),genius];
+    if(s===5)shares=[1,0,0,0];
+    if(fixed)shares=rareFixedSix.has(i)?[0,1,0,0]:[1,0,0,0];
+    const total=shares.reduce((x,y)=>x+y,0);
+    shares=shares.map(v=>v/total);
+    const rows=typeNames.map((name,type)=>{
+      const chance=shares[type];
+      if(fixed){
+        const L=levels[i][2],speed=format(2,valueFromLevel(2,L));
+        return {name,type,chance,g:L<10?1:0,zero:speed==='0.050 km/s'?1:0};
+      }
+      const mu=f(f(levels[i][2])+f(typeBonuses[type]));
+      const width=f(clamp(f(8-f(f(mu*4)/70)),1,8));
+      const extra=type===2?3:0;
+      const g=normalCdf((10-extra-mu)/width);
+      // With the official F3 panel display, 0.050 spans L in [0, 0.5/8.75].
+      // OldSoldier starts at total L>=3, so this event is impossible for it.
+      const zero=extra?0:normalCdf((0.0005/0.00875-mu)/width);
+      return {name,type,chance,g,zero};
+    });
+    return {id:i,star:s,fixed,rows,g:rows.reduce((n,r)=>n+r.chance*r.g,0),
+      zero:rows.reduce((n,r)=>n+r.chance*r.zero,0)};
+  }
+  window.DFCHRecruitStatus=Object.freeze({version:'2.5.0',generate,valueFromLevel,formatReadable,speedProbabilities,
     names:Object.freeze(names),typeNames:Object.freeze(typeNames),
     fixedSixIds:Object.freeze([...fixedSix]),rareFixedSixIds:Object.freeze([...rareFixedSix])});
 })();
