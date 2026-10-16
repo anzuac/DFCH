@@ -1,6 +1,6 @@
 (() => {
   'use strict';
-  const D=window.DFCH_DATA, C=window.DFCHRecruitConfig, ST=window.DFCHRecruitStatus;
+  const D=window.DFCH_DATA, C=window.DFCHRecruitConfig, ST=window.DFCHRecruitStatus, B=window.DFCHRecruitBonus;
   const $=id=>document.getElementById(id);
   const storeKey='dfch-recruit-v1-independent';
   const heroGuides=window.DFCHHeroPreferences?.heroes||[];
@@ -17,9 +17,9 @@
       .catch(err=>{iconCache.delete(src);throw err;}));
     return iconCache.get(src);
   }
-  if(!D||!C||!ST){$('notice').textContent='資料載入失敗，請重新整理頁面。';return;}
+  if(!D||!C||!ST||!B){$('notice').textContent='資料載入失敗，請重新整理頁面。';return;}
   const name6={13:'伊茲',19:'蘭德格里茲',22:'伊茲（海裝）',23:'齊格菲（海裝）',27:'弗拉斯萬',34:'阿卡夏',43:'蘭德格里茲（異鄉）',44:'露娜',47:'伊茲（聖夜）',53:'戀心公主（海裝）',54:'阿卡夏（海裝）',59:'弗雷雅',60:'芙麗嘉'};
-  const state={pool:0,hiddenEye:false,hiddenSword:false,ownedEye:false,ownedSword:false,seen:[],progress:{},results:[],selected:0,confirmed:0,history:[]};
+  const state={pool:0,hiddenEye:false,hiddenSword:false,ownedEye:false,ownedSword:false,bonusValkyrja:false,poolBonusOwned:{},maneLevel:0,emmaLevel:0,seen:[],progress:{},results:[],selected:0,confirmed:0,history:[]};
   function restore(){
     try{
       const saved=JSON.parse(localStorage.getItem(storeKey)||'null');
@@ -27,6 +27,12 @@
       if(Number.isInteger(saved.pool)&&saved.pool>=0&&saved.pool<9)state.pool=saved.pool;
       state.hiddenEye=!!saved.hiddenEye;state.hiddenSword=!!saved.hiddenSword;
       state.ownedEye=!!saved.ownedEye;state.ownedSword=!!saved.ownedSword;
+      state.bonusValkyrja=!!saved.bonusValkyrja;
+      if(saved.poolBonusOwned&&typeof saved.poolBonusOwned==='object'){
+        for(const idx of [1,3,4])state.poolBonusOwned[idx]=!!saved.poolBonusOwned[idx];
+      }
+      state.maneLevel=B.validLevel(saved.maneLevel,4);
+      state.emmaLevel=B.validLevel(saved.emmaLevel,2);
       state.seen=Array.isArray(saved.seen)?saved.seen.filter(x=>C.six.some(a=>a.includes(x))):[];
       if(saved.progress&&typeof saved.progress==='object')
         for(const [k,v] of Object.entries(saved.progress))
@@ -40,6 +46,8 @@
     try{localStorage.setItem(storeKey,JSON.stringify({
       pool:state.pool,hiddenEye:state.hiddenEye,hiddenSword:state.hiddenSword,
       ownedEye:state.ownedEye,ownedSword:state.ownedSword,
+      bonusValkyrja:state.bonusValkyrja,poolBonusOwned:state.poolBonusOwned,
+      maneLevel:state.maneLevel,emmaLevel:state.emmaLevel,
       seen:state.seen,progress:state.progress,confirmed:state.confirmed,history:state.history
     }));}catch(_){}
   }
@@ -79,9 +87,8 @@
   }
   const f32=Math.fround;
   function weights(){
-    const arr=C.weights[state.pool].map(f32);
-    if(!rarityList(6).length)arr[3]=0;
-    return arr;
+    return B.getModifiedWeights(C.weights[state.pool],state.pool,rarityList(6).length>0,
+      state.bonusValkyrja,state.poolBonusOwned);
   }
   function probability(){
     const arr=weights(),total=arr.reduce((a,b)=>a+b,0);
@@ -184,13 +191,37 @@
   function createCandidate(position,alreadyHasSix){
     const star=rollRarity(position,alreadyHasSix),id=pickHero(star);
     if(id===null)return null;
-    const status=ST.generate(id,star);
+    const status=ST.generate(id,star,Math.random,{
+      ability731:B.geniusBonus(state.maneLevel,state.emmaLevel)
+    });
     return {star,id,skills:buildSkills(star,id),status,speed:status.speed};
   }
 
   const groupLabels=['確定能力','自由能力','攻擊增益','HP 增益'];
   const jobName=mask=>({0:'不限職業',1:'劍士',2:'弓箭手',4:'法師',7:'全部職業'})[mask]||'限定職業';
   const starName=id=>C.lowOnly.includes(id)?'3～4 星':C.highOnly.includes(id)?'5～6 星':null;
+  function syncRecruitBonuses(){
+    $('bonusValkyrja').checked=state.bonusValkyrja;
+    $('bonusMane').value=String(state.maneLevel);
+    $('bonusEmma').value=String(state.emmaLevel);
+    const p=B.poolArtifact(state.pool);
+    $('poolBonusGroup').hidden=!p;
+    if(p){
+      $('poolBonusName').textContent=p.name+' · 五、六星權重 +'+p.amount+'%';
+      $('poolBonusOwned').checked=!!state.poolBonusOwned[state.pool];
+    }
+    const total=B.geniusBonus(state.maneLevel,state.emmaLevel);
+    $('bonusGeniusSummary').textContent='天才基礎權重 '+(1+total/100).toFixed(2)+'%'+
+      (total?'（能力731合計 +'+total+'%）':'（未套用神器加成）')+
+      '；僅影響未被模板固定類型的英靈';
+  }
+  function setRecruitBonus(key,value){
+    if(key==='bonusValkyrja')state.bonusValkyrja=!!value;
+    if(key==='poolBonusOwned'&&B.poolArtifact(state.pool))state.poolBonusOwned[state.pool]=!!value;
+    if(key==='maneLevel')state.maneLevel=B.validLevel(value,4);
+    if(key==='emmaLevel')state.emmaLevel=B.validLevel(value,2);
+    syncRecruitBonuses();rates();save();
+  }
   function syncArtifacts(){
     for(const [id,key] of [['eye','hiddenEye'],['modalEye','hiddenEye'],['sword','hiddenSword'],
       ['modalSword','hiddenSword'],['ownedEye','ownedEye'],['ownedSword','ownedSword']])
@@ -493,13 +524,17 @@
     if(!discardPending()){$('pool').value=String(state.pool);return;}
     state.pool=idx;clearPending();
     $('notice').textContent='已切換「'+D.poolNames[poolKey()]+'」';
-    rates();updateSummary();save();
+    syncRecruitBonuses();rates();updateSummary();save();
     if($('poolAbilitiesDialog').open)renderPoolAbilities();
   }
   function bind(){
     C.keys.forEach((k,i)=>{const option=el('option','',D.poolNames[k]||k);option.value=String(i);$('pool').append(option);});
     $('pool').value=String(state.pool);
-    syncArtifacts();
+    syncArtifacts();syncRecruitBonuses();
+    $('bonusValkyrja').addEventListener('change',()=>setRecruitBonus('bonusValkyrja',$('bonusValkyrja').checked));
+    $('poolBonusOwned').addEventListener('change',()=>setRecruitBonus('poolBonusOwned',$('poolBonusOwned').checked));
+    $('bonusMane').addEventListener('change',()=>setRecruitBonus('maneLevel',$('bonusMane').value));
+    $('bonusEmma').addEventListener('change',()=>setRecruitBonus('emmaLevel',$('bonusEmma').value));
     $('pool').addEventListener('change',()=>setPool(Number($('pool').value)));
     for(const [id,key] of [['eye','hiddenEye'],['sword','hiddenSword'],
       ['modalEye','hiddenEye'],['modalSword','hiddenSword'],['ownedEye','ownedEye'],['ownedSword','ownedSword']]){
