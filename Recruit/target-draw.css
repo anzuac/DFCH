@@ -134,3 +134,106 @@
 @media(prefers-reduced-motion:reduce){
   #targetTabPanel .target-cost-tier-6{animation:none;background-position:center}
 }
+
+/* Fourth page: official-image skill picker, preset shortcuts, and selected-skill cards. */
+#targetTabPanel .target-preset-sections{display:grid;gap:13px;margin:14px 0 17px}
+#targetTabPanel .target-preset-section[hidden]{display:none!important}
+#targetTabPanel .target-preset-section{
+  border:1px solid #46685f;background:#173138;border-radius:11px;padding:11px 12px
+}
+#targetTabPanel .target-preset-section h4{color:#f2dfaf;font-size:13px;font-weight:800;margin:0 0 10px}
+#targetTabPanel .target-preset-buttons{display:flex;gap:7px;flex-wrap:wrap}
+#targetTabPanel .target-preset-button{
+  background:#25463f;color:#e9f1dc;border:1px solid #668578;border-radius:9px;
+  padding:9px 11px;font:inherit;font-size:12px;font-weight:700;line-height:1.5;
+  max-width:100%;white-space:normal;text-align:left;cursor:pointer
+}
+#targetTabPanel .target-preset-button:hover:not(:disabled),
+#targetTabPanel .target-preset-button:focus-visible{background:#35594c;border-color:#d8c190}
+#targetTabPanel .target-preset-button.is-selected{
+  background:#53513b;color:#ffe9ac;border-color:#f1d591;
+  box-shadow:inset 0 0 0 1px #d7bf8460
+}
+#targetTabPanel .target-preset-button:disabled{opacity:.55;cursor:not-allowed}
+#targetTabPanel .target-slot-heading{
+  display:flex;align-items:center;justify-content:space-between;gap:10px
+}
+#targetTabPanel .target-slot-heading h3{margin:10px 0 4px}
+#targetTabPanel .target-clear-slots{
+  flex-shrink:0;border:1px solid #6d8a7b;background:#23443d;color:#e9ead7;
+  border-radius:9px;font:inherit;font-size:12px;font-weight:700;padding:8px 12px;cursor:pointer
+}
+#targetTabPanel .target-clear-slots:disabled{opacity:.45;cursor:not-allowed}
+#targetTabPanel .target-slot{display:grid;gap:6px;min-width:0}
+#targetTabPanel .target-slot-label{color:#c2ddd0;font-size:13px;font-weight:800}
+#targetTabPanel .target-slot-button{
+  display:flex;align-items:center;gap:12px;min-height:79px;width:100%;padding:10px 13px;
+  background:#142d31;border:1px solid #668980;border-radius:11px;
+  color:#f0f0e8;text-align:left;cursor:pointer;font:inherit
+}
+#targetTabPanel .target-slot-button:hover:not(:disabled),
+#targetTabPanel .target-slot-button:focus-visible{border-color:#f0d18a;background:#1c3b3d;outline:2px solid #ecd28a66;outline-offset:1px}
+#targetTabPanel .target-slot-button.is-picked{border-color:#83a98f}
+#targetTabPanel .target-slot-button.target-slot-unavailable{border-color:#bc8580}
+#targetTabPanel .target-slot-button:disabled{opacity:.65;cursor:default}
+#targetTabPanel .target-slot-icon{
+  flex:0 0 48px;width:48px;height:48px;object-fit:contain;
+  background:#0e242a;border-radius:8px;padding:3px
+}
+#targetTabPanel .target-slot-name{flex:1;min-width:0;color:#f3e9c8;font-weight:750;font-size:14px;line-height:1.4;overflow-wrap:anywhere}
+#targetTabPanel .target-slot-button:not(.is-picked) .target-slot-name{color:#bcd2c9}
+#targetTabPanel .target-slot-chevron{font-size:25px;color:#a5bbb5}
+#targetTabPanel .target-skill-placeholder{
+  display:inline-flex;align-items:center;justify-content:center;color:#a2c2b9;font-size:25px
+}
+.target-skill-dialog{
+  width:min(94vw,840px);max-height:min(91dvh,950px);padding:0;
+  border:1px solid #6c9587;border-radius:16px;
+  background:#152e32;color:#e9f2e9;box-shadow:0 25px 70px #000b
+}
+.target-skill-dialog::backdrop{background:rgba(0,0,0,.76)}
+.target-skill-dialog-head{
+  display:flex;align-items:flex-start;justify-content:space-between;gap:12px;
+  padding:15px 17px;background:#24413e;border-bottom:1px solid #46685f
+}
+.target-skill-dialog-head h2{font-size:18px;margin:0 0 4px;color:#f8dda2}
+.target-skill-dialog-head p{font-size:12px;color:#c2d7cb;margin:0}
+.target-skill-close{
+  border:1px solid #688f84;border-radius:8px;padding:8px 10px;
+  background:#193239;color:#ecf0e3;cursor:pointer;font:inherit;font-size:12px
+}
+.target-skill-dialog-body{padding:14px 17px 20px;overflow-y:auto;max-height:calc(91dvh - 79px);overscroll-behavior:contain}
+.target-skill-search-label{display:grid;gap:7px;font-size:13px;font-weight:700;color:#c9dcd3}
+.target-skill-search-label input{
+  width:100%;font:inherit;font-size:14px;padding:11px;
+  border:1px solid #769b8c;border-radius:9px;background:#10292c;color:#f6f3e8
+}
+.target-skill-options{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;margin-top:13px}
+.target-skill-option{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;
+  width:100%;min-width:0;min-height:113px;padding:11px 7px;
+  border:1px solid #51786d;border-radius:11px;background:#1e3c3e;
+  color:#eef3e6;cursor:pointer;font:inherit;white-space:normal
+}
+.target-skill-option:hover,.target-skill-option:focus-visible{
+  background:#2c5250;border-color:#e7cb91;outline:2px solid #e4c98550;outline-offset:1px
+}
+.target-skill-option.is-selected{background:#48503b;border-color:#f0d28a}
+.target-skill-option-icon{width:49px;height:49px;object-fit:contain}
+.target-skill-option-name{font-size:12px;font-weight:700;text-align:center;line-height:1.45;overflow-wrap:anywhere}
+.target-skill-empty{grid-column:1/-1;color:#b7cbc1;font-size:13px;text-align:center;padding:15px}
+@media(max-width:720px){
+  .target-skill-options{grid-template-columns:repeat(3,minmax(0,1fr))}
+  #targetTabPanel .target-slot-button{padding:9px;gap:8px}
+  #targetTabPanel .target-slot-icon{flex-basis:42px;width:42px;height:42px}
+}
+@media(max-width:440px){
+  .target-skill-options{grid-template-columns:repeat(2,minmax(0,1fr))}
+  #targetTabPanel .target-slot-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  #targetTabPanel .target-slot-button{flex-wrap:wrap;min-height:88px}
+  #targetTabPanel .target-slot-icon{flex-basis:38px;width:38px;height:38px}
+  #targetTabPanel .target-slot-name{font-size:12px}
+  #targetTabPanel .target-slot-chevron{font-size:17px}
+  #targetTabPanel .target-preset-button{font-size:11px}
+}
+@media(max-width:330px){#targetTabPanel .target-slot-grid{grid-template-columns:1fr}}
