@@ -43,7 +43,7 @@
   function poolKey(){return C.keys[pool()];}
   function roster(star){
     const ids=star===6?C.six[pool()]:(D.poolRarityRoster[poolKey()]?.[String(star)]||[]);
-    return star===6?ids.filter(id=>config().sixMode==='keep'&&!state.run?.seen?.includes(id)):ids;
+    return star===6?ids.filter(id=>config().sixMode==='keep'&&!(activeRun()&&state.run.seen.includes(id))):ids;
   }
   function ownsArtifact(id,options){
     return id===301008017?options.ownedEye:id===301008020?options.ownedSword:false;
@@ -69,8 +69,6 @@
     for(const [id,group,weight] of rows)if(group===1&&weight>0)ids.add(id);
     for(const id of D.poolRarityRoster[key]?.['5']||[])
       for(const skill of D.heroes[String(id)]?.fixed||[])ids.add(skill);
-    // Include fixed five-star abilities but hide irrelevant baseline HP/attack template skills.
-    [303000000,303000119,303000123,303000127,303000131].forEach(id=>ids.delete(id));
     return [...ids].sort((a,b)=>skillName(a).localeCompare(skillName(b),'zh-Hant'));
   }
   function feasible(ids,options=state.settings,poolIndex=state.settings.pool){
@@ -327,6 +325,8 @@
       skillArea.append(skill);
     }
     detail.append(skillArea);
+    const speed=c.status?.speed?.display;
+    if(speed)detail.append(el('p','target-hero-speed','移動速度 '+speed));
     area.append(detail);
   }
   function renderStatistics(){
