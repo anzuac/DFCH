@@ -1,4 +1,4 @@
-/* DFCH Recruit V2.5.0 — 11 initial ability levels from APK 3.16.1.
+/* DFCH Recruit V2.5.1 — 11 initial ability levels from APK 3.16.1.
  * 64 unique hero-specific 11-element arrays; fixed 6-star templates.
  * HumanType: weighted 3/4-star Normal/Rare/OldSoldier/Genius; 5/6-star official templates.
  * Ability 731 and secondary OldSoldier status vector remain out of scope.
@@ -169,7 +169,7 @@
     return {id:i,star:s,fixed,rows,g:rows.reduce((n,r)=>n+r.chance*r.g,0),
       zero:rows.reduce((n,r)=>n+r.chance*r.zero,0)};
   }
-  window.DFCHRecruitStatus=Object.freeze({version:'2.5.0',generate,valueFromLevel,formatReadable,speedProbabilities,
+  window.DFCHRecruitStatus=Object.freeze({version:'2.5.1',generate,valueFromLevel,formatReadable,speedProbabilities,
     names:Object.freeze(names),typeNames:Object.freeze(typeNames),
     fixedSixIds:Object.freeze([...fixedSix]),rareFixedSixIds:Object.freeze([...rareFixedSix])});
 })();
