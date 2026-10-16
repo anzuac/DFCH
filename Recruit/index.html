@@ -7,7 +7,7 @@
 <title>英靈抽取模擬器 V2.6.0｜DFCH</title>
 <link rel="stylesheet" href="./style.css?v=2.6.0">
 <link rel="stylesheet" href="./recruit-ui-fix.css?v=2.6.0">
-<link rel="stylesheet" href="./tabs.css?v=2.6.0">
+<link rel="stylesheet" href="./tabs.css?v=2.6.0-ability1">
 <link rel="stylesheet" href="./bond.css?v=2.6.0">
 </head>
 <body>
@@ -102,6 +102,32 @@
   <div class="table-scroll"><table><thead><tr><th>特殊類型</th><th>類型占比</th><th>G 級</th><th>0.050</th></tr></thead><tbody id="speedTypes"></tbody></table></div>
   
 </section>
+<section class="stats-panel ability-panel" aria-labelledby="abilityStatsHeading">
+  <h2 id="abilityStatsHeading">能力組合統計</h2>
+  <p class="stats-hint">依上方選擇的招募池，計算單一非六星候選英靈的加權命中機率；不含保底。只顯示本池可成立的組合，五星固定能力一併納入。</p>
+  <div class="filters">
+    <label class="form-field">紀錄對象<select id="abilityCountMode"><option value="candidates">全部候選英靈</option><option value="obtained">正式取得英靈</option></select></label>
+  </div>
+  <p id="abilityProgress" class="muted">能力紀錄由此版本起累積，舊版缺少的能力明細不會回填。</p>
+  <h3 id="abilityBaseHeading">禁斷／貪欲組合</h3>
+  <div class="table-scroll" id="abilityBaseWrap"><table><thead><tr><th>能力組合</th><th>命中次數</th><th>單一候選機率</th></tr></thead><tbody id="abilityBaseRows"></tbody></table></div>
+  <h3 id="abilityGoldHeading">三金組合</h3>
+  <div class="table-scroll" id="abilityGoldWrap"><table><thead><tr><th>能力組合</th><th>命中次數</th><th>單一候選機率</th></tr></thead><tbody id="abilityGoldRows"></tbody></table></div>
+  <details id="abilityMixed" class="ability-mixed">
+    <summary>
+      <span><strong>特殊混搭組合</strong><small>指定禁斷／貪欲組合＋至少一金</small></span>
+      <span class="ability-mixed-result"><strong id="abilityMixedRate">—</strong><small id="abilityMixedCount">命中 0 次</small></span>
+    </summary>
+    <p class="stats-hint">下列機率以七種目標能力的「恰好組合」分類，不重複計入，因此各列加總等於上方總機率；其他非目標能力不影響分類。</p>
+    <div class="table-scroll ability-mixed-scroll"><table><thead><tr><th>詳細組合</th><th>次數</th><th>單一候選機率</th></tr></thead><tbody id="abilityMixedRows"></tbody></table></div>
+  </details>
+  <h3>羈絆進化命中紀錄</h3>
+  <div class="stat-grid two">
+    <div class="stat-card"><small>恰好命中 2 種目標能力</small><strong id="abilityBondTwo">0 次</strong></div>
+    <div class="stat-card"><small>恰好命中 3 種目標能力</small><strong id="abilityBondThree">0 次</strong></div>
+  </div>
+  <p class="stats-hint">僅計算羈絆 Lv.6／13／23 進化命中七種指定能力的數量；2 種、3 種分開計次，不顯示機率。六星不納入。</p>
+</section>
 <section class="stats-panel">
   <div class="panel-header"><h2>累積抽卡統計</h2></div>
   <div class="filters">
@@ -168,8 +194,9 @@
 <script src="./status-data.js?v=2.6.0"></script>
 <script src="./recruit-bonus.js?v=2.6.0"></script>
 <script src="./stats-core.js?v=2.6.0"></script>
+<script src="./ability-stats.js?v=2.6.0-ability1"></script>
 <script src="./bond.js?v=2.6.0"></script>
-<script src="./app.js?v=2.6.0-bond50"></script>
-<script src="./stats.js?v=2.6.0"></script>
+<script src="./app.js?v=2.6.0-ability1"></script>
+<script src="./stats.js?v=2.6.0-ability1"></script>
 <script src="./tabs.js?v=2.6.0"></script>
 </body></html>
