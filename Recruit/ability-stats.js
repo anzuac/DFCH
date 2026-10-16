@@ -157,7 +157,8 @@
   function theory(pool,options={}){
     const key=JSON.stringify([pool,!!options.hiddenEye,!!options.hiddenSword,
       !!options.ownedEye,!!options.ownedSword,!!options.bonusValkyrja,
-      !!options.poolBonusOwned?.[String(pool)],(options.seen||[]).length]);
+      !!options.poolBonusOwned?.[String(pool)],
+      C.six[pool].some(id=>!(options.seen||[]).includes(id))]);
     if(key===theoryCacheKey&&theoryCache)return theoryCache;
     const weights=B.getModifiedWeights(C.weights[pool],pool,
       C.six[pool].some(id=>!(options.seen||[]).includes(id)),
