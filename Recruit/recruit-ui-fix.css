@@ -422,3 +422,94 @@ dialog#statusDialog::backdrop {
 @media(max-width:400px) {
   #candidates .candidate-image-button .human-type-chip{font-size:10px;padding:2px 4px}
 }
+
+/* V2.3.0 — recruit-probability artifact settings. */
+.recruit-bonuses {
+  display:grid;
+  gap:9px;
+  min-width:0;
+  margin:14px 0;
+  padding:12px;
+  border:1px solid #53766d;
+  border-radius:12px;
+  background:#152f32;
+}
+.recruit-bonuses h3 {
+  color:#f4dda2;
+  margin:0 0 2px;
+  font-size:15px;
+  font-weight:800;
+}
+.recruit-bonus-check {
+  display:flex;
+  align-items:center;
+  gap:10px;
+  min-width:0;
+  padding:9px 10px;
+  border:1px solid #41625b;
+  border-radius:9px;
+  background:#1d393a;
+  color:#e9f1e9;
+  cursor:pointer;
+  line-height:1.4;
+  font-size:13px;
+  font-weight:700;
+}
+.recruit-bonus-check[hidden] {display:none!important}
+.recruit-bonus-check input {
+  width:18px;
+  height:18px;
+  flex:0 0 auto;
+  accent-color:#edcf89;
+}
+.recruit-bonus-check span {min-width:0;overflow-wrap:anywhere}
+.recruit-bonus-check small {
+  display:block;
+  color:#b9d0c8;
+  font-size:11px;
+  margin-top:3px;
+  font-weight:500;
+}
+.recruit-bonus-levels {
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(105px,138px);
+  gap:9px 12px;
+  align-items:center;
+  padding:9px 2px 2px;
+  border-top:1px solid #42655c;
+}
+.recruit-bonus-levels label {color:#edf1e9;font-size:13px;font-weight:750;line-height:1.35;min-width:0}
+.recruit-bonus-levels label small {display:block;font-size:11px;color:#b5cbc2;font-weight:500;margin-top:4px}
+.recruit-bonus-levels select {
+  display:block;
+  box-sizing:border-box;
+  width:100%;
+  min-width:0;
+  min-height:36px;
+  margin:0;
+  padding:6px 7px;
+  border:1px solid #718f80;
+  border-radius:7px;
+  font:inherit;
+  font-size:12px;
+  color:#f2f2e8;
+  background:#1b393a;
+}
+.recruit-bonus-summary{
+  margin:3px 0 0;
+  font-size:12px;
+  font-weight:750;
+  color:#dcebbd;
+  line-height:1.55;
+}
+.recruit-bonus-hint{
+  display:block;
+  font-size:11px;
+  line-height:1.55;
+  color:#9fbab0;
+}
+@media(max-width:440px) {
+  .recruit-bonuses{padding:10px}
+  .recruit-bonus-levels{grid-template-columns:minmax(0,1fr) minmax(101px,116px);gap:8px}
+  .recruit-bonus-levels select{font-size:11px}
+}
