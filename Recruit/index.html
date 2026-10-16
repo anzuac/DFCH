@@ -7,7 +7,8 @@
 <title>英靈抽取模擬器 V2.6.0｜DFCH</title>
 <link rel="stylesheet" href="./style.css?v=2.6.0">
 <link rel="stylesheet" href="./recruit-ui-fix.css?v=2.6.0">
-<link rel="stylesheet" href="./tabs.css?v=2.6.0-three-tabs1">
+<link rel="stylesheet" href="./tabs.css?v=2.6.0-target1">
+<link rel="stylesheet" href="./target-draw.css?v=2.6.0-target1">
 <link rel="stylesheet" href="./bond.css?v=2.6.0">
 </head>
 <body>
@@ -21,6 +22,7 @@
     <button id="recruitTabButton" class="recruit-tab is-active" type="button" role="tab" aria-selected="true" aria-controls="recruitTabPanel">① 英靈抽取</button>
     <button id="statsTabButton" class="recruit-tab" type="button" role="tab" aria-selected="false" aria-controls="statsTabPanel" tabindex="-1">② 統計資料</button>
     <button id="abilityTabButton" class="recruit-tab" type="button" role="tab" aria-selected="false" aria-controls="abilityTabPanel" tabindex="-1">③ 能力組合</button>
+    <button id="targetTabButton" class="recruit-tab" type="button" role="tab" aria-selected="false" aria-controls="targetTabPanel" tabindex="-1">④ 指定抽選</button>
   </nav>
   <section id="recruitTabPanel" class="tab-panel" role="tabpanel" aria-labelledby="recruitTabButton">
   <div class="columns">
@@ -159,6 +161,93 @@
   <p id="abilityStatsNotice" class="muted" role="status"></p>
 </section>
   </section>
+
+  <section id="targetTabPanel" class="tab-panel stats-tab-panel" role="tabpanel" aria-labelledby="targetTabButton" hidden>
+    <section class="stats-panel">
+      <h2>指定能力抽選</h2>
+      <p class="stats-hint">每輪產生三位英靈，任意一位非六星候選具有全部指定能力即停止。未指定的能力格不限制；五星固定能力也可命中。</p>
+      <div class="filters">
+        <label class="form-field">招募池<select id="targetPool"></select></label>
+        <label class="form-field">六星抽選
+          <select id="targetSixMode">
+            <option value="exclude">排除六星（轉為五星保底）</option>
+            <option value="keep">保留六星及六星保底</option>
+          </select>
+        </label>
+      </div>
+      <details class="target-artifacts">
+        <summary>神器與能力條件設定</summary>
+        <div class="target-artifact-options">
+          <label><input type="checkbox" id="target_bonusValkyrja"> 女武神的蜜酒（五星／六星權重）</label>
+          <label id="targetPoolBonusWrap"><input type="checkbox" id="targetPoolBonus"> <span id="targetPoolBonusName">本池神器</span></label>
+          <label><input type="checkbox" id="target_ownedEye"> 已持有眼球</label>
+          <label><input type="checkbox" id="target_hiddenEye"> 排除眼球相關能力</label>
+          <label><input type="checkbox" id="target_ownedSword"> 已持有魔劍</label>
+          <label><input type="checkbox" id="target_hiddenSword"> 排除魔劍相關能力</label>
+          <label>瑞光的鬃毛 <select id="target_maneLevel"><option value="0">未持有</option><option value="1">Lv.1</option><option value="2">Lv.2</option><option value="3">Lv.3</option><option value="4">Lv.4</option></select></label>
+          <label>艾瑪的頭環 <select id="target_emmaLevel"><option value="0">未持有</option><option value="1">Lv.1</option><option value="2">Lv.2</option></select></label>
+        </div>
+      </details>
+      <h3>自行指定自由能力</h3>
+      <p class="stats-hint">請選擇 1～6 項指定能力。同一位英靈必須同時擁有全部指定能力；其餘未指定格為「任意能力」，不要求能力順序。</p>
+      <div class="target-slot-grid">
+        <label class="form-field">指定格 1<select id="targetSlot0"></select></label>
+        <label class="form-field">指定格 2<select id="targetSlot1"></select></label>
+        <label class="form-field">指定格 3<select id="targetSlot2"></select></label>
+        <label class="form-field">指定格 4<select id="targetSlot3"></select></label>
+        <label class="form-field">指定格 5<select id="targetSlot4"></select></label>
+        <label class="form-field">指定格 6<select id="targetSlot5"></select></label>
+      </div>
+      <div class="target-selector-summary">
+        <strong id="targetSelectedCount">已指定 0／6 項能力</strong>
+        <span id="targetFeasibility">請至少選擇一項能力</span>
+      </div>
+      <p id="targetLocks" class="stats-hint" hidden>本次抽選尚未結束，為保護進度已暫時鎖定抽選設定。暫停後可選擇接續或正式停止。</p>
+    </section>
+    <section class="stats-panel">
+      <div class="panel-header"><h2>模擬進度</h2><span id="targetStatus" class="target-running-status">尚未開始</span></div>
+      <div class="stat-grid two">
+        <div class="stat-card"><small>本次抽選輪數</small><strong id="targetRunRounds">0</strong></div>
+        <div class="stat-card"><small>本次候選英靈數</small><strong id="targetRunCandidates">0</strong></div>
+        <div class="stat-card"><small>第四頁累積輪數（本池）</small><strong id="targetLifetimeRounds">0</strong></div>
+        <div class="stat-card"><small>下一次保底進度</small><strong id="targetRunPity">—</strong></div>
+      </div>
+      <div id="targetActivity" class="target-progress" hidden><div class="target-progress-bar"></div><span>正在進行連續抽選……</span></div>
+      <button id="targetMainButton" class="target-main-button" type="button">開始模擬</button>
+      <button id="targetStopButton" class="target-stop-button" type="button" hidden>停止模擬</button>
+      <p class="stats-hint">指定 1～2 項採快速模擬；3 項每批 100 輪、4 項 1,000 輪、5 項 3,000 輪、6 項 5,000 輪。按「暫停模擬」可保留進度，之後繼續。</p>
+      <p id="targetNotice" class="muted" role="status"></p>
+    </section>
+    <section id="targetResults" class="stats-panel" hidden>
+      <h2>命中結果 · 請選擇英靈</h2>
+    </section>
+    <button id="targetConfirm" class="target-main-button target-confirm" type="button" hidden>確認取得所選英靈</button>
+    <section class="stats-panel ability-panel">
+      <h2>本頁獨立能力統計</h2>
+      <p class="stats-hint">此處只統計第四頁產生的結果，完全不影響第一至第三頁紀錄。能力與羈絆統計均排除六星。</p>
+      <label class="form-field">紀錄對象
+        <select id="targetCountMode"><option value="candidates">全部候選英靈</option><option value="obtained">正式取得英靈</option></select>
+      </label>
+      <p id="targetStatTotal" class="muted"></p>
+      <h3 id="targetBaseHeading">禁斷／貪欲組合</h3>
+      <div class="table-scroll"><table><thead><tr><th>能力組合</th><th>命中次數</th><th>單一候選機率</th></tr></thead><tbody id="targetBaseRows"></tbody></table></div>
+      <h3 id="targetGoldHeading">三金組合</h3>
+      <div class="table-scroll"><table><thead><tr><th>能力組合</th><th>命中次數</th><th>單一候選機率</th></tr></thead><tbody id="targetGoldRows"></tbody></table></div>
+      <details id="targetMixedDetails" class="ability-mixed">
+        <summary><span><strong>特殊混搭組合</strong><small>指定禁斷／貪欲組合＋至少一金</small></span>
+          <span class="ability-mixed-result"><strong id="targetMixedRate">—</strong><small id="targetMixedCount">命中 0 次</small></span></summary>
+        <p class="stats-hint">詳細組合按七種指定能力的恰好組合分類，機率不重複計入。</p>
+        <div class="table-scroll ability-mixed-scroll"><table><thead><tr><th>詳細組合</th><th>次數</th><th>單一候選機率</th></tr></thead><tbody id="targetMixedRows"></tbody></table></div>
+      </details>
+      <h3>羈絆進化命中紀錄</h3>
+      <div class="stat-grid two">
+        <div class="stat-card"><small>恰好命中 2 種目標能力</small><strong id="targetBondTwo">0 次</strong></div>
+        <div class="stat-card"><small>恰好命中 3 種目標能力</small><strong id="targetBondThree">0 次</strong></div>
+      </div>
+      <p class="stats-hint">僅計算羈絆 Lv.6／13／23 命中七種指定能力的紀錄，不顯示機率。</p>
+      <button id="targetClearStats" class="danger" type="button">清除第四頁累積統計</button>
+    </section>
+  </section>
   <footer class="site-footer">非官方模擬器，抽選結果僅供參考。</footer>
 </main>
 <dialog id="statusDialog" class="status-dialog" aria-labelledby="statusDialogTitle">
@@ -194,6 +283,16 @@
     <div id="abilitySections" class="ability-sections"></div>
   </div>
 </dialog>
+
+<dialog id="targetWarning" class="target-warning-dialog" aria-labelledby="targetWarningTitle">
+  <h2 id="targetWarningTitle">這次抽選可能需要較長時間</h2>
+  <p id="targetWarningText">指定能力較多，可能需要大量抽選才能命中。</p>
+  <p>模擬期間會持續顯示累積抽選輪數，可以隨時暫停並接續。</p>
+  <div class="target-warning-actions">
+    <button id="targetWarningCancel" type="button">取消</button>
+    <button id="targetWarningConfirm" type="button">確認開始</button>
+  </div>
+</dialog>
 <script src="../Bond30/js/data.js"></script>
 <script src="../hero-preferences-data.js"></script>
 <script src="./config.js?v=2.6.0"></script>
@@ -204,5 +303,6 @@
 <script src="./bond.js?v=2.6.0"></script>
 <script src="./app.js?v=2.6.0-ability1"></script>
 <script src="./stats.js?v=2.6.0-three-tabs1"></script>
-<script src="./tabs.js?v=2.6.0-three-tabs1"></script>
+<script src="./target-draw.js?v=2.6.0-target1"></script>
+<script src="./tabs.js?v=2.6.0-target1"></script>
 </body></html>
