@@ -2,7 +2,8 @@
   'use strict';
   const targets={
     'dfch-bond30-height':'bond30EmbeddedFrame',
-    'dfch-team-height':'teamEmbeddedFrame'
+    'dfch-team-height':'teamEmbeddedFrame',
+    'dfch-recruit-height':'recruitEmbeddedFrame'
   };
   window.addEventListener('message',e=>{
     if(e.origin!==location.origin)return;
