@@ -76,3 +76,6 @@
   #targetTabPanel .target-candidate .target-portrait{height:63px}
 }
 @media(prefers-reduced-motion:reduce){#targetTabPanel .target-progress-bar{animation:none}}
+
+#targetTabPanel .target-artifact-options [hidden]{display:none!important}
+#targetTabPanel .target-hero-speed{font-size:12px;color:#cbdcce;margin:10px 0 0}
