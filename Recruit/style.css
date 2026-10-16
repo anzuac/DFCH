@@ -102,3 +102,6 @@
 .ability-option{padding:8px 7px}
 .ability-option>img{width:42px;height:42px}
 }
+
+/* Publication-ready UI: small, unobtrusive non-official notice. */
+.site-footer{text-align:center;font-size:11px;line-height:1.6;color:#94b1a9;padding:18px 10px 3px}

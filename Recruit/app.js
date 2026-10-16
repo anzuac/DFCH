@@ -51,7 +51,7 @@
       (D.poolRarityRoster[id]?.[String(s)]||[]);
   };
   const heroInfo=id=>guideByIndex.get(Number(id))||null;
-  const nameOf=id=>heroInfo(id)?.name||name6[id]||D.heroRoster[String(id)]?.name||('英靈 '+id);
+  const nameOf=id=>heroInfo(id)?.name||name6[id]||D.heroRoster[String(id)]?.name||'未知英靈';
   const titleOf=id=>heroInfo(id)?.title||'';
   const sixDoc=id=>abilityGuide?.heroes?.find(h=>h.slug===heroInfo(id)?.key);
   const portrait=id=>{
@@ -62,7 +62,7 @@
     img.onerror=()=>img.remove();
     return img;
   };
-  const skillName=(id)=>D.displayNames[String(id)]||('能力 '+id);
+  const skillName=(id)=>D.displayNames[String(id)]||'未知能力';
   const f32=Math.fround;
   function weights(){
     const arr=C.weights[state.pool].map(f32);
@@ -174,8 +174,8 @@
   }
 
   const groupLabels=['確定能力','自由能力','攻擊增益','HP 增益'];
-  const jobName=mask=>({0:'不限職業',1:'劍士',2:'弓箭手',4:'法師',7:'全部職業'})[mask]||'職業遮罩 '+mask;
-  const starName=id=>C.lowOnly.includes(id)?'3～4 星':C.highOnly.includes(id)?'5～6 星':'3～6 星';
+  const jobName=mask=>({0:'不限職業',1:'劍士',2:'弓箭手',4:'法師',7:'全部職業'})[mask]||'限定職業';
+  const starName=id=>C.lowOnly.includes(id)?'3～4 星':C.highOnly.includes(id)?'5～6 星':null;
   function syncArtifacts(){
     for(const [id,key] of [['eye','hiddenEye'],['modalEye','hiddenEye'],['sword','hiddenSword'],
       ['modalSword','hiddenSword'],['ownedEye','ownedEye'],['ownedSword','ownedSword']])
@@ -193,7 +193,7 @@
     const target=$('abilitySections');target.replaceChildren();
     const rows=D.poolRows[poolKey()].map(([id,group,weight])=>({id,group,weight}));
     for(let group=0;group<=3;group++){
-      const matching=rows.filter(r=>r.group===group&&(skillName(r.id).toLowerCase().includes(q)||String(r.id).includes(q)));
+      const matching=rows.filter(r=>r.group===group&&skillName(r.id).toLowerCase().includes(q));
       if(!matching.length)continue;
       const section=el('section','ability-category');
       section.append(el('h3','',groupLabels[group]+' · '+matching.length+' 項'));
@@ -203,9 +203,11 @@
         const row=el('div','ability-option');
         row.append(imageFor(r.id));
         const content=el('div','ability-option-info');
-        content.append(el('strong','',skillName(r.id)),el('small','',String(r.id)));
+        content.append(el('strong','',skillName(r.id)));
         const badges=el('div','ability-tags');
-        badges.append(el('span','',starName(r.id)),el('span','',jobName(info.jobMask)));
+        const knownStars=starName(r.id);
+        if(knownStars)badges.append(el('span','',knownStars));
+        badges.append(el('span','',jobName(info.jobMask)));
         if(C.targetPlayerIndexes?.[r.id]?.length)badges.append(el('span','ability-limited','限定角色'));
         if(info.cond===1){
           const name=info.condValue===301008017?'眼球':'魔劍';
@@ -270,7 +272,7 @@
     const info=el('div','hero-profile-text');
     info.append(el('h3','',nameOf(r.id)+' · '+r.star+' 星'));
     if(r.star===6&&titleOf(r.id))info.append(el('p','hero-title',titleOf(r.id)));
-    info.append(el('p','desc','英靈 ID '+r.id+' · '+r.skills.filter(x=>x.role==='固定').length+' 個固定能力 · '+r.skills.filter(x=>x.role==='自由').length+' 個自由能力 · '+r.skills.filter(x=>x.id===null).length+' 個未填滿格'));
+    info.append(el('p','desc',r.skills.filter(x=>x.role==='固定').length+' 項固定能力 · '+r.skills.filter(x=>x.role==='自由').length+' 項自由能力'+(r.skills.some(x=>x.id===null)?' · '+r.skills.filter(x=>x.id===null).length+' 個空格':'')));
     head.append(info);
     const board=el('div','skills');
     const effect=el('div','ability-info');effect.hidden=true;
@@ -280,16 +282,16 @@
       if(detail)cell.type='button';
       if(skill.id!==null)cell.append(imageFor(skill.id,detail));
       cell.append(el('span','text',skill.id===null?'未填滿':detail?.name||skillName(skill.id)),el('span','role',skill.role));
-      cell.title=detail?'點擊檢視官方技能效果 · '+skill.id:skill.id===null?'本次未抽到合格能力':String(skill.id);
+      cell.title=detail?'查看能力效果':skill.id===null?'未取得能力':skillName(skill.id);
       if(detail)cell.addEventListener('click',()=>{
-        effect.replaceChildren(el('strong','',detail.name),el('p','',detail.levelEffects?.[0]||'未提供初始效果說明'),el('small','', '基礎等級上限 '+(detail.baseCap||'—')+' ／ 羈絆後上限 '+(detail.fullCap||'—')+' · 技能 ID '+skill.id));
+        effect.replaceChildren(el('strong','',detail.name),el('p','',detail.levelEffects?.[0]||'未提供初始效果說明'),el('small','', '基礎等級上限 '+(detail.baseCap||'—')+' ／ 羈絆後上限 '+(detail.fullCap||'—')));
         effect.hidden=false;
       });
       board.append(cell);
     });
     $('detail').append(head,board,effect);
     if(r.star===6){
-      if(!doc)$('detail').append(el('p','desc','六星完整技能資料載入中；載入後會顯示名稱及正確圖示。'));
+      if(!doc)$('detail').append(el('p','desc','技能資料載入中…'));
       else {
         const later=doc.skills.filter(x=>Number(x.unlockAt)>0);
         if(later.length)$('detail').append(el('p','bond-note','羈絆後續解鎖（不算抽卡固定十格）：'+later.map(x=>x.name+'（羈絆 '+x.unlockAt+'）').join('、')));
@@ -304,7 +306,7 @@
       const photo=r.star===6?portrait(r.id):null;if(photo)card.append(photo);
       card.append(el('span','stars','★'.repeat(r.star)),el('strong','',nameOf(r.id)));
       if(r.star===6&&titleOf(r.id))card.append(el('span','hero-subtitle',titleOf(r.id)));
-      card.append(el('span','sub','ID '+r.id+' · '+r.skills.filter(x=>x.id!==null).length+' 項能力'));
+      card.append(el('span','sub',r.skills.filter(x=>x.id!==null).length+' 項能力'));
       card.addEventListener('click',()=>{state.selected=i;renderCandidates();renderDetail();});
       $('candidates').append(card);
     });
@@ -315,8 +317,7 @@
     b.hidden=max<5;b.className='rarity-notice '+(max===6?'six':'five');
     b.replaceChildren();
     if(max>=5){
-      b.append(el('strong','',max===6?'✦ 六星英靈出現！':'★ 五星英靈出現！'),
-        el('span','',max===6?'已出現六星候選！可查看角色圖片、稱號及十項固定能力。':'已出現五星候選！請檢查固定格及自由格。'));
+      b.append(el('strong','',max===6?'✦ 六星英靈出現！':'★ 五星英靈出現！'));
       b.classList.remove('reveal');void b.offsetWidth;b.classList.add('reveal');
     }
   }
@@ -373,12 +374,11 @@
       if(r)state.results.push(r);
     }
     if(!state.results.length){
-      $('notice').textContent='無法建立可抽角色，請先檢查卡池與已取得的六星名單。';
+      $('notice').textContent='目前無法召喚此卡池的英靈。';
       $('confirm').hidden=true;rarityNotice();$('pendingReminder').hidden=true;renderCandidates();return;
     }
     state.selected=0;
-    $('notice').textContent=(autoSelectedName?'上一輪已自動確認取得「'+autoSelectedName+'」；':'')+
-      '已產生 '+state.results.length+' 位候選英靈。未手動選擇時預設第一位；再次按「開始召喚」會先確認目前選取的英靈。';
+    $('notice').textContent=(autoSelectedName?'已取得「'+autoSelectedName+'」 · ':'')+'本次召喚 '+state.results.length+' 位候選';
     $('confirm').hidden=false;renderCandidates();rarityNotice();$('pendingReminder').hidden=false;
   }
   function commit(){
@@ -404,15 +404,15 @@
     clearPending();updateSummary();rates();
   }
   function reset(){
-    if(!confirm('清除英靈抽取 V1 的所有測試保底與六星取得紀錄？其他遠征紀錄不受影響。'))return;
+    if(!confirm('確定重置抽取紀錄、保底進度與已取得的六星嗎？'))return;
     state.progress={};state.seen=[];state.confirmed=0;
     state.history=[];clearPending();save();renderHistory();
-    $('notice').textContent='英靈抽取測試紀錄已重置。';rates();updateSummary();
+    $('notice').textContent='抽取紀錄已重置';rates();updateSummary();
   }
   function setPool(idx){
     if(!discardPending()){$('pool').value=String(state.pool);return;}
     state.pool=idx;clearPending();
-    $('notice').textContent='已切換為「'+D.poolNames[poolKey()]+'」，可開始召喚。';
+    $('notice').textContent='已切換「'+D.poolNames[poolKey()]+'」';
     rates();updateSummary();save();
     if($('poolAbilitiesDialog').open)renderPoolAbilities();
   }
@@ -442,7 +442,7 @@
       .then(data=>{
         if(!Array.isArray(data.heroes)||!data.icons)throw Error('Invalid hero ability data');
         abilityGuide=data;if(state.results.length)renderCandidates();renderHistory();
-      }).catch(()=>{$('notice').textContent+=' 六星完整技能圖示載入失敗，可重新整理重試。';});
+      }).catch(()=>{$('notice').textContent+=' 技能資料暫時無法載入。';});
     if(window.parent!==window){
       const report=()=>{
         const height=Math.ceil(document.querySelector('main.container').getBoundingClientRect().bottom-document.body.getBoundingClientRect().top+20);
