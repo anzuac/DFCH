@@ -1,6 +1,6 @@
 (() => {
   'use strict';
-  const D=window.DFCH_DATA, C=window.DFCHRecruitConfig;
+  const D=window.DFCH_DATA, C=window.DFCHRecruitConfig, S=window.DFCHRecruitSpeed;
   const $=id=>document.getElementById(id);
   const storeKey='dfch-recruit-v1-independent';
   const heroGuides=window.DFCHHeroPreferences?.heroes||[];
@@ -17,7 +17,7 @@
       .catch(err=>{iconCache.delete(src);throw err;}));
     return iconCache.get(src);
   }
-  if(!D||!C){$('notice').textContent='資料載入失敗，請重新整理頁面。';return;}
+  if(!D||!C||!S){$('notice').textContent='資料載入失敗，請重新整理頁面。';return;}
   const name6={13:'伊茲',19:'蘭德格里茲',22:'伊茲（海裝）',23:'齊格菲（海裝）',27:'弗拉斯萬',34:'阿卡夏',43:'蘭德格里茲（異鄉）',44:'露娜',47:'伊茲（聖夜）',53:'戀心公主（海裝）',54:'阿卡夏（海裝）',59:'弗雷雅',60:'芙麗嘉'};
   const state={pool:0,hiddenEye:false,hiddenSword:false,ownedEye:false,ownedSword:false,seen:[],progress:{},results:[],selected:0,confirmed:0,history:[]};
   function restore(){
@@ -68,6 +68,13 @@
     return img;
   };
   const skillName=(id)=>D.displayNames[String(id)]||'未知能力';
+  // V2.0.0 displays only the Normal-type movement-speed model.
+  // Rank names above D are withheld until their native text mapping is verified.
+  function speedText(candidate){
+    const result=candidate?.speed;
+    if(!result)return '舊版未儲存速度';
+    return result.display+' · '+(result.grade?result.grade+'級':'速度等級段 '+result.gradeIndex+'（級名待核對）');
+  }
   const f32=Math.fround;
   function weights(){
     const arr=C.weights[state.pool].map(f32);
@@ -175,7 +182,7 @@
   function createCandidate(position,alreadyHasSix){
     const star=rollRarity(position,alreadyHasSix),id=pickHero(star);
     if(id===null)return null;
-    return {star,id,skills:buildSkills(star,id)};
+    return {star,id,skills:buildSkills(star,id),speed:S.generate(id,star)};
   }
 
   const groupLabels=['確定能力','自由能力','攻擊增益','HP 增益'];
@@ -278,6 +285,9 @@
     info.append(el('h3','',nameOf(r.id)+' · '+r.star+' 星'));
     if(r.star===6&&titleOf(r.id))info.append(el('p','hero-title',titleOf(r.id)));
     info.append(el('p','desc',r.skills.filter(x=>x.role==='固定').length+' 項固定能力 · '+r.skills.filter(x=>x.role==='自由').length+' 項自由能力'+(r.skills.some(x=>x.id===null)?' · '+r.skills.filter(x=>x.id===null).length+' 個空格':'')));
+    info.append(el('p','speed-result','移動速度 '+speedText(r)));
+    if(r.speed)info.append(el('p','speed-source',r.speed.fixed?'六星固定模板初始速度':'普通類型初始速度（未含老兵、天才、神器）'));
+
     head.append(info);
     const board=el('div','skills');
     const effect=el('div','ability-info');effect.hidden=true;
@@ -312,6 +322,7 @@
       card.append(el('span','stars','★'.repeat(r.star)),el('strong','',nameOf(r.id)));
       if(r.star===6&&titleOf(r.id))card.append(el('span','hero-subtitle',titleOf(r.id)));
       card.append(el('span','sub',r.skills.filter(x=>x.id!==null).length+' 項能力'));
+      if(r.speed)card.append(el('span','candidate-speed',speedText(r)));
       card.addEventListener('click',()=>{state.selected=i;renderCandidates();renderDetail();});
       $('candidates').append(card);
     });
@@ -346,12 +357,15 @@
       const li=el('li','history-entry rarity'+r.star),fold=el('details'),summary=el('summary','history-summary');
       summary.append(el('span','history-time','#'+(entry.sequence||'?')+' · '+(entry.time||'')+' · '+(D.poolNames[C.keys[entry.pool]]||'')),
         el('strong','',r.star+'★ '+nameOf(r.id)));
+      if(r.speed)summary.append(el('small','history-speed',speedText(r)));
       fold.append(summary);
       const row=el('div','history-choice-grid');
       entry.candidates.forEach((candidate,i)=>{
         const card=el('div','history-choice'+(i===entry.selected?' chosen':''));
         const img=portrait(candidate.id);if(img)card.append(img);
-        card.append(el('b','',candidate.star+'★ '+nameOf(candidate.id)),el('small','',i===entry.selected?'正式取得':'未選擇'));row.append(card);
+        card.append(el('b','',candidate.star+'★ '+nameOf(candidate.id)),el('small','',i===entry.selected?'正式取得':'未選擇'));
+        if(candidate.speed)card.append(el('small','history-speed',speedText(candidate)));
+        row.append(card);
       });
       fold.append(row);
       const skills=(r.skills||[]).map((skill,i)=>({id:skill.id,name:r.star===6?sixDoc(r.id)?.skills?.[i]?.name:null})).filter(x=>x.id);
@@ -360,7 +374,7 @@
     });
   }
   function draw(){
-    // V1 rapid draw: the currently highlighted candidate is the default choice.
+    // V2.0.0 preserves the existing rapid draw and confirmation semantics.
     // The first card is highlighted until the player chooses a different card.
     // Confirm the previous draw before generating new candidates, so pity and
     // six-star history are updated in the same order as explicit confirmation.
@@ -401,7 +415,7 @@
     state.history.unshift({
       pool:state.pool,time:drawnAt||new Date().toLocaleString('zh-TW',{hour12:false}),
       sequence:state.confirmed,selected:state.selected,
-      candidates:state.results.map(x=>({id:x.id,star:x.star,skills:x.skills.map(y=>({id:y.id,role:y.role}))}))
+      candidates:state.results.map(x=>({id:x.id,star:x.star,speed:x.speed,skills:x.skills.map(y=>({id:y.id,role:y.role}))}))
     });
     state.history=state.history.slice(0,200);
     save();renderHistory();
