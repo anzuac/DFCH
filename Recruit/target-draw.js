@@ -21,7 +21,7 @@
     pool:0,sixMode:'exclude',hiddenEye:false,hiddenSword:false,
     ownedEye:false,ownedSword:false,bonusValkyrja:false,poolBonusOwned:{},
     maneLevel:0,emmaLevel:0
-  },slots:[0,0,0,0,0,0],run:null,stats:Array.from({length:9},bucket)});
+  },slots:[0,0,0,0,0,0],run:null,lastRun:null,stats:Array.from({length:9},bucket)});
   let state=initial(),timer=null,refreshStamp=0,roundsInBatch=0;
   try{
     const saved=JSON.parse(localStorage.getItem(KEY)||'null');
@@ -234,6 +234,7 @@
       $('targetNotice').textContent='指定能力無法由同一位三星～五星英靈同時取得，請調整能力或招募池。';return;
     }
     const begin=()=>{
+      state.lastRun=null;
       state.run={pool:p,settings:{...state.settings,poolBonusOwned:{...state.settings.poolBonusOwned}},
         ids:[...ids],status:'running',rounds:0,candidates:0,
         progress:{count:0,round:0},seen:[],pending:null,selected:0};
@@ -254,6 +255,7 @@
   function stop(){
     if(state.run?.status!=='paused')return;
     if(!confirm('確定停止本次模擬？目前保底及本次進度將結束，但第四頁累積統計仍會保留。'))return;
+    state.lastRun={pool:state.run.pool,rounds:state.run.rounds,candidates:state.run.candidates};
     state.run=null;persist();render();
   }
   function confirmChoice(){
@@ -283,12 +285,27 @@
       feasible(ids)?'此組合有機會由同一位非六星英靈取得':'這組條件在目前卡池無法同時成立';
     $('targetFeasibility').classList.toggle('target-unavailable',!!ids.length&&!feasible(ids));
   }
+  // Each completed three-candidate draw costs 700 diamonds, regardless of its result.
+  const diamondCost=rounds=>BigInt(Math.max(0,Math.trunc(Number(rounds)||0)))*700n;
+  function costTier(cost){
+    if(cost>=100000000n)return 6;
+    if(cost>=10000000n)return 5;
+    if(cost>=1000000n)return 4;
+    if(cost>=100000n)return 3;
+    if(cost>=10000n)return 2;
+    if(cost>=1000n)return 1;
+    return 0;
+  }
   function renderProgress(){
-    const r=state.run,stats=state.stats[pool()];
-    $('targetRunRounds').textContent=(r?.rounds||0).toLocaleString('zh-TW');
-    $('targetRunCandidates').textContent=(r?.candidates||0).toLocaleString('zh-TW');
+    const r=state.run,summary=r||state.lastRun,stats=state.stats[pool()];
+    $('targetRunRounds').textContent=(summary?.rounds||0).toLocaleString('zh-TW');
+    $('targetRunCandidates').textContent=(summary?.candidates||0).toLocaleString('zh-TW');
     $('targetLifetimeRounds').textContent=(stats?.rounds||0).toLocaleString('zh-TW');
     $('targetRunPity').textContent=r?(r.progress.count+1)+'／50':'—';
+    const cost=diamondCost(summary?.rounds);
+    $('targetCostValue').textContent=cost.toLocaleString('zh-TW')+' 鑽石';
+    $('targetCostBar').className='target-cost-bar target-cost-tier-'+costTier(cost);
+    $('targetCostLabel').textContent=!r&&state.lastRun?'上次模擬花費':'本次模擬花費';
     const status=r?.status;
     $('targetStatus').textContent=status==='running'?'持續抽選中':status==='paused'?'已暫停，可接續或停止':
       status==='hit'?'已命中，請選擇英靈':status==='finished'?'本次模擬已完成':'尚未開始';
