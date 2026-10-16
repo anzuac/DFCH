@@ -106,3 +106,35 @@
   #statsTabPanel .stat-card{padding:9px 8px}
   #statsTabPanel th,#statsTabPanel td{padding:8px}
 }
+
+/* Player-facing ability forecast and compact expandable mixed combinations. */
+#statsTabPanel .ability-panel .table-scroll[hidden],
+#statsTabPanel .ability-panel h3[hidden],
+#statsTabPanel .ability-mixed[hidden]{display:none!important}
+#statsTabPanel .ability-panel td:first-child{white-space:normal;min-width:160px;line-height:1.5}
+#statsTabPanel .ability-panel th:nth-child(2),
+#statsTabPanel .ability-panel td:nth-child(2){text-align:right;white-space:nowrap}
+#statsTabPanel .ability-panel th:last-child,
+#statsTabPanel .ability-panel td:last-child{white-space:nowrap}
+#statsTabPanel .ability-mixed{
+  margin:18px 0 8px;background:#142b30;border:1px solid #66877a;border-radius:11px;overflow:hidden
+}
+#statsTabPanel .ability-mixed summary{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:14px;cursor:pointer;list-style:none
+}
+#statsTabPanel .ability-mixed summary::-webkit-details-marker{display:none}
+#statsTabPanel .ability-mixed summary>span{display:flex;flex-direction:column;gap:3px;min-width:0}
+#statsTabPanel .ability-mixed summary strong{font-size:15px;color:#f3ddb1}
+#statsTabPanel .ability-mixed summary small{font-size:11px;color:#bbd1ca}
+#statsTabPanel .ability-mixed-result{text-align:right}
+#statsTabPanel .ability-mixed-result strong{font-size:21px!important;font-variant-numeric:tabular-nums}
+#statsTabPanel .ability-mixed[open] summary{border-bottom:1px solid #436a61}
+#statsTabPanel .ability-mixed>p{padding:0 13px;margin:11px 0}
+#statsTabPanel .ability-mixed-scroll{max-height:450px;overflow-y:auto;border-radius:0;border:0}
+@media(max-width:500px){
+  #statsTabPanel .ability-panel table{font-size:11px}
+  #statsTabPanel .ability-panel th,#statsTabPanel .ability-panel td{padding:8px 6px}
+  #statsTabPanel .ability-mixed summary{padding:11px}
+  #statsTabPanel .ability-mixed-result strong{font-size:17px!important}
+}
