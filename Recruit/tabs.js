@@ -5,13 +5,15 @@
   const tabs=[
     {id:'recruit',button:$('recruitTabButton'),panel:$('recruitTabPanel')},
     {id:'stats',button:$('statsTabButton'),panel:$('statsTabPanel')},
-    {id:'abilities',button:$('abilityTabButton'),panel:$('abilityTabPanel')}
+    {id:'abilities',button:$('abilityTabButton'),panel:$('abilityTabPanel')},
+    {id:'target',button:$('targetTabButton'),panel:$('targetTabPanel')}
   ];
   if(tabs.some(tab=>!tab.button||!tab.panel))return;
   let selected='';
   function fromHash(){
     if(location.hash==='#stats')return 'stats';
     if(location.hash==='#abilities')return 'abilities';
+    if(location.hash==='#target')return 'target';
     return 'recruit';
   }
   function show(which,writeHistory=false){
@@ -25,6 +27,7 @@
     }
     if(active==='stats')window.DFCHRecruitStatisticsUI?.refresh?.();
     if(active==='abilities')window.DFCHRecruitStatisticsUI?.refreshAbilities?.();
+    if(active==='target')window.DFCHTargetDraw?.render?.();
     if(writeHistory&&selected!==active){
       const base=location.pathname+location.search;
       history.pushState({dfchRecruitTab:active},'',base+'#'+active);
