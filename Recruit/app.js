@@ -291,6 +291,7 @@
     }
     const info=el('div','hero-profile-text');
     info.append(el('h3','',nameOf(r.id)+' · '+r.star+' 星'));
+    if(Number(r.status?.humanType)>0)info.append(el('span','human-type-tag human-type-'+r.status.humanType,r.status.humanTypeName));
     if(r.star===6&&titleOf(r.id))info.append(el('p','hero-title',titleOf(r.id)));
     info.append(el('p','desc',r.skills.filter(x=>x.role==='固定').length+' 項固定能力 · '+r.skills.filter(x=>x.role==='自由').length+' 項自由能力'+(r.skills.some(x=>x.id===null)?' · '+r.skills.filter(x=>x.id===null).length+' 個空格':'')));
     info.append(el('p','speed-result'+speedRankClass(r),'移動速度 '+speedText(r)));
