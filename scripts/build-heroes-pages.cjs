@@ -147,7 +147,12 @@ const bondHtmlPath=path.join(outputDir,'bond30/index.html');
 let bondHtml=fs.readFileSync(bondHtmlPath,'utf8');
 // Bond30 already includes shared settings, navigation, and localization exactly once.
 if(!bondHtml.includes('public-tool-i18n.js'))throw new Error('Bond30 localization entry missing');
-bondHtml=bondHtml.replace('</head>','<link rel="stylesheet" href="../public-accessibility.css?v=3.0.0"></head>');
+bondHtml=bondHtml
+ .replace(/display-settings\\.js\\?v=[^"]+/g,'display-settings.js?v=3.0.0')
+ .replace(/public-nav\\.js\\?v=[^"]+/g,'public-nav.js?v=3.0.0')
+ .replace(/public-nav\\.css\\?v=[^"]+/g,'public-nav.css?v=3.0.0')
+ .replace(/public-display\\.css\\?v=[^"]+/g,'public-display.css?v=3.0.0')
+ .replace('</head>','<link rel="stylesheet" href="../public-accessibility.css?v=3.0.0"></head>');
 bondHtml=bondHtml.replace('</body>', '<script src="../site-counter.js?v=1.0.0"></script></body>');
 fs.writeFileSync(bondHtmlPath,bondHtml);
 
@@ -243,7 +248,12 @@ fs.writeFileSync(path.join(outputDir,'index.html'),homepage);
 const teamPage=path.join(outputDir,'team/index.html');
 let teamHtml=fs.readFileSync(teamPage,'utf8');
 if(!teamHtml.includes('display-settings.js'))teamHtml=teamHtml.replace('<head>','<head><script src="../display-settings.js?v=3.0.0"></script>');
-teamHtml=teamHtml.replace('</head>',`<link rel="stylesheet" href="../public-accessibility.css?v=3.0.0"></head>`);
+teamHtml=teamHtml
+ .replace(/display-settings\\.js\\?v=[^"]+/g,'display-settings.js?v=3.0.0')
+ .replace(/public-nav\\.js\\?v=[^"]+/g,'public-nav.js?v=3.0.0')
+ .replace(/public-nav\\.css\\?v=[^"]+/g,'public-nav.css?v=3.0.0')
+ .replace(/public-display\\.css\\?v=[^"]+/g,'public-display.css?v=3.0.0')
+ .replace('</head>',`<link rel="stylesheet" href="../public-accessibility.css?v=3.0.0"></head>`);
 teamHtml=teamHtml.replace('</body>','<script src="../site-counter.js?v=1.0.0"></script></body>');
 fs.writeFileSync(teamPage,teamHtml);
 fs.copyFileSync(path.join(repoRoot,'cloudflare/guide-worker.mjs'),path.join(outputDir,'_worker.js'));
