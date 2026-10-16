@@ -21,15 +21,30 @@
     return state;
   }
   const origin=current();
-  const startPool=Number.isInteger(origin.pool)&&origin.pool>=0&&origin.pool<9?origin.pool:0;
-  let lastSourcePool=startPool;
+  const statsPoolKey='dfch-recruit-stats-view-pool-v1';
+  const abilityPoolKey='dfch-recruit-ability-view-pool-v1';
+  const fallbackPool=Number.isInteger(origin.pool)&&origin.pool>=0&&origin.pool<9?origin.pool:0;
+  function storedPool(key){
+    try{
+      const raw=localStorage.getItem(key),value=Number(raw);
+      if(raw!==null&&Number.isInteger(value)&&value>=0&&value<9)return value;
+    }catch(_){}
+    return fallbackPool;
+  }
+  function rememberPool(key,value){
+    try{localStorage.setItem(key,String(value));}catch(_){}
+  }
+  const startPool=storedPool(statsPoolKey);
+  const startAbilityPool=storedPool(abilityPoolKey);
   function poolList(){
     for(let i=0;i<9;i++){
       const option=el('option','',D.poolNames[C.keys[i]]||C.keys[i]);option.value=String(i);
       $('analysisPool').append(option);
-      const scope=option.cloneNode(true);$('scopePool').append(scope);
+      $('abilityPool').append(option.cloneNode(true));
+      $('scopePool').append(option.cloneNode(true));
     }
     $('analysisPool').value=String(startPool);
+    $('abilityPool').value=String(startAbilityPool);
   }
   function activeTheory(){
     const state=current(),pool=Number($('analysisPool').value)||0;
@@ -91,7 +106,7 @@
       cell.colSpan=3;row.append(cell);rows.append(row);
     }
     if(resetHero)rerenderHeroOptions(pool);
-    renderSpeed();renderAbilities();
+    renderSpeed();
   }
   function renderSpeed(){
     const [starText,idText]=($('analysisHero').value||'').split(':');
@@ -112,7 +127,7 @@
     }
   }
   function renderAbilities(){
-    const pool=Number($('analysisPool').value)||0;
+    const pool=Number($('abilityPool').value)||0;
     const state=current(),forecast=A.theory(pool,state);
     const records=A.read().pools[pool]||{};
     const side=$('abilityCountMode').value==='obtained'?'obtained':'candidates';
@@ -188,16 +203,28 @@
   }
   poolList();
   rerenderHeroOptions(startPool);
-  $('analysisPool').addEventListener('change',()=>renderTheory(true));
+  $('analysisPool').addEventListener('change',()=>{
+    rememberPool(statsPoolKey,Number($('analysisPool').value));
+    renderTheory(true);
+  });
   $('analysisHero').addEventListener('change',renderSpeed);
+  $('abilityPool').addEventListener('change',()=>{
+    rememberPool(abilityPoolKey,Number($('abilityPool').value));
+    renderAbilities();
+  });
   $('abilityCountMode').addEventListener('change',renderAbilities);
   for(const id of ['scopePool','countMode','humanScope'])$(id).addEventListener('change',renderObserved);
   $('clearStats').addEventListener('click',()=>{
-    if(!confirm('確定只清除第二頁的所有累積統計？第一頁最近50筆、保底及已取得六星完全不會更動。'))return;
-    const basicCleared=T.clear(),abilityCleared=A.clear();
-    if(!basicCleared||!abilityCleared){$('statsNotice').textContent='部分統計無法清除，請檢查瀏覽器儲存權限。';return;}
-    renderObserved();renderAbilities();
-    $('statsNotice').textContent='第二頁累積統計及能力紀錄已清空；第一頁資料保留。';
+    if(!confirm('確定清除第二頁抽卡統計？第三頁能力組合紀錄、第一頁保底與抽卡明細均會保留。'))return;
+    if(!T.clear()){$('statsNotice').textContent='無法清除，請檢查瀏覽器儲存權限。';return;}
+    renderObserved();
+    $('statsNotice').textContent='第二頁抽卡統計已清空，其他分頁資料不變。';
+  });
+  $('clearAbilityStats').addEventListener('click',()=>{
+    if(!confirm('確定清除第三頁所有能力組合與羈絆命中紀錄？其他分頁的統計、抽卡明細和保底不會改變。'))return;
+    if(!A.clear()){$('abilityStatsNotice').textContent='無法清除，請檢查瀏覽器儲存權限。';return;}
+    renderAbilities();
+    $('abilityStatsNotice').textContent='第三頁能力紀錄已清空，其他分頁資料保留。';
   });
   window.addEventListener('storage',e=>{
     if(e.key===T.key)renderObserved();
@@ -205,16 +232,12 @@
     if(e.key==='dfch-recruit-v1-independent')refresh();
   });
   function refresh(){
-    const state=current();
-    const selected=Number(state.pool);
-    if(Number.isInteger(selected)&&selected>=0&&selected<9&&selected!==lastSourcePool){
-      $('analysisPool').value=String(selected);
-      lastSourcePool=selected;
-      renderTheory(true);
-    }else renderTheory();
+    renderTheory();
     renderObserved();
   }
-  window.DFCHRecruitStatisticsUI=Object.freeze({refresh});
+  function refreshAbilities(){renderAbilities();}
+  window.DFCHRecruitStatisticsUI=Object.freeze({refresh,refreshAbilities});
   renderTheory();
   renderObserved();
+  renderAbilities();
 })();
