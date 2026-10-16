@@ -1,0 +1,378 @@
+/* Recruit V2.1.0 mobile UI repair.
+   Loaded as a separate, cache-busted stylesheet so the portrait buttons,
+   colored speed values, and all eleven progress bars are never left
+   with browser-default grey buttons / unstyled dialog markup. */
+
+#candidates.candidates {
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  align-items:stretch;
+  gap:9px;
+}
+#candidates.candidates > .candidate {
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-start;
+  align-items:stretch;
+  gap:8px;
+  min-height:0;
+  min-width:0;
+  padding:9px;
+  color:#e8f1e9;
+  background:#10282c;
+  border:1px solid #496967;
+  border-radius:13px;
+  box-shadow:none;
+}
+#candidates.candidates > .candidate.selected {
+  color:#fff3d6;
+  background:#294339;
+  border:2px solid #f0d092;
+  padding:8px;
+  box-shadow:0 0 0 1px #f4cf8b35;
+}
+#candidates .candidate-image-button,
+#candidates .candidate-select {
+  display:block;
+  box-sizing:border-box;
+  width:100%;
+  min-width:0;
+  min-height:0;
+  margin:0;
+  padding:0;
+  border:0;
+  border-radius:8px;
+  color:inherit;
+  background:transparent;
+  box-shadow:none;
+  text-align:left;
+  cursor:pointer;
+  white-space:normal;
+  font:inherit;
+}
+#candidates .candidate-image-button {
+  position:relative;
+  overflow:hidden;
+  background:#091d23;
+  outline-offset:2px;
+}
+#candidates .candidate-image-button:focus-visible,
+#candidates .candidate-select:focus-visible {
+  outline:2px solid #ffe6a8;
+  outline-offset:2px;
+}
+#candidates .candidate-image-button img.hero-portrait {
+  display:block;
+  width:100%;
+  height:clamp(92px,14vw,140px);
+  object-fit:contain;
+  margin:0;
+  padding:2px;
+  border:0;
+  background:#091d23;
+  border-radius:8px;
+}
+#candidates .candidate-fallback {
+  display:grid;
+  place-items:center;
+  height:100px;
+  font-size:12px;
+  color:#dfd1b0;
+}
+#candidates .candidate-image-hint {
+  display:block;
+  position:relative;
+  inset:auto;
+  z-index:1;
+  padding:6px 3px;
+  background:#264540;
+  border-top:1px solid #3f7164;
+  border-radius:0 0 7px 7px;
+  color:#f5e2a9;
+  font-size:11px;
+  font-weight:750;
+  line-height:1.2;
+  white-space:nowrap;
+  text-align:center;
+  pointer-events:none;
+}
+#candidates .candidate-select {
+  display:flex;
+  flex-direction:column;
+  align-items:stretch;
+  gap:5px;
+  flex:1;
+  border-radius:6px;
+}
+#candidates .candidate-select .stars {
+  display:block;
+  order:0;
+  width:100%;
+  font-size:clamp(11px,2vw,17px);
+  font-weight:850;
+  line-height:1.35;
+  letter-spacing:0;
+  color:#f4d37a;
+  white-space:nowrap;
+}
+#candidates .candidate-select strong.candidate-name {
+  display:block;
+  order:1;
+  font-size:clamp(12px,1.7vw,17px);
+  font-weight:800;
+  line-height:1.33;
+  min-height:2.66em;
+  max-height:2.66em;
+  margin:0;
+  overflow:hidden;
+  overflow-wrap:anywhere;
+  color:#f1f6f2;
+}
+#candidates .candidate-select .candidate-speed {
+  display:block;
+  order:2;
+  width:100%;
+  margin:auto 0 0;
+  padding:6px 0 0;
+  border-top:1px solid #385b55;
+  font-size:clamp(11px,1.55vw,15px);
+  font-weight:850;
+  line-height:1.3;
+  font-variant-numeric:tabular-nums;
+  white-space:nowrap;
+  letter-spacing:-.025em;
+}
+.candidate-speed.speed-rank-0,.speed-result.speed-rank-0,.history-speed.speed-rank-0{color:#b6bec1!important}
+.candidate-speed.speed-rank-1,.speed-result.speed-rank-1,.history-speed.speed-rank-1{color:#c2a6e5!important}
+.candidate-speed.speed-rank-2,.speed-result.speed-rank-2,.history-speed.speed-rank-2{color:#94b6f6!important}
+.candidate-speed.speed-rank-3,.speed-result.speed-rank-3,.history-speed.speed-rank-3{color:#67dce5!important}
+.candidate-speed.speed-rank-4,.speed-result.speed-rank-4,.history-speed.speed-rank-4{color:#a4e796!important}
+.candidate-speed.speed-rank-5,.speed-result.speed-rank-5,.history-speed.speed-rank-5{color:#ffc079!important}
+.candidate-speed.speed-rank-6,.speed-result.speed-rank-6,.history-speed.speed-rank-6{color:#ff9299!important}
+.candidate-speed.speed-rank-7,.speed-result.speed-rank-7,.history-speed.speed-rank-7{color:#ffdd84!important}
+.candidate-speed.speed-rank-8,.speed-result.speed-rank-8,.history-speed.speed-rank-8{color:#f9e99a!important}
+.candidate-speed.speed-rank-9,.speed-result.speed-rank-9,.history-speed.speed-rank-9{color:#ffedbb!important}
+.candidate-speed.speed-rank-unknown,.speed-result.speed-rank-unknown,.history-speed.speed-rank-unknown{color:#b9cfc5!important}
+
+/* Pop-up is a true viewport modal. Keep the title visible while rows scroll. */
+dialog#statusDialog {
+  box-sizing:border-box;
+  position:fixed;
+  inset:auto;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  margin:0;
+  padding:0;
+  width:min(590px,calc(100vw - 22px));
+  max-width:calc(100vw - 22px);
+  height:auto;
+  max-height:calc(100dvh - 28px);
+  overflow:hidden;
+  border:2px solid #8b9973;
+  border-radius:16px;
+  color:#eef2ea;
+  background:#142b2e;
+  box-shadow:0 18px 70px #000c;
+}
+dialog#statusDialog:not([open]) {display:none!important}
+dialog#statusDialog[open] {
+  display:flex!important;
+  flex-direction:column;
+}
+dialog#statusDialog::backdrop {
+  background:rgba(0,0,0,.80);
+  backdrop-filter:blur(3px);
+}
+#statusDialog .status-dialog-head {
+  display:flex;
+  flex:0 0 auto;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:13px 15px;
+  background:linear-gradient(120deg,#355047,#20373a);
+  border-bottom:1px solid #597568;
+  color:#f6dda6;
+}
+#statusDialog .status-dialog-head strong {font-size:17px;line-height:1.3}
+#statusDialog .status-close {
+  display:inline-flex;
+  justify-content:center;
+  align-items:center;
+  flex:0 0 auto;
+  padding:8px 13px;
+  border:1px solid #68877f;
+  border-radius:8px;
+  color:#f3ede1;
+  background:#294644;
+  font:inherit;
+  font-size:13px;
+  cursor:pointer;
+}
+#statusDialog .status-dialog-body {
+  box-sizing:border-box;
+  display:block;
+  flex:1 1 auto;
+  min-height:0;
+  max-height:min(82dvh,790px);
+  overflow-y:auto;
+  overscroll-behavior:contain;
+  -webkit-overflow-scrolling:touch;
+  padding:12px 14px 16px;
+  background:#142b2e;
+}
+#statusDialog .status-hero {
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin:0 0 10px;
+  padding:6px 0 11px;
+  border-bottom:1px solid #3b5752;
+}
+#statusDialog .status-hero img.hero-portrait {
+  display:block;
+  flex:0 0 auto;
+  width:72px;
+  height:72px;
+  border-radius:9px;
+  object-fit:contain;
+  background:#0a1c22;
+}
+#statusDialog .status-hero-heading {min-width:0}
+#statusDialog .status-hero-heading h2 {
+  color:#f4e4b4;
+  margin:0 0 5px;
+  font-size:18px;
+  line-height:1.4;
+}
+#statusDialog .status-hero-heading p {
+  margin:0;
+  color:#e8c77d;
+  font-size:17px;
+  line-height:1.3;
+  letter-spacing:1px;
+}
+#statusDialog .status-rows {
+  display:flex;
+  flex-direction:column;
+  gap:5px;
+}
+#statusDialog .status-row {
+  display:grid;
+  box-sizing:border-box;
+  grid-template-columns:28px 38px minmax(0,1fr);
+  column-gap:9px;
+  align-items:center;
+  width:100%;
+  min-height:64px;
+  margin:0;
+  padding:8px 10px;
+  border:1px solid #354e48;
+  border-radius:8px;
+  background:#19292c;
+  color:#eff2ef;
+}
+#statusDialog .status-icon {
+  font-size:22px;
+  line-height:1;
+  text-align:center;
+}
+#statusDialog .status-grade {
+  display:grid;
+  place-items:center;
+  min-width:34px;
+  height:32px;
+  padding:1px 2px;
+  border:1px solid #596d62;
+  border-radius:5px;
+  background:#172025;
+  color:#f4db9d;
+  font-size:16px;
+  font-weight:900;
+  line-height:1;
+  text-shadow:0 1px 3px #000c;
+}
+#statusDialog .status-grade.grade-0{color:#aeb7b9}
+#statusDialog .status-grade.grade-1{color:#c4adeb}
+#statusDialog .status-grade.grade-2{color:#9ebff2}
+#statusDialog .status-grade.grade-3{color:#75d7e3}
+#statusDialog .status-grade.grade-4{color:#a1e6a2}
+#statusDialog .status-grade.grade-5{color:#ffc286}
+#statusDialog .status-grade.grade-6{color:#ff969d}
+#statusDialog .status-grade.grade-7,#statusDialog .status-grade.grade-8,#statusDialog .status-grade.grade-9{color:#ffe39a}
+#statusDialog .status-row-content {display:block;min-width:0}
+#statusDialog .status-row-header {
+  display:flex;
+  align-items:baseline;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:3px 8px;
+  margin-bottom:7px;
+}
+#statusDialog .status-name {
+  color:#c9d9d4;
+  font-size:12px;
+  font-weight:750;
+}
+#statusDialog .status-value {
+  color:#f2f6ee;
+  font-size:13px;
+  font-weight:850;
+  font-variant-numeric:tabular-nums;
+}
+#statusDialog .status-meter {
+  position:relative;
+  display:block!important;
+  box-sizing:border-box;
+  width:100%!important;
+  height:13px!important;
+  min-height:13px!important;
+  margin:0;
+  padding:0;
+  overflow:hidden;
+  border:1px solid #425e5a;
+  border-radius:3px;
+  background:linear-gradient(180deg,#050b0e,#2f4141)!important;
+  box-shadow:inset 0 2px 4px #000a;
+}
+#statusDialog .status-meter-fill {
+  display:block!important;
+  position:relative;
+  box-sizing:border-box;
+  height:100%!important;
+  min-height:11px;
+  margin:0;
+  padding:0;
+  border:0;
+  border-radius:2px;
+  background:linear-gradient(90deg,#485b60,#b3bec0);
+  box-shadow:inset 0 1px 1px #fffc,0 0 6px #ffffff17;
+}
+#statusDialog .status-meter-fill.grade-1{background:linear-gradient(90deg,#564372,#bfaae6)}
+#statusDialog .status-meter-fill.grade-2{background:linear-gradient(90deg,#35578c,#9cbeff)}
+#statusDialog .status-meter-fill.grade-3{background:linear-gradient(90deg,#23677b,#71dfe6)}
+#statusDialog .status-meter-fill.grade-4{background:linear-gradient(90deg,#346948,#b4eb9b)}
+#statusDialog .status-meter-fill.grade-5{background:linear-gradient(90deg,#8f542b,#ffc77b)}
+#statusDialog .status-meter-fill.grade-6{background:linear-gradient(90deg,#953e49,#ff9f9a)}
+#statusDialog .status-meter-fill.grade-7{background:linear-gradient(90deg,#99702b,#ffdf8e)}
+#statusDialog .status-meter-fill.grade-8{background:linear-gradient(90deg,#af8533,#fff0a1)}
+#statusDialog .status-meter-fill.grade-9{background:linear-gradient(90deg,#bd9a45,#fff7c4)}
+#statusDialog .status-row-ignored {opacity:.54}
+#statusDialog .status-row-ignored .status-meter{background:#222c2e!important}
+@media(max-width:500px) {
+  #candidates.candidates {gap:7px}
+  #candidates.candidates > .candidate {padding:6px;gap:6px}
+  #candidates.candidates > .candidate.selected {padding:5px}
+  #candidates .candidate-image-button img.hero-portrait{height:clamp(82px,23vw,110px)}
+  #candidates .candidate-select strong.candidate-name{font-size:12px}
+  #candidates .candidate-select .candidate-speed{font-size:11px;letter-spacing:-.045em}
+  dialog#statusDialog{width:calc(100vw - 16px);max-width:calc(100vw - 16px);max-height:calc(100dvh - 24px)}
+  #statusDialog .status-dialog-head{padding:10px 12px}
+  #statusDialog .status-dialog-body{padding:9px 10px 14px;max-height:calc(100dvh - 86px)}
+  #statusDialog .status-row{grid-template-columns:24px 31px minmax(0,1fr);column-gap:6px;padding:8px 7px;min-height:59px}
+  #statusDialog .status-icon{font-size:18px}
+  #statusDialog .status-grade{min-width:29px;height:28px;font-size:14px}
+  #statusDialog .status-value{font-size:12px}
+  #statusDialog .status-meter{height:12px!important;min-height:12px!important}
+}
