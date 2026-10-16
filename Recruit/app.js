@@ -1,6 +1,6 @@
 (() => {
   'use strict';
-  const D=window.DFCH_DATA, C=window.DFCHRecruitConfig, S=window.DFCHRecruitSpeed;
+  const D=window.DFCH_DATA, C=window.DFCHRecruitConfig, ST=window.DFCHRecruitStatus;
   const $=id=>document.getElementById(id);
   const storeKey='dfch-recruit-v1-independent';
   const heroGuides=window.DFCHHeroPreferences?.heroes||[];
@@ -17,7 +17,7 @@
       .catch(err=>{iconCache.delete(src);throw err;}));
     return iconCache.get(src);
   }
-  if(!D||!C||!S){$('notice').textContent='資料載入失敗，請重新整理頁面。';return;}
+  if(!D||!C||!ST){$('notice').textContent='資料載入失敗，請重新整理頁面。';return;}
   const name6={13:'伊茲',19:'蘭德格里茲',22:'伊茲（海裝）',23:'齊格菲（海裝）',27:'弗拉斯萬',34:'阿卡夏',43:'蘭德格里茲（異鄉）',44:'露娜',47:'伊茲（聖夜）',53:'戀心公主（海裝）',54:'阿卡夏（海裝）',59:'弗雷雅',60:'芙麗嘉'};
   const state={pool:0,hiddenEye:false,hiddenSword:false,ownedEye:false,ownedSword:false,seen:[],progress:{},results:[],selected:0,confirmed:0,history:[]};
   function restore(){
@@ -182,7 +182,8 @@
   function createCandidate(position,alreadyHasSix){
     const star=rollRarity(position,alreadyHasSix),id=pickHero(star);
     if(id===null)return null;
-    return {star,id,skills:buildSkills(star,id),speed:S.generate(id,star)};
+    const status=ST.generate(id,star);
+    return {star,id,skills:buildSkills(star,id),status,speed:status.speed};
   }
 
   const groupLabels=['確定能力','自由能力','攻擊增益','HP 增益'];
@@ -280,7 +281,12 @@
     $('detail').hidden=false;
     const doc=r.star===6?sixDoc(r.id):null;
     const head=el('div','hero-profile'),photo=portrait(r.id);
-    if(photo)head.append(photo);
+    if(photo){
+      const photoButton=el('button','detail-portrait-button');photoButton.type='button';
+      photoButton.setAttribute('aria-label','查看'+nameOf(r.id)+'的11項能力');
+      photoButton.title='點擊圖片查看11項能力';
+      photoButton.append(photo);photoButton.addEventListener('click',()=>openStatusModal(r));head.append(photoButton);
+    }
     const info=el('div','hero-profile-text');
     info.append(el('h3','',nameOf(r.id)+' · '+r.star+' 星'));
     if(r.star===6&&titleOf(r.id))info.append(el('p','hero-title',titleOf(r.id)));
@@ -313,18 +319,62 @@
       }
     }
   }
+  const statusIcons=['❤️','⚔️','🥾','🏹','💥','⏱️','🪓','⚖️','💛','🪙','✨'];
+  function openStatusModal(r){
+    if(!r?.status?.stats){return;}
+    const panel=$('statusDialog');if(!panel)return;
+    $('statusHero').replaceChildren();
+    const portraitNode=portrait(r.id);
+    if(portraitNode)$('statusHero').append(portraitNode);
+    const heading=el('div','status-hero-heading');
+    heading.append(el('h2','',nameOf(r.id)+' · '+r.star+'★'),el('p','',r.status.mode+' · 初始能力'));
+    $('statusHero').append(heading);
+    $('statusRows').replaceChildren();
+    r.status.stats.forEach((a,j)=>{
+      const row=el('div','status-row'+(a.ignored?' status-row-ignored':''));
+      const icon=el('span','status-icon',statusIcons[j]);icon.setAttribute('aria-hidden','true');
+      const content=el('div','status-row-content');
+      const header=el('div','status-row-header');
+      header.append(el('span','status-name',a.name));
+      header.append(el('span','status-value',a.ignored?'不適用':a.text));
+      const meter=el('div','status-meter');
+      meter.setAttribute('role','progressbar');
+      meter.setAttribute('aria-label',a.name+'能力等級');
+      meter.setAttribute('aria-valuemin','0');meter.setAttribute('aria-valuemax','100');
+      meter.setAttribute('aria-valuenow',a.ignored?'0':String(Math.round(a.level*10)/10));
+      if(!a.ignored){
+        const fill=el('div','status-meter-fill grade-'+a.rank);
+        fill.style.width=a.percent+'%';
+        meter.append(fill);
+      }
+      content.append(header,meter);
+      const rank=el('span','status-grade'+(a.ignored?' is-ignored':' grade-'+a.rank),a.ignored?'—':a.grade);
+      if(!a.ignored)rank.title='內部初始等級 '+a.level.toFixed(2);
+      row.append(icon,rank,content);
+      $('statusRows').append(row);
+    });
+    if(!panel.open)panel.showModal();
+  }
   function renderCandidates(){
     $('candidates').replaceChildren();
     state.results.forEach((r,i)=>{
-      const card=el('button','candidate'+(r.star>=5?' rarity'+r.star:''));card.type='button';
-      card.setAttribute('aria-pressed',String(i===state.selected));
-      const photo=portrait(r.id);if(photo)card.append(photo);
-      card.append(el('span','stars','★'.repeat(r.star)),el('strong','',nameOf(r.id)));
-      if(r.star===6&&titleOf(r.id))card.append(el('span','hero-subtitle',titleOf(r.id)));
-      card.append(el('span','sub',r.skills.filter(x=>x.id!==null).length+' 項能力'));
-      if(r.speed)card.append(el('span','candidate-speed',speedText(r)));
-      card.addEventListener('click',()=>{state.selected=i;renderCandidates();renderDetail();});
-      $('candidates').append(card);
+      const card=el('div','candidate'+(r.star>=5?' rarity'+r.star:'')+(i===state.selected?' selected':''));
+      const preview=el('button','candidate-image-button');preview.type='button';
+      preview.title='點擊圖片查看11項能力';preview.setAttribute('aria-label','查看'+nameOf(r.id)+'的11項能力');
+      const photo=portrait(r.id);
+      if(photo)preview.append(photo);
+      else preview.append(el('span','candidate-fallback','查看英靈能力'));
+      preview.append(el('span','candidate-image-hint','查看11項能力'));
+      preview.addEventListener('click',()=>openStatusModal(r));
+      const choose=el('button','candidate-select');choose.type='button';
+      choose.setAttribute('aria-pressed',String(i===state.selected));
+      choose.title='選擇這位英靈';
+      choose.append(el('span','stars','★'.repeat(r.star)),el('strong','',nameOf(r.id)));
+      if(r.star===6&&titleOf(r.id))choose.append(el('span','hero-subtitle',titleOf(r.id)));
+      choose.append(el('span','sub',r.skills.filter(x=>x.id!==null).length+' 項能力'));
+      if(r.speed)choose.append(el('span','candidate-speed',speedText(r)));
+      choose.addEventListener('click',()=>{state.selected=i;renderCandidates();});
+      card.append(preview,choose);$('candidates').append(card);
     });
     renderDetail();
   }
@@ -358,7 +408,13 @@
       summary.append(el('span','history-time','#'+(entry.sequence||'?')+' · '+(entry.time||'')+' · '+(D.poolNames[C.keys[entry.pool]]||'')),
         el('strong','',r.star+'★ '+nameOf(r.id)));
       if(r.speed)summary.append(el('small','history-speed',speedText(r)));
-      fold.append(summary);
+      if(r.status?.stats){
+        const inspect=el('button','history-status-button','查看已取得能力');inspect.type='button';
+        inspect.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();openStatusModal(r);});
+        // A <summary> cannot safely contain another interactive control; place this after the details summary.
+        fold.append(summary,inspect);
+      }
+      if(!fold.contains(summary))fold.append(summary);
       const row=el('div','history-choice-grid');
       entry.candidates.forEach((candidate,i)=>{
         const card=el('div','history-choice'+(i===entry.selected?' chosen':''));
@@ -415,7 +471,7 @@
     state.history.unshift({
       pool:state.pool,time:drawnAt||new Date().toLocaleString('zh-TW',{hour12:false}),
       sequence:state.confirmed,selected:state.selected,
-      candidates:state.results.map(x=>({id:x.id,star:x.star,speed:x.speed,skills:x.skills.map(y=>({id:y.id,role:y.role}))}))
+      candidates:state.results.map(x=>({id:x.id,star:x.star,speed:x.speed,status:x.status,skills:x.skills.map(y=>({id:y.id,role:y.role}))}))
     });
     state.history=state.history.slice(0,200);
     save();renderHistory();
@@ -444,6 +500,8 @@
       ['modalEye','hiddenEye'],['modalSword','hiddenSword'],['ownedEye','ownedEye'],['ownedSword','ownedSword']]){
       $(id).addEventListener('change',()=>setArtifact(key,$(id).checked));
     }
+    $('closeStatus').addEventListener('click',()=>$('statusDialog').close());
+    $('statusDialog').addEventListener('click',e=>{if(e.target===$('statusDialog'))$('statusDialog').close();});
     $('openAbilities').addEventListener('click',openPoolAbilities);
     $('closeAbilities').addEventListener('click',()=>$('poolAbilitiesDialog').close());
     $('abilitySearch').addEventListener('input',renderPoolAbilities);
