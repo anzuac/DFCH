@@ -336,12 +336,14 @@
     const theory=A.theory(p,{...o,seen});
     $('targetStatTotal').textContent='已紀錄 '+values.total.toLocaleString('zh-TW')+' 位非六星'+
       (mode==='obtained'?'正式取得英靈':'候選英靈');
-    for(const group of [{kind:'禁斷／貪欲',id:'targetBaseRows',heading:'targetBaseHeading'},
-      {kind:'三金組合',id:'targetGoldRows',heading:'targetGoldHeading'}]){
+    let visibleGroups=0;
+    for(const group of [{kind:'禁斷／貪欲',id:'targetBaseRows',heading:'targetBaseHeading',wrap:'targetBaseWrap'},
+      {kind:'三金組合',id:'targetGoldRows',heading:'targetGoldHeading',wrap:'targetGoldWrap'}]){
       const body=$(group.id);body.replaceChildren();
       const subset=A.regular.filter(row=>row.section===group.kind&&theory.regular[row.mask]>0);
       $(group.heading).hidden=!subset.length;
-      body.parentElement.hidden=!subset.length;
+      $(group.wrap).hidden=!subset.length;
+      visibleGroups+=subset.length;
       for(const item of subset){
         const tr=el('tr');tr.append(el('td','',A.label(item.mask)),
           el('td','',(values.regular[item.mask]||0).toLocaleString('zh-TW')),
@@ -351,6 +353,7 @@
     }
     const mixed=Object.entries(theory.special).map(([mask,p])=>({mask:Number(mask),p})).sort((a,b)=>b.p-a.p);
     $('targetMixedDetails').hidden=!mixed.length;
+    $('targetNone').hidden=visibleGroups>0||mixed.length>0;
     $('targetMixedRate').textContent=rate(theory.mixedTotal);
     $('targetMixedCount').textContent='命中 '+Object.values(values.mixed).reduce((s,n)=>s+n,0).toLocaleString('zh-TW')+' 次';
     const rows=$('targetMixedRows');rows.replaceChildren();
