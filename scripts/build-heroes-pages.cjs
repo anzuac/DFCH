@@ -277,5 +277,21 @@ fs.writeFileSync(
   'utf8',
 );
 
+// Fail the deployment rather than silently publishing broken scripts or stylesheets.
+for(const page of ['index.html','heroes.html','heroes/index.html',
+  'recruit/index.html','bond30/index.html','diamond/index.html','team/index.html']){
+ const htmlPath=path.join(outputDir,page);
+ const markup=fs.readFileSync(htmlPath,'utf8');
+ const base=markup.includes('<base href="/">')?outputDir:path.dirname(htmlPath);
+ for(const match of markup.matchAll(/<(?:script|link)\\b[^>]*?\\b(?:src|href)="([^"]+)"/g)){
+  const raw=match[1].split(/[?#]/)[0];
+  if(!raw||/^(?:https?:|data:|\/\/)/i.test(raw))continue;
+  const target=raw.startsWith('/')?path.join(outputDir,raw.slice(1)):path.resolve(base,raw);
+  if(!target.startsWith(outputDir+path.sep)||!fs.existsSync(target)){
+   throw new Error('Missing published asset on '+page+': '+raw);
+  }
+ }
+}
+
 console.log('Cloudflare Pages: homepage plus five public tools prepared in dist-heroes/');
 console.log('Published: Home, Heroes, Recruit, Bond30, Diamond and Team (whitelisted assets).');
