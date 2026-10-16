@@ -1,4 +1,4 @@
-/* DFCH Recruit V2.5.0 — independent read-only theoretical analytics and slim totals. */
+/* DFCH Recruit V2.5.1 — independent read-only theoretical analytics and slim totals. */
 (() => {
   'use strict';
   const D=window.DFCH_DATA,C=window.DFCHRecruitConfig,
@@ -22,6 +22,7 @@
   }
   const origin=current();
   const startPool=Number.isInteger(origin.pool)&&origin.pool>=0&&origin.pool<9?origin.pool:0;
+  let lastSourcePool=startPool;
   function poolList(){
     for(let i=0;i<9;i++){
       const option=el('option','',D.poolNames[C.keys[i]]||C.keys[i]);option.value=String(i);
@@ -62,20 +63,19 @@
     const v=activeTheory(),pool=v.pool;
     $('theoryRarities').replaceChildren();
     v.probs.forEach((p,i)=>$('theoryRarities').append(statCard((i+3)+' 星',pct(p,4))));
-    const global=v.state.bonusValkyrja?'已持有':'未持有';
+    const active=[];
+    if(v.state.bonusValkyrja)active.push('女武神的蜜酒');
     const extra=B.poolArtifact(pool);
-    const owned=!!(extra&&v.state.poolBonusOwned?.[String(pool)]);
-    $('theorySettings').textContent='女武神的蜜酒：'+global+
-      (extra?' · '+extra.name+'：'+(owned?'已持有':'未持有'):' · 本池無指定加成神器')+
-      ' · 天才加成：+'+v.ability731+'%';
+    if(extra&&v.state.poolBonusOwned?.[String(pool)])active.push(extra.name);
+    if(v.ability731>0)active.push('天才加成 +'+v.ability731+'%');
+    $('theorySettings').textContent=active.length?'目前加成：'+active.join('、'):'目前未啟用機率加成神器';
     const progress=v.state.progress?.[pool]||{count:0,round:0};
     const count=Number.isInteger(progress.count)?progress.count:0;
     const round=Number.isInteger(progress.round)?progress.round:0;
     const ceil=C.publicCeiling[pool];
-    const forced=count===49?(ceil&&round+1>=ceil&&v.six.length?'第 50 抽首位保底六星':'第 50 抽首位保底至少五星'):
-      '尚未到第 50 抽；下次進度 '+(count+1)+'/50';
-    $('theoryPity').textContent='保底狀態：'+forced+
-      '。上方與下表為普通候選基礎機率，不含保底與同輪六星限制。';
+    const forced=count===49?(ceil&&round+1>=ceil&&v.six.length?'第 50 抽首位保底六星':'第 50 抽首位至少五星'):
+      '下一抽進度 '+(count+1)+'/50';
+    $('theoryPity').textContent='目前保底：'+forced;
     const rows=$('theoryHeroes');rows.replaceChildren();
     const k=C.keys[pool],five=D.poolRarityRoster[k]?.['5']||[];
     for(const [star,ids] of [[5,five],[6,v.six]]){
@@ -100,9 +100,8 @@
     if(!data){$('gRate').textContent='—';$('slowRate').textContent='—';return;}
     $('gRate').textContent=pct(data.g,5);
     $('slowRate').textContent=pct(data.zero,6);
-    $('speedNote').textContent=(data.fixed?'固定六星模板':'依角色的常態速度初始等級與特殊類型加權')+
-      ' · '+star+'★ '+nameOf(id)+
-      (star<=4?' · 天才神器累計 +'+v.ability731+'%':' · 模板強制類型');
+    $('speedNote').textContent=star+'★ '+nameOf(id)+
+      (data.fixed?' · 固定速度':star===5?' · 普通類型':' · 已包含目前的特殊類型加成');
     const body=$('speedTypes');body.replaceChildren();
     for(const type of data.rows){
       if(type.chance<=0)continue;
@@ -154,8 +153,19 @@
   });
   window.addEventListener('storage',e=>{
     if(e.key===T.key)renderObserved();
-    if(e.key==='dfch-recruit-v1-independent')renderTheory();
+    if(e.key==='dfch-recruit-v1-independent')refresh();
   });
+  function refresh(){
+    const state=current();
+    const selected=Number(state.pool);
+    if(Number.isInteger(selected)&&selected>=0&&selected<9&&selected!==lastSourcePool){
+      $('analysisPool').value=String(selected);
+      lastSourcePool=selected;
+      renderTheory(true);
+    }else renderTheory();
+    renderObserved();
+  }
+  window.DFCHRecruitStatisticsUI=Object.freeze({refresh});
   renderTheory();
   renderObserved();
 })();
