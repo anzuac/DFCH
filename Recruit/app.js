@@ -85,11 +85,22 @@
     for(let i=0;i<arr.length;i++){cursor-=arr[i];if(cursor<0)return i;}
     return arr.length-1;
   }
-  function rollRarity(){
-    const w=weights(),mode=currentMode();
-    if(mode==='six')return 6;
-    if(mode==='five'){const i=weightedIndex([w[2],w[3]]);return i<0?5:i+5;}
-    const i=weightedIndex(w);return i<0?3:i+3;
+  function rollRarity(position,alreadyHasSix){
+    const w=weights();
+    // APK 3.16.1 ChooseRarityAndMaster:
+    // mode 4/6/8 enforces minimum rarity only at candidate index 0.
+    // After any six-star candidate has been generated in this group of three,
+    // additional six-star attempts are rejected and re-sampled.
+    // Removing that weight here reproduces the accepted-rarity distribution.
+    if(alreadyHasSix)w[3]=0;
+    const mode=position===0?currentMode():'normal';
+    if(mode==='six'&&w[3]>0)return 6;
+    if(mode==='five'||mode==='six'){
+      const i=weightedIndex([w[2],w[3]]);
+      return i<0?5:i+5;
+    }
+    const i=weightedIndex(w);
+    return i<0?3:i+3;
   }
   function pickHero(star){
     let pool=rarityList(star);
@@ -148,8 +159,8 @@
     while(selected.length<maximum)selected.push({id:null,role:'空格'});
     return selected.slice(0,maximum);
   }
-  function createCandidate(){
-    const star=rollRarity(),id=pickHero(star);
+  function createCandidate(position,alreadyHasSix){
+    const star=rollRarity(position,alreadyHasSix),id=pickHero(star);
     if(id===null)return null;
     return {star,id,skills:buildSkills(star,id)};
   }
@@ -297,7 +308,10 @@
     }
     state.results=[];
     drawnAt=new Date().toLocaleString('zh-TW',{hour12:false});
-    for(let i=0;i<3;i++){const r=createCandidate();if(r)state.results.push(r);}
+    for(let i=0;i<3;i++){
+      const r=createCandidate(i,state.results.some(x=>x.star===6));
+      if(r)state.results.push(r);
+    }
     if(!state.results.length){
       $('notice').textContent='無法建立可抽角色，請先檢查卡池與已取得的六星名單。';
       $('confirm').hidden=true;rarityNotice();$('pendingReminder').hidden=true;renderCandidates();return;
