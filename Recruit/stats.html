@@ -3,68 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="color-scheme" content="dark">
-<title>抽卡機率與統計 V2.5.0｜DFCH</title>
-<link rel="stylesheet" href="./stats.css?v=2.5.0">
+<meta http-equiv="refresh" content="0; url=./index.html#stats">
+<title>抽卡統計｜DFCH</title>
+<style>body{margin:0;padding:30px 18px;background:#0e2022;color:#e4efeb;font:16px/1.6 system-ui,-apple-system,sans-serif}a{color:#e8d39d}</style>
 </head>
 <body>
-<main class="stats-page">
-<header class="stats-header">
-  <div><p class="eyebrow">DFCH · 英靈抽取</p><h1>抽卡機率與統計</h1>
-  <p>理論機率即時計算 · 實際次數精簡累積</p></div>
-  <a class="back-link" href="./index.html">← 返回英靈抽取</a>
-</header>
-<section class="stats-panel">
-  <div class="panel-header"><h2>理論抽中機率</h2><span class="tag">依目前神器設定</span></div>
-  <label class="form-field">查詢招募池<select id="analysisPool"></select></label>
-  <p id="theorySettings" class="muted"></p>
-  <div id="theoryRarities" class="stat-grid four"></div>
-  <p id="theoryPity" class="muted"></p>
-  <h3>五星／六星個別英靈</h3>
-  <p class="hint">未觸發保底、尚未出現六星的單一普通候選機率；並非整輪三位候選或最後選擇取得率。</p>
-  <div class="table-scroll"><table><thead><tr><th>星級</th><th>英靈</th><th>單一候選</th></tr></thead><tbody id="theoryHeroes"></tbody></table></div>
-</section>
-<section class="stats-panel">
-  <h2>G 速與 0.050 km/s 機率</h2>
-  <label class="form-field">指定英靈<select id="analysisHero"></select></label>
-  <div class="stat-grid two">
-    <div class="stat-card"><small>G 級速度機率</small><strong id="gRate">—</strong></div>
-    <div class="stat-card"><small>顯示 0.050 km/s 機率</small><strong id="slowRate">—</strong></div>
-  </div>
-  <p id="speedNote" class="muted"></p>
-  <div class="table-scroll"><table><thead><tr><th>特殊類型</th><th>類型占比</th><th>G 級</th><th>0.050</th></tr></thead><tbody id="speedTypes"></tbody></table></div>
-  <p class="hint">G級及0.050是兩個不同事件。三星／四星按目前天才神器權重混合；五星模板固定普通類型，六星使用固定能力。此處是常態模型的理論近似值。</p>
-</section>
-<section class="stats-panel">
-  <div class="panel-header"><h2>累積抽卡統計</h2><span class="tag">僅存計數，不存明細</span></div>
-  <div class="filters">
-    <label class="form-field">統計範圍<select id="scopePool"><option value="-1">全部九個招募池</option></select></label>
-    <label class="form-field">統計對象<select id="countMode"><option value="candidates">全部候選</option><option value="obtained">正式取得</option></select></label>
-  </div>
-  <div class="stat-grid three">
-    <div class="stat-card"><small>已確認召喚輪數</small><strong id="roundsTotal">0</strong></div>
-    <div class="stat-card"><small id="observedLabel">候選總數</small><strong id="observedTotal">0</strong></div>
-    <div class="stat-card"><small>G 級速度次數</small><strong id="observedG">0</strong></div>
-    <div class="stat-card"><small>0.050 km/s 次數</small><strong id="observedSlow">0</strong></div>
-  </div>
-  <h3>各星級出現次數</h3>
-  <div id="observedRarities" class="stat-grid four"></div>
-  <h3>普通／稀有／老兵／天才</h3>
-  <div class="filters"><label class="form-field">類型統計範圍<select id="humanScope"><option value="lowTypes">僅三星／四星（適合對照理論機率）</option><option value="types">全部星級</option></select></label></div>
-  <div class="table-scroll"><table><thead><tr><th>類型</th><th>次數</th><th>比例</th></tr></thead><tbody id="observedTypes"></tbody></table></div>
-  <h3>五星／六星個別出現次數</h3>
-  <div class="table-scroll"><table><thead><tr><th>英靈</th><th>次數</th></tr></thead><tbody id="observedHeroes"></tbody></table></div>
-  <p class="hint">從 V2.5.0 起，每輪確認取得時才把三位候選及正式取得分別納入累積數字。舊版歷史不回填；本頁沒有保存各輪完整能力或技能資訊。</p>
-  <button id="clearStats" class="danger" type="button">清除第二頁全部累積統計</button>
-  <p id="statsNotice" class="muted" role="status"></p>
-</section>
-<footer>本頁的清除操作只影響累積統計；第一頁的最近 50 筆明細、保底進度和已取得六星不會更動。</footer>
-</main>
-<script src="../Bond30/js/data.js"></script>
-<script src="../hero-preferences-data.js"></script>
-<script src="./config.js?v=2.5.0"></script>
-<script src="./status-data.js?v=2.5.0"></script>
-<script src="./recruit-bonus.js?v=2.5.0"></script>
-<script src="./stats-core.js?v=2.5.0"></script>
-<script src="./stats.js?v=2.5.0"></script>
+<p>抽卡統計已整合至英靈抽取模擬器的「統計資料」分頁。</p>
+<p><a href="./index.html#stats">前往統計資料</a></p>
+<script>location.replace('./index.html#stats');</script>
 </body></html>
