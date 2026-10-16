@@ -81,7 +81,7 @@
 #targetTabPanel .target-hero-speed{font-size:12px;color:#cbdcce;margin:10px 0 0}
 
 /* Draw cost: centered, full-width display; one clear visual tier per digit range. */
-#targetTabPanel .target-cost-bar{
+:is(#targetTabPanel,#recruitTabPanel) .target-cost-bar{
   display:flex;flex-direction:column;align-items:center;justify-content:center;
   gap:3px;width:100%;min-height:88px;padding:12px 15px;margin:14px 0 12px;
   border:1px solid var(--target-cost-border,#5b7774);
@@ -90,37 +90,37 @@
   text-align:center;box-shadow:var(--target-cost-shadow,none);
   transition:background-color .2s,border-color .2s,box-shadow .2s;
 }
-#targetTabPanel .target-cost-label{font-size:13px;font-weight:750;line-height:1.4;letter-spacing:.03em}
-#targetTabPanel .target-cost-value{
+:is(#targetTabPanel,#recruitTabPanel) .target-cost-label{font-size:13px;font-weight:750;line-height:1.4;letter-spacing:.03em}
+:is(#targetTabPanel,#recruitTabPanel) .target-cost-value{
   display:block;max-width:100%;font-size:clamp(23px,4.5vw,35px);
   font-weight:850;line-height:1.25;font-variant-numeric:tabular-nums;
   overflow-wrap:anywhere;
 }
-#targetTabPanel .target-cost-tier-0{
+:is(#targetTabPanel,#recruitTabPanel) .target-cost-tier-0{
   --target-cost-bg:linear-gradient(115deg,#244444,#27413a);
   --target-cost-fg:#f7e5c1;--target-cost-border:#668279;
 }
-#targetTabPanel .target-cost-tier-1{
+:is(#targetTabPanel,#recruitTabPanel) .target-cost-tier-1{
   --target-cost-bg:linear-gradient(115deg,#164e3e,#26705a);
   --target-cost-fg:#e6fff0;--target-cost-border:#62af89;
 }
-#targetTabPanel .target-cost-tier-2{
+:is(#targetTabPanel,#recruitTabPanel) .target-cost-tier-2{
   --target-cost-bg:linear-gradient(115deg,#174b66,#226986);
   --target-cost-fg:#e5f8ff;--target-cost-border:#67b9da;
 }
-#targetTabPanel .target-cost-tier-3{
+:is(#targetTabPanel,#recruitTabPanel) .target-cost-tier-3{
   --target-cost-bg:linear-gradient(115deg,#744719,#96601c);
   --target-cost-fg:#fff2d3;--target-cost-border:#e4b167;
 }
-#targetTabPanel .target-cost-tier-4{
+:is(#targetTabPanel,#recruitTabPanel) .target-cost-tier-4{
   --target-cost-bg:linear-gradient(115deg,#833b35,#ae554b);
   --target-cost-fg:#fff3ed;--target-cost-border:#f2a392;
 }
-#targetTabPanel .target-cost-tier-5{
+:is(#targetTabPanel,#recruitTabPanel) .target-cost-tier-5{
   --target-cost-bg:linear-gradient(115deg,#512f82,#79429e);
   --target-cost-fg:#f9ecff;--target-cost-border:#c9a2e6;
 }
-#targetTabPanel .target-cost-tier-6{
+:is(#targetTabPanel,#recruitTabPanel) .target-cost-tier-6{
   --target-cost-bg:linear-gradient(112deg,#39205e 0%,#6e3379 28%,#a37824 54%,#6e3379 78%,#39205e 100%);
   --target-cost-fg:#fff4b3;--target-cost-border:#ffe19a;
   --target-cost-shadow:0 0 0 1px #f7d78270,inset 0 0 28px #e7b96130,0 0 22px #f0c66655;
@@ -132,7 +132,7 @@
   to{background-position:right center}
 }
 @media(prefers-reduced-motion:reduce){
-  #targetTabPanel .target-cost-tier-6{animation:none;background-position:center}
+  :is(#targetTabPanel,#recruitTabPanel) .target-cost-tier-6{animation:none;background-position:center}
 }
 
 /* Fourth page: official-image skill picker, preset shortcuts, and selected-skill cards. */
