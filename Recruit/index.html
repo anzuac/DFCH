@@ -4,20 +4,45 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="color-scheme" content="dark">
-<title>英靈抽取模擬器V2.2.0｜DFCH</title>
-<link rel="stylesheet" href="./style.css?v=2.2.0">
-<link rel="stylesheet" href="./recruit-ui-fix.css?v=2.2.0">
+<title>英靈抽取模擬器V2.3.0｜DFCH</title>
+<link rel="stylesheet" href="./style.css?v=2.3.0">
+<link rel="stylesheet" href="./recruit-ui-fix.css?v=2.3.0">
 </head>
 <body>
 <main class="container">
   <header class="intro">
-    <div><p class="eyebrow">DFCH · 英靈抽取</p><h1>英靈抽取模擬器V2.2.0</h1><p>九個招募池 · 三位英靈候選 · 點擊圖片查看能力</p></div>
+    <div><p class="eyebrow">DFCH · 英靈抽取</p><h1>英靈抽取模擬器V2.3.0</h1><p>九個招募池 · 三位英靈候選 · 點擊圖片查看能力</p></div>
   </header>
   <div class="columns">
     <aside class="settings card">
       <h2>召喚設定</h2>
       <label class="field">招募池<select id="pool"></select></label>
-      <div class="ratebox"><strong>基礎星級機率</strong><div id="rates" class="rates"></div><small>基礎機率；保底與已取得的六星另行計算。</small></div>
+      <div class="ratebox"><strong>目前星級機率</strong><div id="rates" class="rates"></div><small>已套用選擇的神器；此處是單次基礎權重換算，保底、候選位置及已取得六星條件另行處理。</small></div>
+      <section class="recruit-bonuses" aria-label="招募機率神器">
+        <h3>招募機率神器</h3>
+        <label class="recruit-bonus-check"><input id="bonusValkyrja" type="checkbox">
+          <span>★女武神的蜜酒 <small>所有池 · 五、六星權重 +20%</small></span></label>
+        <label id="poolBonusGroup" class="recruit-bonus-check" hidden><input id="poolBonusOwned" type="checkbox">
+          <span id="poolBonusName"></span></label>
+        <div class="recruit-bonus-levels">
+          <label for="bonusMane">瑞光的鬃毛 <small>提高天才權重</small></label>
+          <select id="bonusMane" aria-label="瑞光的鬃毛等級">
+            <option value="0">未持有</option>
+            <option value="1">Lv.1 · +5%</option>
+            <option value="2">Lv.2 · +10%</option>
+            <option value="3">Lv.3 · +15%</option>
+            <option value="4">Lv.4 · +20%</option>
+          </select>
+          <label for="bonusEmma">★艾瑪的頭環 <small>提高天才權重</small></label>
+          <select id="bonusEmma" aria-label="艾瑪的頭環等級">
+            <option value="0">未持有</option>
+            <option value="1">Lv.1 · +10%</option>
+            <option value="2">Lv.2 · +20%</option>
+          </select>
+        </div>
+        <p id="bonusGeniusSummary" class="recruit-bonus-summary"></p>
+        <small class="recruit-bonus-hint">僅影響下一次召喚；已生成的候選不會重新抽取。年齡與壽命不納入模擬。</small>
+      </section>
       <div class="artifact-inline" role="group" aria-label="神器技能排除">
         <strong>神器排除</strong>
         <label><input id="eye" type="checkbox">眼球</label>
@@ -83,6 +108,7 @@
 <script src="../Bond30/js/data.js"></script>
 <script src="../hero-preferences-data.js"></script>
 <script src="./config.js?v=2.1.0"></script>
-<script src="./status-data.js?v=2.2.0"></script>
-<script src="./app.js?v=2.2.0"></script>
+<script src="./status-data.js?v=2.3.0"></script>
+<script src="./recruit-bonus.js?v=2.3.0"></script>
+<script src="./app.js?v=2.3.0"></script>
 </body></html>
