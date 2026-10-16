@@ -3,9 +3,9 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="選擇英靈來源招募池、配置九格能力，模擬羈絆 30 等抽選與鑽石花費。">
+  <meta name="description" content="選擇英靈來源招募池、配置九格／十格能力，模擬羈絆 30 等抽選與鑽石花費。">
   <title>英靈羈絆 30 等抽選模擬器</title>
-  <link rel="stylesheet" href="css/style.css?v=1.0.1">
+  <link rel="stylesheet" href="css/style.css?v=1.0.2">
   <link rel="stylesheet" href="../public-nav.css?v=1.0.0">
   <link rel="stylesheet" href="../public-display.css?v=1.0.2">
   <script src="../display-settings.js?v=2.1.1"></script>
@@ -13,7 +13,7 @@
   <script src="../public-tool-i18n.js?v=1.0.1" defer></script>
   <script src="../public-nav.js?v=1.3.1" defer></script>
   <script src="js/data.js" defer></script>
-  <script src="js/app.js?v=1.1.0" defer></script>
+  <script src="js/app.js?v=1.1.1" defer></script>
 </head>
 <body class="bond30-public">
   <main class="container">
@@ -37,14 +37,14 @@
           <label class="toggle"><input type="checkbox" id="artifactEye"><span><strong>小惡魔的眼球</strong><small>頭部射擊 I～III</small></span></label>
           <label class="toggle"><input type="checkbox" id="artifactSword"><span><strong>魔劍丹因斯萊夫</strong><small>必殺斬 I～III</small></span></label>
         </div>
-        <p class="hint">勾選會影響自動填入九格的技能選擇；不影響羈絆 30 等的固定排除規則。手動設定九格仍可選擇相關能力。</p>
+        <p class="hint">勾選會影響自動填入自由格的技能選擇；不影響羈絆 30 等的固定排除規則。手動設定能力格仍可選擇相關能力。</p>
       </fieldset>
     </section>
 
     <section class="panel" aria-labelledby="step2">
-      <h2 id="step2"><span class="step">2</span>配置原有九格能力</h2>
+      <h2 id="step2"><span class="step">2</span>配置原有能力（<span id="slotLimitLabel">9 格</span>）</h2>
       <p id="fixedRequiredNotice" class="rule-notice" hidden></p>
-      <div id="slots" class="slots" aria-label="英靈九格能力"></div>
+      <div id="slots" class="slots" aria-label="英靈能力格"></div>
       <div id="completion" class="completion" aria-live="polite"><span id="completionText"></span><div class="progress"><div id="completionBar" class="progress-fill"></div></div></div>
       <div class="actions">
         <button type="button" id="autofill" class="button secondary">隨機填滿可選格</button>
@@ -61,7 +61,7 @@
 
     <section class="panel locked-panel" id="bondGate" aria-live="polite">
       <h2><span class="step">3</span>羈絆 30 等抽選</h2>
-      <p id="bondGateMessage" class="hint">請先完成全部九格能力配置，才可以開始抽選。</p>
+      <p id="bondGateMessage" class="hint">請先完成目前星級的全部能力格配置，才可以開始抽選。</p>
     </section>
 
     <section class="panel" id="bondStage" aria-labelledby="step3" hidden>

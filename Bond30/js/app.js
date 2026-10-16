@@ -73,7 +73,9 @@
     if (requiredExtra()) list.push({ id: requiredExtra(), role: '確定格' });
     return list;
   };
-  const freeSize = () => 9 - fixedSlots().length - (state.star === 5 ? 0 : 2);
+  // APK 3.16.1: 3/4 stars use nine unlocked slots; 5 stars use ten total.
+  const totalSlots = () => state.star === 5 ? 10 : 9;
+  const freeSize = () => totalSlots() - fixedSlots().length - (state.star === 5 ? 0 : 2);
   const held = () => new Set([
     ...fixedSlots().map(x => x.id),
     ...state.buffs.filter(x => x !== null),
@@ -89,7 +91,7 @@
   const totalWeight = list => list.reduce((a, x) => a + x.weight, 0);
   const ready = () => {
     const n = fixedSlots().length + (state.star === 5 ? 0 : state.buffs.filter(x => x !== null).length) + state.chosen.filter(x => x !== null).length;
-    return { n, ok: !!hero() && n === 9 && state.chosen.length === freeSize() && state.chosen.every(x => x !== null) && (state.star === 5 || state.buffs.every(x => x !== null)) };
+    return { n, ok: !!hero() && n === totalSlots() && state.chosen.length === freeSize() && state.chosen.every(x => x !== null) && (state.star === 5 || state.buffs.every(x => x !== null)) };
   };
   const image = (id, className) => {
     const src = D.images[String(id)];
@@ -111,11 +113,13 @@
     const h = hero(), extra = requiredExtra();
     $('heroStatus').textContent = !h ? '此池沒有對應英靈。' :
       '已選擇 ' + h.name + '（' + professionName(h.job) + '）' +
-      (state.star === 5 ? '，固有能力已自動配置。' : extra ? '，已固定「氣力」及「' + nameOf(extra) + '」。' : '。');
+      (state.star === 5 ? '，已配置 ' + fixedSlots().length + ' 項固定能力及 ' + freeSize() + ' 個自由格（共 10 格）。' : extra ? '，已固定「氣力」及「' + nameOf(extra) + '」。' : '。');
   }
 
   function renderSlots() {
     const board = $('slots'); board.replaceChildren();
+    board.classList.toggle('ten-slots', totalSlots() === 10);
+    board.setAttribute('aria-label', '英靈' + totalSlots() + '格能力');
     fixedSlots().forEach(slot => {
       const cell = make('div', undefined, 'slot lock');
       cell.append(image(slot.id, 'glyph'), make('strong', nameOf(slot.id)), make('small', slot.role + ' · 固定'));
@@ -159,7 +163,7 @@
       button.disabled = sameAlreadyHeld || notForJob;
       const info = make('span', undefined, 'info');
       info.append(make('strong', nameOf(x.id)), make('small',
-        notForJob ? '不適用此職業' : sameAlreadyHeld ? '九格已持有' :
+        notForJob ? '不適用此職業' : sameAlreadyHeld ? '已配置於原有能力格' :
         blockedByArtifact ? '神器設定已啟用 · 仍可手動配置' :
         specialArtifact(x.id) ? '羈絆 30 等不會抽到此能力' : ''));
       button.append(image(x.id, 'icon'), info, make('span', '權重 ' + x.weight, 'weight'));
@@ -219,11 +223,13 @@
   }
   function renderGate() {
     const r = ready();
-    $('completionText').textContent = '九格已配置 ' + r.n + ' / 9' + (r.ok ? ' · 可以開始抽選' : ' · 請繼續配置能力');
-    $('completionBar').style.width = (r.n / 9 * 100) + '%';
+    const limit = totalSlots();
+    $('slotLimitLabel').textContent = limit + ' 格';
+    $('completionText').textContent = '能力格已配置 ' + r.n + ' / ' + limit + (r.ok ? ' · 可以開始抽選' : ' · 請繼續配置能力');
+    $('completionBar').style.width = (r.n / limit * 100) + '%';
     $('bondGate').hidden = r.ok;
     $('bondStage').hidden = !r.ok;
-    $('bondGateMessage').textContent = '仍需配置 ' + (9 - r.n) + ' 格才能開放羈絆抽選。';
+    $('bondGateMessage').textContent = '仍需配置 ' + (limit - r.n) + ' 格才能開放羈絆抽選。';
   }
   function render() {
     renderHero();
