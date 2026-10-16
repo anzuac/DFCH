@@ -40,3 +40,19 @@
 .history-heading{align-items:flex-start}.history-heading .subtle{font-size:11px;white-space:normal;max-width:110px}
 .history-summary{flex-direction:column;align-items:flex-start;gap:4px}.history-choice-grid{gap:4px}}
 @media(prefers-reduced-motion:reduce){.rarity-notice.reveal{animation:none}}
+
+/* V1.2: keep up to 200 saved draws without extending the parent iframe/page. */
+.history-scroll-hint{font-size:12px;color:#a9cac2;margin:12px 0 0;line-height:1.5}
+.history-list{
+  max-height:480px;
+  max-height:min(60vh,480px);
+  overflow-y:auto;
+  overscroll-behavior:contain;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-gutter:stable;
+  padding:2px 6px 2px 0;
+}
+.history-list:focus-visible{outline:2px solid #d6b879;outline-offset:3px;border-radius:8px}
+@media(max-width:500px){
+  .history-list{max-height:min(52vh,400px)}
+}

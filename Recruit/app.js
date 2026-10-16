@@ -283,7 +283,18 @@
     });
   }
   function draw(){
-    if(!discardPending())return;
+    // V1 rapid draw: the currently highlighted candidate is the default choice.
+    // The first card is highlighted until the player chooses a different card.
+    // Confirm the previous draw before generating new candidates, so pity and
+    // six-star history are updated in the same order as explicit confirmation.
+    let autoSelectedName='';
+    if(state.results.length){
+      const previous=state.results[state.selected];
+      if(previous){
+        autoSelectedName=nameOf(previous.id);
+        commit();
+      }
+    }
     state.results=[];
     drawnAt=new Date().toLocaleString('zh-TW',{hour12:false});
     for(let i=0;i<3;i++){const r=createCandidate();if(r)state.results.push(r);}
@@ -292,7 +303,8 @@
       $('confirm').hidden=true;rarityNotice();$('pendingReminder').hidden=true;renderCandidates();return;
     }
     state.selected=0;
-    $('notice').textContent='已產生 '+state.results.length+' 位候選英靈；點選卡片查看能力格，再確認正式取得。抽選結果不產生速度或戰鬥面板。';
+    $('notice').textContent=(autoSelectedName?'上一輪已自動確認取得「'+autoSelectedName+'」；':'')+
+      '已產生 '+state.results.length+' 位候選英靈。未手動選擇時預設第一位；再次按「開始召喚」會先確認目前選取的英靈。';
     $('confirm').hidden=false;renderCandidates();rarityNotice();$('pendingReminder').hidden=false;
   }
   function commit(){
