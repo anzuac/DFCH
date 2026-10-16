@@ -174,12 +174,17 @@
     const img=el('img');
     img.alt=official?.name||skillName(id);img.loading='lazy';
     if(path.startsWith('https://api.github.com/')){
-      img.src='data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';
-      img.style.opacity='0.4';
-      getOfficialIcon(path).then(src=>{img.src=src;img.style.opacity='1';}).catch(()=>{
-        img.removeAttribute('src');
-        img.alt=(official?.name||skillName(id))+'（圖示暫時無法載入）';
-      });
+      const sha=path.slice(path.lastIndexOf('/')+1);
+      if(/^[a-f0-9]{40}$/.test(sha)){
+        img.src='./icons/'+sha+'.png';
+        img.onerror=()=>{
+          img.onerror=null; // avoid a loop if both the local asset and fallback fail
+          getOfficialIcon(path).then(src=>{img.src=src;}).catch(()=>{
+            img.removeAttribute('src');
+            img.alt=(official?.name||skillName(id))+'（圖示暫時無法載入）';
+          });
+        };
+      }
     }else img.src=path.startsWith('data:image/')?path:
       (path.startsWith('assets/')?new URL('../Bond30/'+path,location.href).href:path);
     return img;
