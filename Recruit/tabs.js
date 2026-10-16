@@ -1,43 +1,49 @@
-/* Recruit V2.5.1 — two tabs in one document. Draw state never reinitialized. */
+/* Three recruitment tabs with independent selections and preserved draw state. */
 (() => {
   'use strict';
   const $=id=>document.getElementById(id);
-  const recruit=$('recruitTabButton'),stats=$('statsTabButton');
-  const recruitPanel=$('recruitTabPanel'),statsPanel=$('statsTabPanel');
-  if(!recruit||!stats||!recruitPanel||!statsPanel)return;
+  const tabs=[
+    {id:'recruit',button:$('recruitTabButton'),panel:$('recruitTabPanel')},
+    {id:'stats',button:$('statsTabButton'),panel:$('statsTabPanel')},
+    {id:'abilities',button:$('abilityTabButton'),panel:$('abilityTabPanel')}
+  ];
+  if(tabs.some(tab=>!tab.button||!tab.panel))return;
   let selected='';
+  function fromHash(){
+    if(location.hash==='#stats')return 'stats';
+    if(location.hash==='#abilities')return 'abilities';
+    return 'recruit';
+  }
   function show(which,writeHistory=false){
-    const next=which==='stats'?'stats':'recruit';
-    const showingStats=next==='stats';
-    recruitPanel.hidden=showingStats;
-    statsPanel.hidden=!showingStats;
-    recruit.setAttribute('aria-selected',String(!showingStats));
-    stats.setAttribute('aria-selected',String(showingStats));
-    recruit.tabIndex=showingStats?-1:0;
-    stats.tabIndex=showingStats?0:-1;
-    recruit.classList.toggle('is-active',!showingStats);
-    stats.classList.toggle('is-active',showingStats);
-    if(showingStats&&window.DFCHRecruitStatisticsUI?.refresh)
-      window.DFCHRecruitStatisticsUI.refresh();
-    if(writeHistory&&selected!==next){
-      const base=location.pathname+location.search;
-      history.pushState({dfchRecruitTab:next},'',base+(showingStats?'#stats':'#recruit'));
+    const active=tabs.some(x=>x.id===which)?which:'recruit';
+    for(const tab of tabs){
+      const isActive=tab.id===active;
+      tab.panel.hidden=!isActive;
+      tab.button.setAttribute('aria-selected',String(isActive));
+      tab.button.tabIndex=isActive?0:-1;
+      tab.button.classList.toggle('is-active',isActive);
     }
-    selected=next;
+    if(active==='stats')window.DFCHRecruitStatisticsUI?.refresh?.();
+    if(active==='abilities')window.DFCHRecruitStatisticsUI?.refreshAbilities?.();
+    if(writeHistory&&selected!==active){
+      const base=location.pathname+location.search;
+      history.pushState({dfchRecruitTab:active},'',base+'#'+active);
+    }
+    selected=active;
     if(writeHistory)window.scrollTo(0,0);
   }
-  recruit.addEventListener('click',()=>show('recruit',true));
-  stats.addEventListener('click',()=>show('stats',true));
-  for(const [control,tab] of [[recruit,'recruit'],[stats,'stats']]){
-    control.addEventListener('keydown',event=>{
+  tabs.forEach((tab,i)=>{
+    tab.button.addEventListener('click',()=>show(tab.id,true));
+    tab.button.addEventListener('keydown',event=>{
       if(event.key!=='ArrowLeft'&&event.key!=='ArrowRight')return;
       event.preventDefault();
-      const next=tab==='recruit'?'stats':'recruit';
-      show(next,true);
-      (next==='stats'?stats:recruit).focus();
+      const direction=event.key==='ArrowRight'?1:-1;
+      const next=tabs[(i+direction+tabs.length)%tabs.length];
+      show(next.id,true);
+      next.button.focus();
     });
-  }
-  window.addEventListener('popstate',()=>show(location.hash==='#stats'?'stats':'recruit'));
-  window.addEventListener('hashchange',()=>show(location.hash==='#stats'?'stats':'recruit'));
-  show(location.hash==='#stats'?'stats':'recruit');
+  });
+  window.addEventListener('popstate',()=>show(fromHash()));
+  window.addEventListener('hashchange',()=>show(fromHash()));
+  show(fromHash());
 })();
