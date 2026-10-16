@@ -265,25 +265,107 @@
     $('targetNotice').textContent='已取得「'+nameOf(chosen.id)+'」，本次指定抽選完成。';
     persist();render();
   }
-  function updateSlots(){
-    const values=state.slots.map(v=>Number(v)||0);
-    const source=selectable();
-    for(let i=0;i<6;i++){
-      const select=$('targetSlot'+i),value=values[i];
-      select.replaceChildren();
-      const any=el('option','', '任意能力');any.value='0';select.append(any);
-      for(const id of source){
-        if(values.some((v,j)=>i!==j&&v===id))continue;
-        const option=el('option','',skillName(id));option.value=String(id);select.append(option);
+  function skillIcon(id,cls){
+    if(!id)return el('span',cls+' target-skill-placeholder','◇');
+    const path=D.images?.[String(id)];
+    if(!path)return el('span',cls+' target-skill-placeholder','✦');
+    const img=el('img',cls);
+    img.alt='';img.loading='lazy';
+    img.src=path.startsWith('assets/')?'../Bond30/'+path:path;
+    img.onerror=()=>{img.onerror=null;img.hidden=true;};
+    return img;
+  }
+  function pickedMaskIds(mask){
+    return A.ids.filter((id,i)=>mask&(1<<i));
+  }
+  function presets(){
+    const locked=activeRun(),selected=state.slots.filter(Boolean);
+    for(const group of [
+      {section:'禁斷／貪欲',wrap:'targetBasePresets',body:'targetBasePresetButtons'},
+      {section:'三金組合',wrap:'targetGoldPresets',body:'targetGoldPresetButtons'}
+    ]){
+      const area=$(group.body);area.replaceChildren();
+      const matches=A.regular.filter(row=>row.section===group.section)
+        .map(row=>({mask:row.mask,ids:pickedMaskIds(row.mask)}))
+        .filter(row=>feasible(row.ids));
+      $(group.wrap).hidden=!matches.length;
+      for(const item of matches){
+        const names=item.ids.map(id=>skillName(id));
+        const button=el('button','target-preset-button',A.label(item.mask));
+        button.type='button';button.disabled=locked;
+        button.title=names.join(' ＋ ');
+        const chosen=selected.length===item.ids.length&&item.ids.every(id=>selected.includes(id));
+        if(chosen)button.classList.add('is-selected');
+        button.setAttribute('aria-pressed',String(chosen));
+        button.addEventListener('click',()=>{
+          if(activeRun())return;
+          state.slots=Array.from({length:6},(_,i)=>item.ids[i]||0);
+          persist();updateSlots();
+        });
+        area.append(button);
       }
-      select.value=String(value);
-      if(select.selectedIndex<0){select.value='0';state.slots[i]=0;}
+    }
+  }
+  let pickerIndex=-1;
+  function renderSkillOptions(){
+    if(pickerIndex<0)return;
+    const container=$('targetSkillOptions');container.replaceChildren();
+    const query=$('targetSkillSearch').value.trim().toLowerCase();
+    const others=state.slots.filter((id,i)=>id&&i!==pickerIndex);
+    const candidateIds=selectable().filter(id=>
+      !others.includes(id)&&feasible([...others,id]));
+    const options=[0,...candidateIds];
+    let matches=0;
+    for(const id of options){
+      const name=id?skillName(id):'任意能力';
+      if(query&&!name.toLowerCase().includes(query))continue;
+      const button=el('button','target-skill-option');
+      button.type='button';
+      if(state.slots[pickerIndex]===id)button.classList.add('is-selected');
+      button.setAttribute('aria-pressed',String(state.slots[pickerIndex]===id));
+      button.append(skillIcon(id,'target-skill-option-icon'),el('span','target-skill-option-name',name));
+      button.addEventListener('click',()=>{
+        if(activeRun()||pickerIndex<0)return;
+        const index=pickerIndex;
+        state.slots[index]=id;
+        $('targetSkillDialog').close();pickerIndex=-1;
+        persist();updateSlots();
+        $('targetSlot'+index).focus();
+      });
+      container.append(button);matches++;
+    }
+    if(!matches)container.append(el('p','target-skill-empty','沒有符合條件的能力，可清空其他格子後重新選擇。'));
+  }
+  function openSkillPicker(index){
+    if(activeRun())return;
+    pickerIndex=index;
+    $('targetSkillDialogTitle').textContent='選擇指定格 '+(index+1)+' 的能力';
+    $('targetSkillDialogPool').textContent=D.poolNames[C.keys[state.settings.pool]]||C.keys[state.settings.pool];
+    $('targetSkillSearch').value='';
+    renderSkillOptions();
+    $('targetSkillDialog').showModal();
+  }
+  function updateSlots(){
+    const valid=new Set(selectable());
+    for(let i=0;i<6;i++){
+      const button=$('targetSlot'+i),id=state.slots[i];
+      button.replaceChildren();
+      const icon=skillIcon(id,'target-slot-icon');
+      button.append(icon,el('span','target-slot-name',id?skillName(id):'任意能力'),
+        el('span','target-slot-chevron','›'));
+      button.classList.toggle('is-picked',!!id);
+      button.setAttribute('aria-label','指定格 '+(i+1)+'：'+(id?skillName(id):'任意能力')+'，點擊選擇');
+      if(id&&!valid.has(id))button.classList.add('target-slot-unavailable');
+      else button.classList.remove('target-slot-unavailable');
     }
     const ids=state.slots.filter(Boolean);
+    const possible=ids.length?feasible(ids):false;
     $('targetSelectedCount').textContent='已指定 '+ids.length+'／6 項能力';
     $('targetFeasibility').textContent=!ids.length?'請至少選擇 1 項能力':
-      feasible(ids)?'此組合有機會由同一位非六星英靈取得':'這組條件在目前卡池無法同時成立';
-    $('targetFeasibility').classList.toggle('target-unavailable',!!ids.length&&!feasible(ids));
+      possible?'此組合有機會由同一位非六星英靈取得':'這組條件在目前卡池無法同時成立';
+    $('targetFeasibility').classList.toggle('target-unavailable',!!ids.length&&!possible);
+    $('targetClearSlots').disabled=activeRun()||!ids.length;
+    presets();
   }
   // Each completed three-candidate draw costs 700 diamonds, regardless of its result.
   const diamondCost=rounds=>BigInt(Math.max(0,Math.trunc(Number(rounds)||0)))*700n;
@@ -402,7 +484,6 @@
     for(const id of ['targetPool','targetSixMode','target_hiddenEye','target_hiddenSword',
       'target_ownedEye','target_ownedSword','target_bonusValkyrja','targetPoolBonus',
       'target_maneLevel','target_emmaLevel'])$(id).disabled=active;
-    for(let i=0;i<6;i++)$('targetSlot'+i).value=String(state.slots[i]||0);
     updateSlots();
     $('targetMainButton').textContent=running?'暫停模擬':'開始模擬';
     $('targetMainButton').disabled=state.run?.status==='hit';
@@ -416,13 +497,16 @@
       const option=el('option','',D.poolNames[C.keys[i]]||C.keys[i]);
       option.value=String(i);$('targetPool').append(option);
     }
-    for(let i=0;i<6;i++){
-      const select=$('targetSlot'+i);
-      select.addEventListener('change',()=>{
-        state.slots[i]=Number(select.value)||0;
-        persist();updateSlots();
-      });
-    }
+    for(let i=0;i<6;i++)$('targetSlot'+i).addEventListener('click',()=>openSkillPicker(i));
+    $('targetClearSlots').addEventListener('click',()=>{
+      if(activeRun())return;
+      state.slots=[0,0,0,0,0,0];persist();updateSlots();
+    });
+    $('targetSkillSearch').addEventListener('input',renderSkillOptions);
+    $('targetSkillClose').addEventListener('click',()=>{
+      $('targetSkillDialog').close();pickerIndex=-1;
+    });
+    $('targetSkillDialog').addEventListener('close',()=>{pickerIndex=-1;});
     $('targetPool').addEventListener('change',()=>{
       state.settings.pool=Number($('targetPool').value);
       state.slots=[0,0,0,0,0,0];
