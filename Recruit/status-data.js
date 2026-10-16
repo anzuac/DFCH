@@ -1,4 +1,4 @@
-/* DFCH Recruit V2.3.0 — 11 initial ability levels from APK 3.16.1.
+/* DFCH Recruit V2.4.0 — 11 initial ability levels from APK 3.16.1.
  * 64 unique hero-specific 11-element arrays; fixed 6-star templates.
  * HumanType: weighted 3/4-star Normal/Rare/OldSoldier/Genius; 5/6-star official templates.
  * Ability 731 and secondary OldSoldier status vector remain out of scope.
@@ -100,23 +100,36 @@
     const typeBonus=typeBonuses[humanType];
     const stats=levels[i].map((base,index)=>{
       const ignored=(index===4&&ignoreArea.has(i))||(index===6&&ignoreKnockBack.has(i));
-      if(ignored)return {index,key:keys[index],name:names[index],ignored:true,level:null,value:null,text:'不適用',grade:null,rank:null,percent:0};
-      const level=fixed?f(base):calcLevel(base,rng,typeBonus);
+      if(ignored)return {index,key:keys[index],name:names[index],ignored:true,
+        initialLevel:null,currentLevel:null,level:null,oldSoldierBonus:0,
+        value:null,text:'不適用',grade:null,rank:null,percent:0};
+      // CreateRandomStatusData stores initial (x18) and current (x20) separately.
+      // OldSoldier gains +4 to the random mean and +3 to current level ONLY.
+      // UniqueStatusData.GetTotalLevel clamps current + inheritance to rank-9 cap
+      // 99.9 for a newly recruited hero, then GetActualValue / GetRank use total.
+      const initialLevel=fixed?f(base):calcLevel(base,rng,typeBonus);
+      const oldSoldierBonus=humanType===2?3:0;
+      const currentLevel=f(initialLevel+oldSoldierBonus);
+      const level=f(Math.min(currentLevel,f(99.9)));
       const value=valueFromLevel(index,level);
       const rank=Math.max(0,Math.min(9,Math.floor(level/10)));
-      return {index,key:keys[index],name:names[index],ignored:false,level,value,text:format(index,value),grade:ranks[rank],rank,percent:Math.round(level*1000)/1000};
+      return {index,key:keys[index],name:names[index],ignored:false,
+        initialLevel,currentLevel,oldSoldierBonus,level,value,
+        text:format(index,value),grade:ranks[rank],rank,percent:Math.round(level*1000)/1000};
     });
     const speed=stats[2];
     return {stats,fixed,humanType,humanTypeName:typeNames[humanType],ability731,
       humanTypeMode:Number(star)>=5?'模板指定':'按基礎權重抽選',
-      // OldSoldier also writes +3 to a secondary status-level vector.
-      // The later consumer of that second vector is not yet verified:
-      // deliberately NOT added to these 11 initial levels a second time.
+      // The original OldSoldier additional +3 is reflected in the displayed
+      // total/current level, while initialLevel preserves the pre-+3 value.
       mode:fixed?'六星固定模板':humanType===0?'普通類型正負隨機':typeNames[humanType]+'正負隨機',
-      speed:{level:speed.level,speed:speed.value,display:speed.text,gradeIndex:speed.rank,grade:speed.grade,fixed,mode:fixed?'六星固定初始值':typeNames[humanType]+'初始值'}
+      speed:{initialLevel:speed.initialLevel,currentLevel:speed.currentLevel,
+        level:speed.level,speed:speed.value,display:speed.text,
+        gradeIndex:speed.rank,grade:speed.grade,fixed,
+        mode:fixed?'六星固定初始值':typeNames[humanType]+'初始值'}
     };
   }
-  window.DFCHRecruitStatus=Object.freeze({version:'2.3.0',generate,valueFromLevel,formatReadable,
+  window.DFCHRecruitStatus=Object.freeze({version:'2.4.0',generate,valueFromLevel,formatReadable,
     names:Object.freeze(names),typeNames:Object.freeze(typeNames),
     fixedSixIds:Object.freeze([...fixedSix]),rareFixedSixIds:Object.freeze([...rareFixedSix])});
 })();
