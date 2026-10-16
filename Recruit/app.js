@@ -329,6 +329,9 @@
     if(portraitNode)$('statusHero').append(portraitNode);
     const heading=el('div','status-hero-heading');
     heading.append(el('h2','',nameOf(r.id)),el('p','',('★'.repeat(r.star))));
+    if(Number(r.status.humanType)>0){
+      heading.append(el('span','human-type-tag human-type-'+r.status.humanType,r.status.humanTypeName));
+    }
     $('statusHero').append(heading);
     $('statusRows').replaceChildren();
     r.status.stats.forEach((a,j)=>{
@@ -364,6 +367,8 @@
       const photo=portrait(r.id);
       if(photo)preview.append(photo);
       else preview.append(el('span','candidate-fallback','查看能力'));
+      if(Number(r.status?.humanType)>0)
+        preview.append(el('span','human-type-chip human-type-'+r.status.humanType,r.status.humanTypeName));
       preview.append(el('span','candidate-image-hint','查看能力'));
       preview.addEventListener('click',()=>openStatusModal(r));
       const choose=el('button','candidate-select');choose.type='button';
@@ -406,6 +411,7 @@
       summary.append(el('span','history-time','#'+(entry.sequence||'?')+' · '+(entry.time||'')+' · '+(D.poolNames[C.keys[entry.pool]]||'')),
         el('strong','',r.star+'★ '+nameOf(r.id)));
       if(r.speed)summary.append(el('small','history-speed'+speedRankClass(r),speedText(r)));
+      if(Number(r.status?.humanType)>0)summary.append(el('small','history-human-type',r.status.humanTypeName));
       if(r.status?.stats){
         const inspect=el('button','history-status-button','查看已取得能力');inspect.type='button';
         inspect.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();openStatusModal(r);});
