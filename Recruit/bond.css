@@ -1,0 +1,61 @@
+/* DFCH Recruit V2.6.0 — distinct bond evolution borders without changing the original 9/10-slot grid. */
+.bond-settings{
+  margin:13px 0 18px;padding:13px 12px;border:1px solid #49726c;border-radius:12px;
+  background:linear-gradient(155deg,#1c3939,#193134);min-width:0;
+}
+.bond-settings h3{margin:0 0 10px;font-size:16px;color:#f0e1b7}
+.bond-test-label{font-size:10px;color:#b0dccb;border:1px solid #4b796e;
+  padding:3px 6px;border-radius:20px;vertical-align:middle;margin-left:3px;}
+.bond-activate{display:flex;align-items:center;gap:7px;font-size:13px;color:#e3f0e4;margin-bottom:12px;cursor:pointer}
+.bond-activate input{accent-color:#82c4bb;width:16px;height:16px}
+.bond-level-control{margin:5px 0 11px}
+.bond-level-control label{display:flex;justify-content:space-between;gap:8px;font-size:12px;color:#b5d6c9}
+.bond-level-control label strong{color:#f1e0ac;font-size:15px}
+.bond-level-control input[type=range]{width:100%;min-height:30px;margin:5px 0 0;accent-color:#9bd5b6;cursor:pointer}
+.bond-level-control input:disabled{opacity:.45;cursor:not-allowed}
+.bond-ticks{display:flex;justify-content:space-between;gap:0;color:#b4c7bd;font-size:10px;padding:0 2px}
+.bond-legend{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px 8px;margin:12px 0}
+.bond-legend>span{display:flex;align-items:center;gap:6px;min-width:0;color:#d8e5df;font-size:11px}
+.bond-key{display:inline-block;width:13px;height:13px;border-radius:4px;flex:none}
+.bond-key-normal{background:linear-gradient(125deg,#cd79fd,#7cd9fc);border:1px solid #cb9cf0}
+.bond-key-specific{background:linear-gradient(125deg,#f5cc66,#f08f55);border:1px solid #f7d994}
+.bond-key-hp{background:linear-gradient(125deg,#61cf8b,#1b9d83);border:1px solid #75df9f}
+.bond-key-attack{background:linear-gradient(125deg,#ff907e,#d84c70);border:1px solid #ffae8a}
+.bond-settings .bond-reroll{width:100%;min-height:35px;font-size:12px}
+.bond-settings .bond-reroll:disabled{opacity:.55;cursor:not-allowed}
+.bond-hint{margin:8px 0 0;color:#9fc1b6;font-size:11px;line-height:1.6}
+#detail .skills .skill.bond-evolved{
+  border:2px solid #c68cf0!important;background:#302d50!important;
+  box-shadow:0 0 0 1px #c48ae055,0 0 12px #b879e034;position:relative;opacity:1;
+}
+#detail .skills .skill.bond-normal{
+  border-image:none!important;border-color:#c28aff!important;
+  background:linear-gradient(160deg,#372b50,#243f51)!important;
+  box-shadow:inset 0 0 0 1px #66bdec77,0 0 8px #aa75df55;
+}
+#detail .skills .skill.bond-specific{
+  border-color:#f2c86d!important;background:linear-gradient(155deg,#4b3b27,#394331)!important;
+  box-shadow:inset 0 0 0 1px #f2d28477,0 0 9px #eab55b44;
+}
+#detail .skills .skill.bond-hp{
+  border-color:#67d79d!important;background:linear-gradient(155deg,#1e4c41,#233f3a)!important;
+  box-shadow:inset 0 0 0 1px #9aebba44,0 0 9px #60d5a047;
+}
+#detail .skills .skill.bond-attack{
+  border-color:#fd907c!important;background:linear-gradient(155deg,#58343c,#48343b)!important;
+  box-shadow:inset 0 0 0 1px #ffb19a44,0 0 9px #fa887444;
+}
+#detail .skills .skill.bond-evolved .text{color:#fff5de;font-weight:700}
+#detail .skills .skill .bond-chip{
+  display:block;max-width:100%;border-radius:8px;padding:2px 5px;
+  font-size:9px;line-height:1.25;letter-spacing:0;color:#f7f4ec;
+  background:#ffffff20;white-space:nowrap;
+}
+#detail .bond-summary{font-size:12px;font-weight:650;color:#e9d59a;margin:5px 0 0}
+#detail .bond-events-summary{margin:10px 0 2px;font-size:11px;color:#cbded5;line-height:1.65}
+@media(max-width:560px){
+  .bond-settings{padding:10px}
+  #detail .skills .skill.bond-evolved{padding:5px 2px}
+  #detail .skills .skill .bond-chip{font-size:8px;padding:2px 3px}
+  .bond-legend>span{font-size:10px}
+}
