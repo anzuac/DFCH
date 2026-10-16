@@ -1,6 +1,6 @@
 (() => {
   'use strict';
-  const D=window.DFCH_DATA, C=window.DFCHRecruitConfig, ST=window.DFCHRecruitStatus, B=window.DFCHRecruitBonus, T=window.DFCHRecruitStats;
+  const D=window.DFCH_DATA, C=window.DFCHRecruitConfig, ST=window.DFCHRecruitStatus, B=window.DFCHRecruitBonus, T=window.DFCHRecruitStats, BD=window.DFCHRecruitBond;
   const $=id=>document.getElementById(id);
   const storeKey='dfch-recruit-v1-independent';
   const heroGuides=window.DFCHHeroPreferences?.heroes||[];
@@ -17,9 +17,9 @@
       .catch(err=>{iconCache.delete(src);throw err;}));
     return iconCache.get(src);
   }
-  if(!D||!C||!ST||!B||!T){$('notice').textContent='資料載入失敗，請重新整理頁面。';return;}
+  if(!D||!C||!ST||!B||!T||!BD){$('notice').textContent='資料載入失敗，請重新整理頁面。';return;}
   const name6={13:'伊茲',19:'蘭德格里茲',22:'伊茲（海裝）',23:'齊格菲（海裝）',27:'弗拉斯萬',34:'阿卡夏',43:'蘭德格里茲（異鄉）',44:'露娜',47:'伊茲（聖夜）',53:'戀心公主（海裝）',54:'阿卡夏（海裝）',59:'弗雷雅',60:'芙麗嘉'};
-  const state={pool:0,hiddenEye:false,hiddenSword:false,ownedEye:false,ownedSword:false,bonusValkyrja:false,poolBonusOwned:{},maneLevel:0,emmaLevel:0,seen:[],progress:{},results:[],selected:0,confirmed:0,history:[]};
+  const state={pool:0,hiddenEye:false,hiddenSword:false,ownedEye:false,ownedSword:false,bonusValkyrja:false,poolBonusOwned:{},maneLevel:0,emmaLevel:0,bondEnabled:true,bondLevel:50,seen:[],progress:{},results:[],selected:0,confirmed:0,history:[]};
   function restore(){
     try{
       const saved=JSON.parse(localStorage.getItem(storeKey)||'null');
@@ -33,6 +33,8 @@
       }
       state.maneLevel=B.validLevel(saved.maneLevel,4);
       state.emmaLevel=B.validLevel(saved.emmaLevel,2);
+      if(typeof saved.bondEnabled==='boolean')state.bondEnabled=saved.bondEnabled;
+      if(Number.isInteger(saved.bondLevel)&&saved.bondLevel>=0&&saved.bondLevel<=50)state.bondLevel=saved.bondLevel;
       state.seen=Array.isArray(saved.seen)?saved.seen.filter(x=>C.six.some(a=>a.includes(x))):[];
       if(saved.progress&&typeof saved.progress==='object')
         for(const [k,v] of Object.entries(saved.progress))
@@ -48,6 +50,7 @@
       ownedEye:state.ownedEye,ownedSword:state.ownedSword,
       bonusValkyrja:state.bonusValkyrja,poolBonusOwned:state.poolBonusOwned,
       maneLevel:state.maneLevel,emmaLevel:state.emmaLevel,
+      bondEnabled:state.bondEnabled,bondLevel:state.bondLevel,
       seen:state.seen,progress:state.progress,confirmed:state.confirmed,history:state.history
     }));}catch(_){}
   }
@@ -194,7 +197,8 @@
     const status=ST.generate(id,star,Math.random,{
       ability731:B.geniusBonus(state.maneLevel,state.emmaLevel)
     });
-    return {star,id,skills:buildSkills(star,id),status,speed:status.speed};
+    const skills=buildSkills(star,id);
+    return {star,id,skills,bondEvents:BD.decide(skills,star,id,Math.random),status,speed:status.speed};
   }
 
   const groupLabels=['確定能力','自由能力','攻擊增益','HP 增益'];
@@ -308,6 +312,37 @@
       (path.startsWith('assets/')?new URL('../Bond30/'+path,location.href).href:path);
     return img;
   }
+  function effectiveBondLevel(){return state.bondEnabled?state.bondLevel:0;}
+  function eventsFor(r,doc){
+    return r.star===6?BD.sixEvents(doc,r.skills):Array.isArray(r.bondEvents)?r.bondEvents:[];
+  }
+  function decoratedSkills(r,doc,level=effectiveBondLevel()){
+    return BD.decorate(r.skills||[],eventsFor(r,doc),level);
+  }
+  function bondMark(event){
+    return event.kind==='hp'?'HP':event.kind==='attack'?'攻擊':event.kind==='specific'?'指定':'進化';
+  }
+  function bondSync(){
+    $('bondEnabled').checked=state.bondEnabled;
+    $('bondLevel').value=String(state.bondLevel);
+    $('bondLevel').disabled=!state.bondEnabled;
+    $('bondLevelValue').textContent='Lv.'+state.bondLevel;
+    $('bondReroll').disabled=!state.results.length;
+  }
+  function bondSettingsChange(){
+    state.bondEnabled=$('bondEnabled').checked;
+    state.bondLevel=Math.max(0,Math.min(50,Number($('bondLevel').value)||0));
+    bondSync();save();
+    if(state.results.length)renderCandidates();
+  }
+  function rerollBond(){
+    if(!state.results.length)return;
+    for(const r of state.results){
+      if(r.star!==6)r.bondEvents=BD.decide(r.skills,r.star,r.id,Math.random);
+    }
+    renderCandidates();
+    $('notice').textContent='已重新抽選目前三位候選的羈絆進化能力；英靈、屬性及保底均未改變。';
+  }
   function renderDetail(){
     const r=state.results[state.selected];$('detail').replaceChildren();
     if(!r){$('detail').hidden=true;return;}
@@ -326,17 +361,24 @@
     if(r.star===6&&titleOf(r.id))info.append(el('p','hero-title',titleOf(r.id)));
     info.append(el('p','desc',r.skills.filter(x=>x.role==='固定').length+' 項固定能力 · '+r.skills.filter(x=>x.role==='自由').length+' 項自由能力'+(r.skills.some(x=>x.id===null)?' · '+r.skills.filter(x=>x.id===null).length+' 個空格':'')));
     info.append(el('p','speed-result'+speedRankClass(r),'移動速度 '+speedText(r)));
+    const bondDoc=r.star===6?doc:null;
+    const activeEvents=eventsFor(r,bondDoc).filter(e=>e.level<=effectiveBondLevel());
+    info.append(el('p','bond-summary',state.bondEnabled?'羈絆 Lv.'+state.bondLevel+' · 已進化 '+activeEvents.length+' 格':'羈絆進化預覽已關閉'));
 
     head.append(info);
     const board=el('div','skills');
     const effect=el('div','ability-info');effect.hidden=true;
-    r.skills.forEach((skill,i)=>{
+    decoratedSkills(r,doc).forEach((skill,i)=>{
       const detail=r.star===6&&skill.role==='固定'?doc?.skills?.[i]:null;
-      const cell=el(detail?'button':'div','skill'+(skill.id===null?' empty':'')+(detail?' skill-button':''));
+      const evolution=skill.bond;
+      const cell=el(detail?'button':'div','skill'+(skill.id===null?' empty':'')+(detail?' skill-button':'')+(evolution?' bond-evolved bond-'+evolution.kind:''));
       if(detail)cell.type='button';
       if(skill.id!==null)cell.append(imageFor(skill.id,detail));
-      cell.append(el('span','text',skill.id===null?'未填滿':detail?.name||skillName(skill.id)),el('span','role',skill.role));
-      cell.title=detail?'查看能力效果':skill.id===null?'未取得能力':skillName(skill.id);
+      const abilityName=skill.id===null?'未填滿':detail?.name||skillName(skill.id);
+      const evolvedName=evolution?(evolution.evolvedName||abilityName+(abilityName.endsWith('+')?'':'+')):abilityName;
+      cell.append(el('span','text',evolvedName),el('span','role',skill.role));
+      if(evolution)cell.append(el('span','bond-chip',bondMark(evolution)+' · '+evolution.level));
+      cell.title=evolution?'羈絆 Lv.'+evolution.level+' · '+bondMark(evolution)+'：'+abilityName+' → '+evolvedName:(detail?'查看能力效果':skill.id===null?'未取得能力':abilityName);
       if(detail)cell.addEventListener('click',()=>{
         effect.replaceChildren(el('strong','',detail.name),el('p','',detail.levelEffects?.[0]||'未提供初始效果說明'),el('small','', '基礎等級上限 '+(detail.baseCap||'—')+' ／ 羈絆後上限 '+(detail.fullCap||'—')));
         effect.hidden=false;
@@ -344,6 +386,10 @@
       board.append(cell);
     });
     $('detail').append(head,board,effect);
+    if(activeEvents.length){
+      const descriptions=activeEvents.map(e=>'Lv.'+e.level+' '+(e.evolvedName||skillName(e.id)+(String(skillName(e.id)).endsWith('+')?'':'+'))+'（'+bondMark(e)+'）');
+      $('detail').append(el('p','bond-events-summary','羈絆進化：'+descriptions.join(' · ')));
+    }
     if(r.star===6){
       if(!doc)$('detail').append(el('p','desc','技能資料載入中…'));
       else {
@@ -411,7 +457,7 @@
       choose.addEventListener('click',()=>{state.selected=i;renderCandidates();});
       card.append(preview,choose);$('candidates').append(card);
     });
-    renderDetail();
+    renderDetail();bondSync();
   }
   function rarityNotice(){
     const max=state.results.reduce((n,x)=>Math.max(n,x.star),0),b=$('rarityNotice');
@@ -460,8 +506,12 @@
         row.append(card);
       });
       fold.append(row);
-      const skills=(r.skills||[]).map((skill,i)=>({id:skill.id,name:r.star===6?sixDoc(r.id)?.skills?.[i]?.name:null})).filter(x=>x.id);
-      fold.append(el('p','history-skills','取得技能：'+skills.map(x=>x.name||skillName(x.id)).join('、')));
+      const doc=r.star===6?sixDoc(r.id):null;
+      const snapshotLevel=entry.bondEnabled===false?0:(Number.isInteger(entry.bondLevel)?entry.bondLevel:0);
+      const skills=decoratedSkills(r,doc,snapshotLevel).filter(x=>x.id);
+      fold.append(el('p','history-skills','取得技能：'+skills.map(x=>{
+        const name=skillName(x.id);return x.bond?(x.bond.evolvedName||name+(name.endsWith('+')?'':'+'))+'〔羈絆'+x.bond.level+'〕':name;
+      }).join('、')));
       li.append(fold);list.append(li);
     });
   }
@@ -509,7 +559,8 @@
     state.history.unshift({
       pool:state.pool,time:drawnAt||new Date().toLocaleString('zh-TW',{hour12:false}),
       sequence:state.confirmed,selected:state.selected,
-      candidates:state.results.map(x=>({id:x.id,star:x.star,speed:x.speed,status:x.status,skills:x.skills.map(y=>({id:y.id,role:y.role}))}))
+      bondLevel:state.bondLevel,bondEnabled:state.bondEnabled,
+      candidates:state.results.map(x=>({id:x.id,star:x.star,speed:x.speed,status:x.status,bondEvents:x.bondEvents||[],skills:x.skills.map(y=>({id:y.id,role:y.role}))}))
     });
     state.history=state.history.slice(0,50);
     save();renderHistory();
@@ -532,7 +583,10 @@
   function bind(){
     C.keys.forEach((k,i)=>{const option=el('option','',D.poolNames[k]||k);option.value=String(i);$('pool').append(option);});
     $('pool').value=String(state.pool);
-    syncArtifacts();syncRecruitBonuses();
+    syncArtifacts();syncRecruitBonuses();bondSync();
+    $('bondEnabled').addEventListener('change',bondSettingsChange);
+    $('bondLevel').addEventListener('input',bondSettingsChange);
+    $('bondReroll').addEventListener('click',rerollBond);
     $('bonusValkyrja').addEventListener('change',()=>setRecruitBonus('bonusValkyrja',$('bonusValkyrja').checked));
     $('poolBonusOwned').addEventListener('change',()=>setRecruitBonus('poolBonusOwned',$('poolBonusOwned').checked));
     $('bonusMane').addEventListener('change',()=>setRecruitBonus('maneLevel',$('bonusMane').value));
