@@ -54,11 +54,16 @@
   const nameOf=id=>heroInfo(id)?.name||name6[id]||D.heroRoster[String(id)]?.name||'未知英靈';
   const titleOf=id=>heroInfo(id)?.title||'';
   const sixDoc=id=>abilityGuide?.heroes?.find(h=>h.slug===heroInfo(id)?.key);
+  // Official 3–5 star sprite icons exported from Unity; separate from 6-star illustrations.
+  const lowStarPortraitIds=new Set([0,1,2,3,4,5,6,7,8,9,10,11,12,14,15,17,18,20,24,25,26,28,29,30,31,35,36,37,38,40,41,42,48,49,50,55,56,57,61,62,63]);
   const portrait=id=>{
-    const info=heroInfo(id);if(!info)return null;
-    const img=el('img','hero-portrait');
-    img.src='../assets/heroes/'+encodeURIComponent(info.key)+'.webp';
-    img.alt=info.name+'（'+info.title+'）';img.loading='lazy';
+    const info=heroInfo(id);
+    const isSprite=lowStarPortraitIds.has(Number(id));
+    if(!isSprite&&!info)return null;
+    const img=el('img',isSprite?'hero-portrait sprite':'hero-portrait');
+    img.src=isSprite?'./images/'+id+'.webp':'../assets/heroes/'+encodeURIComponent(info.key)+'.webp';
+    img.alt=isSprite?nameOf(id):(info.name+'（'+info.title+'）');
+    img.loading='lazy';
     img.onerror=()=>img.remove();
     return img;
   };
@@ -267,7 +272,7 @@
     if(!r){$('detail').hidden=true;return;}
     $('detail').hidden=false;
     const doc=r.star===6?sixDoc(r.id):null;
-    const head=el('div','hero-profile'),photo=r.star===6?portrait(r.id):null;
+    const head=el('div','hero-profile'),photo=portrait(r.id);
     if(photo)head.append(photo);
     const info=el('div','hero-profile-text');
     info.append(el('h3','',nameOf(r.id)+' · '+r.star+' 星'));
@@ -303,7 +308,7 @@
     state.results.forEach((r,i)=>{
       const card=el('button','candidate'+(r.star>=5?' rarity'+r.star:''));card.type='button';
       card.setAttribute('aria-pressed',String(i===state.selected));
-      const photo=r.star===6?portrait(r.id):null;if(photo)card.append(photo);
+      const photo=portrait(r.id);if(photo)card.append(photo);
       card.append(el('span','stars','★'.repeat(r.star)),el('strong','',nameOf(r.id)));
       if(r.star===6&&titleOf(r.id))card.append(el('span','hero-subtitle',titleOf(r.id)));
       card.append(el('span','sub',r.skills.filter(x=>x.id!==null).length+' 項能力'));
@@ -345,7 +350,7 @@
       const row=el('div','history-choice-grid');
       entry.candidates.forEach((candidate,i)=>{
         const card=el('div','history-choice'+(i===entry.selected?' chosen':''));
-        const img=candidate.star===6?portrait(candidate.id):null;if(img)card.append(img);
+        const img=portrait(candidate.id);if(img)card.append(img);
         card.append(el('b','',candidate.star+'★ '+nameOf(candidate.id)),el('small','',i===entry.selected?'正式取得':'未選擇'));row.append(card);
       });
       fold.append(row);
