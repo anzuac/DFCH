@@ -1,5 +1,5 @@
 /* V2.5.1 — shared one-page Recruit / Statistics tabs.
-   Every analytics selector is scoped to #statsTabPanel to avoid overriding recruit cards. */
+   Every analytics selector is scoped to :is(#statsTabPanel,#abilityTabPanel) to avoid overriding recruit cards. */
 .container .recruit-compact-header{
   display:block!important;width:100%;min-width:0;margin:0 0 14px!important;
   padding:2px 2px 0;overflow-wrap:normal;
@@ -21,7 +21,7 @@
   font-size:12px!important;line-height:1.5!important;margin:0!important;max-width:none;
 }
 .recruit-tabs{
-  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;
   width:100%;margin:14px 0 16px;padding:7px;
   border:1px solid #375653;border-radius:14px;background:#10252a;
 }
@@ -40,101 +40,105 @@
 }
 .recruit-tabs .recruit-tab:focus-visible{outline:2px solid #f6d59e;outline-offset:2px}
 .tab-panel[hidden]{display:none!important}
-#statsTabPanel{
+:is(#statsTabPanel,#abilityTabPanel){
   --s-sub:#b5cdc4;--s-panel:#1b3335;--s-card:#213e3e;
   --s-line:#44665d;--s-gold:#f3dcaa;
   width:100%;min-width:0;color:#e8f0e8;line-height:1.6;
 }
-#statsTabPanel .stats-panel{
+:is(#statsTabPanel,#abilityTabPanel) .stats-panel{
   padding:clamp(11px,2.5vw,18px);margin:0 0 15px;
   background:var(--s-panel);border:1px solid var(--s-line);border-radius:14px;
   box-shadow:0 6px 18px #07130f39;
   min-width:0;
 }
-#statsTabPanel h2{font-size:clamp(17px,4vw,19px);font-weight:800;line-height:1.4;
+:is(#statsTabPanel,#abilityTabPanel) h2{font-size:clamp(17px,4vw,19px);font-weight:800;line-height:1.4;
   color:var(--s-gold);margin:0 0 12px}
-#statsTabPanel h3{font-size:14px;font-weight:800;color:#eddfbf;margin:15px 0 8px}
-#statsTabPanel .panel-header{display:flex;align-items:center;justify-content:space-between;gap:12px}
-#statsTabPanel .panel-header h2{margin:0}
-#statsTabPanel .form-field{display:grid;gap:6px;min-width:0;color:var(--s-sub);font-size:12px;font-weight:700}
-#statsTabPanel .form-field select{box-sizing:border-box;display:block;
+:is(#statsTabPanel,#abilityTabPanel) h3{font-size:14px;font-weight:800;color:#eddfbf;margin:15px 0 8px}
+:is(#statsTabPanel,#abilityTabPanel) .panel-header{display:flex;align-items:center;justify-content:space-between;gap:12px}
+:is(#statsTabPanel,#abilityTabPanel) .panel-header h2{margin:0}
+:is(#statsTabPanel,#abilityTabPanel) .form-field{display:grid;gap:6px;min-width:0;color:var(--s-sub);font-size:12px;font-weight:700}
+:is(#statsTabPanel,#abilityTabPanel) .form-field select{box-sizing:border-box;display:block;
   width:100%;min-height:43px;padding:9px 10px;margin:0;
   color:#f4f2e8;background:#152d31;border:1px solid #63847b;border-radius:9px;
   font:inherit;font-size:13px}
-#statsTabPanel .stats-panel>.form-field{max-width:500px;margin:12px 0}
-#statsTabPanel .filters{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:13px 0}
-#statsTabPanel .stat-grid{display:grid;gap:9px;margin:12px 0}
-#statsTabPanel .stat-grid.four{grid-template-columns:repeat(4,minmax(0,1fr))}
-#statsTabPanel .stat-grid.three{grid-template-columns:repeat(4,minmax(0,1fr))}
-#statsTabPanel .stat-grid.two{grid-template-columns:repeat(2,minmax(0,1fr))}
-#statsTabPanel .stat-card{display:flex;flex-direction:column;justify-content:center;gap:3px;
+:is(#statsTabPanel,#abilityTabPanel) .stats-panel>.form-field{max-width:500px;margin:12px 0}
+:is(#statsTabPanel,#abilityTabPanel) .filters{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:13px 0}
+:is(#statsTabPanel,#abilityTabPanel) .stat-grid{display:grid;gap:9px;margin:12px 0}
+:is(#statsTabPanel,#abilityTabPanel) .stat-grid.four{grid-template-columns:repeat(4,minmax(0,1fr))}
+:is(#statsTabPanel,#abilityTabPanel) .stat-grid.three{grid-template-columns:repeat(4,minmax(0,1fr))}
+:is(#statsTabPanel,#abilityTabPanel) .stat-grid.two{grid-template-columns:repeat(2,minmax(0,1fr))}
+:is(#statsTabPanel,#abilityTabPanel) .stat-card{display:flex;flex-direction:column;justify-content:center;gap:3px;
   min-width:0;padding:12px 10px;background:var(--s-card);border:1px solid #49685f;border-radius:10px}
-#statsTabPanel .stat-card small{display:block;color:#b9cdc4;font-size:12px;font-weight:500;line-height:1.35}
-#statsTabPanel .stat-card strong{font-size:clamp(17px,2.8vw,25px);font-variant-numeric:tabular-nums;
+:is(#statsTabPanel,#abilityTabPanel) .stat-card small{display:block;color:#b9cdc4;font-size:12px;font-weight:500;line-height:1.35}
+:is(#statsTabPanel,#abilityTabPanel) .stat-card strong{font-size:clamp(17px,2.8vw,25px);font-variant-numeric:tabular-nums;
   color:#f5e5ba;line-height:1.4;overflow-wrap:anywhere}
-#statsTabPanel .stat-card em{font-size:11px;color:#abc6ba;font-style:normal}
-#statsTabPanel .muted,#statsTabPanel .stats-hint{
+:is(#statsTabPanel,#abilityTabPanel) .stat-card em{font-size:11px;color:#abc6ba;font-style:normal}
+:is(#statsTabPanel,#abilityTabPanel) .muted,:is(#statsTabPanel,#abilityTabPanel) .stats-hint{
   margin:8px 0;color:var(--s-sub);font-size:12px;line-height:1.6}
-#statsTabPanel .table-scroll{width:100%;max-width:100%;overflow-x:auto;
+:is(#statsTabPanel,#abilityTabPanel) .table-scroll{width:100%;max-width:100%;overflow-x:auto;
   border:1px solid #466a60;border-radius:9px}
-#statsTabPanel table{border-collapse:collapse;width:100%;min-width:310px;font-size:13px}
-#statsTabPanel thead{background:#284941;color:#f4e3b5}
-#statsTabPanel th,#statsTabPanel td{
+:is(#statsTabPanel,#abilityTabPanel) table{border-collapse:collapse;width:100%;min-width:310px;font-size:13px}
+:is(#statsTabPanel,#abilityTabPanel) thead{background:#284941;color:#f4e3b5}
+:is(#statsTabPanel,#abilityTabPanel) th,:is(#statsTabPanel,#abilityTabPanel) td{
   padding:9px 10px;text-align:left;border-bottom:1px solid #3a5b51;white-space:nowrap;
 }
-#statsTabPanel th:last-child,#statsTabPanel td:last-child{
+:is(#statsTabPanel,#abilityTabPanel) th:last-child,:is(#statsTabPanel,#abilityTabPanel) td:last-child{
   text-align:right;font-variant-numeric:tabular-nums}
-#statsTabPanel tbody tr:last-child td{border-bottom:0}
-#statsTabPanel tbody tr:nth-child(even){background:#24413e66}
-#statsTabPanel .danger{
+:is(#statsTabPanel,#abilityTabPanel) tbody tr:last-child td{border-bottom:0}
+:is(#statsTabPanel,#abilityTabPanel) tbody tr:nth-child(even){background:#24413e66}
+:is(#statsTabPanel,#abilityTabPanel) .danger{
   border:1px solid #ba7774;border-radius:9px;padding:10px 14px;
   color:#ffdddd;background:#653839;font:inherit;font-size:13px;font-weight:750;
   min-height:44px;cursor:pointer
 }
-#statsTabPanel .danger:focus-visible{outline:2px solid #f4c5aa;outline-offset:2px}
+:is(#statsTabPanel,#abilityTabPanel) .danger:focus-visible{outline:2px solid #f4c5aa;outline-offset:2px}
 @media(max-width:680px){
-  #statsTabPanel .stat-grid.four,#statsTabPanel .stat-grid.three{grid-template-columns:repeat(2,minmax(0,1fr))}
-  #statsTabPanel .filters{grid-template-columns:1fr}
-  #statsTabPanel .stat-card strong{font-size:20px}
-  #statsTabPanel .stats-panel{margin-bottom:11px}
+  :is(#statsTabPanel,#abilityTabPanel) .stat-grid.four,:is(#statsTabPanel,#abilityTabPanel) .stat-grid.three{grid-template-columns:repeat(2,minmax(0,1fr))}
+  :is(#statsTabPanel,#abilityTabPanel) .filters{grid-template-columns:1fr}
+  :is(#statsTabPanel,#abilityTabPanel) .stat-card strong{font-size:20px}
+  :is(#statsTabPanel,#abilityTabPanel) .stats-panel{margin-bottom:11px}
 }
 @media(max-width:390px){
   .container .recruit-compact-header h1{font-size:23px!important}
   .container .recruit-compact-header .recruit-version{display:block;margin:1px 0 0;font-size:15px}
   .recruit-tabs{padding:5px;gap:5px}
   .recruit-tabs .recruit-tab{font-size:13px;min-height:43px;padding:9px 3px}
-  #statsTabPanel .stat-card{padding:9px 8px}
-  #statsTabPanel th,#statsTabPanel td{padding:8px}
+  :is(#statsTabPanel,#abilityTabPanel) .stat-card{padding:9px 8px}
+  :is(#statsTabPanel,#abilityTabPanel) th,:is(#statsTabPanel,#abilityTabPanel) td{padding:8px}
 }
 
 /* Player-facing ability forecast and compact expandable mixed combinations. */
-#statsTabPanel .ability-panel .table-scroll[hidden],
-#statsTabPanel .ability-panel h3[hidden],
-#statsTabPanel .ability-mixed[hidden]{display:none!important}
-#statsTabPanel .ability-panel td:first-child{white-space:normal;min-width:160px;line-height:1.5}
-#statsTabPanel .ability-panel th:nth-child(2),
-#statsTabPanel .ability-panel td:nth-child(2){text-align:right;white-space:nowrap}
-#statsTabPanel .ability-panel th:last-child,
-#statsTabPanel .ability-panel td:last-child{white-space:nowrap}
-#statsTabPanel .ability-mixed{
+:is(#statsTabPanel,#abilityTabPanel) .ability-panel .table-scroll[hidden],
+:is(#statsTabPanel,#abilityTabPanel) .ability-panel h3[hidden],
+:is(#statsTabPanel,#abilityTabPanel) .ability-mixed[hidden]{display:none!important}
+:is(#statsTabPanel,#abilityTabPanel) .ability-panel td:first-child{white-space:normal;min-width:160px;line-height:1.5}
+:is(#statsTabPanel,#abilityTabPanel) .ability-panel th:nth-child(2),
+:is(#statsTabPanel,#abilityTabPanel) .ability-panel td:nth-child(2){text-align:right;white-space:nowrap}
+:is(#statsTabPanel,#abilityTabPanel) .ability-panel th:last-child,
+:is(#statsTabPanel,#abilityTabPanel) .ability-panel td:last-child{white-space:nowrap}
+:is(#statsTabPanel,#abilityTabPanel) .ability-mixed{
   margin:18px 0 8px;background:#142b30;border:1px solid #66877a;border-radius:11px;overflow:hidden
 }
-#statsTabPanel .ability-mixed summary{
+:is(#statsTabPanel,#abilityTabPanel) .ability-mixed summary{
   display:flex;align-items:center;justify-content:space-between;gap:12px;
   padding:14px;cursor:pointer;list-style:none
 }
-#statsTabPanel .ability-mixed summary::-webkit-details-marker{display:none}
-#statsTabPanel .ability-mixed summary>span{display:flex;flex-direction:column;gap:3px;min-width:0}
-#statsTabPanel .ability-mixed summary strong{font-size:15px;color:#f3ddb1}
-#statsTabPanel .ability-mixed summary small{font-size:11px;color:#bbd1ca}
-#statsTabPanel .ability-mixed-result{text-align:right}
-#statsTabPanel .ability-mixed-result strong{font-size:21px!important;font-variant-numeric:tabular-nums}
-#statsTabPanel .ability-mixed[open] summary{border-bottom:1px solid #436a61}
-#statsTabPanel .ability-mixed>p{padding:0 13px;margin:11px 0}
-#statsTabPanel .ability-mixed-scroll{max-height:450px;overflow-y:auto;border-radius:0;border:0}
+:is(#statsTabPanel,#abilityTabPanel) .ability-mixed summary::-webkit-details-marker{display:none}
+:is(#statsTabPanel,#abilityTabPanel) .ability-mixed summary>span{display:flex;flex-direction:column;gap:3px;min-width:0}
+:is(#statsTabPanel,#abilityTabPanel) .ability-mixed summary strong{font-size:15px;color:#f3ddb1}
+:is(#statsTabPanel,#abilityTabPanel) .ability-mixed summary small{font-size:11px;color:#bbd1ca}
+:is(#statsTabPanel,#abilityTabPanel) .ability-mixed-result{text-align:right}
+:is(#statsTabPanel,#abilityTabPanel) .ability-mixed-result strong{font-size:21px!important;font-variant-numeric:tabular-nums}
+:is(#statsTabPanel,#abilityTabPanel) .ability-mixed[open] summary{border-bottom:1px solid #436a61}
+:is(#statsTabPanel,#abilityTabPanel) .ability-mixed>p{padding:0 13px;margin:11px 0}
+:is(#statsTabPanel,#abilityTabPanel) .ability-mixed-scroll{max-height:450px;overflow-y:auto;border-radius:0;border:0}
 @media(max-width:500px){
-  #statsTabPanel .ability-panel table{font-size:11px}
-  #statsTabPanel .ability-panel th,#statsTabPanel .ability-panel td{padding:8px 6px}
-  #statsTabPanel .ability-mixed summary{padding:11px}
-  #statsTabPanel .ability-mixed-result strong{font-size:17px!important}
+  :is(#statsTabPanel,#abilityTabPanel) .ability-panel table{font-size:11px}
+  :is(#statsTabPanel,#abilityTabPanel) .ability-panel th,:is(#statsTabPanel,#abilityTabPanel) .ability-panel td{padding:8px 6px}
+  :is(#statsTabPanel,#abilityTabPanel) .ability-mixed summary{padding:11px}
+  :is(#statsTabPanel,#abilityTabPanel) .ability-mixed-result strong{font-size:17px!important}
 }
+
+:is(#statsTabPanel,#abilityTabPanel) .ability-pool-choice{max-width:510px;margin:8px 0 13px}
+:is(#statsTabPanel,#abilityTabPanel) #clearAbilityStats{margin-top:13px}
+@media(max-width:480px){.recruit-tabs{gap:4px}.recruit-tabs .recruit-tab{font-size:12px;padding:9px 3px;white-space:normal}}
