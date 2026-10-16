@@ -4,13 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="color-scheme" content="dark">
-<title>英靈抽取模擬器V2.0.0｜DFCH</title>
-<link rel="stylesheet" href="./style.css?v=2.0.0">
+<title>英靈抽取模擬器V2.1.0｜DFCH</title>
+<link rel="stylesheet" href="./style.css?v=2.1.0">
 </head>
 <body>
 <main class="container">
   <header class="intro">
-    <div><p class="eyebrow">DFCH · 英靈抽取</p><h1>英靈抽取模擬器V2.0.0</h1><p>九個招募池 · 三位英靈候選 · 新增初始移動速度</p></div>
+    <div><p class="eyebrow">DFCH · 英靈抽取</p><h1>英靈抽取模擬器V2.1.0</h1><p>九個招募池 · 三位英靈候選 · 點擊英靈圖片查看11項能力</p></div>
   </header>
   <div class="columns">
     <aside class="settings card">
@@ -35,7 +35,7 @@
       <div id="notice" class="notice" role="status">尚無召喚結果</div>
       <div id="pendingReminder" class="pending-reminder" role="status" hidden>尚未確認取得</div>
       <div id="candidates" class="candidates" aria-live="polite"></div>
-      <p class="speed-notice">V2.0.0 速度測試：三星～五星先以普通類型生成移速，六星使用固定模板；Rare、老兵、天才及神器速度效果留待後續版本。</p>
+      <p class="speed-notice">V2.1.0：點擊上方英靈圖片，查看完整11項初始能力與評級進度條；點擊名稱則選擇候選。三星～五星暫用普通類型亂數，六星採固定模板；老兵、天才及神器修正留待後續版本。</p>
       <div id="detail" class="detail" hidden></div>
       <button id="confirm" class="primary confirm" type="button" hidden>確認取得這位英靈</button>
     </section>
@@ -47,6 +47,18 @@
   </section>
   <footer class="site-footer">非官方模擬器，抽選結果僅供參考。</footer>
 </main>
+<dialog id="statusDialog" class="status-dialog" aria-labelledby="statusDialogTitle">
+  <div class="status-dialog-head">
+    <strong id="statusDialogTitle">英靈能力狀態</strong>
+    <button id="closeStatus" type="button" class="status-close">關閉 ×</button>
+  </div>
+  <div class="status-dialog-body">
+    <div id="statusHero" class="status-hero"></div>
+    <p class="status-help">官方初始能力概念 · 進度條反映內部初始等級（0～99.9），不是面板數值的百分比。</p>
+    <div id="statusRows" class="status-rows"></div>
+    <p class="status-caveat">普通類型初始值測試，不含老兵、天才、Rare與神器加成；極少數末位可能與Android原版不同。</p>
+  </div>
+</dialog>
 <dialog id="poolAbilitiesDialog" class="abilities-dialog" aria-labelledby="abilityDialogTitle">
   <div class="abilities-dialog-head">
     <div><h2 id="abilityDialogTitle">本池可獲得的能力</h2><p id="modalPoolName" class="hint"></p></div>
@@ -72,7 +84,7 @@
 </dialog>
 <script src="../Bond30/js/data.js"></script>
 <script src="../hero-preferences-data.js"></script>
-<script src="./config.js?v=2.0.0"></script>
-<script src="./speed-data.js?v=2.0.0"></script>
-<script src="./app.js?v=2.0.0"></script>
+<script src="./config.js?v=2.1.0"></script>
+<script src="./status-data.js?v=2.1.0"></script>
+<script src="./app.js?v=2.1.0"></script>
 </body></html>
