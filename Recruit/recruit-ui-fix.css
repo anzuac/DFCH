@@ -376,3 +376,49 @@ dialog#statusDialog::backdrop {
   #statusDialog .status-value{font-size:12px}
   #statusDialog .status-meter{height:12px!important;min-height:12px!important}
 }
+
+/* Recruit V2.2.0: HumanType marker distinct from ★ rarity and speed grade. */
+#candidates .candidate-image-button .human-type-chip {
+  display:inline-flex;
+  position:absolute;
+  top:5px;
+  right:5px;
+  z-index:2;
+  max-width:calc(100% - 10px);
+  padding:3px 7px;
+  border-radius:6px;
+  border:1px solid #e0d8b888;
+  box-shadow:0 1px 5px #000b;
+  color:#fff9e9;
+  background:#436065;
+  font-size:clamp(10px,2.5vw,12px);
+  font-weight:850;
+  line-height:1.3;
+  letter-spacing:0;
+  white-space:nowrap;
+  pointer-events:none;
+}
+#candidates .candidate-image-button .human-type-chip.human-type-1,
+.human-type-tag.human-type-1 {background:#235f65;color:#c4faf3;border-color:#76c8cb}
+#candidates .candidate-image-button .human-type-chip.human-type-2,
+.human-type-tag.human-type-2 {background:#66412b;color:#ffdcaa;border-color:#cc9665}
+#candidates .candidate-image-button .human-type-chip.human-type-3,
+.human-type-tag.human-type-3 {background:#594777;color:#f2d8ff;border-color:#c3a0ea}
+#statusDialog .status-hero-heading .human-type-tag,
+.hero-profile-text .human-type-tag {
+  display:inline-flex;
+  align-items:center;
+  width:max-content;
+  max-width:100%;
+  margin:4px 0 0;
+  padding:3px 9px;
+  border:1px solid;
+  border-radius:6px;
+  font-size:12px;
+  font-weight:850;
+  line-height:1.35;
+}
+.history-human-type {display:inline-block;margin:0 0 0 5px;padding:2px 5px;color:#f0e0b0;font-weight:750}
+@media(max-width:400px) {
+  #candidates .candidate-image-button .human-type-chip{font-size:10px;padding:2px 4px}
+}
