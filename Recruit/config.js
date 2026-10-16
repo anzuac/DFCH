@@ -41,6 +41,11 @@ window.DFCHRecruitConfig = Object.freeze({
   highOnly:[303000119,303000123],
   // master.exclusiveIndexes；另一類為 2026 海裝池原生 exclusiveGroupId
   exclusiveSeries:[303000319,303000320,303001009],
+  // 官方技能主表 targetPlayerIndexes（指定角色允許名單，非排除清單）
+  targetPlayerIndexes:{
+    303000251:[1,2,4,5,6,8,9,11,14,15,17,18,20],
+    303000604:[1,3,4,7,28,29,31,40,41]
+  },
   groupExclusive:{'2026_sea_pickup':[[303000709,303000722]]},
   // 使用者的兩件可選技能排除神器，和 710/713 高星課金加成為不同機制
   artifactEye:[303000404,303000405,303000406],

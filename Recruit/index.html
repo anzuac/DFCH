@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="color-scheme" content="dark">
 <title>DFCH｜英靈抽取 V1</title>
-<link rel="stylesheet" href="./style.css?v=1.2.0">
+<link rel="stylesheet" href="./style.css?v=1.4.0">
 </head>
 <body>
 <main class="container">
@@ -18,9 +18,13 @@
       <h2>召喚設定</h2>
       <label class="field">招募池<select id="pool"></select></label>
       <div class="ratebox"><strong>基礎星級機率</strong><div id="rates" class="rates"></div><small>不含加成。保底、六星取得紀錄可能改變實際結果。</small></div>
-      <h3>能力排除神器</h3>
-      <label class="toggle"><input id="eye" type="checkbox"><span>小惡魔的眼球<small>隱藏頭部射擊 I／II／III</small></span></label>
-      <label class="toggle"><input id="sword" type="checkbox"><span>魔劍丹因斯萊夫<small>隱藏必殺斬 I／II／III</small></span></label>
+      <div class="artifact-inline" role="group" aria-label="神器技能排除">
+        <strong>神器排除</strong>
+        <label><input id="eye" type="checkbox">眼球</label>
+        <label><input id="sword" type="checkbox">魔劍</label>
+      </div>
+      <p id="artifactState" class="artifact-state">眼球：未持有 ／ 魔劍：未持有</p>
+      <button id="openAbilities" type="button" class="subtle abilities-open">查看本池能力、權重與神器詳細設定 <span aria-hidden="true">↗</span></button>
       <details class="reserved"><summary>課金五星／六星加成（未啟用）</summary><label class="toggle"><input type="checkbox" disabled>高星加成 710 · V1 不生效</label><label class="toggle"><input type="checkbox" disabled>卡池加成 713 · V1 不生效</label><p class="hint">僅預留欄位，不更動抽出星級或技能權重。</p></details>
       <h3>取得紀錄與保底</h3>
       <p class="summary" id="pity">尚未召喚</p>
@@ -51,8 +55,31 @@
     <ol id="drawHistory" class="history-list" tabindex="0" aria-label="英靈抽取紀錄，可上下捲動"></ol>
   </section>
 </main>
+<dialog id="poolAbilitiesDialog" class="abilities-dialog" aria-labelledby="abilityDialogTitle">
+  <div class="abilities-dialog-head">
+    <div><h2 id="abilityDialogTitle">本池能力與原始權重</h2><p id="modalPoolName" class="hint"></p></div>
+    <button id="closeAbilities" type="button" class="subtle">關閉 ×</button>
+  </div>
+  <div class="abilities-dialog-body">
+    <p class="weight-disclaimer">依照官方卡池原始權重列出所有相關能力，包含不同職業及星級。權重不是抽中機率；實際有效候選會受角色職業、星級、已持有能力、神器及互斥限制影響。確定能力的權重 0 表示固定加入，不代表無法取得。</p>
+    <div class="artifact-modal-grid">
+      <fieldset class="artifact-modal-item"><legend>小惡魔的眼球</legend>
+        <p>頭部射擊 I～III：需先持有神器，亦可選擇排除抽取。</p>
+        <label><input id="ownedEye" type="checkbox">已持有</label>
+        <label><input id="modalEye" type="checkbox">排除相關能力</label>
+      </fieldset>
+      <fieldset class="artifact-modal-item"><legend>魔劍丹因斯萊夫</legend>
+        <p>必殺斬 I～III：需先持有神器，亦可選擇排除抽取。</p>
+        <label><input id="ownedSword" type="checkbox">已持有</label>
+        <label><input id="modalSword" type="checkbox">排除相關能力</label>
+      </fieldset>
+    </div>
+    <label class="field ability-search-label">搜尋能力名稱或 ID<input id="abilitySearch" type="search" placeholder="搜尋技能"></label>
+    <div id="abilitySections" class="ability-sections"></div>
+  </div>
+</dialog>
 <script src="../Bond30/js/data.js"></script>
 <script src="../hero-preferences-data.js"></script>
-<script src="./config.js?v=1.0.0"></script>
-<script src="./app.js?v=1.3.0"></script>
+<script src="./config.js?v=1.4.0"></script>
+<script src="./app.js?v=1.4.0"></script>
 </body></html>

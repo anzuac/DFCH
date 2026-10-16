@@ -19,13 +19,14 @@
   }
   if(!D||!C){$('notice').textContent='資料載入失敗，請重新整理頁面。';return;}
   const name6={13:'伊茲',19:'蘭德格里茲',22:'伊茲（海裝）',23:'齊格菲（海裝）',27:'弗拉斯萬',34:'阿卡夏',43:'蘭德格里茲（異鄉）',44:'露娜',47:'伊茲（聖夜）',53:'戀心公主（海裝）',54:'阿卡夏（海裝）',59:'弗雷雅',60:'芙麗嘉'};
-  const state={pool:0,hiddenEye:false,hiddenSword:false,seen:[],progress:{},results:[],selected:0,confirmed:0,history:[]};
+  const state={pool:0,hiddenEye:false,hiddenSword:false,ownedEye:false,ownedSword:false,seen:[],progress:{},results:[],selected:0,confirmed:0,history:[]};
   function restore(){
     try{
       const saved=JSON.parse(localStorage.getItem(storeKey)||'null');
       if(!saved||typeof saved!=='object')return;
       if(Number.isInteger(saved.pool)&&saved.pool>=0&&saved.pool<9)state.pool=saved.pool;
       state.hiddenEye=!!saved.hiddenEye;state.hiddenSword=!!saved.hiddenSword;
+      state.ownedEye=!!saved.ownedEye;state.ownedSword=!!saved.ownedSword;
       state.seen=Array.isArray(saved.seen)?saved.seen.filter(x=>C.six.some(a=>a.includes(x))):[];
       if(saved.progress&&typeof saved.progress==='object')
         for(const [k,v] of Object.entries(saved.progress))
@@ -38,6 +39,7 @@
   function save(){
     try{localStorage.setItem(storeKey,JSON.stringify({
       pool:state.pool,hiddenEye:state.hiddenEye,hiddenSword:state.hiddenSword,
+      ownedEye:state.ownedEye,ownedSword:state.ownedSword,
       seen:state.seen,progress:state.progress,confirmed:state.confirmed,history:state.history
     }));}catch(_){}
   }
@@ -107,6 +109,9 @@
     if(!pool.length)return null;
     return pool[Math.floor(Math.random()*pool.length)];
   }
+  function ownsArtifact(id){
+    return id===301008017?state.ownedEye:id===301008020?state.ownedSword:false;
+  }
   function allowedSkill(row,star,heroId,selected){
     const id=row.id;
     if(selected.some(x=>x.id===id))return false;
@@ -115,15 +120,18 @@
     if(C.highOnly.includes(id)&&rank<4)return false;
     const info=D.abilityConditions[String(id)]||{};
     const job=D.heroRoster[String(heroId)]?.job||0;
-    if(info.jobMask&&job&&!(info.jobMask&job))return false;
+    if(info.jobMask&&!(info.jobMask&job))return false;
+    // 原生 CheckCondition(chosenCondType=1) 檢查玩家持有神器數量>0
+    if(info.cond===1&&!ownsArtifact(info.condValue))return false;
+    if(info.cond!==undefined&&info.cond!==0&&info.cond!==1)return false;
     if(state.hiddenEye&&C.artifactEye.includes(id))return false;
     if(state.hiddenSword&&C.artifactSword.includes(id))return false;
     if(C.exclusiveSeries.includes(id)&&selected.some(x=>C.exclusiveSeries.includes(x.id)))return false;
     const groups=C.groupExclusive[poolKey()]||[];
     if(groups.some(g=>g.includes(id)&&selected.some(x=>g.includes(x.id))))return false;
-    // 主表的特殊角色排除清單（stage10）
-    if(id===303000251&&[1,2,4,5,6,8,9,11,14,15,17,18,20].includes(heroId))return false;
-    if(id===303000604&&![1,3,4,7,28,29,31,40,41].includes(heroId))return false;
+    // 官方 targetPlayerIndexes 是指定英靈允許名單
+    const targets=C.targetPlayerIndexes?.[id];
+    if(targets?.length&&!targets.includes(heroId))return false;
     return true;
   }
   function pickAbilities(rows,group,num,star,heroId,already){
@@ -163,6 +171,58 @@
     const star=rollRarity(position,alreadyHasSix),id=pickHero(star);
     if(id===null)return null;
     return {star,id,skills:buildSkills(star,id)};
+  }
+
+  const groupLabels=['確定能力','自由能力','攻擊增益','HP 增益'];
+  const jobName=mask=>({0:'不限職業',1:'劍士',2:'弓箭手',4:'法師',7:'全部職業'})[mask]||'職業遮罩 '+mask;
+  const starName=id=>C.lowOnly.includes(id)?'3～4 星':C.highOnly.includes(id)?'5～6 星':'3～6 星';
+  function syncArtifacts(){
+    for(const [id,key] of [['eye','hiddenEye'],['modalEye','hiddenEye'],['sword','hiddenSword'],
+      ['modalSword','hiddenSword'],['ownedEye','ownedEye'],['ownedSword','ownedSword']])
+      $(id).checked=state[key];
+    $('artifactState').textContent='眼球：'+(state.ownedEye?'已持有':'未持有')+
+      ' ／ 魔劍：'+(state.ownedSword?'已持有':'未持有');
+  }
+  function setArtifact(key,checked){
+    state[key]=checked;syncArtifacts();save();
+    if($('poolAbilitiesDialog').open)renderPoolAbilities();
+  }
+  function renderPoolAbilities(){
+    $('modalPoolName').textContent=D.poolNames[poolKey()]||poolKey();
+    const q=$('abilitySearch').value.trim().toLowerCase();
+    const target=$('abilitySections');target.replaceChildren();
+    const rows=D.poolRows[poolKey()].map(([id,group,weight])=>({id,group,weight}));
+    for(let group=0;group<=3;group++){
+      const matching=rows.filter(r=>r.group===group&&(skillName(r.id).toLowerCase().includes(q)||String(r.id).includes(q)));
+      if(!matching.length)continue;
+      const section=el('section','ability-category');
+      section.append(el('h3','',groupLabels[group]+' · '+matching.length+' 項'));
+      const list=el('div','ability-options');
+      for(const r of matching){
+        const info=D.abilityConditions[String(r.id)]||{};
+        const row=el('div','ability-option');
+        row.append(imageFor(r.id));
+        const content=el('div','ability-option-info');
+        content.append(el('strong','',skillName(r.id)),el('small','',String(r.id)));
+        const badges=el('div','ability-tags');
+        badges.append(el('span','',starName(r.id)),el('span','',jobName(info.jobMask)));
+        if(C.targetPlayerIndexes?.[r.id]?.length)badges.append(el('span','ability-limited','限定角色'));
+        if(info.cond===1){
+          const name=info.condValue===301008017?'眼球':'魔劍';
+          const excluded=info.condValue===301008017?state.hiddenEye:state.hiddenSword;
+          const status=!ownsArtifact(info.condValue)?'未持有'+name:excluded?'已設定排除':'神器條件符合';
+          badges.append(el('span',(!ownsArtifact(info.condValue)||excluded)?'ability-blocked':'ability-eligible',status));
+        }
+        content.append(badges);row.append(content,el('b','ability-weight','權重 '+r.weight));
+        list.append(row);
+      }
+      section.append(list);target.append(section);
+    }
+    if(!target.children.length)target.append(el('p','hint','沒有符合搜尋的能力。'));
+  }
+  function openPoolAbilities(){
+    $('abilitySearch').value='';syncArtifacts();renderPoolAbilities();
+    if(!$('poolAbilitiesDialog').open)$('poolAbilitiesDialog').showModal();
   }
   function rates(){
     $('rates').replaceChildren();
@@ -354,14 +414,20 @@
     state.pool=idx;clearPending();
     $('notice').textContent='已切換為「'+D.poolNames[poolKey()]+'」，可開始召喚。';
     rates();updateSummary();save();
+    if($('poolAbilitiesDialog').open)renderPoolAbilities();
   }
   function bind(){
     C.keys.forEach((k,i)=>{const option=el('option','',D.poolNames[k]||k);option.value=String(i);$('pool').append(option);});
     $('pool').value=String(state.pool);
-    $('eye').checked=state.hiddenEye;$('sword').checked=state.hiddenSword;
+    syncArtifacts();
     $('pool').addEventListener('change',()=>setPool(Number($('pool').value)));
-    $('eye').addEventListener('change',()=>{state.hiddenEye=$('eye').checked;save();});
-    $('sword').addEventListener('change',()=>{state.hiddenSword=$('sword').checked;save();});
+    for(const [id,key] of [['eye','hiddenEye'],['sword','hiddenSword'],
+      ['modalEye','hiddenEye'],['modalSword','hiddenSword'],['ownedEye','ownedEye'],['ownedSword','ownedSword']]){
+      $(id).addEventListener('change',()=>setArtifact(key,$(id).checked));
+    }
+    $('openAbilities').addEventListener('click',openPoolAbilities);
+    $('closeAbilities').addEventListener('click',()=>$('poolAbilitiesDialog').close());
+    $('abilitySearch').addEventListener('input',renderPoolAbilities);
     $('draw').addEventListener('click',draw);
     $('confirm').addEventListener('click',commit);
     $('reset').addEventListener('click',reset);

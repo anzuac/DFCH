@@ -56,3 +56,49 @@
 @media(max-width:500px){
   .history-list{max-height:min(52vh,400px)}
 }
+
+/* Compact artifact exclusions on main view, full details in the weighted ability dialog. */
+.artifact-inline{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:18px 0 0;padding:10px;background:#13292e;border:1px solid #496861;border-radius:10px;white-space:nowrap}
+.artifact-inline strong{font-size:12px;color:#f3dba9}
+.artifact-inline label{display:inline-flex;align-items:center;gap:4px;font-size:12px;color:#d0e6d9;cursor:pointer}
+.artifact-inline input,.artifact-modal-item input{accent-color:#93dab6;width:17px;height:17px}
+.artifact-state{color:#acc8bf;font-size:11px;margin:7px 2px 9px}
+.abilities-open{text-align:left;font-size:12px;line-height:1.55;white-space:normal}
+.abilities-dialog{color:#eaf5ee;background:#162b31;border:1px solid #709387;border-radius:15px;padding:0;width:min(94vw,780px);max-height:min(89dvh,900px);box-shadow:0 20px 50px #0009}
+.abilities-dialog::backdrop{background:rgba(0,0,0,.76)}
+.abilities-dialog-head{display:flex;align-items:flex-start;justify-content:space-between;gap:15px;padding:15px 18px;background:#203b3d;border-bottom:1px solid #4d6d67}
+.abilities-dialog-head h2{margin:0;font-size:18px;color:#f2dda9}
+.abilities-dialog-head .hint{margin:5px 0 0}
+.abilities-dialog-head button{width:auto;white-space:nowrap;flex:none}
+.abilities-dialog-body{overflow-y:auto;overscroll-behavior:contain;max-height:calc(89dvh - 91px);padding:12px 17px 24px;-webkit-overflow-scrolling:touch}
+.weight-disclaimer{font-size:12px;line-height:1.7;color:#d2e2db;border:1px solid #4f7d70;background:#1a3938;border-radius:9px;padding:10px;margin:0 0 13px}
+.artifact-modal-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.artifact-modal-item{border:1px solid #526e66;border-radius:10px;padding:11px 10px;margin:0;min-width:0}
+.artifact-modal-item legend{font-size:13px;color:#f4dba8;font-weight:700}
+.artifact-modal-item p{font-size:11px;line-height:1.55;color:#b4cfca;margin:0 0 10px}
+.artifact-modal-item label{display:inline-flex;align-items:center;gap:6px;font-size:12px;margin-right:12px;white-space:nowrap;cursor:pointer}
+.ability-search-label{margin-top:16px}
+.ability-search-label input{font:inherit;background:#11282c;border:1px solid #67837a;border-radius:8px;padding:10px;color:#e9f0ec;width:100%;margin-top:6px}
+.ability-sections{display:grid;gap:14px;margin-top:16px}
+.ability-category{border:1px solid #3e5f59;border-radius:10px;overflow:hidden;background:#11252a}
+.ability-category h3{font-size:14px;margin:0;background:#26413e;color:#e8d2a1;padding:11px 13px}
+.ability-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;padding:9px}
+.ability-option{min-width:0;display:flex;gap:8px;align-items:center;padding:8px;border-radius:8px;border:1px solid #3b5c56;background:#1c363a}
+.ability-option>img{width:44px;height:44px;object-fit:contain;flex:none}
+.ability-option>.skill-icon{width:44px;text-align:center;flex:none}
+.ability-option-info{min-width:0;flex:1}
+.ability-option-info>strong{font-size:12px;line-height:1.35;overflow-wrap:anywhere;display:block}
+.ability-option-info>small{font-size:10px;color:#9bb7ae;display:block;margin-top:2px}
+.ability-tags{display:flex;gap:4px;flex-wrap:wrap;margin-top:5px}
+.ability-tags span{font-size:10px;color:#b6cfc6;padding:2px 5px;border-radius:4px;background:#274845}
+.ability-tags .ability-limited{background:#56442e;color:#f8ddac}
+.ability-tags .ability-blocked{background:#583637;color:#f7c3bd}
+.ability-tags .ability-eligible{background:#2e5136;color:#d4f5d7}
+.ability-weight{font-size:11px;color:#f7dca9;flex:none;white-space:nowrap;align-self:center}
+@media(max-width:610px){.abilities-dialog{width:calc(100vw - 16px);max-height:92dvh}
+.abilities-dialog-head{padding:12px}.abilities-dialog-body{padding:10px;max-height:calc(92dvh - 74px)}
+.artifact-modal-grid{grid-template-columns:1fr}
+.ability-options{grid-template-columns:1fr;padding:7px}
+.ability-option{padding:8px 7px}
+.ability-option>img{width:42px;height:42px}
+}
