@@ -1,6 +1,6 @@
 (() => {
   'use strict';
-  const D=window.DFCH_DATA, C=window.DFCHRecruitConfig, ST=window.DFCHRecruitStatus, B=window.DFCHRecruitBonus;
+  const D=window.DFCH_DATA, C=window.DFCHRecruitConfig, ST=window.DFCHRecruitStatus, B=window.DFCHRecruitBonus, T=window.DFCHRecruitStats;
   const $=id=>document.getElementById(id);
   const storeKey='dfch-recruit-v1-independent';
   const heroGuides=window.DFCHHeroPreferences?.heroes||[];
@@ -17,7 +17,7 @@
       .catch(err=>{iconCache.delete(src);throw err;}));
     return iconCache.get(src);
   }
-  if(!D||!C||!ST||!B){$('notice').textContent='資料載入失敗，請重新整理頁面。';return;}
+  if(!D||!C||!ST||!B||!T){$('notice').textContent='資料載入失敗，請重新整理頁面。';return;}
   const name6={13:'伊茲',19:'蘭德格里茲',22:'伊茲（海裝）',23:'齊格菲（海裝）',27:'弗拉斯萬',34:'阿卡夏',43:'蘭德格里茲（異鄉）',44:'露娜',47:'伊茲（聖夜）',53:'戀心公主（海裝）',54:'阿卡夏（海裝）',59:'弗雷雅',60:'芙麗嘉'};
   const state={pool:0,hiddenEye:false,hiddenSword:false,ownedEye:false,ownedSword:false,bonusValkyrja:false,poolBonusOwned:{},maneLevel:0,emmaLevel:0,seen:[],progress:{},results:[],selected:0,confirmed:0,history:[]};
   function restore(){
@@ -39,7 +39,7 @@
           if(/^[0-8]$/.test(k)&&v&&Number.isInteger(v.count)&&v.count>=0&&v.count<50&&Number.isInteger(v.round)&&v.round>=0&&v.round<=5)
             state.progress[k]={count:v.count,round:v.round};
       if(Number.isInteger(saved.confirmed)&&saved.confirmed>=0)state.confirmed=saved.confirmed;
-      if(Array.isArray(saved.history))state.history=saved.history.filter(r=>r&&Number.isInteger(r.pool)&&r.pool>=0&&r.pool<9&&Array.isArray(r.candidates)&&r.candidates.length===3&&Number.isInteger(r.selected)&&r.selected>=0&&r.selected<3).slice(0,200);
+      if(Array.isArray(saved.history))state.history=saved.history.filter(r=>r&&Number.isInteger(r.pool)&&r.pool>=0&&r.pool<9&&Array.isArray(r.candidates)&&r.candidates.length===3&&Number.isInteger(r.selected)&&r.selected>=0&&r.selected<3).slice(0,50);
     }catch(_){/* Private mode can block storage */}
   }
   function save(){
@@ -436,7 +436,7 @@
   function renderHistory(){
     const list=$('drawHistory');list.replaceChildren();
     $('historyEmpty').hidden=state.history.length>0;
-    $('historyStats').textContent='已保存 '+state.history.length+' 筆確認紀錄（最多 200 筆） · 累計取得 '+state.confirmed+' 次';
+    $('historyStats').textContent='已保存 '+state.history.length+' 筆確認紀錄（最多 50 筆） · 累計取得 '+state.confirmed+' 次';
     state.history.forEach(entry=>{
       const r=entry.candidates[entry.selected];if(!r)return;
       const li=el('li','history-entry rarity'+r.star),fold=el('details'),summary=el('summary','history-summary');
@@ -504,18 +504,20 @@
     state.progress[state.pool]={count,round};
     if(r.star===6&&!state.seen.includes(r.id))state.seen.push(r.id);
     state.confirmed++;
+    // Stats are stored as tiny independent counters. Never clear them with first-page history.
+    T.record(state.pool,state.results,state.selected);
     state.history.unshift({
       pool:state.pool,time:drawnAt||new Date().toLocaleString('zh-TW',{hour12:false}),
       sequence:state.confirmed,selected:state.selected,
       candidates:state.results.map(x=>({id:x.id,star:x.star,speed:x.speed,status:x.status,skills:x.skills.map(y=>({id:y.id,role:y.role}))}))
     });
-    state.history=state.history.slice(0,200);
+    state.history=state.history.slice(0,50);
     save();renderHistory();
     $('notice').textContent='已確認取得「'+nameOf(r.id)+'」！本頁已更新招募計數及六星取得紀錄。';
     clearPending();updateSummary();rates();
   }
   function reset(){
-    if(!confirm('確定重置抽取紀錄、保底進度與已取得的六星嗎？'))return;
+    if(!confirm('確定重置第一頁的抽取紀錄、保底進度與已取得六星？第二頁累積統計不會清除。'))return;
     state.progress={};state.seen=[];state.confirmed=0;
     state.history=[];clearPending();save();renderHistory();
     $('notice').textContent='抽取紀錄已重置';rates();updateSummary();
@@ -550,7 +552,7 @@
     $('reset').addEventListener('click',reset);
     $('clearHistory').addEventListener('click',()=>{
       if(!state.history.length)return;
-      if(!confirm('只清除抽卡明細？保底、六星取得記錄與累積抽數不會重置。'))return;
+      if(!confirm('只清除最近 50 筆抽卡明細？保底及第二頁累積統計不會重置。'))return;
       state.history=[];save();renderHistory();
     });
     updateSummary();rates();renderHistory();
