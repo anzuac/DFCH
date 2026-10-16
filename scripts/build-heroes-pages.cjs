@@ -283,7 +283,7 @@ for(const page of ['index.html','heroes.html','heroes/index.html',
  const htmlPath=path.join(outputDir,page);
  const markup=fs.readFileSync(htmlPath,'utf8');
  const base=markup.includes('<base href="/">')?outputDir:path.dirname(htmlPath);
- for(const match of markup.matchAll(/<(?:script|link)\\b[^>]*?\\b(?:src|href)="([^"]+)"/g)){
+ for(const match of markup.matchAll(/<(?:script|link)\b[^>]*?\b(?:src|href)="([^"]+)"/g)){
   const raw=match[1].split(/[?#]/)[0];
   if(!raw||/^(?:https?:|data:|\/\/)/i.test(raw))continue;
   const target=raw.startsWith('/')?path.join(outputDir,raw.slice(1)):path.resolve(base,raw);
