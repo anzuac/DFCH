@@ -4,16 +4,23 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="color-scheme" content="dark">
-<title>英靈抽取模擬器V2.5.0｜DFCH</title>
-<link rel="stylesheet" href="./style.css?v=2.5.0">
-<link rel="stylesheet" href="./recruit-ui-fix.css?v=2.5.0">
+<title>英靈抽取模擬器 V2.5.1｜DFCH</title>
+<link rel="stylesheet" href="./style.css?v=2.5.1">
+<link rel="stylesheet" href="./recruit-ui-fix.css?v=2.5.1">
+<link rel="stylesheet" href="./tabs.css?v=2.5.1">
 </head>
 <body>
 <main class="container">
-  <header class="intro">
-    <div><p class="eyebrow">DFCH · 英靈抽取</p><h1>英靈抽取模擬器V2.5.0</h1><p>九個招募池 · 三位英靈候選 · 點擊圖片查看能力</p></div>
-    <a class="recruit-stats-link" href="./stats.html">抽卡機率與統計 ↗</a>
+  <header class="intro recruit-compact-header">
+    <p class="eyebrow">DFCH · 英靈抽取</p>
+    <h1>英靈抽取模擬器 <span class="recruit-version">V2.5.1</span></h1>
+    <p class="intro-desc">九個招募池 · 每輪三位英靈候選</p>
   </header>
+  <nav class="recruit-tabs" role="tablist" aria-label="功能分頁">
+    <button id="recruitTabButton" class="recruit-tab is-active" type="button" role="tab" aria-selected="true" aria-controls="recruitTabPanel">① 英靈抽取</button>
+    <button id="statsTabButton" class="recruit-tab" type="button" role="tab" aria-selected="false" aria-controls="statsTabPanel" tabindex="-1">② 統計資料</button>
+  </nav>
+  <section id="recruitTabPanel" class="tab-panel" role="tabpanel" aria-labelledby="recruitTabButton">
   <div class="columns">
     <aside class="settings card">
       <h2>召喚設定</h2>
@@ -71,6 +78,54 @@
     <p id="historyEmpty" class="hint">尚無抽取紀錄</p>
     <ol id="drawHistory" class="history-list" tabindex="0" aria-label="英靈抽取紀錄，可上下捲動"></ol>
   </section>
+  </section>
+  <section id="statsTabPanel" class="tab-panel stats-tab-panel" role="tabpanel" aria-labelledby="statsTabButton" hidden>
+<section class="stats-panel">
+  <div class="panel-header"><h2>目前卡池機率</h2></div>
+  <label class="form-field">招募池<select id="analysisPool"></select></label>
+  <p id="theorySettings" class="muted"></p>
+  <div id="theoryRarities" class="stat-grid four"></div>
+  <p id="theoryPity" class="muted"></p>
+  <h3>五星／六星個別機率</h3>
+  <p class="stats-hint">每位英靈在一般候選中出現的機率。</p>
+  <div class="table-scroll"><table><thead><tr><th>星級</th><th>英靈</th><th>出現機率</th></tr></thead><tbody id="theoryHeroes"></tbody></table></div>
+</section>
+<section class="stats-panel">
+  <h2>速度機率</h2>
+  <label class="form-field">指定英靈<select id="analysisHero"></select></label>
+  <div class="stat-grid two">
+    <div class="stat-card"><small>G 級速度機率</small><strong id="gRate">—</strong></div>
+    <div class="stat-card"><small>顯示 0.050 km/s 機率</small><strong id="slowRate">—</strong></div>
+  </div>
+  <p id="speedNote" class="muted"></p>
+  <div class="table-scroll"><table><thead><tr><th>特殊類型</th><th>類型占比</th><th>G 級</th><th>0.050</th></tr></thead><tbody id="speedTypes"></tbody></table></div>
+  
+</section>
+<section class="stats-panel">
+  <div class="panel-header"><h2>累積抽卡統計</h2></div>
+  <div class="filters">
+    <label class="form-field">統計範圍<select id="scopePool"><option value="-1">全部九個招募池</option></select></label>
+    <label class="form-field">統計對象<select id="countMode"><option value="candidates">全部候選</option><option value="obtained">正式取得</option></select></label>
+  </div>
+  <div class="stat-grid three">
+    <div class="stat-card"><small>已確認召喚輪數</small><strong id="roundsTotal">0</strong></div>
+    <div class="stat-card"><small id="observedLabel">候選總數</small><strong id="observedTotal">0</strong></div>
+    <div class="stat-card"><small>G 級速度次數</small><strong id="observedG">0</strong></div>
+    <div class="stat-card"><small>0.050 km/s 次數</small><strong id="observedSlow">0</strong></div>
+  </div>
+  <h3>各星級出現次數</h3>
+  <div id="observedRarities" class="stat-grid four"></div>
+  <h3>稀有、老兵與天才統計</h3>
+  <div class="filters"><label class="form-field">類型統計範圍<select id="humanScope"><option value="lowTypes">三星／四星</option><option value="types">全部英靈</option></select></label></div>
+  <div class="table-scroll"><table><thead><tr><th>類型</th><th>次數</th><th>比例</th></tr></thead><tbody id="observedTypes"></tbody></table></div>
+  <h3>五星／六星個別出現次數</h3>
+  <div class="table-scroll"><table><thead><tr><th>英靈</th><th>次數</th></tr></thead><tbody id="observedHeroes"></tbody></table></div>
+  
+  <button id="clearStats" class="danger" type="button">清除統計資料</button>
+  <p id="statsNotice" class="muted" role="status"></p>
+</section>
+<footer>本頁的清除操作只影響累積統計；第一頁的最近 50 筆明細、保底進度和已取得六星不會更動。</footer>
+  </section>
   <footer class="site-footer">非官方模擬器，抽選結果僅供參考。</footer>
 </main>
 <dialog id="statusDialog" class="status-dialog" aria-labelledby="statusDialogTitle">
@@ -108,9 +163,11 @@
 </dialog>
 <script src="../Bond30/js/data.js"></script>
 <script src="../hero-preferences-data.js"></script>
-<script src="./config.js?v=2.5.0"></script>
-<script src="./status-data.js?v=2.5.0"></script>
-<script src="./recruit-bonus.js?v=2.5.0"></script>
-<script src="./stats-core.js?v=2.5.0"></script>
-<script src="./app.js?v=2.5.0"></script>
+<script src="./config.js?v=2.5.1"></script>
+<script src="./status-data.js?v=2.5.1"></script>
+<script src="./recruit-bonus.js?v=2.5.1"></script>
+<script src="./stats-core.js?v=2.5.1"></script>
+<script src="./app.js?v=2.5.1"></script>
+<script src="./stats.js?v=2.5.1"></script>
+<script src="./tabs.js?v=2.5.1"></script>
 </body></html>
