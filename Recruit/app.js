@@ -19,7 +19,7 @@
   }
   if(!D||!C||!ST||!B||!T||!BD){$('notice').textContent='資料載入失敗，請重新整理頁面。';return;}
   const name6={13:'伊茲',19:'蘭德格里茲',22:'伊茲（海裝）',23:'齊格菲（海裝）',27:'弗拉斯萬',34:'阿卡夏',43:'蘭德格里茲（異鄉）',44:'露娜',47:'伊茲（聖夜）',53:'戀心公主（海裝）',54:'阿卡夏（海裝）',59:'弗雷雅',60:'芙麗嘉'};
-  const state={pool:0,hiddenEye:false,hiddenSword:false,ownedEye:false,ownedSword:false,bonusValkyrja:false,poolBonusOwned:{},maneLevel:0,emmaLevel:0,bondEnabled:true,bondLevel:50,seen:[],progress:{},results:[],selected:0,confirmed:0,history:[]};
+  const state={pool:0,hiddenEye:false,hiddenSword:false,ownedEye:false,ownedSword:false,bonusValkyrja:false,poolBonusOwned:{},maneLevel:0,emmaLevel:0,bondEnabled:true,bondLevel:50,seen:[],progress:{},results:[],selected:0,confirmed:0,drawCount:0,history:[]};
   function restore(){
     try{
       const saved=JSON.parse(localStorage.getItem(storeKey)||'null');
@@ -39,6 +39,9 @@
           if(/^[0-8]$/.test(k)&&v&&Number.isInteger(v.count)&&v.count>=0&&v.count<50&&Number.isInteger(v.round)&&v.round>=0&&v.round<=5)
             state.progress[k]={count:v.count,round:v.round};
       if(Number.isInteger(saved.confirmed)&&saved.confirmed>=0)state.confirmed=saved.confirmed;
+      // Older versions only retained confirmed draws; use that as the available baseline.
+      state.drawCount=Number.isSafeInteger(saved.drawCount)&&saved.drawCount>=state.confirmed
+        ?saved.drawCount:state.confirmed;
       if(Array.isArray(saved.history))state.history=saved.history.filter(r=>r&&Number.isInteger(r.pool)&&r.pool>=0&&r.pool<9&&Array.isArray(r.candidates)&&r.candidates.length===3&&Number.isInteger(r.selected)&&r.selected>=0&&r.selected<3).slice(0,50);
     }catch(_){/* Private mode can block storage */}
   }
@@ -49,7 +52,8 @@
       bonusValkyrja:state.bonusValkyrja,poolBonusOwned:state.poolBonusOwned,
       maneLevel:state.maneLevel,emmaLevel:state.emmaLevel,
       bondEnabled:true,bondLevel:50,
-      seen:state.seen,progress:state.progress,confirmed:state.confirmed,history:state.history
+      seen:state.seen,progress:state.progress,confirmed:state.confirmed,
+      drawCount:state.drawCount,history:state.history
     }));}catch(_){}
   }
   const el=(tag,cl,text)=>{const n=document.createElement(tag);if(cl)n.className=cl;if(text!==undefined)n.textContent=String(text);return n;};
@@ -500,6 +504,13 @@
       li.append(fold);list.append(li);
     });
   }
+  function renderDrawCost(){
+    const cost=BigInt(state.drawCount)*700n;
+    const tier=cost>=100000000n?6:cost>=10000000n?5:cost>=1000000n?4:
+      cost>=100000n?3:cost>=10000n?2:cost>=1000n?1:0;
+    $('recruitCostValue').textContent=cost.toLocaleString('zh-TW')+' 鑽石';
+    $('recruitCostBar').className='target-cost-bar target-cost-tier-'+tier;
+  }
   function draw(){
     // V2.0.0 preserves the existing rapid draw and confirmation semantics.
     // The first card is highlighted until the player chooses a different card.
@@ -524,6 +535,8 @@
       $('confirm').hidden=true;rarityNotice();$('pendingReminder').hidden=true;renderCandidates();return;
     }
     state.selected=0;
+    state.drawCount++;
+    save();renderDrawCost();
     $('notice').textContent=(autoSelectedName?'已取得「'+autoSelectedName+'」 · ':'')+'本次召喚 '+state.results.length+' 位候選';
     $('confirm').hidden=false;renderCandidates();rarityNotice();$('pendingReminder').hidden=false;
   }
@@ -555,8 +568,8 @@
   }
   function reset(){
     if(!confirm('確定重置第一頁的抽取紀錄、保底進度與已取得六星？第二頁累積統計不會清除。'))return;
-    state.progress={};state.seen=[];state.confirmed=0;
-    state.history=[];clearPending();save();renderHistory();
+    state.progress={};state.seen=[];state.confirmed=0;state.drawCount=0;
+    state.history=[];clearPending();save();renderHistory();renderDrawCost();
     $('notice').textContent='抽取紀錄已重置';rates();updateSummary();
   }
   function setPool(idx){
@@ -592,7 +605,7 @@
       if(!confirm('只清除最近 50 筆抽卡明細？保底及第二頁累積統計不會重置。'))return;
       state.history=[];save();renderHistory();
     });
-    updateSummary();rates();renderHistory();
+    updateSummary();rates();renderHistory();renderDrawCost();
     fetch('../data/sixstar-visible-abilities.json?v=1.3.0',{cache:'force-cache'})
       .then(r=>{if(!r.ok)throw Error('HTTP '+r.status);return r.json();})
       .then(data=>{
