@@ -7,7 +7,7 @@
 <title>英靈抽取模擬器 V2.6.0｜DFCH</title>
 <link rel="stylesheet" href="./style.css?v=2.6.0">
 <link rel="stylesheet" href="./recruit-ui-fix.css?v=2.6.0">
-<link rel="stylesheet" href="./tabs.css?v=2.6.0-ability1">
+<link rel="stylesheet" href="./tabs.css?v=2.6.0-three-tabs1">
 <link rel="stylesheet" href="./bond.css?v=2.6.0">
 </head>
 <body>
@@ -20,6 +20,7 @@
   <nav class="recruit-tabs" role="tablist" aria-label="功能分頁">
     <button id="recruitTabButton" class="recruit-tab is-active" type="button" role="tab" aria-selected="true" aria-controls="recruitTabPanel">① 英靈抽取</button>
     <button id="statsTabButton" class="recruit-tab" type="button" role="tab" aria-selected="false" aria-controls="statsTabPanel" tabindex="-1">② 統計資料</button>
+    <button id="abilityTabButton" class="recruit-tab" type="button" role="tab" aria-selected="false" aria-controls="abilityTabPanel" tabindex="-1">③ 能力組合</button>
   </nav>
   <section id="recruitTabPanel" class="tab-panel" role="tabpanel" aria-labelledby="recruitTabButton">
   <div class="columns">
@@ -102,9 +103,36 @@
   <div class="table-scroll"><table><thead><tr><th>特殊類型</th><th>類型占比</th><th>G 級</th><th>0.050</th></tr></thead><tbody id="speedTypes"></tbody></table></div>
   
 </section>
+<section class="stats-panel">
+  <div class="panel-header"><h2>累積抽卡統計</h2></div>
+  <div class="filters">
+    <label class="form-field">統計範圍<select id="scopePool"><option value="-1">全部九個招募池</option></select></label>
+    <label class="form-field">統計對象<select id="countMode"><option value="candidates">全部候選</option><option value="obtained">正式取得</option></select></label>
+  </div>
+  <div class="stat-grid three">
+    <div class="stat-card"><small>已確認召喚輪數</small><strong id="roundsTotal">0</strong></div>
+    <div class="stat-card"><small id="observedLabel">候選總數</small><strong id="observedTotal">0</strong></div>
+    <div class="stat-card"><small>G 級速度次數</small><strong id="observedG">0</strong></div>
+    <div class="stat-card"><small>0.050 km/s 次數</small><strong id="observedSlow">0</strong></div>
+  </div>
+  <h3>各星級出現次數</h3>
+  <div id="observedRarities" class="stat-grid four"></div>
+  <h3>稀有、老兵與天才統計</h3>
+  <div class="filters"><label class="form-field">類型統計範圍<select id="humanScope"><option value="lowTypes">三星／四星</option><option value="types">全部英靈</option></select></label></div>
+  <div class="table-scroll"><table><thead><tr><th>類型</th><th>次數</th><th>比例</th></tr></thead><tbody id="observedTypes"></tbody></table></div>
+  <h3>五星／六星個別出現次數</h3>
+  <div class="table-scroll"><table><thead><tr><th>英靈</th><th>次數</th></tr></thead><tbody id="observedHeroes"></tbody></table></div>
+  
+  <button id="clearStats" class="danger" type="button">清除抽卡統計</button>
+  <p id="statsNotice" class="muted" role="status"></p>
+</section>
+<footer>本頁只清除抽卡累積統計；第三頁的能力組合紀錄與第一頁抽卡資料均不會更動。</footer>
+  </section>
+  <section id="abilityTabPanel" class="tab-panel stats-tab-panel" role="tabpanel" aria-labelledby="abilityTabButton" hidden>
 <section class="stats-panel ability-panel" aria-labelledby="abilityStatsHeading">
   <h2 id="abilityStatsHeading">能力組合統計</h2>
-  <p class="stats-hint">依上方選擇的招募池，計算單一非六星候選英靈的加權命中機率；不含保底。只顯示本池可成立的組合，五星固定能力一併納入。</p>
+  <label class="form-field ability-pool-choice">查看招募池<select id="abilityPool" aria-label="能力組合招募池"></select></label>
+  <p class="stats-hint">依本分頁選擇的招募池，計算單一非六星候選英靈的加權命中機率；不含保底。只顯示本池可成立的組合，五星固定能力一併納入。</p>
   <div class="filters">
     <label class="form-field">紀錄對象<select id="abilityCountMode"><option value="candidates">全部候選英靈</option><option value="obtained">正式取得英靈</option></select></label>
   </div>
@@ -127,31 +155,9 @@
     <div class="stat-card"><small>恰好命中 3 種目標能力</small><strong id="abilityBondThree">0 次</strong></div>
   </div>
   <p class="stats-hint">僅計算羈絆 Lv.6／13／23 進化命中七種指定能力的數量；2 種、3 種分開計次，不顯示機率。六星不納入。</p>
+  <button id="clearAbilityStats" class="danger" type="button">清除能力組合紀錄</button>
+  <p id="abilityStatsNotice" class="muted" role="status"></p>
 </section>
-<section class="stats-panel">
-  <div class="panel-header"><h2>累積抽卡統計</h2></div>
-  <div class="filters">
-    <label class="form-field">統計範圍<select id="scopePool"><option value="-1">全部九個招募池</option></select></label>
-    <label class="form-field">統計對象<select id="countMode"><option value="candidates">全部候選</option><option value="obtained">正式取得</option></select></label>
-  </div>
-  <div class="stat-grid three">
-    <div class="stat-card"><small>已確認召喚輪數</small><strong id="roundsTotal">0</strong></div>
-    <div class="stat-card"><small id="observedLabel">候選總數</small><strong id="observedTotal">0</strong></div>
-    <div class="stat-card"><small>G 級速度次數</small><strong id="observedG">0</strong></div>
-    <div class="stat-card"><small>0.050 km/s 次數</small><strong id="observedSlow">0</strong></div>
-  </div>
-  <h3>各星級出現次數</h3>
-  <div id="observedRarities" class="stat-grid four"></div>
-  <h3>稀有、老兵與天才統計</h3>
-  <div class="filters"><label class="form-field">類型統計範圍<select id="humanScope"><option value="lowTypes">三星／四星</option><option value="types">全部英靈</option></select></label></div>
-  <div class="table-scroll"><table><thead><tr><th>類型</th><th>次數</th><th>比例</th></tr></thead><tbody id="observedTypes"></tbody></table></div>
-  <h3>五星／六星個別出現次數</h3>
-  <div class="table-scroll"><table><thead><tr><th>英靈</th><th>次數</th></tr></thead><tbody id="observedHeroes"></tbody></table></div>
-  
-  <button id="clearStats" class="danger" type="button">清除統計資料</button>
-  <p id="statsNotice" class="muted" role="status"></p>
-</section>
-<footer>本頁的清除操作只影響累積統計；第一頁的最近 50 筆明細、保底進度和已取得六星不會更動。</footer>
   </section>
   <footer class="site-footer">非官方模擬器，抽選結果僅供參考。</footer>
 </main>
@@ -197,6 +203,6 @@
 <script src="./ability-stats.js?v=2.6.0-ability1"></script>
 <script src="./bond.js?v=2.6.0"></script>
 <script src="./app.js?v=2.6.0-ability1"></script>
-<script src="./stats.js?v=2.6.0-ability1"></script>
-<script src="./tabs.js?v=2.6.0"></script>
+<script src="./stats.js?v=2.6.0-three-tabs1"></script>
+<script src="./tabs.js?v=2.6.0-three-tabs1"></script>
 </body></html>
