@@ -8,7 +8,7 @@
 <link rel="stylesheet" href="./style.css?v=2.6.0">
 <link rel="stylesheet" href="./recruit-ui-fix.css?v=2.6.0">
 <link rel="stylesheet" href="./tabs.css?v=2.6.0-target2">
-<link rel="stylesheet" href="./target-draw.css?v=2.6.0-target2">
+<link rel="stylesheet" href="./target-draw.css?v=2.6.0-target3">
 <link rel="stylesheet" href="./bond.css?v=2.6.0">
 </head>
 <body>
@@ -229,10 +229,11 @@
         <select id="targetCountMode"><option value="candidates">全部候選英靈</option><option value="obtained">正式取得英靈</option></select>
       </label>
       <p id="targetStatTotal" class="muted"></p>
+      <p id="targetNone" class="stats-hint" hidden>目前招募池沒有可成立的預設能力組合，仍可自行指定其他自由能力進行抽選。</p>
       <h3 id="targetBaseHeading">禁斷／貪欲組合</h3>
-      <div class="table-scroll"><table><thead><tr><th>能力組合</th><th>命中次數</th><th>單一候選機率</th></tr></thead><tbody id="targetBaseRows"></tbody></table></div>
+      <div class="table-scroll" id="targetBaseWrap"><table><thead><tr><th>能力組合</th><th>命中次數</th><th>單一候選機率</th></tr></thead><tbody id="targetBaseRows"></tbody></table></div>
       <h3 id="targetGoldHeading">三金組合</h3>
-      <div class="table-scroll"><table><thead><tr><th>能力組合</th><th>命中次數</th><th>單一候選機率</th></tr></thead><tbody id="targetGoldRows"></tbody></table></div>
+      <div class="table-scroll" id="targetGoldWrap"><table><thead><tr><th>能力組合</th><th>命中次數</th><th>單一候選機率</th></tr></thead><tbody id="targetGoldRows"></tbody></table></div>
       <details id="targetMixedDetails" class="ability-mixed">
         <summary><span><strong>特殊混搭組合</strong><small>指定禁斷／貪欲組合＋至少一金</small></span>
           <span class="ability-mixed-result"><strong id="targetMixedRate">—</strong><small id="targetMixedCount">命中 0 次</small></span></summary>
@@ -303,6 +304,6 @@
 <script src="./bond.js?v=2.6.0"></script>
 <script src="./app.js?v=2.6.0-ability1"></script>
 <script src="./stats.js?v=2.6.0-three-tabs1"></script>
-<script src="./target-draw.js?v=2.6.0-target2"></script>
+<script src="./target-draw.js?v=2.6.0-target3"></script>
 <script src="./tabs.js?v=2.6.0-target2"></script>
 </body></html>
