@@ -108,3 +108,11 @@
 
 /* Original pixel sprites for 3–5 star recruit portraits. */
 .hero-portrait.sprite{image-rendering:pixelated;image-rendering:crisp-edges}
+
+/* Recruit V2.0.0 — initial movement-speed readouts (Normal type only). */
+.candidate-speed{display:block;margin-top:3px;color:#b8ebdb;font-size:12px;font-weight:800;line-height:1.5;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.speed-result{margin:8px 0 2px!important;color:#aee6d0;font-size:15px!important;font-weight:800;line-height:1.55;font-variant-numeric:tabular-nums}
+.speed-source{display:block;margin:0 0 10px;color:#abc3bb;font-size:11px;line-height:1.5}
+.speed-notice{font-size:11px;line-height:1.65;color:#b5c9c5;margin:10px 2px 3px}
+.history-speed{display:block;font-size:11px;line-height:1.5;color:#a9ddc9;font-variant-numeric:tabular-nums;white-space:normal;overflow-wrap:anywhere}
+@media(max-width:500px){.candidate-speed{font-size:11px}.speed-result{font-size:14px!important}}
