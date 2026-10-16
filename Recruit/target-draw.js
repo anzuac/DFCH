@@ -440,7 +440,5 @@
     document.addEventListener('visibilitychange',()=>{if(document.hidden)pause();});
   }
   bind();render();
-  window.DFCHTargetDraw=Object.freeze({
-    pause,render,inspect:()=>({run:state.run&&{...state.run,pending:undefined},settings:{...state.settings}})
-  });
+  window.DFCHTargetDraw=Object.freeze({render});
 })();
