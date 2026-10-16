@@ -213,7 +213,7 @@
     const p=B.poolArtifact(state.pool);
     $('poolBonusGroup').hidden=!p;
     if(p){
-      $('poolBonusName').textContent=p.name+' · 五、六星機率加成 +'+p.amount+'%';
+      $('poolBonusName').textContent=p.name+' · 五星／六星抽選加成 +'+p.amount+'%';
       $('poolBonusOwned').checked=!!state.poolBonusOwned[state.pool];
     }
     const total=B.geniusBonus(state.maneLevel,state.emmaLevel);
