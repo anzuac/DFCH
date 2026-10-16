@@ -33,8 +33,6 @@
       }
       state.maneLevel=B.validLevel(saved.maneLevel,4);
       state.emmaLevel=B.validLevel(saved.emmaLevel,2);
-      if(typeof saved.bondEnabled==='boolean')state.bondEnabled=saved.bondEnabled;
-      if(Number.isInteger(saved.bondLevel)&&saved.bondLevel>=0&&saved.bondLevel<=50)state.bondLevel=saved.bondLevel;
       state.seen=Array.isArray(saved.seen)?saved.seen.filter(x=>C.six.some(a=>a.includes(x))):[];
       if(saved.progress&&typeof saved.progress==='object')
         for(const [k,v] of Object.entries(saved.progress))
@@ -50,7 +48,7 @@
       ownedEye:state.ownedEye,ownedSword:state.ownedSword,
       bonusValkyrja:state.bonusValkyrja,poolBonusOwned:state.poolBonusOwned,
       maneLevel:state.maneLevel,emmaLevel:state.emmaLevel,
-      bondEnabled:state.bondEnabled,bondLevel:state.bondLevel,
+      bondEnabled:true,bondLevel:50,
       seen:state.seen,progress:state.progress,confirmed:state.confirmed,history:state.history
     }));}catch(_){}
   }
@@ -312,7 +310,7 @@
       (path.startsWith('assets/')?new URL('../Bond30/'+path,location.href).href:path);
     return img;
   }
-  function effectiveBondLevel(){return state.bondEnabled?state.bondLevel:0;}
+  function effectiveBondLevel(){return 50;}
   function eventsFor(r,doc){
     return r.star===6?BD.sixEvents(doc,r.skills):Array.isArray(r.bondEvents)?r.bondEvents:[];
   }
@@ -321,19 +319,6 @@
   }
   function bondMark(event){
     return event.kind==='hp'?'HP':event.kind==='attack'?'攻擊':event.kind==='specific'?'指定':'進化';
-  }
-  function bondSync(){
-    $('bondEnabled').checked=state.bondEnabled;
-    $('bondLevel').value=String(state.bondLevel);
-    $('bondLevel').disabled=!state.bondEnabled;
-    $('bondLevelValue').textContent='Lv.'+state.bondLevel;
-    $('bondReroll').disabled=!state.results.length;
-  }
-  function bondSettingsChange(){
-    state.bondEnabled=$('bondEnabled').checked;
-    state.bondLevel=Math.max(0,Math.min(50,Number($('bondLevel').value)||0));
-    bondSync();save();
-    if(state.results.length)renderCandidates();
   }
   function rerollBond(){
     if(!state.results.length)return;
@@ -363,7 +348,7 @@
     info.append(el('p','speed-result'+speedRankClass(r),'移動速度 '+speedText(r)));
     const bondDoc=r.star===6?doc:null;
     const activeEvents=eventsFor(r,bondDoc).filter(e=>e.level<=effectiveBondLevel());
-    info.append(el('p','bond-summary',state.bondEnabled?'羈絆 Lv.'+state.bondLevel+' · 已進化 '+activeEvents.length+' 格':'羈絆進化預覽已關閉'));
+    info.append(el('p','bond-summary','羈絆 Lv.50 · 已進化 '+activeEvents.length+' 格'));
 
     head.append(info);
     const board=el('div','skills');
@@ -457,7 +442,7 @@
       choose.addEventListener('click',()=>{state.selected=i;renderCandidates();});
       card.append(preview,choose);$('candidates').append(card);
     });
-    renderDetail();bondSync();
+    renderDetail();
   }
   function rarityNotice(){
     const max=state.results.reduce((n,x)=>Math.max(n,x.star),0),b=$('rarityNotice');
@@ -559,7 +544,7 @@
     state.history.unshift({
       pool:state.pool,time:drawnAt||new Date().toLocaleString('zh-TW',{hour12:false}),
       sequence:state.confirmed,selected:state.selected,
-      bondLevel:state.bondLevel,bondEnabled:state.bondEnabled,
+      bondLevel:50,bondEnabled:true,
       candidates:state.results.map(x=>({id:x.id,star:x.star,speed:x.speed,status:x.status,bondEvents:x.bondEvents||[],skills:x.skills.map(y=>({id:y.id,role:y.role}))}))
     });
     state.history=state.history.slice(0,50);
@@ -583,10 +568,7 @@
   function bind(){
     C.keys.forEach((k,i)=>{const option=el('option','',D.poolNames[k]||k);option.value=String(i);$('pool').append(option);});
     $('pool').value=String(state.pool);
-    syncArtifacts();syncRecruitBonuses();bondSync();
-    $('bondEnabled').addEventListener('change',bondSettingsChange);
-    $('bondLevel').addEventListener('input',bondSettingsChange);
-    $('bondReroll').addEventListener('click',rerollBond);
+    syncArtifacts();syncRecruitBonuses();
     $('bonusValkyrja').addEventListener('change',()=>setRecruitBonus('bonusValkyrja',$('bonusValkyrja').checked));
     $('poolBonusOwned').addEventListener('change',()=>setRecruitBonus('poolBonusOwned',$('poolBonusOwned').checked));
     $('bonusMane').addEventListener('change',()=>setRecruitBonus('maneLevel',$('bonusMane').value));
