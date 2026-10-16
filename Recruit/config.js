@@ -1,7 +1,7 @@
-/* DFCH 招募 V2.1.0：保留 V1 的星級、角色與能力設定；移動速度資料另存 speed-data.js。
+/* DFCH 招募 V2.2.0：保留 V1 的星級、角色與能力設定；初始能力和HumanType資料另存 status-data.js。
    本檔仍只包含原本使用的抽卡靜態部分。不得把課金神器預留欄位連入星級權重。 */
 window.DFCHRecruitConfig = Object.freeze({
-  version:'2.1.0',
+  version:'2.2.0',
   keys:['default_gacha','multi_strike_pickup','sea_pickup','snow_solider_pickup','wizard_pickup','caravan_pickup','xmas_pickup','2026_sea_pickup','2026_aniv_pickup'],
   // 3～6 星的原始非零 float32 權重
   weights:[
