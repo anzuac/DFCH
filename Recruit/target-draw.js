@@ -36,9 +36,10 @@
     try{localStorage.setItem(KEY,JSON.stringify(state));}
     catch(_){$('targetNotice').textContent='瀏覽器無法儲存紀錄；請檢查儲存空間或隱私模式。';}
   }
-  function config(){return state.run?.settings||state.settings;}
-  function pool(){return state.run?.pool??state.settings.pool;}
-  function required(){return state.run?.ids||state.slots.filter(Boolean);}
+  function activeRun(){return !!state.run&&['running','paused','hit'].includes(state.run.status);}
+  function config(){return activeRun()?state.run.settings:state.settings;}
+  function pool(){return activeRun()?state.run.pool:state.settings.pool;}
+  function required(){return activeRun()?state.run.ids:state.slots.filter(Boolean);}
   function poolKey(){return C.keys[pool()];}
   function roster(star){
     const ids=star===6?C.six[pool()]:(D.poolRarityRoster[poolKey()]?.[String(star)]||[]);
