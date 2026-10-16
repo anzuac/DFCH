@@ -2,9 +2,9 @@
 (() => {
   'use strict';
   const D=window.DFCH_DATA,C=window.DFCHRecruitConfig,
-    B=window.DFCHRecruitBonus,S=window.DFCHRecruitStatus,T=window.DFCHRecruitStats;
+    B=window.DFCHRecruitBonus,S=window.DFCHRecruitStatus,T=window.DFCHRecruitStats,A=window.DFCHRecruitAbilityStats;
   const $=id=>document.getElementById(id);
-  if(!D||!C||!B||!S||!T){$('statsNotice').textContent='統計資料載入失敗，請重新整理。';return;}
+  if(!D||!C||!B||!S||!T||!A){$('statsNotice').textContent='統計資料載入失敗，請重新整理。';return;}
   const guides=new Map((window.DFCHHeroPreferences?.heroes||[]).map(x=>[x.index,x]));
   const names=['普通','稀有','老兵','天才'];
   const numbers=n=>(Number(n)||0).toLocaleString('zh-TW');
@@ -91,7 +91,7 @@
       cell.colSpan=3;row.append(cell);rows.append(row);
     }
     if(resetHero)rerenderHeroOptions(pool);
-    renderSpeed();
+    renderSpeed();renderAbilities();
   }
   function renderSpeed(){
     const [starText,idText]=($('analysisHero').value||'').split(':');
@@ -110,6 +110,52 @@
         el('td','',pct(type.g,5)),el('td','',pct(type.zero,6)));
       body.append(row);
     }
+  }
+  function renderAbilities(){
+    const pool=Number($('analysisPool').value)||0;
+    const state=current(),forecast=A.theory(pool,state);
+    const records=A.read().pools[pool]||{};
+    const side=$('abilityCountMode').value==='obtained'?'obtained':'candidates';
+    const values=records[side]||{};
+    $('abilityProgress').textContent='本池已記錄 '+numbers(values.total||0)+
+      ' 位非六星'+(side==='obtained'?'正式取得英靈':'候選英靈')+
+      '；能力統計由此版本起累積，舊版紀錄不回填。';
+    const groups=[
+      {kind:'禁斷／貪欲',rows:$('abilityBaseRows'),wrap:$('abilityBaseWrap'),heading:$('abilityBaseHeading')},
+      {kind:'三金組合',rows:$('abilityGoldRows'),wrap:$('abilityGoldWrap'),heading:$('abilityGoldHeading')}
+    ];
+    for(const group of groups){
+      group.rows.replaceChildren();
+      const visible=A.regular.filter(x=>x.section===group.kind&&forecast.regular[x.mask]>0);
+      group.heading.hidden=group.wrap.hidden=!visible.length;
+      for(const item of visible){
+        const tr=el('tr');
+        tr.append(el('td','',A.label(item.mask)),
+          el('td','',numbers(values.regular?.[item.mask]||0)),
+          el('td','',pct(forecast.regular[item.mask],7)));
+        group.rows.append(tr);
+      }
+    }
+    const detail=$('abilityMixed'),list=$('abilityMixedRows');
+    list.replaceChildren();
+    const mixed=Object.entries(forecast.special)
+      .map(([mask,rate])=>({mask:Number(mask),rate}))
+      .sort((a,b)=>b.rate-a.rate||a.mask-b.mask);
+    detail.hidden=!mixed.length;
+    if(mixed.length){
+      const totalCount=Object.values(values.mixed||{}).reduce((a,b)=>a+(Number(b)||0),0);
+      $('abilityMixedRate').textContent=pct(forecast.mixedTotal,7);
+      $('abilityMixedCount').textContent='命中 '+numbers(totalCount)+' 次';
+      for(const item of mixed){
+        const tr=el('tr');
+        tr.append(el('td','',A.label(item.mask)),
+          el('td','',numbers(values.mixed?.[item.mask]||0)),
+          el('td','',pct(item.rate,8)));
+        list.append(tr);
+      }
+    }
+    $('abilityBondTwo').textContent=numbers(values.bond2||0)+' 次';
+    $('abilityBondThree').textContent=numbers(values.bond3||0)+' 次';
   }
   function renderObserved(){
     const source=T.read(),scope=Number($('scopePool').value);
@@ -144,15 +190,18 @@
   rerenderHeroOptions(startPool);
   $('analysisPool').addEventListener('change',()=>renderTheory(true));
   $('analysisHero').addEventListener('change',renderSpeed);
+  $('abilityCountMode').addEventListener('change',renderAbilities);
   for(const id of ['scopePool','countMode','humanScope'])$(id).addEventListener('change',renderObserved);
   $('clearStats').addEventListener('click',()=>{
     if(!confirm('確定只清除第二頁的所有累積統計？第一頁最近50筆、保底及已取得六星完全不會更動。'))return;
-    if(!T.clear()){$('statsNotice').textContent='無法清除，請檢查瀏覽器儲存權限。';return;}
-    renderObserved();
-    $('statsNotice').textContent='第二頁累積統計已清空；第一頁資料保留。';
+    const basicCleared=T.clear(),abilityCleared=A.clear();
+    if(!basicCleared||!abilityCleared){$('statsNotice').textContent='部分統計無法清除，請檢查瀏覽器儲存權限。';return;}
+    renderObserved();renderAbilities();
+    $('statsNotice').textContent='第二頁累積統計及能力紀錄已清空；第一頁資料保留。';
   });
   window.addEventListener('storage',e=>{
     if(e.key===T.key)renderObserved();
+    if(e.key===A.KEY)renderAbilities();
     if(e.key==='dfch-recruit-v1-independent')refresh();
   });
   function refresh(){
