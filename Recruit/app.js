@@ -1,6 +1,6 @@
 (() => {
   'use strict';
-  const D=window.DFCH_DATA, C=window.DFCHRecruitConfig, ST=window.DFCHRecruitStatus, B=window.DFCHRecruitBonus, T=window.DFCHRecruitStats, BD=window.DFCHRecruitBond;
+  const D=window.DFCH_DATA, C=window.DFCHRecruitConfig, ST=window.DFCHRecruitStatus, B=window.DFCHRecruitBonus, T=window.DFCHRecruitStats, BD=window.DFCHRecruitBond, A=window.DFCHRecruitAbilityStats;
   const $=id=>document.getElementById(id);
   const storeKey='dfch-recruit-v1-independent';
   const heroGuides=window.DFCHHeroPreferences?.heroes||[];
@@ -541,6 +541,7 @@
     state.confirmed++;
     // Stats are stored as tiny independent counters. Never clear them with first-page history.
     T.record(state.pool,state.results,state.selected);
+    if(A)A.record(state.pool,state.results,state.selected);
     state.history.unshift({
       pool:state.pool,time:drawnAt||new Date().toLocaleString('zh-TW',{hour12:false}),
       sequence:state.confirmed,selected:state.selected,
