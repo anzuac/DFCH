@@ -4,14 +4,15 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="color-scheme" content="dark">
-<title>英靈抽取模擬器V2.4.0｜DFCH</title>
-<link rel="stylesheet" href="./style.css?v=2.3.0">
-<link rel="stylesheet" href="./recruit-ui-fix.css?v=2.3.0">
+<title>英靈抽取模擬器V2.5.0｜DFCH</title>
+<link rel="stylesheet" href="./style.css?v=2.5.0">
+<link rel="stylesheet" href="./recruit-ui-fix.css?v=2.5.0">
 </head>
 <body>
 <main class="container">
   <header class="intro">
-    <div><p class="eyebrow">DFCH · 英靈抽取</p><h1>英靈抽取模擬器V2.4.0</h1><p>九個招募池 · 三位英靈候選 · 點擊圖片查看能力</p></div>
+    <div><p class="eyebrow">DFCH · 英靈抽取</p><h1>英靈抽取模擬器V2.5.0</h1><p>九個招募池 · 三位英靈候選 · 點擊圖片查看能力</p></div>
+    <a class="recruit-stats-link" href="./stats.html">抽卡機率與統計 ↗</a>
   </header>
   <div class="columns">
     <aside class="settings card">
@@ -53,7 +54,7 @@
       <h3>取得紀錄與保底</h3>
       <p class="summary" id="pity">尚未召喚</p>
       <p class="summary" id="owned">已取得六星：0 位</p>
-      <button type="button" class="subtle" id="reset">重置抽取紀錄</button>
+      <button type="button" class="subtle" id="reset">重置本頁保底與紀錄</button>
     </aside>
     <section class="results card" aria-label="英靈抽取結果">
       <div class="panelhead"><div><h2>召喚結果</h2></div><button id="draw" type="button" class="primary">開始召喚</button></div>
@@ -66,7 +67,7 @@
     </section>
   </div>
   <section class="card history" aria-labelledby="historyHeading">
-    <div class="history-heading"><div><h2 id="historyHeading">英靈抽取紀錄</h2><p id="historyStats">尚無取得紀錄</p></div><button type="button" class="subtle" id="clearHistory">清除明細</button></div>
+    <div class="history-heading"><div><h2 id="historyHeading">最近 50 筆抽卡紀錄</h2><p id="historyStats">尚無取得紀錄</p></div><button type="button" class="subtle" id="clearHistory">清除第一頁明細</button></div>
     <p id="historyEmpty" class="hint">尚無抽取紀錄</p>
     <ol id="drawHistory" class="history-list" tabindex="0" aria-label="英靈抽取紀錄，可上下捲動"></ol>
   </section>
@@ -107,8 +108,9 @@
 </dialog>
 <script src="../Bond30/js/data.js"></script>
 <script src="../hero-preferences-data.js"></script>
-<script src="./config.js?v=2.4.0"></script>
-<script src="./status-data.js?v=2.4.0"></script>
-<script src="./recruit-bonus.js?v=2.4.0"></script>
-<script src="./app.js?v=2.4.0"></script>
+<script src="./config.js?v=2.5.0"></script>
+<script src="./status-data.js?v=2.5.0"></script>
+<script src="./recruit-bonus.js?v=2.5.0"></script>
+<script src="./stats-core.js?v=2.5.0"></script>
+<script src="./app.js?v=2.5.0"></script>
 </body></html>
