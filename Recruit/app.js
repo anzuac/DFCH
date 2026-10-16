@@ -71,9 +71,11 @@
   // V2.0.0 displays only the Normal-type movement-speed model.
   // Rank names above D are withheld until their native text mapping is verified.
   function speedText(candidate){
-    const result=candidate?.speed;
-    if(!result)return '舊版未儲存速度';
-    return result.display+' · '+(result.grade?result.grade+'級':'速度等級段 '+result.gradeIndex+'（級名待核對）');
+    return candidate?.speed?.display || '—';
+  }
+  function speedRankClass(candidate){
+    const rank=Number(candidate?.speed?.gradeIndex);
+    return Number.isInteger(rank)&&rank>=0&&rank<=9?' speed-rank-'+rank:' speed-rank-unknown';
   }
   const f32=Math.fround;
   function weights(){
@@ -283,16 +285,15 @@
     const head=el('div','hero-profile'),photo=portrait(r.id);
     if(photo){
       const photoButton=el('button','detail-portrait-button');photoButton.type='button';
-      photoButton.setAttribute('aria-label','查看'+nameOf(r.id)+'的11項能力');
-      photoButton.title='點擊圖片查看11項能力';
+      photoButton.setAttribute('aria-label','查看'+nameOf(r.id)+'的能力');
+      photoButton.title='查看能力';
       photoButton.append(photo);photoButton.addEventListener('click',()=>openStatusModal(r));head.append(photoButton);
     }
     const info=el('div','hero-profile-text');
     info.append(el('h3','',nameOf(r.id)+' · '+r.star+' 星'));
     if(r.star===6&&titleOf(r.id))info.append(el('p','hero-title',titleOf(r.id)));
     info.append(el('p','desc',r.skills.filter(x=>x.role==='固定').length+' 項固定能力 · '+r.skills.filter(x=>x.role==='自由').length+' 項自由能力'+(r.skills.some(x=>x.id===null)?' · '+r.skills.filter(x=>x.id===null).length+' 個空格':'')));
-    info.append(el('p','speed-result','移動速度 '+speedText(r)));
-    if(r.speed)info.append(el('p','speed-source',r.speed.fixed?'六星固定模板初始速度':'普通類型初始速度（未含老兵、天才、神器）'));
+    info.append(el('p','speed-result'+speedRankClass(r),'移動速度 '+speedText(r)));
 
     head.append(info);
     const board=el('div','skills');
@@ -327,7 +328,7 @@
     const portraitNode=portrait(r.id);
     if(portraitNode)$('statusHero').append(portraitNode);
     const heading=el('div','status-hero-heading');
-    heading.append(el('h2','',nameOf(r.id)+' · '+r.star+'★'),el('p','',r.status.mode+' · 初始能力'));
+    heading.append(el('h2','',nameOf(r.id)),el('p','',('★'.repeat(r.star))));
     $('statusHero').append(heading);
     $('statusRows').replaceChildren();
     r.status.stats.forEach((a,j)=>{
@@ -349,7 +350,6 @@
       }
       content.append(header,meter);
       const rank=el('span','status-grade'+(a.ignored?' is-ignored':' grade-'+a.rank),a.ignored?'—':a.grade);
-      if(!a.ignored)rank.title='內部初始等級 '+a.level.toFixed(2);
       row.append(icon,rank,content);
       $('statusRows').append(row);
     });
@@ -360,19 +360,17 @@
     state.results.forEach((r,i)=>{
       const card=el('div','candidate'+(r.star>=5?' rarity'+r.star:'')+(i===state.selected?' selected':''));
       const preview=el('button','candidate-image-button');preview.type='button';
-      preview.title='點擊圖片查看11項能力';preview.setAttribute('aria-label','查看'+nameOf(r.id)+'的11項能力');
+      preview.title='查看能力';preview.setAttribute('aria-label','查看'+nameOf(r.id)+'的能力');
       const photo=portrait(r.id);
       if(photo)preview.append(photo);
-      else preview.append(el('span','candidate-fallback','查看英靈能力'));
-      preview.append(el('span','candidate-image-hint','查看11項能力'));
+      else preview.append(el('span','candidate-fallback','查看能力'));
+      preview.append(el('span','candidate-image-hint','查看能力'));
       preview.addEventListener('click',()=>openStatusModal(r));
       const choose=el('button','candidate-select');choose.type='button';
       choose.setAttribute('aria-pressed',String(i===state.selected));
       choose.title='選擇這位英靈';
-      choose.append(el('span','stars','★'.repeat(r.star)),el('strong','',nameOf(r.id)));
-      if(r.star===6&&titleOf(r.id))choose.append(el('span','hero-subtitle',titleOf(r.id)));
-      choose.append(el('span','sub',r.skills.filter(x=>x.id!==null).length+' 項能力'));
-      if(r.speed)choose.append(el('span','candidate-speed',speedText(r)));
+      choose.append(el('span','stars','★'.repeat(r.star)),el('strong','candidate-name',nameOf(r.id)));
+      if(r.speed)choose.append(el('span','candidate-speed'+speedRankClass(r),speedText(r)));
       choose.addEventListener('click',()=>{state.selected=i;renderCandidates();});
       card.append(preview,choose);$('candidates').append(card);
     });
@@ -407,7 +405,7 @@
       const li=el('li','history-entry rarity'+r.star),fold=el('details'),summary=el('summary','history-summary');
       summary.append(el('span','history-time','#'+(entry.sequence||'?')+' · '+(entry.time||'')+' · '+(D.poolNames[C.keys[entry.pool]]||'')),
         el('strong','',r.star+'★ '+nameOf(r.id)));
-      if(r.speed)summary.append(el('small','history-speed',speedText(r)));
+      if(r.speed)summary.append(el('small','history-speed'+speedRankClass(r),speedText(r)));
       if(r.status?.stats){
         const inspect=el('button','history-status-button','查看已取得能力');inspect.type='button';
         inspect.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();openStatusModal(r);});
@@ -420,7 +418,7 @@
         const card=el('div','history-choice'+(i===entry.selected?' chosen':''));
         const img=portrait(candidate.id);if(img)card.append(img);
         card.append(el('b','',candidate.star+'★ '+nameOf(candidate.id)),el('small','',i===entry.selected?'正式取得':'未選擇'));
-        if(candidate.speed)card.append(el('small','history-speed',speedText(candidate)));
+        if(candidate.speed)card.append(el('small','history-speed'+speedRankClass(candidate),speedText(candidate)));
         row.append(card);
       });
       fold.append(row);
