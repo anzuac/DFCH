@@ -33,11 +33,11 @@
       <section class="recruit-bonuses" aria-label="招募機率神器">
         <h3>招募機率神器</h3>
         <label class="recruit-bonus-check"><input id="bonusValkyrja" type="checkbox">
-          <span>★女武神的蜜酒 <small>所有池 · 五、六星權重 +20%</small></span></label>
+          <span>★女武神的蜜酒 <small>所有池 · 五星／六星抽選加成 +20%</small></span></label>
         <label id="poolBonusGroup" class="recruit-bonus-check" hidden><input id="poolBonusOwned" type="checkbox">
           <span id="poolBonusName"></span></label>
         <div class="recruit-bonus-levels">
-          <label for="bonusMane">瑞光的鬃毛 <small>提高天才權重</small></label>
+          <label for="bonusMane">瑞光的鬃毛 <small>提高天才類型出現機會</small></label>
           <select id="bonusMane" aria-label="瑞光的鬃毛等級">
             <option value="0">未持有</option>
             <option value="1">Lv.1 · +5%</option>
@@ -45,7 +45,7 @@
             <option value="3">Lv.3 · +15%</option>
             <option value="4">Lv.4 · +20%</option>
           </select>
-          <label for="bonusEmma">★艾瑪的頭環 <small>提高天才權重</small></label>
+          <label for="bonusEmma">★艾瑪的頭環 <small>提高天才類型出現機會</small></label>
           <select id="bonusEmma" aria-label="艾瑪的頭環等級">
             <option value="0">未持有</option>
             <option value="1">Lv.1 · +10%</option>
@@ -182,7 +182,7 @@
       <details class="target-artifacts">
         <summary>神器與能力條件設定</summary>
         <div class="target-artifact-options">
-          <label><input type="checkbox" id="target_bonusValkyrja"> 女武神的蜜酒（五星／六星權重）</label>
+          <label><input type="checkbox" id="target_bonusValkyrja"> 女武神的蜜酒（提高五星／六星出現機會）</label>
           <label id="targetPoolBonusWrap"><input type="checkbox" id="targetPoolBonus"> <span id="targetPoolBonusName">本池神器</span></label>
           <label><input type="checkbox" id="target_ownedEye"> 已持有眼球</label>
           <label><input type="checkbox" id="target_hiddenEye"> 排除眼球相關能力</label>
@@ -192,7 +192,7 @@
           <label>艾瑪的頭環 <select id="target_emmaLevel"><option value="0">未持有</option><option value="1">Lv.1</option><option value="2">Lv.2</option></select></label>
         </div>
       </details>
-      <h3>自行指定自由能力</h3>
+      <h3>自行指定能力</h3>
       <p class="stats-hint">可直接使用本池的快捷組合，或點選指定格，從圖片清單選取 1～6 項能力。剩餘格子都是「任意能力」，五星固定能力也可符合條件。</p>
       <div id="targetPresets" class="target-preset-sections">
         <section id="targetBasePresets" class="target-preset-section" hidden>
@@ -339,8 +339,8 @@
 <script src="./stats-core.js?v=2.6.0"></script>
 <script src="./ability-stats.js?v=2.6.0-ability1"></script>
 <script src="./bond.js?v=2.6.0"></script>
-<script src="./app.js?v=2.6.0-recruit-cost1"></script>
-<script src="./stats.js?v=2.6.0-three-tabs1"></script>
+<script src="./app.js?v=2.6.0-playercopy1"></script>
+<script src="./stats.js?v=2.6.0-playercopy1"></script>
 <script src="./target-draw.js?v=2.6.0-picker1"></script>
 <script src="./tabs.js?v=2.6.0-target2"></script>
 </body></html>
