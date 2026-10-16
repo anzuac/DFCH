@@ -1,7 +1,7 @@
-/* DFCH 招募 V2.2.0：保留 V1 的星級、角色與能力設定；初始能力和HumanType資料另存 status-data.js。
-   本檔仍只包含原本使用的抽卡靜態部分。不得把課金神器預留欄位連入星級權重。 */
+/* DFCH 招募 V2.3.0：保留 V1 的星級、角色與能力設定；初始能力和HumanType資料另存 status-data.js。
+   本檔仍只包含原本使用的抽卡靜態部分。710/713 星級加成在 recruit-bonus.js 依官方原生公式獨立計算。 */
 window.DFCHRecruitConfig = Object.freeze({
-  version:'2.2.0',
+  version:'2.3.0',
   keys:['default_gacha','multi_strike_pickup','sea_pickup','snow_solider_pickup','wizard_pickup','caravan_pickup','xmas_pickup','2026_sea_pickup','2026_aniv_pickup'],
   // 3～6 星的原始非零 float32 權重
   weights:[
@@ -47,7 +47,7 @@ window.DFCHRecruitConfig = Object.freeze({
     303000604:[1,3,4,7,28,29,31,40,41]
   },
   groupExclusive:{'2026_sea_pickup':[[303000709,303000722]]},
-  // 使用者的兩件可選技能排除神器，和 710/713 高星課金加成為不同機制
+  // 使用者的兩件可選技能排除神器，和 710/713 高星權重加成為不同機制
   artifactEye:[303000404,303000405,303000406],
   artifactSword:[303000310,303000311,303000312],
   // 雪嶺 27 有獨立劇情旗標，V1 以正式取得後排除作為測試狀態
