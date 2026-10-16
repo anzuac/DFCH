@@ -29,7 +29,7 @@
     <aside class="settings card">
       <h2>召喚設定</h2>
       <label class="field">招募池<select id="pool"></select></label>
-      <div class="ratebox"><strong>目前星級機率</strong><div id="rates" class="rates"></div><small>已套用選擇的神器；此處是單次基礎權重換算，保底、候選位置及已取得六星條件另行處理。</small></div>
+      <div class="ratebox"><strong>目前星級機率</strong><div id="rates" class="rates"></div><small>已套用目前的神器加成。保底及已取得的六星英靈可能影響實際抽選結果。</small></div>
       <section class="recruit-bonuses" aria-label="招募機率神器">
         <h3>招募機率神器</h3>
         <label class="recruit-bonus-check"><input id="bonusValkyrja" type="checkbox">
@@ -132,17 +132,17 @@
   <button id="clearStats" class="danger" type="button">清除抽卡統計</button>
   <p id="statsNotice" class="muted" role="status"></p>
 </section>
-<footer>本頁只清除抽卡累積統計；第三頁的能力組合紀錄與第一頁抽卡資料均不會更動。</footer>
+<footer>清除這裡的統計，不會影響召喚紀錄或其他分頁的統計。</footer>
   </section>
   <section id="abilityTabPanel" class="tab-panel stats-tab-panel" role="tabpanel" aria-labelledby="abilityTabButton" hidden>
 <section class="stats-panel ability-panel" aria-labelledby="abilityStatsHeading">
   <h2 id="abilityStatsHeading">能力組合統計</h2>
   <label class="form-field ability-pool-choice">查看招募池<select id="abilityPool" aria-label="能力組合招募池"></select></label>
-  <p class="stats-hint">依本分頁選擇的招募池，計算單一非六星候選英靈的加權命中機率；不含保底。只顯示本池可成立的組合，五星固定能力一併納入。</p>
+  <p class="stats-hint">選擇招募池後，可以查看每位三星至五星候選英靈抽中指定組合的機率（不含保底）。只顯示本池可能出現的組合。</p>
   <div class="filters">
     <label class="form-field">紀錄對象<select id="abilityCountMode"><option value="candidates">全部候選英靈</option><option value="obtained">正式取得英靈</option></select></label>
   </div>
-  <p id="abilityProgress" class="muted">能力紀錄由此版本起累積，舊版缺少的能力明細不會回填。</p>
+  <p id="abilityProgress" class="muted">能力組合紀錄從此功能啟用後開始累積。</p>
   <h3 id="abilityBaseHeading">禁斷／貪欲組合</h3>
   <div class="table-scroll" id="abilityBaseWrap"><table><thead><tr><th>能力組合</th><th>命中次數</th><th>單一候選機率</th></tr></thead><tbody id="abilityBaseRows"></tbody></table></div>
   <h3 id="abilityGoldHeading">三金組合</h3>
@@ -152,7 +152,7 @@
       <span><strong>特殊混搭組合</strong><small>指定禁斷／貪欲組合＋至少一金</small></span>
       <span class="ability-mixed-result"><strong id="abilityMixedRate">—</strong><small id="abilityMixedCount">命中 0 次</small></span>
     </summary>
-    <p class="stats-hint">下列機率以七種目標能力的「恰好組合」分類，不重複計入，因此各列加總等於上方總機率；其他非目標能力不影響分類。</p>
+    <p class="stats-hint">每列顯示一種混搭組合的命中機率，所有組合的機率加總等於上方的總機率。</p>
     <div class="table-scroll ability-mixed-scroll"><table><thead><tr><th>詳細組合</th><th>次數</th><th>單一候選機率</th></tr></thead><tbody id="abilityMixedRows"></tbody></table></div>
   </details>
   <h3>羈絆進化命中紀錄</h3>
@@ -160,7 +160,7 @@
     <div class="stat-card"><small>恰好命中 2 種目標能力</small><strong id="abilityBondTwo">0 次</strong></div>
     <div class="stat-card"><small>恰好命中 3 種目標能力</small><strong id="abilityBondThree">0 次</strong></div>
   </div>
-  <p class="stats-hint">僅計算羈絆 Lv.6／13／23 進化命中七種指定能力的數量；2 種、3 種分開計次，不顯示機率。六星不納入。</p>
+  <p class="stats-hint">只記錄羈絆 Lv.6、13、23 命中指定能力的次數。命中 2 種與 3 種分開統計，不包含六星英靈。</p>
   <button id="clearAbilityStats" class="danger" type="button">清除能力組合紀錄</button>
   <p id="abilityStatsNotice" class="muted" role="status"></p>
 </section>
@@ -220,7 +220,7 @@
         <strong id="targetSelectedCount">已指定 0／6 項能力</strong>
         <span id="targetFeasibility">請至少選擇一項能力</span>
       </div>
-      <p id="targetLocks" class="stats-hint" hidden>本次抽選尚未結束，為保護進度已暫時鎖定抽選設定。暫停後可選擇接續或正式停止。</p>
+      <p id="targetLocks" class="stats-hint" hidden>本次抽選尚未結束，無法更換招募池或指定能力。暫停後可以接續，也可以停止本次模擬。</p>
     </section>
     <section class="stats-panel">
       <div class="panel-header"><h2>模擬進度</h2><span id="targetStatus" class="target-running-status">尚未開始</span></div>
@@ -237,7 +237,7 @@
       </div>
       <button id="targetMainButton" class="target-main-button" type="button">開始模擬</button>
       <button id="targetStopButton" class="target-stop-button" type="button" hidden>停止模擬</button>
-      <p class="stats-hint">指定 1～2 項採快速模擬；3 項每批 100 輪、4 項 1,000 輪、5 項 3,000 輪、6 項 5,000 輪。按「暫停模擬」可保留進度，之後繼續。</p>
+      <p class="stats-hint">指定能力越多，可能需要越長的抽選時間。模擬中可隨時暫停，之後再繼續。</p>
       <p id="targetNotice" class="muted" role="status"></p>
     </section>
     <section id="targetResults" class="stats-panel" hidden>
@@ -245,8 +245,8 @@
     </section>
     <button id="targetConfirm" class="target-main-button target-confirm" type="button" hidden>確認取得所選英靈</button>
     <section class="stats-panel ability-panel">
-      <h2>本頁獨立能力統計</h2>
-      <p class="stats-hint">此處只統計第四頁產生的結果，完全不影響第一至第三頁紀錄。能力與羈絆統計均排除六星。</p>
+      <h2>指定抽選統計</h2>
+      <p class="stats-hint">只顯示指定抽選的紀錄，與一般召喚分開保存。能力組合及羈絆統計不包含六星。</p>
       <label class="form-field">紀錄對象
         <select id="targetCountMode"><option value="candidates">全部候選英靈</option><option value="obtained">正式取得英靈</option></select>
       </label>
@@ -259,7 +259,7 @@
       <details id="targetMixedDetails" class="ability-mixed">
         <summary><span><strong>特殊混搭組合</strong><small>指定禁斷／貪欲組合＋至少一金</small></span>
           <span class="ability-mixed-result"><strong id="targetMixedRate">—</strong><small id="targetMixedCount">命中 0 次</small></span></summary>
-        <p class="stats-hint">詳細組合按七種指定能力的恰好組合分類，機率不重複計入。</p>
+        <p class="stats-hint">每種混搭組合分開顯示，總機率不會重複計算。</p>
         <div class="table-scroll ability-mixed-scroll"><table><thead><tr><th>詳細組合</th><th>次數</th><th>單一候選機率</th></tr></thead><tbody id="targetMixedRows"></tbody></table></div>
       </details>
       <h3>羈絆進化命中紀錄</h3>
@@ -289,7 +289,7 @@
     <button id="closeAbilities" type="button" class="subtle">關閉 ×</button>
   </div>
   <div class="abilities-dialog-body">
-    <p class="weight-disclaimer">依卡池顯示原始權重，非個別英靈抽中機率。不同職業與星級的有效技能會有所不同；確定能力為固定配置。</p>
+    <p class="weight-disclaimer">此處列出本池可能取得的能力。不同星級、職業或神器設定可能影響實際可取得的能力。</p>
     <div class="artifact-modal-grid">
       <fieldset class="artifact-modal-item"><legend>小惡魔的眼球</legend>
         <p>頭部射擊 I～III</p>
