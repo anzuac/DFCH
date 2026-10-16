@@ -58,3 +58,24 @@ html[data-guide-color-vision="contrast"] :is(.dfch-home,.recruit-public) :is(a,b
 @media(prefers-reduced-motion:reduce){
   .dfch-tool-card{transition:none!important}
 }
+
+/* Distinct shapes remain visible when the six spending tiers share accessible colors. */
+html[data-guide-color-vision]:not([data-guide-color-vision="normal"]) .target-cost-tier-1{
+ background-image:repeating-linear-gradient(135deg,transparent 0 12px,#e7edf322 12px 16px)!important
+}
+html[data-guide-color-vision]:not([data-guide-color-vision="normal"]) .target-cost-tier-2{
+ background-image:radial-gradient(#f7f9ff40 1.8px,transparent 2px)!important;background-size:13px 13px!important
+}
+html[data-guide-color-vision]:not([data-guide-color-vision="normal"]) .target-cost-tier-3{
+ background-image:repeating-linear-gradient(45deg,transparent 0 11px,#f7f9ff40 11px 14px)!important
+}
+html[data-guide-color-vision]:not([data-guide-color-vision="normal"]) .target-cost-tier-4{
+ background-image:repeating-linear-gradient(90deg,transparent 0 14px,#e7edf330 14px 18px)!important
+}
+html[data-guide-color-vision]:not([data-guide-color-vision="normal"]) .target-cost-tier-5{
+ background-image:linear-gradient(90deg,#e7edf322 1px,transparent 1px),linear-gradient(#e7edf322 1px,transparent 1px)!important;
+ background-size:18px 18px!important
+}
+html[data-guide-color-vision]:not([data-guide-color-vision="normal"]) .target-cost-tier-6{
+ border:3px double var(--vision-other)!important;background-image:repeating-linear-gradient(135deg,transparent 0 18px,#f7f9ff40 18px 21px)!important
+}
