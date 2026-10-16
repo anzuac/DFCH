@@ -134,7 +134,7 @@
     const values=records[side]||{};
     $('abilityProgress').textContent='本池已記錄 '+numbers(values.total||0)+
       ' 位非六星'+(side==='obtained'?'正式取得英靈':'候選英靈')+
-      '；能力統計由此版本起累積，舊版紀錄不回填。';
+      '；只包含能力統計功能啟用後的紀錄。';
     const groups=[
       {kind:'禁斷／貪欲',rows:$('abilityBaseRows'),wrap:$('abilityBaseWrap'),heading:$('abilityBaseHeading')},
       {kind:'三金組合',rows:$('abilityGoldRows'),wrap:$('abilityGoldWrap'),heading:$('abilityGoldHeading')}
