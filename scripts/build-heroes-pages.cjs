@@ -26,6 +26,7 @@ const guideFiles = [
   'styles.css',
   'hero-preferences-data.js',
   'hero-gift-ranking.js',
+  'hero-proof-of-bond.js',
   'hero-preferences-view.js',
   // Player-visible six-star bond and ability modal resources.
   'sixstar-abilities.js',
@@ -234,7 +235,7 @@ function taiwanDate(iso){
 }
 const items=[
   {key:'heroes',name:'六星英靈喜好圖鑑',url:'heroes/',files:[
-    'heroes.html','hero-preferences-data.js','hero-preferences-view.js','hero-gift-ranking.js',
+    'heroes.html','hero-preferences-data.js','hero-preferences-view.js','hero-proof-of-bond.js','hero-gift-ranking.js',
     'sixstar-abilities.js','data/hero-preferences.json','data/hero-gift-locations.json']},
   {key:'recruit',name:'英靈抽取模擬器',url:'recruit/',files:[...recruitFiles,'recruit-public-translations.js','recruit-public-i18n.js']},
   {key:'bond30',name:'羈絆 30 等抽選',url:'bond30/',files:bondFiles},
