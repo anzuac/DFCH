@@ -3,7 +3,8 @@
   const targets={
     'dfch-bond30-height':'bond30EmbeddedFrame',
     'dfch-team-height':'teamEmbeddedFrame',
-    'dfch-recruit-height':'recruitEmbeddedFrame'
+    'dfch-recruit-height':'recruitEmbeddedFrame',
+    'dfch-training-height':'trainingEmbeddedFrame'
   };
   window.addEventListener('message',e=>{
     if(e.origin!==location.origin)return;

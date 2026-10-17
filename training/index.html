@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+ <meta name="color-scheme" content="dark">
+ <title>英靈養成・開發者工具｜DFCH</title>
+ <link rel="stylesheet" href="./style.css?v=1.0.0">
+</head>
+<body>
+ <main class="training-app">
+  <header class="stage-head"><span class="eyebrow">DFCH DEVELOPER / APK 3.16.1</span><h1>英靈能力強化</h1><p>以官方能力狀態介面為基礎，獨立模擬果實、SP 與突破上限。</p></header>
+  <section class="entry-card" aria-label="英靈資料來源">
+   <div class="entry-title">英靈資料來源</div>
+   <div class="source-switch" role="group" aria-label="選擇英靈來源">
+    <label><input type="radio" name="source" value="preset" checked><span>使用預設英靈（23 位六星）</span></label>
+    <label><input type="radio" name="source" value="custom"><span>自訂</span></label>
+   </div>
+   <div class="choice-row">
+    <label id="presetSelectLabel">指定六星英靈<select id="heroChoice"></select></label>
+    <label id="customNameLabel" hidden>自訂英靈名稱<input id="customName" type="text" maxlength="32" value="自訂英靈"></label>
+   </div>
+   <div id="customBase" class="custom-base" hidden><strong>11 項初始內部等級 L（0～99.9）</strong><p>只在自訂模式可修改；變更一項會重置該項已投入的 SP 等級。</p><div id="customFields" class="custom-fields"></div></div>
+  </section>
+  <section class="game-frame" aria-label="英靈能力狀態與強化">
+   <header class="frame-header"><span class="frame-kicker">能力狀態</span><span class="frame-tag">STATUS ENHANCE</span></header>
+   <div class="hero-plate">
+    <img id="portrait" class="hero-portrait" alt="" width="82" height="82">
+    <div class="hero-identity"><h2 id="heroName"></h2><p id="heroTitle"></p><div id="starText" class="stars">★★★★★★</div></div>
+   </div>
+   <div class="enhance-controls">
+    <div class="points-field"><label for="availableSp">可用能力點數 SP</label><div class="points-input"><span aria-hidden="true">🔮</span><input id="availableSp" type="number" min="0" max="100000" step="1" value="0" inputmode="numeric"></div></div>
+    <label class="cap-field" for="rankCap">目前已解鎖上限<select id="rankCap"><option value="SSS">SSS · 99.9</option><option value="GOD">GOD · 109.9</option><option value="GOD+">GOD+ · 119.9</option></select></label>
+   </div>
+   <div class="mode-row" role="group" aria-label="強化模式"><button type="button" data-mode="X1" class="selected">×1</button><button type="button" data-mode="X10">×10</button><button type="button" data-mode="MAX">MAX</button><button type="button" data-mode="RANK">超強化</button></div>
+   <div class="status-headline"><strong>基本能力</strong><span>果實數量可直接設定，右側按鈕扣除 SP</span></div>
+   <div id="statusList" class="status-list" aria-live="polite"></div>
+   <div class="frame-footer"><button type="button" id="resetTraining">重置目前英靈的強化</button><p id="feedback" role="status"></p></div>
+  </section>
+  <p class="research-note">研究版：依 APK 3.16.1 的 11 種能力公式與 SP 四模式重建；Android 原生浮點末位、部分特殊狀態及真實存檔寫入仍需實機核對。本頁只修改瀏覽器中的模擬資料，不影響遊戲。</p>
+ </main>
+ <script src="./presets.js?v=1.0.0"></script>
+ <script src="./engine.js?v=1.0.0"></script>
+ <script src="./app.js?v=1.0.0"></script>
+</body>
+</html>
