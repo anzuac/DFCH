@@ -354,3 +354,55 @@ html[data-guide-theme="light"] body.recruit-public :is(.candidate-speed,.speed-r
 body.recruit-public :is(button,select,input,textarea):focus-visible{
   outline:2px solid var(--rc-accent);outline-offset:2px;
 }
+
+/* These two selectors carry an ID in recruit-ui-fix.css, so generic card
+   overrides cannot defeat them. Keep the real recruit candidates in sync. */
+body.recruit-public #candidates.candidates > .candidate{
+  background:var(--rc-inset);color:var(--rc-ink);border-color:var(--rc-border);
+}
+body.recruit-public #candidates.candidates > .candidate.selected{
+  background:var(--rc-selected);color:var(--rc-selected-ink);border-color:var(--rc-accent);
+}
+body.recruit-public #candidates .candidate-select strong.candidate-name{
+  color:var(--rc-ink);
+}
+body.recruit-public #statusDialog .status-dialog-head,
+body.recruit-public #statusDialog .status-dialog-body{
+  background:var(--rc-surface);color:var(--rc-ink);border-color:var(--rc-border);
+}
+body.recruit-public #statusDialog .status-dialog-head{
+  background:var(--rc-inset);color:var(--rc-heading);
+}
+body.recruit-public #statusDialog .status-hero,
+body.recruit-public #statusDialog .status-row{
+  border-color:var(--rc-border);
+}
+body.recruit-public #statusDialog .status-row{
+  background:var(--rc-inset);color:var(--rc-ink);
+}
+body.recruit-public #statusDialog :is(.status-hero-heading h2,.status-dialog-head strong){
+  color:var(--rc-heading);
+}
+body.recruit-public #statusDialog :is(.status-hero-heading p,.status-name){
+  color:var(--rc-sub);
+}
+body.recruit-public #statusDialog .status-value{
+  color:var(--rc-ink);
+}
+body.recruit-public #statusDialog .status-grade{
+  background:var(--rc-input);border-color:var(--rc-border);
+}
+html[data-guide-theme="light"] body.recruit-public #statusDialog .status-meter{
+  background:#dce9ed!important;box-shadow:inset 0 1px 3px #38546725;
+}
+html[data-guide-theme="light"] body.recruit-public #statusDialog .status-grade{
+  text-shadow:none;color:var(--rc-ink);
+}
+html[data-guide-theme="light"] body.recruit-public #statusDialog .status-grade.grade-0{color:#53616b}
+html[data-guide-theme="light"] body.recruit-public #statusDialog .status-grade.grade-1{color:#68479a}
+html[data-guide-theme="light"] body.recruit-public #statusDialog .status-grade.grade-2{color:#235a9c}
+html[data-guide-theme="light"] body.recruit-public #statusDialog .status-grade.grade-3{color:#086c80}
+html[data-guide-theme="light"] body.recruit-public #statusDialog .status-grade.grade-4{color:#277433}
+html[data-guide-theme="light"] body.recruit-public #statusDialog .status-grade.grade-5{color:#a15b19}
+html[data-guide-theme="light"] body.recruit-public #statusDialog .status-grade.grade-6{color:#a43345}
+html[data-guide-theme="light"] body.recruit-public #statusDialog .status-grade:is(.grade-7,.grade-8,.grade-9){color:#72540d}
