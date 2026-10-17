@@ -216,7 +216,7 @@
     const speed = card.querySelector(".speed-input");
 
     name.value = prefill.name || `隊員 ${currentMembers + 1}`;
-    speed.value = prefill.speed || "0.500";
+    speed.value = prefill.speed || "0.050";
 
     memberList.appendChild(card);
     wireUnit(card);
@@ -278,7 +278,7 @@
 
   window.addEventListener('dfch-account-change',updateSummary);
 
-  addMember({ name: "隊員 1", speed: "0.520" });
-  addMember({ name: "隊員 2", speed: "0.480" });
+  addMember({ name: "隊員 1", speed: "0.050" });
+  addMember({ name: "隊員 2", speed: "0.050" });
   updateSummary();
 })();
