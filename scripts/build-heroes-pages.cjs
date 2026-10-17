@@ -236,7 +236,7 @@ const items=[
   {key:'heroes',name:'六星英靈喜好圖鑑',url:'heroes/',files:[
     'heroes.html','hero-preferences-data.js','hero-preferences-view.js','hero-gift-ranking.js',
     'sixstar-abilities.js','data/hero-preferences.json','data/hero-gift-locations.json']},
-  {key:'recruit',name:'英靈抽取模擬器',url:'recruit/',files:recruitFiles},
+  {key:'recruit',name:'英靈抽取模擬器',url:'recruit/',files:[...recruitFiles,'recruit-public-translations.js','recruit-public-i18n.js']},
   {key:'bond30',name:'羈絆 30 等抽選',url:'bond30/',files:bondFiles},
   {key:'diamond',name:'鑽石抽取模擬器',url:'diamond/',files:[
     'diamond-draw.js','diamond-view.js','diamond-public.css','index.html']},
