@@ -9,7 +9,60 @@
 .enhance-controls{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px;padding:13px 2px}.points-field>label,.cap-field{font-size:12px;color:#d4d6c8;font-weight:650}.points-input{display:flex;align-items:center;gap:8px;padding:2px 10px;background:#121b1e;border:1px solid #56675a;clip-path:polygon(0 50%,10px 0,100% 0,calc(100% - 10px) 100%,10px 100%)}.points-input input{flex:1;min-width:0;border:0;background:transparent;color:#f6df6d;font-weight:850;font-size:19px;outline-offset:-2px}.cap-field select{display:block;margin-top:4px;color:var(--gold)}
 .mode-row{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;border:2px solid #8a764d;border-radius:4px;overflow:hidden;margin:0 2px 14px;background:#25211d}.mode-row button{min-width:0;background:linear-gradient(#352e2a,#1f1d1d);color:#d0c2ad;border:0;border-right:1px solid #78664b;font-weight:800;font-size:13px}.mode-row button:last-child{border-right:0}.mode-row button.selected{background:linear-gradient(#5b4b2b,#2a261f);color:#fff4ce;box-shadow:inset 0 2px #e1c67d}
 .status-headline{display:flex;justify-content:space-between;gap:10px;align-items:baseline;border-bottom:1px solid #617570;padding:4px 3px 8px}.status-headline strong{color:#eed88f;font-size:14px}.status-headline span{color:#a5b8b3;font-size:11px}.status-list{display:grid;gap:4px;padding-top:7px}
-.ability-row{display:grid;grid-template-columns:37px 36px minmax(0,1fr) 112px;align-items:center;gap:7px;padding:9px 7px;background:linear-gradient(180deg,#2c3530,#222b29);border:1px solid #64716b;border-radius:5px;min-width:0}.ability-icon{text-align:center;font-size:25px;line-height:1}.grade{font-size:17px;letter-spacing:-.07em;font-weight:1000;text-align:center;min-width:0;text-shadow:0 2px 2px #000;line-height:1.1}.grade-0{color:#9aa5ac}.grade-1{color:#c8a7e8}.grade-2{color:#8dbaf7}.grade-3{color:#72dad8}.grade-4{color:#a2e79c}.grade-5{color:#ffba71}.grade-6{color:#ffa2af}.grade-7{color:#f4d879}.grade-8{color:#f0d577}.grade-9{color:#f5d98d}.grade-10{color:#e3caff}.grade-11{color:#ffd9f7}.ability-main{min-width:0}.ability-head{display:flex;justify-content:space-between;align-items:baseline;gap:5px}.ability-name{font-size:13px;color:#bac4bb;font-weight:800;white-space:nowrap}.ability-value{font-size:13px;font-weight:900;text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}.ability-meta{display:flex;justify-content:space-between;align-items:center;gap:5px;margin:4px 0}.fruit-field{display:flex;gap:4px;align-items:center;color:#ddd6bd;font-size:11px}.fruit-field input{height:24px;min-height:24px;width:50px;min-width:0;text-align:center;padding:2px 3px;border:1px solid #65736c;border-radius:3px;background:#161d1c;color:#f9d66d;font-size:11px}.fruit-field input:focus{border-color:#f3ce83}.used-sp{font-size:10px;color:#c0bba7;white-space:nowrap}.ability-track{height:11px;border:1px solid #586b64;background:linear-gradient(#030808,#151b1a);border-radius:3px;overflow:hidden;box-shadow:inset 0 2px 3px #000}.ability-fill{height:100%;background:linear-gradient(90deg,#783f48,#e37874,#f6dc8c);box-shadow:0 0 5px #efb88066}.ability-fill.grade-0{background:linear-gradient(90deg,#526064,#c3cbce)}.ability-fill.grade-1,.ability-fill.grade-2{background:linear-gradient(90deg,#44456e,#aba0d9)}.ability-fill.grade-3,.ability-fill.grade-4{background:linear-gradient(90deg,#20524c,#7fddbd)}.ability-fill.grade-5,.ability-fill.grade-6{background:linear-gradient(90deg,#76532c,#f3c07d)}.ability-fill.grade-7,.ability-fill.grade-8{background:linear-gradient(90deg,#60512b,#f4dd68)}.ability-fill.grade-9,.ability-fill.grade-10,.ability-fill.grade-11{background:linear-gradient(90deg,#682e4c,#e1b6ed,#f6e1b7)}
+.ability-row{display:grid;grid-template-columns:37px 36px minmax(0,1fr) 112px;align-items:center;gap:7px;padding:9px 7px;background:linear-gradient(180deg,#2c3530,#222b29);border:1px solid #64716b;border-radius:5px;min-width:0}.ability-icon{text-align:center;font-size:25px;line-height:1}.grade{font-size:17px;letter-spacing:-.07em;font-weight:1000;text-align:center;min-width:0;text-shadow:0 2px 2px #000;line-height:1.1}.grade-0{color:#9aa5ac}.grade-1{color:#c8a7e8}.grade-2{color:#8dbaf7}.grade-3{color:#72dad8}.grade-4{color:#a2e79c}.grade-5{color:#ffba71}.grade-6{color:#ffa2af}.grade-7{color:#f4d879}.grade-8{color:#f0d577}.grade-9{color:#f5d98d}.grade-10{color:#e3caff}.grade-11{color:#ffd9f7}.ability-main{min-width:0}.ability-head{display:flex;justify-content:space-between;align-items:baseline;gap:5px}.ability-name{font-size:13px;color:#bac4bb;font-weight:800;white-space:nowrap}.ability-value{font-size:13px;font-weight:900;text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}.ability-meta{display:flex;justify-content:space-between;align-items:center;gap:5px;margin:4px 0}.fruit-field{display:flex;gap:4px;align-items:center;color:#ddd6bd;font-size:11px}.fruit-field input{height:24px;min-height:24px;width:50px;min-width:0;text-align:center;padding:2px 3px;border:1px solid #65736c;border-radius:3px;background:#161d1c;color:#f9d66d;font-size:11px}.fruit-field input:focus{border-color:#f3ce83}.used-sp{font-size:10px;color:#c0bba7;white-space:nowrap}/* 官方階段式能力條：每升一個評級，前一級的顏色成為底色，
+   新評級的顏色從左邊重新填滿，而不是將 L/119.9 畫成一條長條。 */
+.ability-track{
+  position:relative;isolation:isolate;height:12px;border:1px solid #566460;
+  border-radius:3px;overflow:hidden;background:var(--tier-previous,linear-gradient(#060a0b,#151b19));
+  box-shadow:inset 0 1px 3px #050707bb;
+}
+.ability-track .ability-fill{
+  position:relative;height:100%;
+  background:var(--tier-current,linear-gradient(90deg,#778388,#c5d0d0));
+  box-shadow:inset 0 1px #ffffff52,0 0 4px #e5ecf166;
+  transition:width 180ms ease-out;
+}
+.ability-track.tier-0{--tier-previous:linear-gradient(#060a0b,#121819);--tier-current:linear-gradient(90deg,#758187,#d8dfe2)}
+.ability-track.tier-1{--tier-previous:linear-gradient(90deg,#76858a,#d4dbdb);--tier-current:linear-gradient(90deg,#72518e,#c2a4e3)}
+.ability-track.tier-2{--tier-previous:linear-gradient(90deg,#755491,#c7a4eb);--tier-current:linear-gradient(90deg,#355dba,#83b7ff)}
+.ability-track.tier-3{--tier-previous:linear-gradient(90deg,#365db1,#82b3ff);--tier-current:linear-gradient(90deg,#136a7d,#67ddd8)}
+.ability-track.tier-4{--tier-previous:linear-gradient(90deg,#1f7387,#65d5d1);--tier-current:linear-gradient(90deg,#277348,#9fe49a)}
+.ability-track.tier-5{--tier-previous:linear-gradient(90deg,#2e7b50,#92da92);--tier-current:linear-gradient(90deg,#9e4f2b,#ffc278)}
+.ability-track.tier-6{--tier-previous:linear-gradient(90deg,#9d5833,#f4b77a);--tier-current:linear-gradient(90deg,#a52d45,#ff8e8c)}
+.ability-track.tier-7{--tier-previous:linear-gradient(90deg,#ad3952,#fa8e94);--tier-current:linear-gradient(90deg,#ae792e,#ffe17a)}
+.ability-track.tier-8{--tier-previous:linear-gradient(90deg,#a77c32,#f6da7b);--tier-current:linear-gradient(90deg,#b78639,#f6b6d7)}
+.ability-track.tier-9{--tier-previous:linear-gradient(90deg,#a56e56,#eeb5d7);--tier-current:linear-gradient(90deg,#963c7c,#f1a6d8,#d1b0ff)}
+/* GOD: rainbow fill, gold animated outline. GOD+ keeps GOD rainbow as its base
+   and uses a stronger luminous rainbow and double-gold glint. */
+.ability-track.tier-10{
+  --tier-previous:linear-gradient(90deg,#6b374b,#91633a,#898741,#427969,#456e8f,#785b98);
+  --tier-current:linear-gradient(90deg,#ff5f73,#ffb452,#faf56d,#75e8a2,#5fcdf9,#967cf4,#fa8ac8);
+}
+.ability-track.tier-11{
+  --tier-previous:linear-gradient(90deg,#f06a82,#ffc35d,#f8ed68,#77d5a3,#73bdef,#ae8fea,#e784c2);
+  --tier-current:linear-gradient(90deg,#ffdd86,#fe6d9a,#b8a2ff,#69d2fc,#9cf7b5,#fff38a,#ffb273);
+}
+.ability-track.tier-10,.ability-track.tier-11{
+  border-color:#ffe58f;
+  box-shadow:0 0 0 1px #ebbb4d,0 0 7px #ffd15ab0,0 0 13px #ffdf6855,inset 0 0 2px #fff5c9;
+}
+.ability-track.tier-11{border-color:#fff7c0;box-shadow:0 0 0 1px #ffe18c,0 0 9px #ffe08ec7,0 0 18px #ffd46d77,inset 0 0 3px #fff}
+.ability-track.tier-10 .ability-fill,.ability-track.tier-11 .ability-fill{
+  background-size:200% 100%;animation:dfch-rainbow-flow 3.5s linear infinite;
+  box-shadow:inset 0 1px #ffffff9b,0 0 8px #ffe69f9c;
+}
+.ability-track.tier-10::after,.ability-track.tier-11::after{
+  content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:linear-gradient(107deg,transparent 20%,#fff3bb00 38%,#fffbdebd 50%,#fff3bb00 61%,transparent 79%);
+  background-size:250% 100%;animation:dfch-gold-sparkle 3s ease-in-out infinite;
+}
+.ability-track.tier-11::after{animation-duration:2.15s}
+@keyframes dfch-rainbow-flow{from{background-position:0 0}to{background-position:200% 0}}
+@keyframes dfch-gold-sparkle{from{background-position:170% 0}to{background-position:-170% 0}}
+@media(prefers-reduced-motion:reduce){
+ .ability-track .ability-fill{animation:none!important;transition:none}
+ .ability-track.tier-10::after,.ability-track.tier-11::after{animation:none;opacity:.28}
+}
 .train-button{width:100%;min-height:54px;display:grid;align-content:center;justify-items:center;gap:3px;border:2px solid #aaa16d;border-radius:4px;background:linear-gradient(180deg,#547239,#244022);color:#f7e9bc;font-size:14px;font-weight:850;text-shadow:0 1px #131b13;line-height:1.05}.train-button.rank-up{background:linear-gradient(180deg,#aa5048,#5e2826)}.train-button strong{color:#f7e365;font-size:17px}.train-button:disabled{opacity:.56;background:linear-gradient(#4a4941,#33332f)}
 .frame-footer{border-top:1px solid #6d7767;margin-top:10px;padding:11px 2px 0;display:flex;align-items:center;flex-wrap:wrap;gap:12px}.frame-footer button{border:1px solid #948363;color:#e8d6b2;background:#3a3530;padding:8px 13px;border-radius:4px}.frame-footer p{font-size:12px;color:#c7ddbb;margin:0;line-height:1.5}.research-note{font-size:11px;color:#a1aeae;line-height:1.65;padding:9px}
 .ability-row.is-ignored{opacity:.55}.ability-row.is-ignored .ability-track{background:#101519}.ability-row.is-ignored .train-button{pointer-events:none}

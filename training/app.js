@@ -56,13 +56,16 @@
    const cost=preview?.cost||0,active=!!preview?.affordable;
    const actionLabel=preview?.rankUp?'超強化':'強化';
    const btnText=cost?'<span>'+actionLabel+'</span><strong>'+cost+'</strong>':'<span>已達上限</span>';
-   const percent=clamp(L/119.9*100,0,100);
+   // One full bar per grade: the previous grade becomes the background.
+   // G begins with an empty black track and gradually fills in silver-grey.
+   const stageValue=skip?0:clamp(L-rank*10,0,9.9);
+   const percent=skip?0:clamp(stageValue/10*100,0,100);
    return '<article class="ability-row'+(skip?' is-ignored':'')+'">'+
     '<span class="ability-icon" aria-hidden="true">'+E.ICONS[i]+'</span>'+
     '<strong class="grade grade-'+rank+'">'+label+'</strong>'+
     '<div class="ability-main"><div class="ability-head"><span class="ability-name">'+esc(n)+'</span><strong class="ability-value">'+esc(value)+'</strong></div>'+
     '<div class="ability-meta"><label class="fruit-field">果實 <input type="number" data-fruit="'+i+'" min="0" max="10000" step="1" inputmode="numeric" value="'+fruit+'"'+(skip?' disabled':'')+' aria-label="'+esc(n)+'果實數量"> 顆</label><span class="used-sp">已用 '+r.used[i]+' SP</span></div>'+
-    '<div class="ability-track" role="progressbar" aria-label="'+esc(n)+'能力內部等級" aria-valuemin="0" aria-valuemax="119.9" aria-valuenow="'+L.toFixed(2)+'"><div class="ability-fill grade-'+rank+'" style="width:'+percent.toFixed(2)+'%"></div></div></div>'+
+    '<div class="ability-track tier-'+rank+'" role="progressbar" aria-label="'+esc(n)+'目前階級進度" aria-valuemin="0" aria-valuemax="10" aria-valuenow="'+stageValue.toFixed(2)+'" aria-valuetext="'+(skip?'不適用':label+' 階級，內部等級 '+L.toFixed(2))+'"><div class="ability-fill tier-fill-'+rank+'" style="width:'+percent.toFixed(2)+'%"></div></div></div>'+
     '<button type="button" class="train-button'+(preview?.rankUp?' rank-up':'')+'" data-train="'+i+'"'+(!active?' disabled':'')+' aria-label="'+esc(n)+'，'+esc(actionLabel)+'，需要 '+cost+' 點能力點數">'+btnText+'</button></article>';
   }).join('');
   save();reportHeight();

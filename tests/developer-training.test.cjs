@@ -46,3 +46,18 @@ test('Developer root has exactly nine tabs, an isolated iframe, and resize mappi
  for(const src of ['training/engine.js','training/presets.js','training/app.js'])
   assert.doesNotThrow(()=>new Function(read(src)));
 });
+
+test('Official-style progress uses one grade at a time with inherited previous color',()=>{
+ const page=read('training/app.js'),css=read('training/style.css');
+ assert.match(page,/const stageValue=skip\?0:clamp\(L-rank\*10,0,9\.9\)/);
+ assert.match(page,/const percent=skip\?0:clamp\(stageValue\/10\*100,0,100\)/);
+ assert.match(page,/ability-track tier-/);
+ assert.match(page,/ability-fill tier-fill-/);
+ assert.match(page,/aria-valuetext/);
+ for(let i=0;i<12;i++)assert.ok(css.includes('.ability-track.tier-'+i+'{'),'missing tier '+i);
+ assert.match(css,/\.ability-track\.tier-10,\.ability-track\.tier-11/);
+ assert.match(css,/@keyframes dfch-rainbow-flow/);
+ assert.match(css,/@keyframes dfch-gold-sparkle/);
+ assert.match(css,/@media\(prefers-reduced-motion:reduce\)/);
+ assert.ok(!page.includes('L/119.9*100'));
+});
