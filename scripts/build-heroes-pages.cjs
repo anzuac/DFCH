@@ -76,9 +76,10 @@ const imageDirectories = [
 ];
 // Original homepage art stays in the author's GitHub asset directory.
 const featuredHomepageImage = 'Home page picture/55417318-8d30-46e8-a146-dbba8a6d134c.jpg';
+const featuredRecruitImage = 'Home page picture/AISelect_20261017_161915_Discord.jpg';
 
 // Validate sources before deleting an existing output directory.
-for (const relativePath of [...guideFiles, ...bondFiles, ...teamFiles, ...recruitFiles, ...imageDirectories, 'Bond30/assets/icons', featuredHomepageImage, 'cloudflare/home.html', 'index.html']) {
+for (const relativePath of [...guideFiles, ...bondFiles, ...teamFiles, ...recruitFiles, ...imageDirectories, 'Bond30/assets/icons', featuredHomepageImage, featuredRecruitImage, 'cloudflare/home.html', 'index.html']) {
   if (!fs.existsSync(path.join(repoRoot, relativePath))) {
     throw new Error(`Missing guide source: ${relativePath}`);
   }
@@ -96,6 +97,7 @@ for (const relativePath of guideFiles) {
 // Only the featured six-star guide card uses artwork; other four cards remain blank.
 fs.mkdirSync(path.join(outputDir, 'home-images'), { recursive: true });
 fs.copyFileSync(path.join(repoRoot, featuredHomepageImage), path.join(outputDir, 'home-images/heroes-guide.jpg'));
+fs.copyFileSync(path.join(repoRoot, featuredRecruitImage), path.join(outputDir, 'home-images/recruit-simulator.jpg'));
 
 // The public lineup uses the same standalone files as GitHub Pages.
 for (const relativePath of teamFiles) {
