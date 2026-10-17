@@ -13,15 +13,15 @@ const html=read('team/index.html');
 const start=app.indexOf('\n <section class="statpanel"><h4>貪欲・寶箱加成</h4>');
 const end=app.indexOf('\n <section class="statpanel"><h4>技能加成明細</h4>',start);
 const view=app.slice(start,end);
-const meterStart=app.indexOf('function greedCycle(value){');
+const meterStart=app.indexOf('function greedDisplay(value){');
 const meterEnd=app.indexOf('function renderStats(){',meterStart);
 const pct=n=>n+'%';
-const {greedMeter:meter,greedCycle}=new Function('enc','pct',app.slice(meterStart,meterEnd)+'return {greedMeter,greedCycle};')(s=>s,pct);
-const render=new Function('d','pct','greedMeter','greedCycle','return '+String.fromCharCode(96)+view+String.fromCharCode(96)+';');
+const {greedMeter:meter,greedDisplay}=new Function('enc','pct',app.slice(meterStart,meterEnd)+'return {greedMeter,greedDisplay};')(s=>s,pct);
+const render=new Function('d','pct','greedMeter','greedDisplay','return '+String.fromCharCode(96)+view+String.fromCharCode(96)+';');
 
 test('Compact four-group card shows no misleading combined drop percentage',()=>{
  const sample={greedSum:15,greedCircuitTotal:40,greedMirrorTotal:15,ominous:{applied:10},greedArtifactTotal:65,greedCombined:80};
- const result=render(sample,pct,meter,greedCycle);
+ const result=render(sample,pct,meter,greedDisplay);
  assert.match(result,/英靈貪欲<\/span>\s*<strong class="greed-hero-value">\+15%<\/strong>/);
  assert.match(result,/回路組<\/span><strong>\+40%<\/strong>/);
  assert.match(result,/欲望之鏡<\/span><strong>\+15%<\/strong>/);
@@ -32,13 +32,20 @@ test('Compact four-group card shows no misleading combined drop percentage',()=>
  assert.doesNotMatch(result,/greedTotal|搭配加成合計|\+80%/);
  assert.doesNotMatch(result,/每滿 100%|80%：|100%：必定|354|355|358|359|AbilityManager/);
 });
-test('Hero progress cycles after 100% while retaining the full displayed value',()=>{
- assert.match(meter('英靈貪欲',125,'hero'),/style="width:25%"/);
+test('Hero greed displays raw totals with a capped meter and an over-limit hint',()=>{
+ assert.deepEqual(greedDisplay(100),{over:false,fill:100});
+ assert.deepEqual(greedDisplay(103),{over:true,fill:100});
+ assert.match(meter('英靈貪欲',125,'hero'),/style="width:100%"/);
  assert.match(meter('英靈貪欲',125,'hero'),/<strong>\+125%<\/strong>/);
- assert.match(meter('英靈貪欲',100,'hero'),/style="width:100%"/);
- assert.match(meter('英靈貪欲',200,'hero'),/style="width:100%"/);
  assert.match(meter('英靈貪欲',0,'hero'),/style="width:0%"/);
  assert.match(meter('回路組',125,'circuit'),/style="width:100%"/);
+ const sample={greedSum:103,greedCircuitTotal:40,greedMirrorTotal:15,ominous:{applied:9}};
+ const rendered=render(sample,pct,meter,greedDisplay);
+ assert.match(rendered,/class="greed-result greed-over-limit"/);
+ assert.match(rendered,/class="greed-hero-value">\+103%<\/strong>/);
+ assert.match(rendered,/已超過 100% 門檻（超出/);
+ assert.match(rendered,/<strong>3%<\/strong>/);
+ assert.doesNotMatch(render({...sample,greedSum:100},pct,meter,greedDisplay),/greed-excess-note/);
 });
 test('Expanded player guide has no internal formulas and ends with in-game disclaimer',()=>{
  assert.match(view,/<details class="greed-more"><summary>詳細說明<\/summary>/);
@@ -55,14 +62,14 @@ test('Four theme colors and mobile layout support compact cards',()=>{
  }
  assert.match(css,/grid-template-columns:repeat\(3,minmax\(0,1fr\)\)/);
  assert.match(css,/--party-foreground/);
- assert.match(html,/style\.css\?v=1\.15\.5/);
- assert.match(html,/app\.js\?v=1\.15\.5/);
- assert.match(html,/i18n\.js\?v=1\.15\.6/);
+ assert.match(html,/style\.css\?v=1\.15\.9/);
+ assert.match(html,/app\.js\?v=1\.15\.9/);
+ assert.match(html,/i18n\.js\?v=1\.15\.9/);
 });
 test('Seven-language entries cover all new player-facing wording',()=>{
  const s=i18n.slice(i18n.indexOf('const entries={')+'const entries='.length,i18n.indexOf(';\nconst langs='));
  const entries=new Function('return ('+s+')')();
- const keys=['英靈貪欲','回路組','欲望之鏡','不祥迴路','各組加成',
+ const keys=['英靈貪欲','已超過 100% 門檻（超出 ','回路組','欲望之鏡','不祥迴路','各組加成',
   '英靈貪欲與神器效果分開顯示，方便查看目前搭配。',
   '「回路組」包含壞掉的回路與不可思議的回路；其他神器分別顯示。',
   '進度條僅供比較各項寶箱加成，不代表單次掉落機率。',

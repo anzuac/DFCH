@@ -229,15 +229,13 @@ function initArtifactSettings(){
   };
  }
 }
-/* Four repeating colors per completed 100% hero-greed milestone (visual only). */
-function greedCycle(value){
+/* Retain raw Greed totals while capping the visual single-trigger meter at 100%. */
+function greedDisplay(value){
  const n=Math.max(0,Number(value)||0);
- const milestone=Math.floor(n/100);
- const remainder=n%100;
- return {color:milestone%4,fill:n>0&&remainder===0?100:remainder};
+ return {over:n>100,fill:Math.min(100,n)};
 }
 function greedMeter(label,value,kind){
- const fill=kind==='hero'?greedCycle(value).fill:Math.min(100,Math.max(0,Number(value)||0));
+ const fill=kind==='hero'?greedDisplay(value).fill:Math.min(100,Math.max(0,Number(value)||0));
  return `<div class="greed-meter greed-meter-${kind}">
   <div class="greed-meter-line"><span>${enc(label)}</span><strong>+${pct(value)}</strong></div>
   <div class="greed-meter-track" aria-hidden="true"><div class="greed-meter-fill" style="width:${fill}%"></div></div>
@@ -268,10 +266,13 @@ function renderStats(){
   ${d.total>100?'<p class="statwarn">計算結果超過 100%，請留意遊戲內可能存在其他限制。</p>':''}
  </section>
  <section class="statpanel"><h4>貪欲・寶箱加成</h4>
-  <div class="greed-result greed-cycle-${greedCycle(d.greedSum).color}">
+  <div class="greed-result ${greedDisplay(d.greedSum).over?'greed-over-limit':''}">
    <div class="greed-hero">
-    <span class="greed-hero-label">英靈貪欲</span>
-    <strong class="greed-hero-value">+${pct(d.greedSum)}</strong>
+    <div class="greed-hero-main">
+     <span class="greed-hero-label">英靈貪欲</span>
+     <strong class="greed-hero-value">+${pct(d.greedSum)}</strong>
+    </div>
+    ${d.greedSum>100?`<p class="greed-excess-note" role="status"><span class="greed-excess-icon" aria-hidden="true">ⓘ</span><span>已超過 100% 門檻（超出 </span><strong>${pct(d.greedSum-100)}</strong><span>）</span></p>`:''}
    </div>
    <div class="greed-artifacts" aria-label="神器效果">
     <div class="greed-artifact-card"><span>回路組</span><strong>+${pct(d.greedCircuitTotal)}</strong></div>

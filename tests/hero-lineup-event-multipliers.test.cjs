@@ -16,11 +16,11 @@ function section(start,end){
 }
 const eventConstants=section('const EVENT_OPTIONS=','const calcStoreKey=');
 const loadSource=section('const calcStoreKey=','function saveCalcSettings(){');
-const meterSource=section('function greedCycle(value){','function eventOptionsMarkup(){');
+const meterSource=section('function greedDisplay(value){','function eventOptionsMarkup(){');
 const eventMarkupSource=section('function eventOptionsMarkup(){','function renderStats(){');
 const buildSource=section('function buildCalcData(){','function showSkillRows(');
-const meterFactory=new Function('pct','enc',meterSource+'return {greedCycle,greedMeter};');
-const {greedCycle,greedMeter}=meterFactory(n=>String(n)+'%',s=>s);
+const meterFactory=new Function('pct','enc',meterSource+'return {greedDisplay,greedMeter};');
+const {greedDisplay,greedMeter}=meterFactory(n=>String(n)+'%',s=>s);
 const makeOptions=new Function('calcSettings',eventConstants+eventMarkupSource+'return eventOptionsMarkup();');
 const restore=new Function('localStorage',eventConstants+loadSource+'return calcSettings;');
 const calculate=new Function('calcSettings',
@@ -28,19 +28,19 @@ const calculate=new Function('calcSettings',
  'const truncToOneDecimal=n=>Math.trunc((n+1e-10)*10)/10;\n'+buildSource+'\nreturn buildCalcData();'
 );
 const defaults={base:3,crown:false,stone:false,ring:0,brokenCircuit:0,mysteriousCircuit:false,desireMirror:0,ominousCircuit:0,ominousDistance:30};
-test('Hero Greed cycles colors for each complete 100% and restores full percentage labels',()=>{
- const values=[[0,0,0],[99,0,99],[100,1,100],[101,1,1],
-  [199,1,99],[200,2,100],[225,2,25],[300,3,100],[399,3,99],[400,0,100],[450,0,50]];
- for(const [n,tone,fill] of values){
-  assert.deepEqual(greedCycle(n),{color:tone,fill},'greed '+n);
+test('Hero greed uses a single warning color above 100% and keeps the meter full',()=>{
+ const values=[[0,false,0],[99,false,99],[100,false,100],[101,true,100],[199,true,100],[200,true,100],[225,true,100],[300,true,100],[450,true,100]];
+ for(const [n,over,fill] of values){
+  assert.deepEqual(greedDisplay(n),{over,fill},'greed '+n);
   assert.match(greedMeter('英靈貪欲',n,'hero'),new RegExp('style="width:'+fill+'%"'));
   assert.match(greedMeter('英靈貪欲',n,'hero'),new RegExp('<strong>\\+'+n+'%'));
  }
  assert.match(greedMeter('回路組',125,'circuit'),/style="width:100%"/);
  const block=section(' <section class="statpanel"><h4>貪欲・寶箱加成</h4>',' <section class="statpanel"><h4>技能加成明細</h4>');
- assert.match(block,/greed-result greed-cycle-\$\{greedCycle\(d\.greedSum\)\.color\}/);
- for(const level of [0,1,2,3])assert.match(css,new RegExp('greed-result\\.greed-cycle-'+level));
- assert.match(css,/html\[data-guide-theme="light"\].*greed-result\.greed-cycle-3/);
+ assert.match(block,/greed-result \$\{greedDisplay\(d\.greedSum\)\.over/);
+ assert.match(css,/greed-result\.greed-over-limit/);
+ assert.match(css,/html\[data-guide-theme="light"\].*greed-result\.greed-over-limit/);
+ assert.doesNotMatch(css,/greed-cycle-[0-3]/);
 });
 test('Event choices share one radio group, with exactly one selection regardless of size',()=>{
  for(const selected of [1,1.5,2]){
@@ -80,10 +80,10 @@ test('150% and 200% change only the event multiplier of the existing gatekeeper 
  assert.match(app,/const greedCombined=greedSum\+greedArtifactTotal/);
 });
 test('Cache versions, localized no-event text and accessible radio styles are present',()=>{
- assert.match(html,/v1\.15\.6<\/span>/);
- assert.match(html,/app\.js\?v=1\.15\.5/);
- assert.match(html,/i18n\.js\?v=1\.15\.6/);
- assert.match(html,/style\.css\?v=1\.15\.5/);
+ assert.match(html,/v1\.15\.9<\/span>/);
+ assert.match(html,/app\.js\?v=1\.15\.9/);
+ assert.match(html,/i18n\.js\?v=1\.15\.9/);
+ assert.match(html,/style\.css\?v=1\.15\.9/);
  const marker="'無活動':";
  const a=i18n.indexOf(marker);
  assert.ok(a>=0);
