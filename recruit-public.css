@@ -45,3 +45,312 @@ html[data-guide-theme="light"] body.recruit-public :is(.candidate,.target-candid
 }
 html[data-guide-theme="light"] body.recruit-public :is(.target-slot-name,.target-skill-option-name,.candidate strong){color:#1e3540}
 html[data-guide-theme="light"] body.recruit-public .target-main-button{color:#182e38}
+
+/*
+ * Recruitment's original sheets are dark-only. Map every visible surface to the
+ * shared theme tokens here, without changing the simulator or GitHub Pages.
+ * Keep this sheet after Recruit/*.css in the generated Cloudflare HTML.
+ */
+body.recruit-public{
+  --rc-bg:var(--dfch-recruit-bg);
+  --rc-surface:var(--dfch-recruit-panel);
+  --rc-inset:var(--dfch-recruit-inset);
+  --rc-input:#132931;
+  --rc-ink:var(--dfch-recruit-text);
+  --rc-sub:var(--dfch-recruit-muted);
+  --rc-border:var(--dfch-recruit-line);
+  --rc-heading:#f0d69f;
+  --rc-highlight:#f8e4af;
+  --rc-accent:#a1dfc9;
+  --rc-tab:#10252a;
+  --rc-selected:#295449;
+  --rc-selected-ink:#f9ecc7;
+  --rc-table-head:#284941;
+  --rc-table-head-ink:#f7e8bb;
+  --rc-stripe:#223f3d;
+  --rc-danger:#5b3438;
+  --rc-danger-ink:#ffe5e7;
+  --rc-shadow:0 6px 18px #07130f39;
+  min-height:100dvh;
+}
+html[data-guide-theme="light"]{
+  color-scheme:light;
+  background:#edf4f7;
+}
+html[data-guide-theme="light"] body.recruit-public{
+  --rc-input:#f8fbfd;
+  --rc-heading:#714a16;
+  --rc-highlight:#714a16;
+  --rc-accent:#14645d;
+  --rc-tab:#dce9ed;
+  --rc-selected:#d9eee4;
+  --rc-selected-ink:#174f45;
+  --rc-table-head:#d8e8e5;
+  --rc-table-head-ink:#20443d;
+  --rc-stripe:#edf5f7;
+  --rc-danger:#fbe9e9;
+  --rc-danger-ink:#8c2734;
+  --rc-shadow:0 5px 18px #4562701a;
+}
+html[data-guide-theme="blue"] body.recruit-public{
+  --rc-input:#132c47;
+  --rc-heading:#f6dfa8;
+  --rc-highlight:#f6dfa8;
+  --rc-accent:#9edaff;
+  --rc-tab:#10253e;
+  --rc-selected:#275775;
+  --rc-selected-ink:#f6edc9;
+  --rc-table-head:#28516c;
+  --rc-table-head-ink:#f7eabf;
+  --rc-stripe:#1c3b55;
+  --rc-danger:#603c51;
+  --rc-danger-ink:#ffe1e8;
+}
+html[data-guide-theme="green"] body.recruit-public{
+  --rc-input:#1a3228;
+  --rc-heading:#f0e0aa;
+  --rc-highlight:#f0e0aa;
+  --rc-accent:#c0e7b4;
+  --rc-tab:#182e24;
+  --rc-selected:#315b45;
+  --rc-selected-ink:#f9efcc;
+  --rc-table-head:#345843;
+  --rc-table-head-ink:#f6e8be;
+  --rc-stripe:#284535;
+  --rc-danger:#623d42;
+  --rc-danger-ink:#ffe5e6;
+}
+
+/* Global heading, navigation and first-tab controls. */
+body.recruit-public .container{color:var(--rc-ink)}
+body.recruit-public .recruit-compact-header .recruit-version,
+body.recruit-public .intro p,
+body.recruit-public :is(.field,.reserved,.help,.legend,.panelhead p,.history-time,
+  .site-footer,.artifact-state,.speed-source,.speed-notice,.history-scroll-hint){
+  color:var(--rc-sub);
+}
+body.recruit-public :is(.intro h1,.card h2,.card h3,.recruit-bonuses h3,
+  .history-summary strong,.history-heading h2,.detail h3){
+  color:var(--rc-heading);
+}
+body.recruit-public :is(.tag,.ratebox,.rate,.toggle,.summary,.notice,.detail,.history-entry,
+ .history-choice,.artifact-inline,.recruit-bonuses,.recruit-bonus-check,.bond-settings,
+ .ability-info,.pending-reminder){
+  background:var(--rc-inset);
+  border-color:var(--rc-border);
+  color:var(--rc-ink);
+}
+body.recruit-public :is(.toggle small,.ratebox small,.hint,.help p,.history-choice small,
+ .history-skills,.history-heading p,.ability-info small,.recruit-bonus-check small,
+ .recruit-bonus-levels label small,.recruit-bonus-hint,.bond-hint,.bond-activate,
+ .bond-level-control label,.bond-ticks,.bond-legend>span,.recruit-bonus-summary,
+ .artifact-modal-item p,.history-scroll-hint,.speed-result,.candidate-speed){
+  color:var(--rc-sub);
+}
+body.recruit-public :is(.rate b,.rate strong,.artifact-inline strong,.artifact-inline label,
+ .reserved summary,.help summary,.recruit-bonus-levels label,.bond-settings h3,
+ .bond-level-control label strong,.bond-legend strong,.ability-info strong){
+  color:var(--rc-heading);
+}
+body.recruit-public :is(.rate,.history-choice,.candidate,.detail,.skill,
+ .recruit-bonus-check,.recruit-bonuses,.bond-settings,.history-entry){
+  border-color:var(--rc-border);
+}
+body.recruit-public :is(.field select,.subtle,.ability-search-label input,
+ .recruit-bonus-levels select,.form-field select,.form-field input){
+  background:var(--rc-input);
+  color:var(--rc-ink);
+  border-color:var(--rc-border);
+}
+body.recruit-public :is(.history-status-button,.abilities-open,.subtle){
+  background:var(--rc-inset);color:var(--rc-ink);border-color:var(--rc-border);
+}
+body.recruit-public .recruit-tabs{
+  background:var(--rc-tab);border-color:var(--rc-border);
+}
+body.recruit-public .recruit-tabs .recruit-tab{
+  color:var(--rc-sub);
+}
+body.recruit-public .recruit-tabs .recruit-tab[aria-selected="true"],
+body.recruit-public .recruit-tabs .recruit-tab.is-active{
+  color:var(--rc-selected-ink);background:var(--rc-selected);
+  border-color:var(--rc-accent);
+}
+body.recruit-public :is(.candidate,.candidate-select,.history-choice,.detail,.skill){
+  color:var(--rc-ink);
+}
+body.recruit-public :is(.candidate,.history-choice,.skill){
+  background:var(--rc-inset);
+}
+body.recruit-public :is(.candidate.selected,.candidate[aria-pressed="true"],.history-choice.chosen){
+  background:var(--rc-selected);border-color:var(--rc-accent);
+}
+body.recruit-public :is(.candidate .sub,.candidate-select .sub,.skill .text,
+ .detail .desc,.skill .role,.candidate .hero-subtitle){
+  color:var(--rc-sub);
+}
+body.recruit-public .candidate-select strong{color:var(--rc-ink)}
+body.recruit-public .candidate-select:hover strong{color:var(--rc-accent)}
+body.recruit-public .recruit-bonus-check,
+body.recruit-public .recruit-bonus-levels label{color:var(--rc-ink)}
+body.recruit-public .recruit-bonus-levels{border-color:var(--rc-border)}
+body.recruit-public :is(.bond-settings,.bond-legend,.artifact-modal-item){
+  border-color:var(--rc-border);
+}
+
+/* All statistics panels use --s-* variables defined locally in tabs.css.
+   Overriding body alone cannot change them: this is the primary screenshot bug. */
+body.recruit-public :is(#statsTabPanel,#abilityTabPanel,#targetTabPanel){
+  --s-sub:var(--rc-sub);
+  --s-panel:var(--rc-surface);
+  --s-card:var(--rc-inset);
+  --s-line:var(--rc-border);
+  --s-gold:var(--rc-heading);
+  color:var(--rc-ink);
+}
+body.recruit-public :is(#statsTabPanel,#abilityTabPanel,#targetTabPanel) .stats-panel{
+  background:var(--s-panel);color:var(--rc-ink);
+  border-color:var(--rc-border);box-shadow:var(--rc-shadow);
+}
+body.recruit-public :is(#statsTabPanel,#abilityTabPanel,#targetTabPanel) :is(h2,h3){
+  color:var(--rc-heading);
+}
+body.recruit-public :is(#statsTabPanel,#abilityTabPanel,#targetTabPanel) .stat-card{
+  background:var(--s-card);color:var(--rc-ink);border-color:var(--rc-border);
+}
+body.recruit-public :is(#statsTabPanel,#abilityTabPanel,#targetTabPanel) .stat-card strong{
+  color:var(--rc-highlight);
+}
+body.recruit-public :is(#statsTabPanel,#abilityTabPanel,#targetTabPanel) .stat-card :is(small,em){
+  color:var(--rc-sub);
+}
+body.recruit-public :is(#statsTabPanel,#abilityTabPanel,#targetTabPanel) .form-field select{
+  background:var(--rc-input);color:var(--rc-ink);border-color:var(--rc-border);
+}
+body.recruit-public :is(#statsTabPanel,#abilityTabPanel,#targetTabPanel) .table-scroll{
+  border-color:var(--rc-border);
+}
+body.recruit-public :is(#statsTabPanel,#abilityTabPanel,#targetTabPanel) table{
+  background:var(--rc-surface);color:var(--rc-ink);
+}
+body.recruit-public :is(#statsTabPanel,#abilityTabPanel,#targetTabPanel) thead{
+  background:var(--rc-table-head);color:var(--rc-table-head-ink);
+}
+body.recruit-public :is(#statsTabPanel,#abilityTabPanel,#targetTabPanel) :is(th,td){
+  border-color:var(--rc-border);
+  color:var(--rc-ink);
+}
+body.recruit-public :is(#statsTabPanel,#abilityTabPanel,#targetTabPanel) thead th{
+  color:var(--rc-table-head-ink);
+}
+body.recruit-public :is(#statsTabPanel,#abilityTabPanel,#targetTabPanel) tbody tr:nth-child(even){
+  background:var(--rc-stripe);
+}
+body.recruit-public :is(#statsTabPanel,#abilityTabPanel,#targetTabPanel) .ability-mixed{
+  background:var(--rc-inset);color:var(--rc-ink);border-color:var(--rc-border);
+}
+body.recruit-public :is(#statsTabPanel,#abilityTabPanel,#targetTabPanel) .ability-mixed summary strong{
+  color:var(--rc-heading);
+}
+body.recruit-public :is(#statsTabPanel,#abilityTabPanel,#targetTabPanel) .ability-mixed summary small{
+  color:var(--rc-sub);
+}
+body.recruit-public :is(#statsTabPanel,#abilityTabPanel,#targetTabPanel) .danger{
+  color:var(--rc-danger-ink);background:var(--rc-danger);border-color:var(--rc-danger-ink);
+}
+
+/* Fourth-tab selection cards, options and results. */
+body.recruit-public #targetTabPanel :is(.target-artifacts,.target-preset-section,
+ .target-slot-button,.target-detail,.target-skill,.target-candidate,.target-progress){
+  background:var(--rc-inset);color:var(--rc-ink);border-color:var(--rc-border);
+}
+body.recruit-public #targetTabPanel :is(.target-selector-summary,.target-running-status,
+ .target-slot-label,.target-hero-speed,.target-artifact-options label,.target-candidate small,
+ .target-skill small,.target-slot-chevron,.target-skill-placeholder){
+  color:var(--rc-sub);
+}
+body.recruit-public #targetTabPanel :is(.target-selector-summary strong,.target-detail>strong,
+ .target-artifacts summary,.target-preset-section h4,.target-slot-name){
+  color:var(--rc-heading);
+}
+body.recruit-public #targetTabPanel .target-slot-button:not(.is-picked) .target-slot-name{
+  color:var(--rc-sub);
+}
+body.recruit-public #targetTabPanel :is(.target-preset-button,.target-clear-slots,
+ .target-artifact-options select,.target-stop-button){
+  color:var(--rc-ink);background:var(--rc-input);border-color:var(--rc-border);
+}
+body.recruit-public #targetTabPanel :is(.target-preset-button.is-selected,
+ .target-slot-button.is-picked,.target-candidate.is-selected,.target-skill.target-match){
+  background:var(--rc-selected);color:var(--rc-selected-ink);border-color:var(--rc-accent);
+}
+body.recruit-public #targetTabPanel .target-skill.target-match span{
+  color:var(--rc-selected-ink);
+}
+body.recruit-public #targetTabPanel .target-preset-button:hover:not(:disabled),
+body.recruit-public #targetTabPanel .target-slot-button:hover:not(:disabled){
+  background:var(--rc-selected);
+}
+body.recruit-public :is(.target-warning-dialog,.target-skill-dialog,.abilities-dialog,.status-dialog){
+  color:var(--rc-ink);background:var(--rc-surface);border-color:var(--rc-border);
+}
+body.recruit-public :is(.target-skill-dialog-head,.abilities-dialog-head,.status-dialog-head){
+  background:var(--rc-inset);border-color:var(--rc-border);color:var(--rc-ink);
+}
+body.recruit-public :is(.target-skill-dialog-head h2,.abilities-dialog-head h2,
+ .status-hero-heading h2,.target-warning-dialog h2){
+  color:var(--rc-heading);
+}
+body.recruit-public :is(.target-skill-dialog-head p,.target-skill-search-label,
+ .target-skill-empty,.ability-option-info>small,.status-hero-heading p,.status-help,
+ .status-caveat,.status-name){
+  color:var(--rc-sub);
+}
+body.recruit-public :is(.target-skill-close,.target-skill-option,.target-warning-actions button,
+ .status-close,.ability-category,.ability-option,.weight-disclaimer,.status-help,
+ .status-caveat,.status-row,.ability-info){
+  color:var(--rc-ink);background:var(--rc-inset);border-color:var(--rc-border);
+}
+body.recruit-public :is(.target-skill-search-label input,.ability-search-label input){
+  background:var(--rc-input);color:var(--rc-ink);border-color:var(--rc-border);
+}
+body.recruit-public :is(.target-skill-option.is-selected,.target-skill-option:hover,
+ .target-warning-actions button:last-child){
+  background:var(--rc-selected);color:var(--rc-selected-ink);border-color:var(--rc-accent);
+}
+body.recruit-public :is(.target-skill-option-name,.ability-option-info>strong,
+ .status-value,.status-hero-heading h2){color:var(--rc-ink)}
+body.recruit-public .ability-category h3{
+  background:var(--rc-table-head);color:var(--rc-table-head-ink);
+}
+body.recruit-public :is(.ability-tags span,.status-meter){
+  background:var(--rc-input);border-color:var(--rc-border);color:var(--rc-ink);
+}
+/* Tier zero follows the selected theme; higher-tier reward colors stay distinctive. */
+html[data-guide-theme="light"] body.recruit-public :is(#recruitTabPanel,#targetTabPanel) .target-cost-tier-0{
+  --target-cost-bg:linear-gradient(110deg,#e9f4f4,#f2f6e9);
+  --target-cost-fg:#29474c;--target-cost-border:#83a7ad;
+}
+html[data-guide-theme="blue"] body.recruit-public :is(#recruitTabPanel,#targetTabPanel) .target-cost-tier-0{
+  --target-cost-bg:linear-gradient(110deg,#17334e,#254461);
+}
+html[data-guide-theme="green"] body.recruit-public :is(#recruitTabPanel,#targetTabPanel) .target-cost-tier-0{
+  --target-cost-bg:linear-gradient(110deg,#254437,#365844);
+}
+/* Force legible speed and rank colors on white, retaining ordinal differences. */
+html[data-guide-theme="light"] body.recruit-public :is(.candidate-speed,.speed-result,.history-speed){
+  color:#28635e;
+}
+html[data-guide-theme="light"] body.recruit-public :is(.candidate-speed,.speed-result,.history-speed).speed-rank-0{color:#50616c!important}
+html[data-guide-theme="light"] body.recruit-public :is(.candidate-speed,.speed-result,.history-speed).speed-rank-1{color:#654398!important}
+html[data-guide-theme="light"] body.recruit-public :is(.candidate-speed,.speed-result,.history-speed).speed-rank-2{color:#235ca9!important}
+html[data-guide-theme="light"] body.recruit-public :is(.candidate-speed,.speed-result,.history-speed).speed-rank-3{color:#086b7e!important}
+html[data-guide-theme="light"] body.recruit-public :is(.candidate-speed,.speed-result,.history-speed).speed-rank-4{color:#24752b!important}
+html[data-guide-theme="light"] body.recruit-public :is(.candidate-speed,.speed-result,.history-speed).speed-rank-5{color:#a55a16!important}
+html[data-guide-theme="light"] body.recruit-public :is(.candidate-speed,.speed-result,.history-speed).speed-rank-6{color:#a82c40!important}
+html[data-guide-theme="light"] body.recruit-public :is(.candidate-speed,.speed-result,.history-speed).speed-rank-7{color:#86600d!important}
+html[data-guide-theme="light"] body.recruit-public :is(.candidate-speed,.speed-result,.history-speed).speed-rank-8{color:#76520c!important}
+html[data-guide-theme="light"] body.recruit-public :is(.candidate-speed,.speed-result,.history-speed).speed-rank-9{color:#634411!important}
+body.recruit-public :is(button,select,input,textarea):focus-visible{
+  outline:2px solid var(--rc-accent);outline-offset:2px;
+}
