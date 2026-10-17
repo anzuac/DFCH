@@ -22,6 +22,11 @@
 .dfch-card-image{display:block;background:var(--panel-2);aspect-ratio:3/2;
  border-bottom:1px solid var(--line-strong)}
 .dfch-card-featured .dfch-card-image{aspect-ratio:16/9}
+.dfch-card-image{position:relative;overflow:hidden}
+.dfch-card-image img{
+ display:block;position:absolute;inset:0;width:100%;height:100%;
+ object-fit:cover;object-position:center;
+}
 .dfch-card-content{padding:14px 17px 18px;display:flex;flex-direction:column;gap:6px}
 .dfch-card-content strong{font-size:1.05em;color:var(--text)}
 .dfch-card-content>span{font-size:.82em;color:var(--muted)}
