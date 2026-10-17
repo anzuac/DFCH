@@ -115,15 +115,15 @@ for(const relativePath of recruitFiles){
 <script src="../display-settings.js?v=3.0.0"></script>
 <link rel="stylesheet" href="../public-nav.css?v=3.0.0">
 <link rel="stylesheet" href="../public-display.css?v=3.0.0">
-<link rel="stylesheet" href="../recruit-public.css?v=3.0.0">
+<link rel="stylesheet" href="../recruit-public.css?v=3.0.2">
 <link rel="stylesheet" href="../public-accessibility.css?v=3.0.0">
 <script src="../public-nav.js?v=3.0.0" defer></script>`);
     content=content.replace('<body>','<body class="recruit-public">');
     content=content.replace('</body>','<script src="../site-counter.js?v=1.0.0"></script></body>');
     // Shared public styles must follow the simulator's dark-only stylesheet.
-    content=content.replace('<link rel="stylesheet" href="../recruit-public.css?v=3.0.0">','')
+    content=content.replace('<link rel="stylesheet" href="../recruit-public.css?v=3.0.2">','')
       .replace('<link rel="stylesheet" href="../public-accessibility.css?v=3.0.0">','');
-    content=content.replace('</head>',`<link rel="stylesheet" href="../recruit-public.css?v=3.0.0">
+    content=content.replace('</head>',`<link rel="stylesheet" href="../recruit-public.css?v=3.0.2">
 <link rel="stylesheet" href="../public-accessibility.css?v=3.0.0"></head>`);
   }
   fs.writeFileSync(destination,content);
