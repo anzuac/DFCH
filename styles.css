@@ -1732,3 +1732,42 @@ html[data-guide-theme="green"] .heroes-standalone {
 @media(max-width:560px){
  .frigg-ability-effect{font-size:.82rem}
 }
+
+
+/* Proof of Bond: independent per-version eligibility sourced from the player chart. */
+.hero-acquisition .hero-proof-row{
+  padding-top:9px;border-top:1px solid var(--line-strong,var(--line));
+}
+.hero-acquisition .hero-proof-state{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:4px 8px;border-radius:8px;border:1px solid;
+  font-weight:700;line-height:1.4;white-space:normal;
+}
+.hero-acquisition .hero-proof-symbol{
+  font-size:1.15em;font-weight:900;line-height:1;
+}
+.hero-acquisition .hero-proof-yes{
+  color:#baf2c9;background:#1c492e;border-color:#70b990;
+}
+.hero-acquisition .hero-proof-no{
+  color:#d7dae0;background:#354048;border-color:#6f8189;
+}
+html[data-guide-theme="light"] .hero-acquisition .hero-proof-yes{
+  color:#155d3b;background:#e0f5e5;border-color:#499468;
+}
+html[data-guide-theme="light"] .hero-acquisition .hero-proof-no{
+  color:#465964;background:#e9f0f3;border-color:#91a8b1;
+}
+html[data-guide-theme="blue"] .hero-acquisition .hero-proof-yes{
+  color:#b5ebfc;background:#1a485e;border-color:#73b7dc;
+}
+html[data-guide-theme="green"] .hero-acquisition .hero-proof-yes{
+  color:#d2f1c8;background:#27503b;border-color:#a1cf9d;
+}
+html[data-guide-color-vision]:not([data-guide-color-vision="normal"]) .hero-acquisition .hero-proof-state{
+  border-width:2px;text-decoration:none;
+  outline:1px solid currentColor;outline-offset:1px;
+}
+@container(max-width:450px){
+  .hero-acquisition .hero-proof-row{border-top:0;border-left:1px solid var(--line);padding:0 0 0 10px}
+}
