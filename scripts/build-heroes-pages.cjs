@@ -42,6 +42,8 @@ const guideFiles = [
   'cloudflare-home.css',
   'cloudflare-home.js',
   'recruit-public.css',
+  'recruit-public-translations.js',
+  'recruit-public-i18n.js',
 ];
 const recruitFiles=[
   'index.html','style.css','recruit-ui-fix.css','tabs.css','target-draw.css','bond.css',
@@ -112,9 +114,24 @@ for(const relativePath of recruitFiles){
   fs.mkdirSync(path.dirname(destination),{recursive:true});
   let content=fs.readFileSync(path.join(repoRoot,relativePath),'utf8');
   content=content.replaceAll('../Bond30/','../bond30/');
+  if(relativePath==='Recruit/app.js'){
+    const search='skillName(r.id).toLowerCase().includes(q)';
+    if(!content.includes(search))throw new Error('Recruit skill search integration missing');
+    content=content.replace(search,
+      '(skillName(r.id).toLowerCase().includes(q) || window.DFCHRecruitI18n?.matchesSkill(skillName(r.id),q))');
+  }
+  if(relativePath==='Recruit/target-draw.js'){
+    const search='!name.toLowerCase().includes(query)';
+    if(!content.includes(search))throw new Error('Target ability search integration missing');
+    content=content.replace(search,
+      '!(name.toLowerCase().includes(query) || window.DFCHRecruitI18n?.matchesSkill(name,query))');
+  }
   if(relativePath==='Recruit/index.html'){
     content=content.replace('<head>',`<head>
 <script src="../display-settings.js?v=3.0.0"></script>
+<script src="../public-official-labels.js?v=1.0.0" defer></script>
+<script src="../recruit-public-translations.js?v=1.0.0" defer></script>
+<script src="../recruit-public-i18n.js?v=1.0.0" defer></script>
 <link rel="stylesheet" href="../public-nav.css?v=3.0.0">
 <link rel="stylesheet" href="../public-display.css?v=3.0.0">
 <link rel="stylesheet" href="../recruit-public.css?v=3.0.2">
