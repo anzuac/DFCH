@@ -1,42 +1,65 @@
+/* Shared DFCH player navigation: home, direct-jump selector and settings slot. */
 (() => {
   'use strict';
-  const labels={
-    zh_tw:{brand:'DFCH · 英靈工具站',guide:'六星英靈喜好',bond30:'羈絆 30 等抽選',diamond:'鑽石抽取模擬器',team:'英靈編隊'},
-    ja:{brand:'DFCH · 英霊ツール',guide:'六星英霊の好み',bond30:'絆 Lv.30 抽選',diamond:'ダイヤ抽選',team:'英霊編成'},
-    en:{brand:'DFCH · Hero tools',guide:'Six-star gifts',bond30:'Bond Lv.30 draw',diamond:'Diamond simulator',team:'Hero lineup'},
-    ko:{brand:'DFCH · 영령 도구',guide:'6성 영령 선물',bond30:'인연 Lv.30 추첨',diamond:'다이아 추첨',team:'영령 편성'},
-    zh_cn:{brand:'DFCH · 英灵工具站',guide:'六星英灵喜好',bond30:'羁绊 Lv.30 抽取',diamond:'钻石抽取模拟器',team:'英灵编队'},
-    th:{brand:'DFCH · เครื่องมือวีรชน',guide:'ของขวัญวีรชน 6 ดาว',bond30:'สุ่มสายสัมพันธ์ Lv.30',diamond:'จำลองสุ่มเพชร',team:'จัดทีมวีรชน'},
-    vi:{brand:'DFCH · Công cụ anh linh',guide:'Quà tặng anh linh 6 sao',bond30:'Rút liên kết Lv.30',diamond:'Mô phỏng rút kim cương',team:'Đội hình anh linh'}
+  const keys=['home','heroes','recruit','bond30','diamond','team'];
+  const names={
+    zh_tw:['回首頁','快速移動','DFCH 首頁','六星英靈喜好圖鑑','英靈抽取模擬器','羈絆 30 等抽選','鑽石抽取模擬器','英靈編隊'],
+    ja:['ホームへ','クイック移動','DFCH ホーム','六星英霊の好み','英霊召喚シミュレーター','絆 Lv.30 抽選','ダイヤ抽選','英霊編成'],
+    en:['Home','Quick jump','DFCH home','Six-star hero gifts','Hero recruitment simulator','Bond Lv.30 draw','Diamond simulator','Hero lineup'],
+    ko:['홈으로','빠른 이동','DFCH 홈','6성 영령 선물','영령 모집 시뮬레이터','인연 Lv.30 추첨','다이아 추첨','영령 편성']
   };
-  let brand,links=[];
+  const isGitHub=location.hostname.endsWith('.github.io');
+  const base=isGitHub?'/DFCH/':'/';
+  const route={
+    home:base,heroes:isGitHub?base+'heroes.html':base+'heroes/',
+    recruit:isGitHub?base+'Recruit/':base+'recruit/',
+    bond30:base+(isGitHub?'Bond30/':'bond30/'),
+    diamond:isGitHub?base+'#tab-diamond':base+'diamond/',
+    team:base+'team/'
+  };
+  const path=location.pathname.toLowerCase().replace(/^\/dfch(?=\/)/,'');
+  const current=path.startsWith('/recruit/')?'recruit':
+    path.startsWith('/bond30/')?'bond30':
+    path.startsWith('/diamond/')?'diamond':
+    path.startsWith('/team/')?'team':
+    path.startsWith('/heroes/')||path.endsWith('/heroes.html')?'heroes':'home';
+  let home,selector,nav;
   function language(){
-    try{const stored=localStorage.getItem('dfch-hero-language');if(['zh_tw','ja','ko','en'].includes(stored))return stored;}catch(_){}
-    return 'zh_tw';
+    try{const saved=localStorage.getItem('dfch-hero-language');return names[saved]?saved:'zh_tw';}
+    catch{return 'zh_tw';}
   }
-  function translate(next){
-    const t=labels[next]||labels.zh_tw;
-    if(!brand)return;
-    brand.textContent=t.brand;
-    for(const [key,a] of links)a.textContent=t[key];
+  function update(next){
+    if(!nav)return;
+    const t=names[next]||names.zh_tw;
+    home.textContent='⌂ '+t[0];selector.setAttribute('aria-label',t[1]);
+    selector.options[0].textContent=t[1];
+    keys.forEach((key,i)=>{selector.options[i+1].textContent=t[i+2]});
+    selector.value='';
   }
   function init(){
-    const base=location.hostname.endsWith('.github.io')?'/DFCH/':'/';
-    const path=location.pathname.toLowerCase().replace(/^\/dfch(?=\/)/,'');
-    const current=path.startsWith('/bond30/')?'bond30':path.startsWith('/diamond/')?'diamond':path.startsWith('/team/')?'team':'guide';
-    const nav=document.createElement('nav');
-    nav.className='dfch-public-nav';
-    nav.setAttribute('aria-label','DFCH tools / 工具導覽');
-    brand=document.createElement('strong');nav.append(brand);
-    const group=document.createElement('div');group.className='dfch-public-links';
-    for(const [key,url] of [['guide',''],['bond30','bond30/'],['diamond','diamond/'],['team','team/']]){
-      const a=document.createElement('a');a.href=base+url;
-      if(key===current)a.setAttribute('aria-current','page');
-      group.append(a);links.push([key,a]);
+    if(document.querySelector('.dfch-public-nav'))return;
+    nav=document.createElement('nav');nav.className='dfch-public-nav';
+    nav.setAttribute('aria-label','DFCH 公開工具導覽');
+    const left=document.createElement('div');left.className='dfch-public-nav-left';
+    home=document.createElement('a');home.className='dfch-public-home';home.href=route.home;
+    const chooser=document.createElement('div');chooser.className='dfch-public-jump';
+    selector=document.createElement('select');selector.id='dfchQuickJump';
+    const first=document.createElement('option');first.value='';first.disabled=true;first.selected=true;selector.append(first);
+    for(const key of keys){
+      const option=document.createElement('option');option.value=key;selector.append(option);
     }
-    nav.append(group);document.body.prepend(nav);translate(language());
+    selector.addEventListener('change',()=>{
+      const chosen=selector.value;
+      if(!Object.prototype.hasOwnProperty.call(route,chosen))return;
+      location.assign(route[chosen]);
+    });
+    chooser.append(selector);left.append(home,chooser);
+    const settings=document.createElement('div');settings.className='dfch-public-settings-slot';
+    nav.append(left,settings);document.body.prepend(nav);
+    nav.dataset.currentPage=current;
+    update(language());
   }
-  window.addEventListener('dfch:language-change',event=>translate(event.detail?.language));
-  window.addEventListener('storage',event=>{if(event.key==='dfch-hero-language')translate(language());});
+  window.addEventListener('dfch:language-change',e=>update(e.detail?.language));
+  window.addEventListener('storage',e=>{if(e.key==='dfch-hero-language')update(language());});
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
 })();

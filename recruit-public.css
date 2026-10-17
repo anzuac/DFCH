@@ -1,0 +1,47 @@
+/* Cloudflare-only recruit theming; original GitHub Pages simulator files remain unchanged. */
+body.recruit-public{
+  --dfch-recruit-bg:#0b1420;--dfch-recruit-panel:#172b34;
+  --dfch-recruit-inset:#203743;--dfch-recruit-text:#edf5f7;
+  --dfch-recruit-muted:#b8cacc;--dfch-recruit-line:#55747b;
+  --text:var(--dfch-recruit-text);--muted:var(--dfch-recruit-muted);
+  --panel:var(--dfch-recruit-panel);--panel-2:var(--dfch-recruit-inset);
+  --line-strong:var(--dfch-recruit-line);--teal:#90d7bd;
+  background:var(--dfch-recruit-bg);color:var(--dfch-recruit-text);
+  font-size:calc(16px * var(--guide-font-multiplier,1));
+}
+body.recruit-public :is(.container,.card,.stats-panel){color:var(--dfch-recruit-text)}
+body.recruit-public :is(.card,.stats-panel,.stat-card,.target-preset-section,.target-slot-button,.target-cost-bar){
+  border-color:var(--dfch-recruit-line)
+}
+body.recruit-public :is(.card,.stats-panel){background:var(--dfch-recruit-panel)}
+body.recruit-public :is(.stat-card,.ratebox,.target-preset-section,.target-slot-button,.target-skill-dialog){
+  background:var(--dfch-recruit-inset)
+}
+body.recruit-public :is(.stat-card small,.stats-hint,.muted,.intro-desc){color:var(--dfch-recruit-muted)}
+body.recruit-public .recruit-compact-header{margin-top:8px}
+html[data-guide-theme="light"] body.recruit-public{
+ color-scheme:light;--dfch-recruit-bg:#edf4f7;--dfch-recruit-panel:#fff;
+ --dfch-recruit-inset:#ebf2f6;--dfch-recruit-text:#203541;--dfch-recruit-muted:#405b66;
+ --dfch-recruit-line:#82a5af;--teal:#176e68
+}
+html[data-guide-theme="blue"] body.recruit-public{
+ color-scheme:dark;--dfch-recruit-bg:#091b30;--dfch-recruit-panel:#152f4a;
+ --dfch-recruit-inset:#203d58;--dfch-recruit-text:#edf5ff;--dfch-recruit-muted:#b6cce0;
+ --dfch-recruit-line:#709dc8;--teal:#9ad7fc
+}
+html[data-guide-theme="green"] body.recruit-public{
+ color-scheme:dark;--dfch-recruit-bg:#13261d;--dfch-recruit-panel:#1e382b;
+ --dfch-recruit-inset:#2b4b39;--dfch-recruit-text:#edf7ea;--dfch-recruit-muted:#b8d0b3;
+ --dfch-recruit-line:#7eaa86;--teal:#b8e5bb
+}
+body.recruit-public :is(button,select,input,textarea){font-size:calc(14px * var(--guide-font-multiplier,1))}
+body.recruit-public :is(.stats-panel h2,.card h2){color:var(--dfch-recruit-text)}
+body.recruit-public :is(.form-field select,.form-field input,.field select){color:var(--dfch-recruit-text);background:var(--dfch-recruit-inset);border-color:var(--dfch-recruit-line)}
+body.recruit-public .target-skill-dialog{color:var(--dfch-recruit-text);border-color:var(--dfch-recruit-line)}
+body.recruit-public .target-skill-dialog :is(button,input){color:var(--dfch-recruit-text)}
+/* In light theme, restore readable links and selectable cards even where original styles are hardcoded. */
+html[data-guide-theme="light"] body.recruit-public :is(.candidate,.target-candidate,.target-slot-button,.target-skill-option){
+  background:#eaf1f5;color:#1e3540;border-color:#76949e
+}
+html[data-guide-theme="light"] body.recruit-public :is(.target-slot-name,.target-skill-option-name,.candidate strong){color:#1e3540}
+html[data-guide-theme="light"] body.recruit-public .target-main-button{color:#182e38}
