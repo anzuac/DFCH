@@ -4,7 +4,7 @@
   const langs=['zh_tw','ja','en','ko'], key='dfch-hero-language';
   const dictionary=window.DFCHRecruitTranslations||{};
   const official=window.DFCHOfficialLabels||{};
-  const entries={...official,...dictionary};
+  const entries={...dictionary,...official};
   const groups=new Map();
   for(const source of Object.keys(entries)){
     if(!source)continue;
