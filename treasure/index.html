@@ -6,11 +6,11 @@
   <meta name="theme-color" content="#0b0b1a">
   <meta name="description" content="以每件大獎 0.01%／0.005%、連續掉落 95% 模擬禁斷與深淵秘寶。">
   <title>秘寶連續掉落模擬器｜DFCH 機率實驗室</title>
-  <link rel="stylesheet" href="./style.css?v=1.1.0">
+  <link rel="stylesheet" href="./style.css?v=1.2.0">
 </head>
 <body>
   <main class="shell">
-    <div class="topline"><span class="eyebrow"><span class="status-led"></span> DFCH / PROBABILITY LAB</span><span class="lab-tag">獨立模擬器 · v1.1</span></div>
+    <div class="topline"><span class="eyebrow"><span class="status-led"></span> DFCH / PROBABILITY LAB</span><span class="lab-tag">獨立模擬器 · v1.2</span></div>
     <header class="masthead">
       <div class="masthead-copy">
         <p class="small-caps">禁斷與深淵秘寶・連續開箱測試</p>
@@ -60,18 +60,24 @@
       <div class="chance-interpretation"><span class="icon-spark" aria-hidden="true">✧</span><p>先保證 <b id="minItemCaption">4</b> 件，再以 <b>95%</b> 的成功率逐件追加；首次失敗即結束這一段開箱。</p></div>
       <p class="expected-hint">此模式單段至少中一種大獎的理論機率約 <strong id="probPerRun">0.344%</strong>（不是每件獎勵機率）。</p>
       <div class="action-group">
-        <button type="button" id="openOnce" class="action-primary" aria-describedby="drawControlHint" aria-label="點擊開箱一次，長按連續開箱，放開停止"><span aria-hidden="true">✦</span><span id="drawButtonText">點擊開始抽獎</span><span class="btn-arrow" aria-hidden="true">↗</span></button>
-        <div id="drawControlHint" class="press-help"><span>點一下：抽取 1 次</span><span>長按 0.4 秒：持續抽獎，放開立即停止</span></div>
+        <button type="button" id="openOnce" class="action-primary" aria-describedby="drawControlHint" aria-label="點擊開箱一次，長按逐件揭曉並連續開箱，放開後完成目前這箱即停止"><span aria-hidden="true">✦</span><span id="drawButtonText">點擊開始抽獎</span><span class="btn-arrow" aria-hidden="true">↗</span></button>
+        <div id="drawControlHint" class="press-help"><span>點一下：抽取 1 次</span><span>長按：逐件揭曉，完成一箱才接下一箱；放開停止連開</span></div>
+        <button type="button" id="skipAnimation" class="skip-animation" aria-pressed="false"><span aria-hidden="true">⏭</span><span id="skipAnimationLabel">跳過動畫：關閉</span></button>
+        <div id="liveDropProgress" class="live-drop-progress" role="status" aria-live="off" hidden>
+          <span class="live-drop-glow" aria-hidden="true">✦</span>
+          <span id="liveDropMessage">準備開啟秘寶…</span>
+          <strong id="liveDropCount">0 件</strong>
+        </div>
         <p id="autoDrawStatus" class="auto-draw-status" role="status" hidden></p>
       </div>
     </section>
 
-    <section class="result-panel" aria-labelledby="result-heading">
+    <section id="resultPanel" class="result-panel" aria-labelledby="result-heading">
       <div class="section-heading result-heading"><div><span class="board-kicker">LATEST OPENING</span><h2 id="result-heading">最新開箱結果</h2></div><span id="lastMode" class="result-mode">尚未開箱</span></div>
-      <div id="emptyResult" class="empty-result"><div class="empty-gem">✧</div><p>秘寶尚未開啟</p><small>按下「開啟一次秘寶」查看獎勵掉落</small></div>
+      <div id="emptyResult" class="empty-result"><div class="empty-gem">✧</div><p>秘寶尚未開啟</p><small>點擊開箱，逐件揭曉每一個掉落物</small></div>
       <div id="resultContent" hidden>
         <div class="result-summary"><div><span>本次獲得</span><strong id="lastItems">—</strong><small>件獎勵</small></div><div><span>本次大獎</span><strong id="lastRare">—</strong><small>件命中</small></div><div><span>連續成功</span><strong id="lastStreak">—</strong><small>次判定</small></div></div>
-        <div class="loot-head"><strong>掉落清單</strong><span id="lootCaption">—</span></div>
+        <div class="loot-head"><strong id="lootHeadline">掉落清單</strong><span id="lootCaption">—</span></div>
         <div id="lootGrid" class="loot-grid" aria-label="本次掉落的獎勵"></div>
         <p id="lootRemainder" class="loot-remainder" hidden></p>
       </div>
@@ -85,7 +91,7 @@
 
     <footer class="footer"><span>DFCH / 非官方研究工具</span><span>僅點擊或長按抽取 · 紀錄保存在此瀏覽器（不計入世界排行）</span></footer>
   </main>
-  <script src="./engine.js?v=1.0.0"></script>
-  <script src="./app.js?v=1.1.0"></script>
+  <script src="./engine.js?v=1.2.0"></script>
+  <script src="./app.js?v=1.2.0"></script>
 </body>
 </html>

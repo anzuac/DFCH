@@ -7,36 +7,50 @@
   const nf = new Intl.NumberFormat('zh-TW');
   const percent = (value, digits = 2) => (100 * value).toFixed(digits) + '%';
   const storage = (() => { try { return window.localStorage; } catch (_) { return null; } })();
+  const HOLD_DELAY_MS = 420;
+  const REVEAL_INTERVAL_MS = 105;
+  const NEXT_CHEST_PAUSE_MS = 310;
+  const SKIP_NEXT_PAUSE_MS = 180;
+  const MAX_ORDINARY_TILES = 56;
   let minimum = 4;
   let stats = E.blankStats();
-  let last = null;
-  let busy = false;
-  const HOLD_DELAY_MS = 420;
-  const HOLD_REPEAT_MS = 300;
-  const openButton = $('openOnce');
+  let skipAnimation = false;
+  let activeOpening = null;
+  let fastForwarding = false;
+  let revealTimer = null;
+  let nextChestTimer = null;
   let activePointer = null;
   let holdTimer = null;
-  let repeatTimer = null;
   let holdActive = false;
   let holdDraws = 0;
   let suppressClick = false;
-  const sanitizeStats = candidate => {
+  const openButton = $('openOnce');
+  const skipButton = $('skipAnimation');
+
+  function sanitizeStats(candidate) {
     const s = E.blankStats();
     if (!candidate || typeof candidate !== 'object') return s;
     for (const key of Object.keys(s)) {
       const value = candidate[key];
       if (Number.isSafeInteger(value) && value >= 0) s[key] = value;
     }
-    // Never use malformed or partly mismatched saved statistics.
-    if (s.runs !== s.normalRuns + s.specialRuns || s.items !== s.a + s.b + s.ordinary || s.continuationChecks !== s.continueSuccess + s.runs || s.hitRuns > s.runs) return E.blankStats();
+    if (s.runs !== s.normalRuns + s.specialRuns ||
+        s.items !== s.a + s.b + s.ordinary ||
+        s.continuationChecks !== s.continueSuccess + s.runs ||
+        s.hitRuns > s.runs) return E.blankStats();
     return s;
-  };
+  }
   try {
     const saved = storage && JSON.parse(storage.getItem(storeKey));
     if (saved && [4, 11].includes(saved.minimum)) minimum = saved.minimum;
     stats = sanitizeStats(saved?.stats);
-  } catch (_) { /* local storage is optional */ }
-  function persist() { try { storage?.setItem(storeKey, JSON.stringify({ minimum, stats })); } catch (_) { /* private browsing */ } }
+    if (typeof saved?.skipAnimation === 'boolean') skipAnimation = saved.skipAnimation;
+    else if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) skipAnimation = true;
+  } catch (_) { /* storage is optional */ }
+  function persist() {
+    try { storage?.setItem(storeKey, JSON.stringify({ minimum, stats, skipAnimation })); }
+    catch (_) { /* private browsing */ }
+  }
   function updateStats() {
     $('statRuns').textContent = nf.format(stats.runs);
     $('statItems').textContent = nf.format(stats.items);
@@ -56,87 +70,161 @@
     $('probPerRun').textContent = percent(E.theoreticalHitChance(minimum), 3);
     persist();
   }
-  function renderLast(draw) {
-    if (!draw) return;
-    last = draw;
-    $('emptyResult').hidden = true;
-    $('resultContent').hidden = false;
-    $('lastMode').textContent = draw.minimum === 4 ? '普通開箱' : '特殊續開試算';
-    $('lastItems').textContent = nf.format(draw.items);
-    $('lastRare').textContent = nf.format(draw.a + draw.b);
-    $('lastStreak').textContent = nf.format(draw.continueSuccess);
-    $('lootCaption').textContent = `大獎 A ×${draw.a}　大獎 B ×${draw.b}　普通 ×${draw.ordinary}`;
-    const fragment = document.createDocumentFragment();
-    for (let i = 0; i < draw.rewards.length; i++) {
-      const reward = draw.rewards[i];
-      const tile = document.createElement('div');
-      const kind = reward.type;
-      tile.className = 'loot-tile type-' + kind;
-      tile.style.setProperty('--delay', Math.min(i, 23) * 27 + 'ms');
-      const symbol = document.createElement('span');
-      symbol.className = 'tile-icon';
-      symbol.textContent = kind === 'A' ? '✦' : kind === 'B' ? '◆' : '◈';
-      const caption = document.createElement('small');
-      caption.textContent = kind === 'ordinary' ? '普通' : '大獎 ' + kind;
-      tile.title = `第 ${reward.number} 件：${caption.textContent}`;
-      tile.append(symbol, caption);
-      fragment.appendChild(tile);
-    }
-    $('lootGrid').replaceChildren(fragment);
-    const hidden = draw.items - draw.rewards.length;
-    $('lootRemainder').hidden = hidden <= 0;
-    $('lootRemainder').textContent = hidden > 0 ? `另有 ${nf.format(hidden)} 件普通獎勵未展開；所有大獎都會顯示。` : '';
+  function updateSkipButton() {
+    skipButton.setAttribute('aria-pressed', String(skipAnimation));
+    $('skipAnimationLabel').textContent = '跳過動畫：' + (skipAnimation ? '開啟' : '關閉');
+    persist();
   }
-  // Each user action draws exactly one chest. No client-side batch submission
-  // or upload of claimed results will be used for the future public leaderboard.
-  function drawSingle() {
-    if (busy) return false;
-    busy = true;
-    try {
-      const draw = E.drawOnce(minimum, Math.random, { capture: true });
-      E.addStats(stats, draw);
-      updateStats();
-      renderLast(draw);
-      persist();
-      if (holdActive) {
-        holdDraws += 1;
-        const status = $('autoDrawStatus');
-        status.hidden = false;
-        status.textContent = `長按抽獎中 · 已開 ${nf.format(holdDraws)} 次，鬆開立即停止`;
-      } else {
-        $('autoDrawStatus').hidden = true;
-      }
-      return true;
-    } catch (error) {
-      stopPress('error');
+  function createTile(reward) {
+    const tile = document.createElement('div');
+    tile.className = 'loot-tile type-' + reward.type;
+    tile.dataset.number = String(reward.number);
+    const symbol = document.createElement('span');
+    symbol.className = 'tile-icon';
+    symbol.textContent = reward.type === 'A' ? '✦' : reward.type === 'B' ? '◆' : '◈';
+    const label = document.createElement('small');
+    label.textContent = reward.type === 'ordinary' ? '普通' : '大獎 ' + reward.type;
+    tile.title = `第 ${reward.number} 件：${label.textContent}`;
+    tile.append(symbol, label);
+    return tile;
+  }
+  function appendReward(reward, stage) {
+    const grid = $('lootGrid');
+    grid.append(createTile(reward));
+    // Keep the latest ordinary rewards visible, and never hide a rare prize.
+    // The counter always includes all rolled rewards, including compacted tiles.
+    if (reward.type === 'ordinary') {
+      const ordinary = grid.querySelectorAll('.type-ordinary');
+      if (ordinary.length > MAX_ORDINARY_TILES) ordinary[0].remove();
+    }
+    const hidden = stage.ordinary - Math.min(stage.ordinary, MAX_ORDINARY_TILES);
+    $('lootRemainder').hidden = hidden <= 0;
+    $('lootRemainder').textContent = hidden > 0 ?
+      `已收起較早的 ${nf.format(hidden)} 件普通獎勵；保留最近 ${MAX_ORDINARY_TILES} 件普通獎勵和所有大獎。` : '';
+  }
+  function updatePartial(stage) {
+    $('lastItems').textContent = nf.format(stage.items);
+    $('lastRare').textContent = nf.format(stage.a + stage.b);
+    $('lastStreak').textContent = nf.format(stage.continueSuccess);
+    $('lootCaption').textContent = `大獎 A ×${stage.a}　大獎 B ×${stage.b}　普通 ×${stage.ordinary}`;
+    const live = $('liveDropProgress');
+    live.classList.toggle('is-rare', stage.reward.type !== 'ordinary');
+    $('liveDropMessage').textContent = stage.reward.type === 'ordinary' ?
+      `第 ${nf.format(stage.items)} 件 · 普通獎勵` :
+      `第 ${nf.format(stage.items)} 件 · ✨ 大獎 ${stage.reward.type}！`;
+    $('liveDropCount').textContent = `${nf.format(stage.items)} 件`;
+  }
+  function refreshDrawButton() {
+    $('drawButtonText').textContent = holdActive ? '連續開箱中 · 放開停止' :
+      activeOpening ? '逐件揭曉中…' : '點擊開始抽獎';
+  }
+  function finishOpening(stage) {
+    if (!activeOpening) return;
+    clearTimeout(revealTimer);
+    revealTimer = null;
+    const wasHeldOpening = activeOpening.startedByHold;
+    activeOpening = null;
+    $('resultContent').hidden = false;
+    $('resultPanel').classList.remove('is-revealing');
+    $('lastMode').textContent = stage.minimum === 4 ? '普通開箱 · 已完成' : '特殊續開 · 已完成';
+    E.addStats(stats, stage);
+    updateStats();
+    persist();
+    holdDraws += wasHeldOpening ? 1 : 0;
+    $('lootHeadline').textContent = '掉落清單 · 已完成';
+    $('liveDropMessage').textContent = `本箱開啟完成 · ${nf.format(stage.items)} 件`;
+    $('liveDropProgress').classList.remove('is-rare');
+    refreshDrawButton();
+    if (holdActive) {
       const status = $('autoDrawStatus');
       status.hidden = false;
-      status.textContent = '開箱發生錯誤：' + String(error.message || error);
-      return false;
-    } finally {
-      busy = false;
+      status.textContent = `長按連抽 · 已完成 ${nf.format(holdDraws)} 箱，放開後停止`;
+      nextChestTimer = setTimeout(() => {
+        nextChestTimer = null;
+        if (holdActive) startOpening();
+      }, skipAnimation ? SKIP_NEXT_PAUSE_MS : NEXT_CHEST_PAUSE_MS);
+    } else if (holdDraws > 0) {
+      $('autoDrawStatus').hidden = false;
+      $('autoDrawStatus').textContent = `連抽已停止 · 共完成 ${nf.format(holdDraws)} 箱`;
     }
   }
-  function stopPress(reason = 'release') {
+  function advanceOpening() {
+    if (!activeOpening) return;
+    const stage = activeOpening.stream.next();
+    if (!stage) return;
+    activeOpening.lastStage = stage;
+    appendReward(stage.reward, stage);
+    updatePartial(stage);
+    if (stage.finished) {
+      finishOpening(stage);
+      return;
+    }
+    if (!skipAnimation && !fastForwarding) revealTimer = setTimeout(advanceOpening, REVEAL_INTERVAL_MS);
+  }
+  function finishAnimationImmediately() {
+    if (!activeOpening) return;
+    clearTimeout(revealTimer);
+    revealTimer = null;
+    fastForwarding = true;
+    try { while (activeOpening) advanceOpening(); }
+    finally { fastForwarding = false; }
+  }
+  function startOpening() {
+    if (activeOpening) return;
+    if (nextChestTimer !== null) { clearTimeout(nextChestTimer); nextChestTimer = null; }
+    try {
+      activeOpening = { stream: E.createOpening(minimum, Math.random), lastStage: null, startedByHold: holdActive };
+      $('emptyResult').hidden = true;
+      $('resultContent').hidden = false;
+      $('lootGrid').replaceChildren();
+      $('lootRemainder').hidden = true;
+      $('lootHeadline').textContent = '掉落清單 · 逐件揭曉中';
+      $('lastMode').textContent = minimum === 4 ? '普通開箱 · 進行中' : '特殊續開 · 進行中';
+      $('lastItems').textContent = '0';
+      $('lastRare').textContent = '0';
+      $('lastStreak').textContent = '0';
+      $('lootCaption').textContent = '即將揭曉第一件獎勵';
+      $('resultPanel').classList.add('is-revealing');
+      $('liveDropProgress').hidden = false;
+      $('liveDropMessage').textContent = '即將揭曉…';
+      $('liveDropCount').textContent = '0 件';
+      if (!holdActive) $('autoDrawStatus').hidden = true;
+      refreshDrawButton();
+      if (skipAnimation) finishAnimationImmediately();
+      else advanceOpening();
+    } catch (error) {
+      clearTimeout(revealTimer);
+      revealTimer = null;
+      activeOpening = null;
+      stopPress();
+      $('liveDropProgress').hidden = false;
+      $('liveDropMessage').textContent = `開箱失敗：${String(error.message || error)}`;
+      refreshDrawButton();
+    }
+  }
+  function stopPress() {
     if (holdTimer !== null) clearTimeout(holdTimer);
-    if (repeatTimer !== null) clearInterval(repeatTimer);
+    if (nextChestTimer !== null) clearTimeout(nextChestTimer);
     holdTimer = null;
-    repeatTimer = null;
+    nextChestTimer = null;
     const wasHolding = holdActive;
     activePointer = null;
     holdActive = false;
     openButton.classList.remove('is-holding');
-    $('drawButtonText').textContent = '點擊開始抽獎';
+    refreshDrawButton();
     if (wasHolding) {
-      suppressClick = true; // discard the synthetic click generated by a long pointer press
-      requestAnimationFrame(() => { suppressClick = false; });
+      suppressClick = true;
       const status = $('autoDrawStatus');
       status.hidden = false;
-      status.textContent = `已停止連續抽獎 · 此次長按共 ${nf.format(holdDraws)} 次`;
+      status.textContent = activeOpening ?
+        `已停止連開，完成目前這箱後結束 · 已完成 ${nf.format(holdDraws)} 箱` :
+        `連抽已停止 · 共完成 ${nf.format(holdDraws)} 箱`;
     }
   }
   openButton.addEventListener('pointerdown', event => {
-    if (activePointer !== null || busy || !event.isPrimary || (event.pointerType === 'mouse' && event.button !== 0)) return;
+    if (activePointer !== null || activeOpening || !event.isPrimary ||
+        (event.pointerType === 'mouse' && event.button !== 0)) return;
+    suppressClick = false;
     activePointer = event.pointerId;
     holdDraws = 0;
     holdTimer = setTimeout(() => {
@@ -145,44 +233,51 @@
       holdActive = true;
       suppressClick = true;
       openButton.classList.add('is-holding');
-      $('drawButtonText').textContent = '連續抽獎中 · 放開停止';
-      if (!drawSingle()) return;
-      repeatTimer = setInterval(() => { drawSingle(); }, HOLD_REPEAT_MS);
+      startOpening();
     }, HOLD_DELAY_MS);
   });
   window.addEventListener('pointerup', event => {
-    if (event.pointerId === activePointer) stopPress('release');
+    if (event.pointerId === activePointer) stopPress();
   });
   window.addEventListener('pointercancel', event => {
-    if (event.pointerId === activePointer) stopPress('cancel');
+    if (event.pointerId === activePointer) stopPress();
   });
   openButton.addEventListener('pointerleave', event => {
-    if (event.pointerId === activePointer) stopPress('leave');
+    if (event.pointerId === activePointer) stopPress();
   });
   openButton.addEventListener('contextmenu', event => event.preventDefault());
   openButton.addEventListener('click', event => {
     if (suppressClick) { event.preventDefault(); return; }
-    drawSingle();
+    if (!activeOpening) { holdDraws = 0; startOpening(); }
   });
-  document.addEventListener('visibilitychange', () => { if (document.hidden) stopPress('hidden'); });
-  window.addEventListener('blur', () => { if (activePointer !== null) stopPress('blur'); });
+  skipButton.addEventListener('click', () => {
+    skipAnimation = !skipAnimation;
+    updateSkipButton();
+    if (skipAnimation && activeOpening) finishAnimationImmediately();
+  });
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) { stopPress(); finishAnimationImmediately(); }
+  });
+  window.addEventListener('blur', () => { if (activePointer !== null) stopPress(); });
   document.querySelectorAll('.mode-option').forEach(button => button.addEventListener('click', () => {
-    if (busy || activePointer !== null) return;
+    if (activeOpening || holdActive || activePointer !== null) return;
     minimum = Number(button.dataset.minimum);
     updateMode();
   }));
   $('resetStats').addEventListener('click', () => {
-    if (busy || activePointer !== null || !window.confirm('確定重置全部累計開箱紀錄？')) return;
+    if (activeOpening || holdActive || activePointer !== null ||
+        !window.confirm('確定重置全部累計開箱紀錄？')) return;
     stats = E.blankStats();
+    holdDraws = 0;
     updateStats();
     $('autoDrawStatus').hidden = true;
+    $('liveDropProgress').hidden = true;
     $('resultContent').hidden = true;
     $('emptyResult').hidden = false;
     $('lastMode').textContent = '尚未開箱';
-    last = null;
     persist();
   });
   updateMode();
+  updateSkipButton();
   updateStats();
-  // Theoretical values are derived from the fixed 95% Bernoulli continuation process.
 })();

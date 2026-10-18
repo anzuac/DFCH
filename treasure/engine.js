@@ -16,25 +16,46 @@
     const r = randomNumber(random);
     return r < CONFIG.prizeA ? 'A' : r < 0.00015 ? 'B' : 'ordinary';
   }
-  function drawOnce(minimum = CONFIG.normalMinimum, random = Math.random, options = {}) {
+  // Shared per-item sampler: exposes each reward when it is actually rolled.
+  // The exact same state transitions are used by instant and animated openings.
+  function createOpening(minimum = CONFIG.normalMinimum, random = Math.random) {
     if (![CONFIG.normalMinimum, CONFIG.specialMinimum].includes(minimum)) throw new RangeError('不支援的保底設定');
-    const capture = options.capture !== false;
-    const visibleLimit = Math.max(0, Math.min(100, Number.isInteger(options.visibleLimit) ? options.visibleLimit : 56));
-    const rewards = [];
     let items = 0, a = 0, b = 0, ordinary = 0, continueSuccess = 0, continuationChecks = 0;
-    while (items < CONFIG.safetyMaxItems) {
+    let finished = false;
+    function next() {
+      if (finished) return null;
       const type = outcome(random);
       ++items;
       if (type === 'A') ++a;
       else if (type === 'B') ++b;
       else ++ordinary;
-      if (capture && (rewards.length < visibleLimit || type !== 'ordinary')) rewards.push({ type, number: items });
-      if (items < minimum) continue;
-      ++continuationChecks;
-      if (randomNumber(random) >= CONFIG.continueChance) break;
-      ++continueSuccess;
+      if (items >= minimum) {
+        ++continuationChecks;
+        if (randomNumber(random) >= CONFIG.continueChance) finished = true;
+        else ++continueSuccess;
+      }
+      if (items >= CONFIG.safetyMaxItems) finished = true;
+      return {
+        reward: { type, number: items }, items, a, b, ordinary,
+        continueSuccess, continuationChecks, minimum,
+        finished, safetyStopped: items >= CONFIG.safetyMaxItems
+      };
     }
-    return { items, a, b, ordinary, rewards, continueSuccess, continuationChecks, minimum, safetyStopped: items >= CONFIG.safetyMaxItems };
+    return Object.freeze({ next });
+  }
+  function drawOnce(minimum = CONFIG.normalMinimum, random = Math.random, options = {}) {
+    if (![CONFIG.normalMinimum, CONFIG.specialMinimum].includes(minimum)) throw new RangeError('不支援的保底設定');
+    const capture = options.capture !== false;
+    const visibleLimit = Math.max(0, Math.min(100, Number.isInteger(options.visibleLimit) ? options.visibleLimit : 56));
+    const rewards = [];
+    const opening = createOpening(minimum, random);
+    let step;
+    do {
+      step = opening.next();
+      if (capture && (rewards.length < visibleLimit || step.reward.type !== 'ordinary')) rewards.push(step.reward);
+    } while (!step.finished);
+    const { reward, finished, ...totals } = step;
+    return { ...totals, rewards };
   }
   function blankStats() { return { runs: 0, items: 0, a: 0, b: 0, ordinary: 0, hitRuns: 0, continueSuccess: 0, continuationChecks: 0, normalRuns: 0, specialRuns: 0 }; }
   function addStats(stats, draw) {
@@ -72,5 +93,5 @@
     const p = CONFIG.continueChance, q = rewardChance;
     return 1 - (1-p) * Math.pow(1-q, minimum) / (1 - p * (1-q));
   }
-  return { CONFIG, outcome, drawOnce, blankStats, addStats, simulateBatch, theoreticalAverage, theoreticalHitChance };
+  return { CONFIG, outcome, createOpening, drawOnce, blankStats, addStats, simulateBatch, theoreticalAverage, theoreticalHitChance };
 });
