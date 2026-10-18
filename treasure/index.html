@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#0b0b1a">
+  <meta name="description" content="以每件大獎 0.01%／0.005%、連續掉落 95% 模擬禁斷與深淵秘寶。">
+  <title>秘寶連續掉落模擬器｜DFCH 機率實驗室</title>
+  <link rel="stylesheet" href="./style.css?v=1.0.0">
+</head>
+<body>
+  <main class="shell">
+    <div class="topline"><span class="eyebrow"><span class="status-led"></span> DFCH / PROBABILITY LAB</span><span class="lab-tag">獨立模擬器 · v1.0</span></div>
+    <header class="masthead">
+      <div class="masthead-copy">
+        <p class="small-caps">禁斷與深淵秘寶・連續開箱測試</p>
+        <h1><span>秘寶連續掉落</span><em>模擬器</em></h1>
+        <p class="lead">以遊戲連續開箱機制為基礎，設定兩個自訂稀有大獎，觀察 95% 持續率下的抽取結果。</p>
+      </div>
+      <div class="chest-hero" aria-hidden="true">
+        <div class="chest-aura"></div>
+        <svg viewBox="0 0 220 188" class="chest-art">
+          <defs><linearGradient id="lid" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#f9dc89"/><stop offset=".44" stop-color="#b67635"/><stop offset="1" stop-color="#573044"/></linearGradient><linearGradient id="body" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#6d315e"/><stop offset=".5" stop-color="#372757"/><stop offset="1" stop-color="#17152c"/></linearGradient><linearGradient id="gem" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#e3fff9"/><stop offset=".4" stop-color="#61dffe"/><stop offset="1" stop-color="#8752ed"/></linearGradient></defs>
+          <path d="M31 77 L38 47 Q43 27 72 26 H151 Q177 26 183 47 L191 77 L180 95 H41Z" fill="url(#lid)" stroke="#f5cf79" stroke-width="5"/>
+          <path d="M32 77 H191 V139 Q191 159 169 163 H54 Q31 159 31 140Z" fill="url(#body)" stroke="#daa85e" stroke-width="6"/>
+          <path d="M45 84 H177 M55 96 V149 M165 96 V149" stroke="#9a6d42" stroke-width="9" opacity=".75"/>
+          <path d="M30 75 H191 V90 H30Z" fill="#f0c267" stroke="#75463b" stroke-width="4"/>
+          <path d="M93 72 H128 V120 L110 133 L93 120Z" fill="#9a643e" stroke="#f8cf6c" stroke-width="5"/>
+          <path d="M111 80 L124 97 L110 116 L97 97Z" fill="url(#gem)" stroke="#dbf8fd" stroke-width="3"/>
+          <path d="M42 38 L33 9 M178 31 L193 6 M114 18 L118 0" stroke="#f8d688" stroke-width="4" stroke-linecap="round" opacity=".8"/>
+          <path d="M12 118 H25 M192 113 H208" stroke="#a388f3" stroke-width="3" stroke-linecap="round"/>
+          <path d="M47 161 L37 170 H188 L178 160" fill="#4c3041" stroke="#b57f55" stroke-width="4"/>
+        </svg>
+        <span class="orb orb-one"></span><span class="orb orb-two"></span><span class="orb orb-three"></span>
+      </div>
+    </header>
+
+    <section class="probability-board" aria-label="獎勵機率">
+      <div class="board-head"><span class="board-kicker">PRIZE POOL</span><span class="board-note">每抽取 1 件獎勵的機率</span></div>
+      <div class="prize-grid">
+        <article class="prize-card prize-a">
+          <div class="prize-art" aria-hidden="true"><span class="prize-sigil">✦</span><span class="prize-shimmer"></span></div>
+          <div class="prize-details"><span class="prize-tier">ULTRA RARE · A</span><h2>大獎 A</h2><strong>0.01<small>%</small></strong><p>約每 10,000 件獎勵命中 1 件</p></div>
+        </article>
+        <article class="prize-card prize-b">
+          <div class="prize-art" aria-hidden="true"><span class="prize-sigil">◆</span><span class="prize-shimmer"></span></div>
+          <div class="prize-details"><span class="prize-tier">MYTHIC RARE · B</span><h2>大獎 B</h2><strong>0.005<small>%</small></strong><p>約每 20,000 件獎勵命中 1 件</p></div>
+        </article>
+      </div>
+      <div class="rates-footer"><span>普通獎勵 <strong>99.985%</strong></span><span class="bullet">•</span><span>三種結果互斥，總和 100%</span></div>
+    </section>
+
+    <section class="sim-panel" aria-labelledby="settings-heading">
+      <div class="section-heading"><div><span class="board-kicker">RETAIN & REPEAT</span><h2 id="settings-heading">開箱設定</h2></div><span class="chance-pill"><span class="pulsing-dot"></span> 連續掉落率 <b>95.00%</b></span></div>
+      <div class="retention-bar" role="img" aria-label="成功續掉率 95%，停止率 5%"><div class="retention-fill"></div><span>95% 持續</span><span>5% 停止</span></div>
+      <div class="mode-picker" role="group" aria-label="開箱保底模式">
+        <button type="button" class="mode-option selected" data-minimum="4" aria-pressed="true"><span class="mode-name">普通開箱</span><span class="mode-sub">最少掉落 4 件</span></button>
+        <button type="button" class="mode-option" data-minimum="11" aria-pressed="false"><span class="mode-name">特殊續開試算</span><span class="mode-sub">最少掉落 11 件</span></button>
+      </div>
+      <div class="chance-interpretation"><span class="icon-spark" aria-hidden="true">✧</span><p>先保證 <b id="minItemCaption">4</b> 件，再以 <b>95%</b> 的成功率逐件追加；首次失敗即結束這一段開箱。</p></div>
+      <p class="expected-hint">此模式單段至少中一種大獎的理論機率約 <strong id="probPerRun">0.344%</strong>（不是每件獎勵機率）。</p>
+      <div class="action-group"><button type="button" id="openOnce" class="action-primary"><span>✦</span> 開啟一次秘寶 <span class="btn-arrow">↗</span></button><div class="batch-control"><label for="batchCount">批次模擬</label><select id="batchCount" aria-label="批次模擬開箱次數"><option value="10">10 次</option><option value="100" selected>100 次</option><option value="1000">1,000 次</option><option value="10000">10,000 次</option></select><button type="button" id="openBatch">開始模擬</button></div></div>
+    </section>
+
+    <section class="result-panel" aria-labelledby="result-heading">
+      <div class="section-heading result-heading"><div><span class="board-kicker">LATEST OPENING</span><h2 id="result-heading">最新開箱結果</h2></div><span id="lastMode" class="result-mode">尚未開箱</span></div>
+      <div id="emptyResult" class="empty-result"><div class="empty-gem">✧</div><p>秘寶尚未開啟</p><small>按下「開啟一次秘寶」查看獎勵掉落</small></div>
+      <div id="resultContent" hidden>
+        <div class="result-summary"><div><span>本次獲得</span><strong id="lastItems">—</strong><small>件獎勵</small></div><div><span>本次大獎</span><strong id="lastRare">—</strong><small>件命中</small></div><div><span>連續成功</span><strong id="lastStreak">—</strong><small>次判定</small></div></div>
+        <div class="loot-head"><strong>掉落清單</strong><span id="lootCaption">—</span></div>
+        <div id="lootGrid" class="loot-grid" aria-label="本次掉落的獎勵"></div>
+        <p id="lootRemainder" class="loot-remainder" hidden></p>
+      </div>
+      <div id="batchResult" class="batch-notice" hidden role="status"></div>
+    </section>
+
+    <section class="stats-panel" aria-labelledby="stats-heading"><div class="section-heading"><div><span class="board-kicker">RECORDED DATA</span><h2 id="stats-heading">累計模擬統計</h2></div><button type="button" class="reset-button" id="resetStats">重置紀錄</button></div>
+      <div class="stats-grid"><div class="stat-box"><span>累計開箱</span><strong id="statRuns">0</strong><small>次</small></div><div class="stat-box"><span>累計獎勵</span><strong id="statItems">0</strong><small>件</small></div><div class="stat-box"><span class="a-color">大獎 A</span><strong id="statA">0</strong><small>件 · 0.01%</small></div><div class="stat-box"><span class="b-color">大獎 B</span><strong id="statB">0</strong><small>件 · 0.005%</small></div></div>
+      <div class="insight-grid"><div><span>平均每次開箱</span><b id="statAverage">—</b></div><div><span>實際連續成功率</span><b id="statRetention">—</b></div><div><span>至少中一種大獎的開箱次數</span><b id="statHitRuns">0</b></div></div>
+      <details class="explanation"><summary>查看機率規則與理論平均值 <span>＋</span></summary><div class="explain-body"><p>大獎機率是「<b>每件獎勵</b>」的機率，不是每開一箱直接有 0.015% 中獎。</p><p>普通開箱（4 件保底）在 95% 持續率下，理論平均每次獲得 <b>23 件</b>；特殊續開的獨立抽選段（11 件保底）則平均 <b>30 件</b>。這是期望值，不是固定數量。</p><p>每件抽獎僅可能是普通、大獎 A 或大獎 B，兩種大獎不會在同一件獎勵重複命中。同一次開箱可以中多件大獎。</p><p>「特殊續開」僅模擬最低 11 件與追加掉落，不計入遊戲實際續開券、鑽石成本、剩餘續開次數與獎勵權重。</p><p>此處大獎 0.01%／0.005% 是自訂測試機率，<b>並非宣稱官方秘寶的原始掉落權重</b>。</p></div></details>
+    </section>
+
+    <footer class="footer"><span>DFCH / 非官方研究工具</span><span>本頁獨立執行 · 紀錄僅保存在瀏覽器</span></footer>
+  </main>
+  <script src="./engine.js?v=1.0.0"></script>
+  <script src="./app.js?v=1.0.0"></script>
+</body>
+</html>
