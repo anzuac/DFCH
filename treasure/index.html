@@ -6,11 +6,11 @@
   <meta name="theme-color" content="#0b0b1a">
   <meta name="description" content="以每件大獎 0.01%／0.005%、連續掉落 95% 模擬禁斷與深淵秘寶。">
   <title>秘寶連續掉落模擬器｜DFCH 機率實驗室</title>
-  <link rel="stylesheet" href="./style.css?v=1.0.0">
+  <link rel="stylesheet" href="./style.css?v=1.1.0">
 </head>
 <body>
   <main class="shell">
-    <div class="topline"><span class="eyebrow"><span class="status-led"></span> DFCH / PROBABILITY LAB</span><span class="lab-tag">獨立模擬器 · v1.0</span></div>
+    <div class="topline"><span class="eyebrow"><span class="status-led"></span> DFCH / PROBABILITY LAB</span><span class="lab-tag">獨立模擬器 · v1.1</span></div>
     <header class="masthead">
       <div class="masthead-copy">
         <p class="small-caps">禁斷與深淵秘寶・連續開箱測試</p>
@@ -59,7 +59,11 @@
       </div>
       <div class="chance-interpretation"><span class="icon-spark" aria-hidden="true">✧</span><p>先保證 <b id="minItemCaption">4</b> 件，再以 <b>95%</b> 的成功率逐件追加；首次失敗即結束這一段開箱。</p></div>
       <p class="expected-hint">此模式單段至少中一種大獎的理論機率約 <strong id="probPerRun">0.344%</strong>（不是每件獎勵機率）。</p>
-      <div class="action-group"><button type="button" id="openOnce" class="action-primary"><span>✦</span> 開啟一次秘寶 <span class="btn-arrow">↗</span></button><div class="batch-control"><label for="batchCount">批次模擬</label><select id="batchCount" aria-label="批次模擬開箱次數"><option value="10">10 次</option><option value="100" selected>100 次</option><option value="1000">1,000 次</option><option value="10000">10,000 次</option></select><button type="button" id="openBatch">開始模擬</button></div></div>
+      <div class="action-group">
+        <button type="button" id="openOnce" class="action-primary" aria-describedby="drawControlHint" aria-label="點擊開箱一次，長按連續開箱，放開停止"><span aria-hidden="true">✦</span><span id="drawButtonText">點擊開始抽獎</span><span class="btn-arrow" aria-hidden="true">↗</span></button>
+        <div id="drawControlHint" class="press-help"><span>點一下：抽取 1 次</span><span>長按 0.4 秒：持續抽獎，放開立即停止</span></div>
+        <p id="autoDrawStatus" class="auto-draw-status" role="status" hidden></p>
+      </div>
     </section>
 
     <section class="result-panel" aria-labelledby="result-heading">
@@ -71,7 +75,6 @@
         <div id="lootGrid" class="loot-grid" aria-label="本次掉落的獎勵"></div>
         <p id="lootRemainder" class="loot-remainder" hidden></p>
       </div>
-      <div id="batchResult" class="batch-notice" hidden role="status"></div>
     </section>
 
     <section class="stats-panel" aria-labelledby="stats-heading"><div class="section-heading"><div><span class="board-kicker">RECORDED DATA</span><h2 id="stats-heading">累計模擬統計</h2></div><button type="button" class="reset-button" id="resetStats">重置紀錄</button></div>
@@ -80,9 +83,9 @@
       <details class="explanation"><summary>查看機率規則與理論平均值 <span>＋</span></summary><div class="explain-body"><p>大獎機率是「<b>每件獎勵</b>」的機率，不是每開一箱直接有 0.015% 中獎。</p><p>普通開箱（4 件保底）在 95% 持續率下，理論平均每次獲得 <b>23 件</b>；特殊續開的獨立抽選段（11 件保底）則平均 <b>30 件</b>。這是期望值，不是固定數量。</p><p>每件抽獎僅可能是普通、大獎 A 或大獎 B，兩種大獎不會在同一件獎勵重複命中。同一次開箱可以中多件大獎。</p><p>「特殊續開」僅模擬最低 11 件與追加掉落，不計入遊戲實際續開券、鑽石成本、剩餘續開次數與獎勵權重。</p><p>此處大獎 0.01%／0.005% 是自訂測試機率，<b>並非宣稱官方秘寶的原始掉落權重</b>。</p></div></details>
     </section>
 
-    <footer class="footer"><span>DFCH / 非官方研究工具</span><span>本頁獨立執行 · 紀錄僅保存在瀏覽器</span></footer>
+    <footer class="footer"><span>DFCH / 非官方研究工具</span><span>僅點擊或長按抽取 · 紀錄保存在此瀏覽器（不計入世界排行）</span></footer>
   </main>
   <script src="./engine.js?v=1.0.0"></script>
-  <script src="./app.js?v=1.0.0"></script>
+  <script src="./app.js?v=1.1.0"></script>
 </body>
 </html>
