@@ -283,8 +283,10 @@ teamHtml=teamHtml
 teamHtml=teamHtml.replace('</body>','<script src="../site-counter.js?v=1.0.0"></script></body>');
 fs.writeFileSync(teamPage,teamHtml);
 // Treasure V1.5 is explicitly published as an isolated page, preserving the guide's whitelist.
-const treasureSiteFiles=['treasure/index.html','treasure/style.css','treasure/engine.js','treasure/app.js','treasure/auth.js',
-  'treasure/challenge/index.html','treasure/challenge/style.css','treasure/challenge/app.js',
+// Only publish the offline practice simulator and a static challenge suspension notice.
+// Auth, leaderboards and official challenge scripts remain in git history but are NOT deployed.
+const treasureSiteFiles=['treasure/index.html','treasure/style.css','treasure/engine.js','treasure/app.js',
+  'treasure/challenge/index.html',
   ...['n','r','sr','ssr','ur'].map(tier=>'treasure/assets/rarity-'+tier+'.webp')];
 for(const relativePath of treasureSiteFiles){
   const source=path.join(repoRoot,relativePath);
@@ -308,23 +310,21 @@ for(const [name,relativePath] of Object.entries(treasurePrizeArt)){
   fs.mkdirSync(path.dirname(dest),{recursive:true});
   fs.copyFileSync(source,dest);
 }
-// Combine auth + the existing guide worker into ONE advanced-mode Pages worker.
-// This keeps the old GUIDE_STATS route and env.ASSETS.fetch fallback unchanged.
-const authWorkerSource=fs.readFileSync(path.join(repoRoot,'cloudflare/treasure-auth.mjs'),'utf8');
-const challengeWorkerSource=fs.readFileSync(path.join(repoRoot,'cloudflare/treasure-challenge.mjs'),'utf8');
+// Freeze ALL Treasure endpoints before any D1 connection or session validation.
+// Preserve the unrelated six-star guide worker and GUIDE_STATS behavior unchanged.
+// Historical Treasure API source remains in GitHub for the later PostgreSQL rebuild,
+// but is deliberately not included in deployed _worker.js.
 const originalGuideWorker=fs.readFileSync(path.join(repoRoot,'cloudflare/guide-worker.mjs'),'utf8');
-const marker='export async function handleTreasureRequest';
-const challengeMarker='export async function handleTreasureChallengeRequest';
 const guideMarker='export default {';
-if(!authWorkerSource.includes(marker)||!challengeWorkerSource.includes(challengeMarker)||!originalGuideWorker.includes(guideMarker))
-  throw new Error('Unexpected Cloudflare Worker exports; cannot safely compose');
-const composedWorker=authWorkerSource.replace(marker,'async function handleTreasureRequest')+'\n'
-  +challengeWorkerSource.replace(challengeMarker,'async function handleTreasureChallengeRequest')+'\n'
-  +originalGuideWorker.replace(guideMarker,'const dfchGuideWorker = {')+'\n'
+if(!originalGuideWorker.includes(guideMarker))
+  throw new Error('Unexpected guide worker export; cannot safely compose');
+const composedWorker=originalGuideWorker.replace(guideMarker,'const dfchGuideWorker = {')+'\\n'
   +'export default { async fetch(request,env,ctx) {'
-  +' if (new URL(request.url).pathname.startsWith("/api/treasure/")) return handleTreasureRequest(request,env);'
+  +' const path=new URL(request.url).pathname;'
+  +' if (path.startsWith("/api/treasure/")) return new Response(JSON.stringify({error:"Treasure 正式服務暫停開放，請使用練習模式"}),'
+  +' {status:410,headers:{"Content-Type":"application/json; charset=utf-8","Cache-Control":"no-store","X-Content-Type-Options":"nosniff"}});'
   +' return dfchGuideWorker.fetch(request,env,ctx);'
-  +' }};\n';
+  +' }};\\n';
 fs.writeFileSync(path.join(outputDir,'_worker.js'),composedWorker);
 fs.writeFileSync(path.join(outputDir,'_routes.json'),JSON.stringify({
   version:1,include:['/api/guide-views','/api/treasure/*'],exclude:[]
