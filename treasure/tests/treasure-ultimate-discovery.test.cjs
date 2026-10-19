@@ -20,7 +20,7 @@ test('identical four-tier jackpot cutoffs in practice and server with 100% total
   for(const roll of thresholds){
     const practice=engine.outcome(()=>roll);
     const server=sandbox.treasureTests.challengeGenerate(
-      (()=>{let i=0;return ()=>++i%2?roll:.99;})()
+      (()=>{let i=0;return ()=>++i===1?roll:.99;})()
     )[0];
     assert.equal(server,practice,'same outcome at '+roll);
   }
