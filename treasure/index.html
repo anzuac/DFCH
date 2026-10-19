@@ -4,9 +4,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#0b0b1a">
-  <meta name="description" content="以每件大獎 A 0.01%／B 0.005%／C 0.00007%、連續掉落 95% 模擬禁斷與深淵秘寶。">
+  <meta name="description" content="Treasure 四階稀有大獎（含 EX 首次發現）與 95% 連續掉落練習。">
   <title>秘寶連續掉落模擬器｜DFCH 機率實驗室</title>
-  <link rel="stylesheet" href="./style.css?v=1.5.4">
+  <link rel="stylesheet" href="./style.css?v=1.6.0">
   <link rel="stylesheet" href="./challenge/style.css?v=1.0.0">
 </head>
 <body>
@@ -60,20 +60,24 @@
       <div class="board-head"><span class="board-kicker">PRIZE POOL</span><span class="board-note">每件掉落機率</span></div>
       <div class="prize-grid">
         <article class="prize-card prize-a">
-          <div class="prize-art" aria-hidden="true"><span class="prize-sigil">✦</span><span class="prize-shimmer"></span></div>
-          <div class="prize-details"><span class="prize-tier">ULTRA RARE · A</span><h2>大獎 A</h2><strong>0.01<small>%</small></strong><p class="prize-points" data-score-type="A">＋1,000 分</p></div>
+          <div class="prize-art" aria-hidden="true"><img class="prize-image" src="./assets/prize-a.png" alt="" loading="lazy"><span class="prize-shimmer"></span></div>
+          <div class="prize-details"><span class="prize-tier">ULTRA RARE · A</span><h2>終極瓶子</h2><strong>0.01<small>%</small></strong><p class="prize-points" data-score-type="A">＋1,000 分</p></div>
         </article>
         <article class="prize-card prize-b">
-          <div class="prize-art" aria-hidden="true"><span class="prize-sigil">◆</span><span class="prize-shimmer"></span></div>
-          <div class="prize-details"><span class="prize-tier">MYTHIC RARE · B</span><h2>大獎 B</h2><strong>0.005<small>%</small></strong><p class="prize-points" data-score-type="B">＋2,500 分</p></div>
+          <div class="prize-art" aria-hidden="true"><img class="prize-image" src="./assets/prize-b.png" alt="" loading="lazy"><span class="prize-shimmer"></span></div>
+          <div class="prize-details"><span class="prize-tier">MYTHIC RARE · B</span><h2>史詩鏡子</h2><strong>0.005<small>%</small></strong><p class="prize-points" data-score-type="B">＋2,500 分</p></div>
         </article>
         <article class="prize-card prize-c">
-          <div class="prize-art" aria-hidden="true"><span class="prize-sigil">✹</span><span class="prize-shimmer"></span></div>
-          <div class="prize-details"><span class="prize-tier">LEGENDARY RARE · C</span><h2>大獎 C</h2><strong>0.00007<small>%</small></strong><p class="prize-points" data-score-type="C">＋100,000 分</p></div>
+          <div class="prize-art" aria-hidden="true"><img class="prize-image" src="./assets/prize-c.png" alt="" loading="lazy"><span class="prize-shimmer"></span></div>
+          <div class="prize-details"><span class="prize-tier">LEGENDARY RARE · C</span><h2>皆傳牌子</h2><strong>0.00015<small>%</small></strong><p class="prize-points" data-score-type="C">＋100,000 分</p><p class="prize-honor" id="prizeCChampion">累積總分第一：待揭曉</p></div>
+        </article>
+        <article class="prize-card prize-ex">
+          <div class="prize-art" aria-hidden="true"><img class="prize-image prize-image-ex" src="./assets/prize-ex.gif" alt="" loading="lazy"><span class="prize-shimmer"></span></div>
+          <div class="prize-details"><span class="prize-tier">ULTIMATE · EX</span><h2>終極大獎</h2><strong id="ultimateRate">???</strong><p class="prize-points" data-score-type="EX">＋350,000 分</p><p class="prize-honor" id="prizeEXChampion">單次最高分第一：待揭曉</p><p class="prize-honor" id="prizeEXDiscoverer">首次發現者：尚未解鎖</p></div>
         </article>
       </div>
       <details class="ordinary-drawer" id="ordinaryRewards">
-        <summary class="ordinary-summary"><span class="ordinary-summary-text"><strong>普通獎勵 N～UR</strong><small>99.98493% · 權重 50／30／15／4／1</small></span><span class="ordinary-summary-action" aria-hidden="true">展開 <span class="ordinary-chevron">⌄</span></span></summary>
+        <summary class="ordinary-summary"><span class="ordinary-summary-text"><strong>普通獎勵 N～UR</strong><small>99.9848176% · 權重 50／30／15／4／1</small></span><span class="ordinary-summary-action" aria-hidden="true">展開 <span class="ordinary-chevron">⌄</span></span></summary>
         <div class="ordinary-drawer-content">
           <p class="ordinary-drawer-note">稀有度權重為暫訂比例，非官方數據。</p>
           <div class="ordinary-weight-grid" aria-label="普通獎品相對權重">
@@ -127,7 +131,7 @@
         <div class="stat-box"><span>練習累計積分</span><strong id="statPracticePoints">0</strong><small>不計入排行榜</small></div>
         <div class="stat-box"><span class="a-color">大獎 A</span><strong id="statA">0</strong><small>件 · 0.01%</small></div>
         <div class="stat-box"><span class="b-color">大獎 B</span><strong id="statB">0</strong><small>件 · 0.005%</small></div>
-        <div class="stat-box"><span class="c-color">大獎 C</span><strong id="statC">0</strong><small>件 · 0.00007%</small></div>
+        <div class="stat-box"><span class="c-color">大獎 C</span><strong id="statC">0</strong><small>件 · 0.00007%</small></div><div class="stat-box"><span>終極大獎 EX</span><strong id="statEX">0</strong><small>件</small></div>
       </div>
       <div class="tier-stats" aria-label="普通獎品累計數量">
         <div><span class="tier-n">N</span><b id="statN">0</b></div>
@@ -160,8 +164,8 @@
       <button type="button" id="treasureNicknameLogout" class="treasure-nickname-exit">取消並登出</button>
     </form>
   </dialog>
-  <script src="./engine.js?v=1.5.4"></script>
-  <script src="./app.js?v=1.5.4"></script>
+  <script src="./engine.js?v=1.6.0"></script>
+  <script src="./app.js?v=1.6.0"></script>
   <script src="./auth.js?v=1.6.0"></script>
 </body>
 </html>
