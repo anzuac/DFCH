@@ -4,35 +4,17 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#0b0b1a">
-  <meta name="description" content="Treasure 四階稀有大獎（含 EX 首次發現）與 95% 連續掉落練習。">
+  <meta name="description" content="Treasure 純本機練習模式：四種大獎與 95% 連續掉落，不需登入。">
   <title>秘寶連續掉落模擬器｜DFCH 機率實驗室</title>
-  <link rel="stylesheet" href="./style.css?v=1.6.1">
-  <link rel="stylesheet" href="./challenge/style.css?v=1.0.0">
+  <link rel="stylesheet" href="./style.css?v=1.6.3">
 </head>
 <body>
   <main class="shell">
     <div class="topline">
       <span class="eyebrow"><span class="status-led"></span> DFCH / PROBABILITY LAB</span>
-      <div class="top-actions">
-        <span class="lab-tag">獨立模擬器 · v1.5</span>
-        <div class="treasure-account" id="treasureLogin" hidden>
-          <div id="treasureSignIn" class="treasure-signin" hidden></div>
-          <div id="treasureSignedIn" hidden>
-            <button type="button" id="treasureAccountToggle" class="treasure-account-toggle" aria-haspopup="true" aria-expanded="false" aria-controls="treasureAccountMenu">
-              <span id="treasurePlayerName">玩家</span><span class="treasure-account-chevron" aria-hidden="true">⌄</span>
-            </button>
-            <div id="treasureAccountMenu" class="treasure-account-menu" hidden>
-              <strong>玩家帳號</strong>
-              <p>已連結 Google 帳號，玩家暱稱會保存在伺服器。</p>
-              <p>本頁為練習抽獎，結果不計入排行榜。可切換至正式挑戰模式。</p>
-              <button type="button" id="treasureLogout" class="treasure-account-logout">登出 Google 帳號</button>
-            </div>
-          </div>
-          <p id="treasureLoginStatus" class="treasure-login-status" role="status" hidden></p>
-        </div>
-      </div>
+      <span class="lab-tag">獨立模擬器 · 僅練習模式</span>
     </div>
-    <nav class="challenge-mode-nav" aria-label="遊戲模式"><a href="./" class="challenge-mode-link active" aria-current="page">練習模式</a><a href="./challenge/" class="challenge-mode-link">挑戰模式</a></nav>
+    <p class="practice-only-banner" role="status">本頁為純本機練習：不需登入、不連接排行榜，也不使用資料庫。</p>
     <header class="masthead">
       <div class="masthead-copy">
         <h1><span>秘寶連續掉落</span><em>模擬器</em></h1>
@@ -61,7 +43,7 @@
       <div class="prize-grid">
         <article class="prize-card prize-ex ultimate-prize-card">
           <div class="prize-art ultimate-prize-art" aria-hidden="true"><img class="prize-image prize-image-ex" src="./assets/prize-ex.gif" alt="" loading="lazy"><span class="prize-shimmer"></span></div>
-          <div class="prize-details ultimate-prize-info"><span class="prize-tier">ULTIMATE · EX</span><h2 id="prizeEXName">終極大獎</h2><strong id="ultimateRate">???</strong><p class="prize-points" data-score-type="EX">＋350,000 分</p><p class="prize-honor" id="prizeEXChampion">單次最高分第一：待揭曉</p><p class="prize-honor" id="prizeEXDiscoverer">首次發現者：尚未解鎖</p></div>
+          <div class="prize-details ultimate-prize-info"><span class="prize-tier">ULTIMATE · EX</span><h2 id="prizeEXName">終極大獎</h2><strong id="ultimateRate">0.0000324%</strong><p class="prize-points" data-score-type="EX">＋350,000 分</p><p class="prize-honor">僅供練習，不記錄正式發現者</p></div>
         </article>
         <article class="prize-card prize-a">
           <div class="prize-art" aria-hidden="true"><img class="prize-image" src="./assets/prize-a.png" alt="" loading="lazy"><span class="prize-shimmer"></span></div>
@@ -73,7 +55,7 @@
         </article>
         <article class="prize-card prize-c">
           <div class="prize-art" aria-hidden="true"><img class="prize-image" src="./assets/prize-c.png" alt="" loading="lazy"><span class="prize-shimmer"></span></div>
-          <div class="prize-details"><span class="prize-tier">LEGENDARY RARE · C</span><h2>皆傳牌子</h2><strong>0.00015<small>%</small></strong><p class="prize-points" data-score-type="C">＋100,000 分</p><p class="prize-honor" id="prizeCChampion">累積總分第一：待揭曉</p></div>
+          <div class="prize-details"><span class="prize-tier">LEGENDARY RARE · C</span><h2>皆傳牌子</h2><strong>0.00015<small>%</small></strong><p class="prize-points" data-score-type="C">＋100,000 分</p></div>
         </article>
 
       </div>
@@ -118,7 +100,7 @@
       <div id="resultContent" hidden>
         <div class="result-summary"><div><span>本次獲得</span><strong id="lastItems">—</strong><small>件獎勵</small></div><div><span>本次大獎</span><strong id="lastRare">—</strong><small>件命中</small></div><div><span>連續成功</span><strong id="lastStreak">—</strong><small>次判定</small></div></div>
         <div class="loot-head"><strong id="lootHeadline">掉落清單</strong><span id="lootCaption">—</span></div>
-        <p class="pending-points" id="lastPoints" role="status">本次練習積分：0 分（不計入排行榜）</p>
+        <p class="pending-points" id="lastPoints" role="status">本次練習積分：0 分（僅存於本機）</p>
         <div id="lootGrid" class="loot-grid" role="region" tabindex="0" aria-label="本次獎勵清單，最多顯示五列，多餘內容在此上下滑動"></div>
         <p id="lootRemainder" class="loot-remainder" hidden>↓ 超過五列的獎勵可在上方清單內上下滑動查看</p>
       </div>
@@ -129,10 +111,10 @@
       <div class="stats-grid">
         <div class="stat-box"><span>累計開箱</span><strong id="statRuns">0</strong><small>次</small></div>
         <div class="stat-box"><span>累計獎勵</span><strong id="statItems">0</strong><small>件</small></div>
-        <div class="stat-box"><span>練習累計積分</span><strong id="statPracticePoints">0</strong><small>不計入排行榜</small></div>
+        <div class="stat-box"><span>練習累計積分</span><strong id="statPracticePoints">0</strong><small>僅存於本機</small></div>
         <div class="stat-box"><span class="a-color">大獎 A</span><strong id="statA">0</strong><small>件 · 0.01%</small></div>
         <div class="stat-box"><span class="b-color">大獎 B</span><strong id="statB">0</strong><small>件 · 0.005%</small></div>
-        <div class="stat-box"><span class="c-color">大獎 C</span><strong id="statC">0</strong><small>件 · 0.00007%</small></div><div class="stat-box"><span>終極大獎 EX</span><strong id="statEX">0</strong><small>件</small></div>
+        <div class="stat-box"><span class="c-color">皆傳牌子 C</span><strong id="statC">0</strong><small>件 · 0.00015%</small></div><div class="stat-box"><span>終極大獎 EX</span><strong id="statEX">0</strong><small>件 · 0.0000324%</small></div>
       </div>
       <div class="tier-stats" aria-label="普通獎品累計數量">
         <div><span class="tier-n">N</span><b id="statN">0</b></div>
@@ -143,30 +125,16 @@
       </div>
       <div class="insight-grid"><div><span>平均每次開箱</span><b id="statAverage">—</b></div><div><span>實際連續成功率</span><b id="statRetention">—</b></div><div><span>至少中一種大獎的開箱次數</span><b id="statHitRuns">0</b></div></div>
       <details class="explanation"><summary>查看機率規則與權重說明 <span>＋</span></summary>
-        <div class="explain-body"><p>每件獎勵只會出現八種結果之一：大獎 A、B、C，或普通稀有度 N、R、SR、SSR、UR。大獎固定機率合計 <b>0.01507%</b>，普通獎池合計 <b>99.98493%</b>。</p>
-        <p>N／R／SR／SSR／UR 暫訂相對權重 <b>50／30／15／4／1</b>，不是遊戲官方掉率；例如 N 的實際每件機率是 99.98493% × 50%，約 49.992465%。</p>
+        <div class="explain-body"><p>每件獎勵共有九種結果：大獎 A、B、C、EX，或普通稀有度 N、R、SR、SSR、UR。四種大獎固定機率合計 <b>0.0151824%</b>，普通獎池合計 <b>99.9848176%</b>。</p>
+        <p>N／R／SR／SSR／UR 暫訂相對權重 <b>50／30／15／4／1</b>，不是遊戲官方掉率；例如 N 的實際每件機率是 99.9848176% × 50%，約 49.9924088%。</p>
         <p>每次保證 4 件獎勵，之後每次以 95% 機率多掉 1 件，第一次失敗即停止。理論平均每箱 <b>23 件</b>。跳過動畫不改變機率。</p>
-        <p>此頁僅為本機模擬，抽取結果不計入世界排行榜；新獎池由本版起重新累計，舊版本機存檔不會刪除。</p></div>
+        <p>此頁僅為本機模擬，不需登入；抽取與統計均留在目前瀏覽器內，不使用 D1。舊版本機存檔不會刪除。</p></div>
       </details>
     </section>
 
     <footer class="footer"><span>DFCH / 非官方研究工具</span><span>練習紀錄僅保存在此瀏覽器 · 不計入世界排行榜</span></footer>
   </main>
-  <dialog id="treasureNicknameDialog" class="treasure-nickname-dialog" aria-labelledby="treasureNicknameHeading" aria-describedby="treasureNicknameIntro">
-    <div class="treasure-dialog-eyebrow"><span>PLAYER IDENTITY</span><span>首次登入</span></div>
-    <h2 id="treasureNicknameHeading">設定你的遊戲暱稱</h2>
-    <p id="treasureNicknameIntro">歡迎加入 DFCH Treasure！請設定公開顯示的玩家暱稱。暱稱只能設定一次，設定後無法自行修改，也不能與其他玩家重複。</p>
-    <form id="treasureNicknameForm" class="treasure-nickname-form">
-      <label for="treasureNicknameInput">遊戲暱稱</label>
-      <input type="text" id="treasureNicknameInput" name="nickname" minlength="2" maxlength="48" autocomplete="off" spellcheck="false" placeholder="2～16 字，中文／英文／數字" required>
-      <p class="treasure-nickname-hint">不可使用空白或符號。英文大小寫及全半形視為相同暱稱。</p>
-      <p id="treasureNicknameStatus" class="treasure-nickname-feedback" role="status" aria-live="polite"></p>
-      <button type="submit" id="treasureNicknameSave" class="treasure-nickname-save">確認設定</button>
-      <button type="button" id="treasureNicknameLogout" class="treasure-nickname-exit">取消並登出</button>
-    </form>
-  </dialog>
   <script src="./engine.js?v=1.6.0"></script>
-  <script src="./app.js?v=1.6.0"></script>
-  <script src="./auth.js?v=1.6.0"></script>
+  <script src="./app.js?v=1.6.3"></script>
 </body>
 </html>
