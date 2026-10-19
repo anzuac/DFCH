@@ -16,7 +16,7 @@ class FakeElement {
  getAttribute(k){return this.attributes[k]}
 }
 function build(randomSequence=null,existingStore=null) {
- const ids=['openOnce','skipAnimation','skipAnimationLabel','statRuns','statItems','statA','statB','statC','statN','statR','statSR','statSSR','statUR','statAverage','statRetention','statHitRuns','emptyResult','resultContent','lastMode','lastItems','lastRare','lastStreak','lastPoints','statPracticePoints','lootCaption','lootHeadline','lootGrid','lootRemainder','liveDropProgress','liveDropMessage','liveDropCount','autoDrawStatus','drawButtonText','resetStats','resultPanel'];
+ const ids=['openOnce','skipAnimation','skipAnimationLabel','statRuns','statItems','statA','statB','statC','statEX','statN','statR','statSR','statSSR','statUR','statAverage','statRetention','statHitRuns','emptyResult','resultContent','lastMode','lastItems','lastRare','lastStreak','lastPoints','statPracticePoints','lootCaption','lootHeadline','lootGrid','lootRemainder','liveDropProgress','liveDropMessage','liveDropCount','autoDrawStatus','drawButtonText','resetStats','resultPanel'];
  const map=Object.fromEntries(ids.map(id=>[id,new FakeElement(id)]));
  const document=new FakeElement();document.hidden=false;
  document.getElementById=id=>{if(!map[id])throw Error('Unknown id '+id);return map[id]};
@@ -58,7 +58,7 @@ test('skip reveals immediately and mid-opening skip does not double count',async
  assert.equal(map.statRuns.textContent,'2');
  assert.equal(JSON.parse(store['dfch-treasure-continuation-v2']).stats.runs,2);
 });
-test('three jackpots and rarity SSR show separately and cumulative counts are exact',()=>{
+test('three named jackpots and rarity SSR show separately and cumulative counts are exact',()=>{
  const {map,store}=build([.00001,.00011,.0001502,.97,.99]);
  map.skipAnimation.checked=!map.skipAnimation.checked;map.skipAnimation.dispatch('change');map.openOnce.dispatch('click');
  assert.deepEqual(map.lootGrid.children.map(x=>x.className),[
@@ -72,8 +72,27 @@ test('three jackpots and rarity SSR show separately and cumulative counts are ex
  assert.equal(map.statSSR.textContent,'1');
  assert.equal(map.statItems.textContent,'4');
  const s=JSON.parse(store['dfch-treasure-continuation-v2']).stats;
- assert.equal(s.items,s.a+s.b+s.c+s.ordinary);
+ assert.equal(s.items,s.a+s.b+s.c+s.ex+s.ordinary);
  assert.equal(s.ordinary,s.n+s.r+s.sr+s.ssr+s.ur);
+});
+test('EX counts as a fourth jackpot and old practice records migrate without reset',()=>{
+ const {map,store}=build([.0001516,.5,.5,.5,.99]);
+ map.skipAnimation.checked=!map.skipAnimation.checked;map.skipAnimation.dispatch('change');
+ map.openOnce.dispatch('click');
+ assert.equal(map.statEX.textContent,'1');
+ assert.equal(map.lastRare.textContent,'1');
+ assert.equal(map.lastPoints.textContent,'本次練習積分：350,003 分（不計入排行榜）');
+ assert.equal(map.statPracticePoints.textContent,'350,003');
+ assert.equal(JSON.parse(store['dfch-treasure-continuation-v2']).stats.ex,1);
+ const old=E.blankStats();
+ delete old.ex;
+ old.runs=1;old.items=4;old.n=4;old.ordinary=4;old.continuationChecks=1;
+ const saved={'dfch-treasure-continuation-v2':JSON.stringify({stats:old,skipAnimation:false})};
+ const legacy=build(null,saved);
+ assert.equal(legacy.map.statRuns.textContent,'1');
+ assert.equal(legacy.map.statItems.textContent,'4');
+ assert.equal(legacy.map.statEX.textContent,'0');
+ assert.equal(legacy.map.statPracticePoints.textContent,'4');
 });
 test('60 rewards remain in five-row scroll viewport without truncation',()=>{
  const seq=[];for(let i=1;i<=60;i++){seq.push(.5);if(i>=4)seq.push(i===60?.99:.2);}
