@@ -41,6 +41,7 @@
     name.textContent=player.nickname || '設定暱稱';
     closeAccountMenu();
     message('');
+    document.dispatchEvent(new CustomEvent('treasure:auth-changed',{detail:{loggedIn:true,player}}));
     if (!player.nickname) openNicknameDialog();
     else if (nicknameDialog.open) {
       nicknameDialog.close();
@@ -131,6 +132,7 @@
     try {
       await api('logout',{});
       activePlayer=null;
+      document.dispatchEvent(new CustomEvent('treasure:auth-changed',{detail:{loggedIn:false,player:null}}));
       profile.hidden=true;
       nicknameInput.value='';
       nicknameStatus.textContent='';

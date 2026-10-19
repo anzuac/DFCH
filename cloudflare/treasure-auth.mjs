@@ -1,7 +1,7 @@
 /*
  * DFCH Treasure V1.5 Google login foundation.
  * Server-side signature verification, nonce-bound login and opaque cookie sessions.
- * Official draws are deliberately NOT enabled in this stage.
+ * Practice drawings stay local; Challenge V1 draws are server-authoritative.
  */
 const TREASURE_COOKIE = '__Host-dfch_treasure_session';
 const TREASURE_NONCE_COOKIE = '__Host-dfch_treasure_nonce';
@@ -147,7 +147,7 @@ async function treasureHandleAuth(request, env) {
         await db.prepare('SELECT nickname,nickname_key FROM treasure_players LIMIT 1').first(); ready = true;
       } catch (_) { ready = false; }
     }
-    return treasureReply({enabled:ready, clientId:ready ? clientId : null, officialDrawsEnabled:false});
+    return treasureReply({enabled:ready, clientId:ready ? clientId : null, officialDrawsEnabled:ready, challengeEnabled:ready});
   }
   if (!db || !clientId) return treasureReply({error:'登入服務尚未設定完成'},503);
   if (route === '/api/treasure/auth/me' && request.method === 'GET') {
@@ -210,8 +210,9 @@ async function treasureHandleAuth(request, env) {
   } catch (_) { return treasureReply({error:'儲存玩家登入資料失敗，請稍後重試'},503); }
 }
 export async function handleTreasureRequest(request, env) {
-  if (new URL(request.url).pathname.startsWith('/api/treasure/auth/'))
-    return treasureHandleAuth(request, env);
-  // Keep unfinished official scoring routes inaccessible until server-side draws exist.
-  return treasureReply({error:'正式抽獎及排行榜尚未啟用'},501);
+  const path=new URL(request.url).pathname;
+  if (path.startsWith('/api/treasure/auth/'))return treasureHandleAuth(request, env);
+  if (path.startsWith('/api/treasure/challenge/'))
+    return handleTreasureChallengeRequest(request,env,{treasureReply,treasureLoggedInPlayer});
+  return treasureReply({error:'未知 Treasure API'},404);
 }

@@ -7,6 +7,7 @@
   <meta name="description" content="以每件大獎 A 0.01%／B 0.005%／C 0.00007%、連續掉落 95% 模擬禁斷與深淵秘寶。">
   <title>秘寶連續掉落模擬器｜DFCH 機率實驗室</title>
   <link rel="stylesheet" href="./style.css?v=1.5.4">
+  <link rel="stylesheet" href="./challenge/style.css?v=1.0.0">
 </head>
 <body>
   <main class="shell">
@@ -23,7 +24,7 @@
             <div id="treasureAccountMenu" class="treasure-account-menu" hidden>
               <strong>玩家帳號</strong>
               <p>已連結 Google 帳號，玩家暱稱會保存在伺服器。</p>
-              <p>正式開箱與世界排行榜尚未啟用，目前抽獎仍為不計分的練習。</p>
+              <p>本頁為練習抽獎，結果不計入排行榜。可切換至正式挑戰模式。</p>
               <button type="button" id="treasureLogout" class="treasure-account-logout">登出 Google 帳號</button>
             </div>
           </div>
@@ -31,6 +32,7 @@
         </div>
       </div>
     </div>
+    <nav class="challenge-mode-nav" aria-label="遊戲模式"><a href="./" class="challenge-mode-link active" aria-current="page">練習模式</a><a href="./challenge/" class="challenge-mode-link">挑戰模式</a></nav>
     <header class="masthead">
       <div class="masthead-copy">
         <h1><span>秘寶連續掉落</span><em>模擬器</em></h1>
@@ -143,7 +145,7 @@
       </details>
     </section>
 
-    <footer class="footer"><span>DFCH / 非官方研究工具</span><span>抽獎紀錄僅保存在此瀏覽器 · 未啟用世界排行榜</span></footer>
+    <footer class="footer"><span>DFCH / 非官方研究工具</span><span>練習紀錄僅保存在此瀏覽器 · 不計入世界排行榜</span></footer>
   </main>
   <dialog id="treasureNicknameDialog" class="treasure-nickname-dialog" aria-labelledby="treasureNicknameHeading" aria-describedby="treasureNicknameIntro">
     <div class="treasure-dialog-eyebrow"><span>PLAYER IDENTITY</span><span>首次登入</span></div>
@@ -160,6 +162,6 @@
   </dialog>
   <script src="./engine.js?v=1.5.4"></script>
   <script src="./app.js?v=1.5.4"></script>
-  <script src="./auth.js?v=1.5.2"></script>
+  <script src="./auth.js?v=1.6.0"></script>
 </body>
 </html>
