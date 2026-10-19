@@ -75,7 +75,8 @@ test('challenge control remains above reward list even after many rows',()=>{
   const button=html.indexOf('id="challengeOpen"');
   const grid=html.indexOf('id="challengeGrid"');
   const stats=html.indexOf('class="challenge-run-stats"');
-  assert.ok(stats>=0&&stats<button&&button<grid);\n  assert.ok(html.indexOf('id=\"challengeSkip\"')<stats,'skip button should be in the heading');
+  assert.ok(stats>=0&&stats<button&&button<grid);
+  assert.ok(html.indexOf('id="challengeSkip"')<stats,'skip button should be in the heading');
   assert.match(css,/\.challenge-main \.challenge-actions\{margin:11px 0 12px\}/);
   assert.match(css,/\.challenge-grid\{--cell:65px;/);
   assert.match(css,/max-height:calc\(var\(--cell\)\*5 \+ var\(--gap\)\*4\)/);
