@@ -1,4 +1,4 @@
-/* Google Identity Services sign-in. Live only on the production Cloudflare site. */
+/* Google Identity Services sign-in; the existing server token and D1 flow are unchanged. */
 (() => {
   'use strict';
   const panel=document.getElementById('treasureLogin');
@@ -9,13 +9,45 @@
   const signIn=$('treasureSignIn');
   const profile=$('treasureSignedIn');
   const name=$('treasurePlayerName');
+  const accountToggle=$('treasureAccountToggle');
+  const accountMenu=$('treasureAccountMenu');
   const logout=$('treasureLogout');
+  const nicknameDialog=$('treasureNicknameDialog');
   const nicknameForm=$('treasureNicknameForm');
   const nicknameInput=$('treasureNicknameInput');
   const nicknameSave=$('treasureNicknameSave');
+  const nicknameExit=$('treasureNicknameLogout');
   const nicknameStatus=$('treasureNicknameStatus');
-  function message(text) {status.textContent=text;}
-  async function api(path, body) {
+  let activePlayer=null;
+  let clientId=null;
+
+  function message(text,visible=false) {
+    status.textContent=text;
+    status.hidden=!visible;
+  }
+  function closeAccountMenu() {
+    accountMenu.hidden=true;
+    accountToggle.setAttribute('aria-expanded','false');
+  }
+  function openNicknameDialog() {
+    closeAccountMenu();
+    if (!nicknameDialog.open) nicknameDialog.showModal();
+    nicknameInput.focus();
+  }
+  function signedIn(player) {
+    activePlayer=player;
+    signIn.hidden=true;
+    profile.hidden=false;
+    name.textContent=player.nickname || '設定暱稱';
+    closeAccountMenu();
+    message('');
+    if (!player.nickname) openNicknameDialog();
+    else if (nicknameDialog.open) {
+      nicknameDialog.close();
+      accountToggle.focus();
+    }
+  }
+  async function api(path,body) {
     const response=await fetch('/api/treasure/auth/'+path,{
       method:body===undefined?'GET':'POST',
       credentials:'same-origin',cache:'no-store',
@@ -25,15 +57,6 @@
     const data=await response.json();
     if (!response.ok) throw new Error(data.error||'登入服務暫時無法使用');
     return data;
-  }
-  function signedIn(player) {
-    signIn.hidden=true;
-    profile.hidden=false;
-    logout.hidden=false;
-    name.textContent=player.nickname || player.displayName || '玩家';
-    nicknameForm.hidden=!!player.nickname;
-    nicknameStatus.textContent='';
-    message('已登入 · 正式抽獎每日五次功能尚未啟用，目前可使用原本練習抽獎。');
   }
   function loadGoogleScript() {
     return new Promise((resolve,reject)=>{
@@ -46,7 +69,9 @@
       document.head.append(script);
     });
   }
-  async function startSignIn(clientId) {
+  async function startSignIn() {
+    closeAccountMenu();
+    profile.hidden=true;
     const {nonce}=await api('nonce');
     await loadGoogleScript();
     signIn.replaceChildren();
@@ -54,19 +79,37 @@
       client_id:clientId,nonce,auto_select:false,
       callback:async ({credential})=>{
         if (!credential) return;
-        message('正在驗證 Google 帳號…');
-        try {const result=await api('google',{credential});signedIn(result.player);}
-        catch (error) {
-          message(error.message+'，請重新登入。');
-          await startSignIn(clientId).catch(e=>message(e.message));
+        message('正在驗證 Google 帳號…',true);
+        try {
+          const result=await api('google',{credential});
+          signedIn(result.player);
+        } catch(error) {
+          message(error.message+'，請重新登入。',true);
+          await startSignIn().catch(e=>message(e.message,true));
         }
       }
     });
     window.google.accounts.id.renderButton(signIn,{
-      theme:'outline',size:'large',type:'standard',text:'signin_with',shape:'pill'
+      theme:'outline',size:'large',type:'standard',text:'signin_with',shape:'pill',width:185
     });
     signIn.hidden=false;
   }
+  accountToggle.addEventListener('click',()=>{
+    if (!activePlayer?.nickname) {openNicknameDialog();return;}
+    accountMenu.hidden=!accountMenu.hidden;
+    accountToggle.setAttribute('aria-expanded',String(!accountMenu.hidden));
+  });
+  document.addEventListener('click',event=>{
+    if (!panel.contains(event.target)) closeAccountMenu();
+  });
+  document.addEventListener('keydown',event=>{
+    if (event.key==='Escape' && !accountMenu.hidden) {
+      closeAccountMenu();
+      accountToggle.focus();
+    }
+  });
+  // First login requires a unique nickname. Logout remains available as the escape path.
+  nicknameDialog.addEventListener('cancel',event=>event.preventDefault());
   nicknameForm.addEventListener('submit',async event=>{
     event.preventDefault();
     nicknameSave.disabled=true;
@@ -76,40 +119,48 @@
       if (result.player) {
         signedIn(result.player);
         nicknameStatus.textContent='';
-        message('暱稱「'+result.nickname+'」設定成功！正式開箱與排名目前仍未啟用。');
         nicknameInput.value='';
       }
     } catch(error) {
       nicknameStatus.textContent=error.message;
     } finally {nicknameSave.disabled=false;}
   });
-  logout.addEventListener('click',async ()=>{
+  async function signOut() {
     logout.disabled=true;
+    nicknameExit.disabled=true;
     try {
       await api('logout',{});
+      activePlayer=null;
       profile.hidden=true;
-      nicknameForm.hidden=true;
       nicknameInput.value='';
-      logout.hidden=true;
-      message('已登出，可以重新使用 Google 帳號登入。');
-      await startSignIn(window.treasureGoogleClientId);
-    } catch(error) {message(error.message);}
-    finally {logout.disabled=false;}
-  });
+      nicknameStatus.textContent='';
+      if (nicknameDialog.open) nicknameDialog.close();
+      closeAccountMenu();
+      message('');
+      await startSignIn();
+    } catch(error) {
+      message(error.message,true);
+      if (nicknameDialog.open) nicknameStatus.textContent=error.message;
+    } finally {
+      logout.disabled=false;
+      nicknameExit.disabled=false;
+    }
+  }
+  logout.addEventListener('click',signOut);
+  nicknameExit.addEventListener('click',signOut);
   (async()=>{
     try {
       const config=await api('config');
       if (!config.enabled || !config.clientId) {
-        message('Google 登入尚未啟用；練習抽獎不受影響。');
+        message('Google 登入尚未啟用；練習抽獎不受影響。',true);
         return;
       }
-      window.treasureGoogleClientId=config.clientId;
+      clientId=config.clientId;
       const existing=await api('me');
       if (existing.loggedIn && existing.player) signedIn(existing.player);
-      else {
-        message('登入後可以跨裝置保留玩家身分。正式積分與世界排行榜將於下一階段開放。');
-        await startSignIn(config.clientId);
-      }
-    } catch(error){message('Google 登入尚未開放：'+error.message);}
+      else await startSignIn();
+    } catch(error) {
+      message('Google 登入尚未開放：'+error.message,true);
+    }
   })();
 })();
