@@ -10,7 +10,9 @@ test('practice scoring is fixed for all eight outcomes',()=>{
   assert.equal(E.scoreForCounts({n:0,r:0,sr:0,ssr:0,ur:0,a:0,b:0,c:1}),100000);
 });
 test('per-reward scoring sums to the displayed chest score',()=>{
-  const result=E.drawOnce(4,()=>0.5,{capture:true});
+  const rolls=[.5,.5,.5,.5,.99];
+  let index=0;
+  const result=E.drawOnce(4,()=>rolls[index++],{capture:true});
   assert.equal(result.n,4);
   assert.equal(E.scoreForCounts(result),4);
 });
