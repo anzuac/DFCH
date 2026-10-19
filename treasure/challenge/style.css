@@ -185,3 +185,14 @@
   .challenge-prize-grid>.ultimate-prize-card .ultimate-prize-rate{font-size:13px}
   .challenge-prize-grid>.challenge-prize:not(.rare-ex) small{font-size:8px}
 }
+
+/* Match practice mode's independent probability and prize-points lines. */
+.challenge-prize-grid>.ultimate-prize-card .ultimate-prize-points{
+  font-size:13px;
+  line-height:1.4;
+  font-weight:700;
+  color:#f7dfaf;
+}
+@media(max-width:510px){
+  .challenge-prize-grid>.ultimate-prize-card .ultimate-prize-points{font-size:11px}
+}
