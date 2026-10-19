@@ -37,3 +37,23 @@ CREATE TABLE IF NOT EXISTS treasure_official_draws (
 );
 CREATE INDEX IF NOT EXISTS idx_treasure_draws_player_date ON treasure_official_draws(player_id,draw_date);
 CREATE INDEX IF NOT EXISTS idx_treasure_draws_score ON treasure_official_draws(score DESC,completed_at ASC);
+
+-- Challenge V1. Created automatically by the Worker on first authenticated use.
+-- Each row is ONE quota-consuming chest, regardless of its reward count.
+-- Only revealed_count advances; rewards_json is sealed server-side until shown.
+CREATE TABLE IF NOT EXISTS treasure_challenge_runs (
+ id INTEGER PRIMARY KEY AUTOINCREMENT,
+ player_id INTEGER NOT NULL REFERENCES treasure_players(id) ON DELETE CASCADE,
+ day_key TEXT NOT NULL,
+ request_id TEXT NOT NULL UNIQUE,
+ rewards_json TEXT NOT NULL,
+ reward_count INTEGER NOT NULL CHECK(reward_count >= 4),
+ total_points INTEGER NOT NULL CHECK(total_points >= 0),
+ revealed_count INTEGER NOT NULL DEFAULT 0 CHECK(revealed_count >= 0 AND revealed_count <= reward_count),
+ started_at INTEGER NOT NULL,
+ completed_at INTEGER
+);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_treasure_challenge_active
+ ON treasure_challenge_runs(player_id) WHERE completed_at IS NULL;
+CREATE INDEX IF NOT EXISTS idx_treasure_challenge_day
+ ON treasure_challenge_runs(player_id, day_key);
