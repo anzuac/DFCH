@@ -145,3 +145,43 @@
  .challenge-prize .honor{font-size:9px}
  .challenge-jackpot-art{height:110px;width:110px}
 }
+
+/* V1.1.1 — match practice mode: full-width EX, three compact A/B/C cards below. */
+.challenge-prize-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.challenge-prize-grid>.ultimate-prize-card{background:linear-gradient(130deg,#4a302c,#26203e);border-color:#f2d18d}
+.challenge-prize-grid>.ultimate-prize-card .ultimate-prize-art{
+  background:radial-gradient(circle at center,#9b784e45,#3b2b3e);
+  border:1px solid #ac895c75;
+  box-shadow:inset 0 0 18px #f9dd9427;
+}
+.challenge-prize-grid>.ultimate-prize-card .ultimate-prize-info strong{color:#ffe8b5}
+.challenge-prize-grid>.ultimate-prize-card .ultimate-prize-tier{
+  font-size:10px;
+  letter-spacing:.12em;
+  font-weight:800;
+  color:#e5c285;
+}
+.challenge-prize-grid>.ultimate-prize-card .ultimate-prize-rate{
+  display:block;
+  font-size:18px;
+  color:#f8dca7;
+  font-weight:800;
+  line-height:1.4;
+}
+.challenge-prize-grid>.challenge-prize:not(.rare-ex){min-width:0;padding:11px 4px}
+.challenge-prize-grid>.challenge-prize:not(.rare-ex) strong{overflow-wrap:anywhere}
+.challenge-prize-grid>.challenge-prize:not(.rare-ex) .honor{max-width:100%}
+@media(max-width:510px){
+  .challenge-prize-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+  .challenge-prize-grid>.ultimate-prize-card .ultimate-prize-tier{font-size:9px}
+  .challenge-prize-grid>.ultimate-prize-card .ultimate-prize-rate{font-size:15px}
+  .challenge-prize-grid>.challenge-prize:not(.rare-ex){padding:9px 3px;gap:3px}
+  .challenge-prize-grid>.challenge-prize:not(.rare-ex) img{width:min(48px,95%);height:48px}
+  .challenge-prize-grid>.challenge-prize:not(.rare-ex) strong{font-size:11px}
+  .challenge-prize-grid>.challenge-prize:not(.rare-ex) small{font-size:9px}
+  .challenge-prize-grid>.challenge-prize:not(.rare-ex) .honor{font-size:8px}
+}
+@media(max-width:360px){
+  .challenge-prize-grid>.ultimate-prize-card .ultimate-prize-rate{font-size:13px}
+  .challenge-prize-grid>.challenge-prize:not(.rare-ex) small{font-size:8px}
+}
