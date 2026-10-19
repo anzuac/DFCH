@@ -16,7 +16,7 @@ class FakeElement {
  getAttribute(k){return this.attributes[k]}
 }
 function build(randomSequence=null,existingStore=null) {
- const ids=['openOnce','skipAnimation','skipAnimationLabel','statRuns','statItems','statA','statB','statC','statN','statR','statSR','statSSR','statUR','statAverage','statRetention','statHitRuns','emptyResult','resultContent','lastMode','lastItems','lastRare','lastStreak','lootCaption','lootHeadline','lootGrid','lootRemainder','liveDropProgress','liveDropMessage','liveDropCount','autoDrawStatus','drawButtonText','resetStats','resultPanel'];
+ const ids=['openOnce','skipAnimation','skipAnimationLabel','statRuns','statItems','statA','statB','statC','statN','statR','statSR','statSSR','statUR','statAverage','statRetention','statHitRuns','emptyResult','resultContent','lastMode','lastItems','lastRare','lastStreak','lastPoints','statPracticePoints','lootCaption','lootHeadline','lootGrid','lootRemainder','liveDropProgress','liveDropMessage','liveDropCount','autoDrawStatus','drawButtonText','resetStats','resultPanel'];
  const map=Object.fromEntries(ids.map(id=>[id,new FakeElement(id)]));
  const document=new FakeElement();document.hidden=false;
  document.getElementById=id=>{if(!map[id])throw Error('Unknown id '+id);return map[id]};
