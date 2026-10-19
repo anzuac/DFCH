@@ -6,7 +6,7 @@
   <meta name="description" content="DFCH Treasure 正式挑戰，五次每日挑戰、逐件開箱、斷線還原與世界排名。">
   <title>Treasure 挑戰模式｜DFCH</title>
   <link rel="stylesheet" href="../style.css?v=1.5.4">
-  <link rel="stylesheet" href="./style.css?v=1.0.0">
+  <link rel="stylesheet" href="./style.css?v=1.0.1">
 </head><body>
 <main class="shell challenge-shell">
   <div class="topline">
@@ -66,11 +66,11 @@
       <div><span>本箱積分</span><strong id="runPoints">0</strong><small>分</small></div>
       <div><span>本箱狀態</span><strong id="runState" class="run-state">未開始</strong></div>
     </div>
-    <div id="challengeGrid" class="challenge-grid" role="region" tabindex="0" aria-label="挑戰已揭曉的獎品"></div>
     <div class="challenge-actions">
       <button type="button" id="challengeOpen" class="action-primary" disabled><span aria-hidden="true">✦</span><span id="challengeOpenLabel">讀取中…</span><span aria-hidden="true">↗</span></button>
-      <p class="challenge-tip">輕點：揭曉下一格｜長按：只快速完成目前這一箱</p>
+      <p class="challenge-tip">輕點：揭曉下一格｜長按：快速逐格揭曉本箱，不會連開下一箱</p>
     </div>
+    <div id="challengeGrid" class="challenge-grid" role="region" tabindex="0" aria-label="挑戰已揭曉的獎品"></div>
   </section>
   <section class="challenge-prizes" aria-label="稀有大獎與積分">
     <div class="challenge-heading"><h2>大獎階級</h2><span class="board-kicker">3 TIERS</span></div>
@@ -106,5 +106,5 @@
   </dialog>
 
 <script src="../auth.js?v=1.6.0"></script>
-<script src="./app.js?v=1.0.0"></script>
+<script src="./app.js?v=1.0.1"></script>
 </body></html>
