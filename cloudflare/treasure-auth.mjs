@@ -1,7 +1,7 @@
 /*
  * DFCH Treasure V1.5 Google login foundation.
  * Server-side signature verification, nonce-bound login and opaque cookie sessions.
- * Official draws are deliberately NOT enabled in this stage.
+ * Practice drawings stay local; Challenge V1 draws are server-authoritative.
  */
 const TREASURE_COOKIE = '__Host-dfch_treasure_session';
 const TREASURE_NONCE_COOKIE = '__Host-dfch_treasure_nonce';
@@ -147,7 +147,7 @@ async function treasureHandleAuth(request, env) {
         await db.prepare('SELECT nickname,nickname_key FROM treasure_players LIMIT 1').first(); ready = true;
       } catch (_) { ready = false; }
     }
-    return treasureReply({enabled:ready, clientId:ready ? clientId : null, officialDrawsEnabled:false});
+    return treasureReply({enabled:ready, clientId:ready ? clientId : null, officialDrawsEnabled:ready, challengeEnabled:ready});
   }
   if (!db || !clientId) return treasureReply({error:'登入服務尚未設定完成'},503);
   if (route === '/api/treasure/auth/me' && request.method === 'GET') {
