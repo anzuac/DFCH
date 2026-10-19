@@ -7,11 +7,11 @@
 })(typeof window === 'undefined' ? null : window, function () {
   'use strict';
   // All prize rates are probabilities PER REWARD, not per chest.
-  // C 0.00007% = 0.0000007 probability (not 0.00007 probability).
+  // C=0.00015%, EX=0.0000324%; all rates are PER REWARD.
   const WEIGHTS = Object.freeze({N:50, R:30, SR:15, SSR:4, UR:1});
   // Practice scoring schedule: NOT official/leaderboard points until server-side draws are enabled.
-  const POINTS = Object.freeze({N:1, R:3, SR:10, SSR:20, UR:50, A:1000, B:2500, C:100000});
-  const COUNT_KEYS = Object.freeze({N:'n',R:'r',SR:'sr',SSR:'ssr',UR:'ur',A:'a',B:'b',C:'c'});
+  const POINTS = Object.freeze({N:1, R:3, SR:10, SSR:20, UR:50, A:1000, B:2500, C:100000,EX:350000});
+  const COUNT_KEYS = Object.freeze({N:'n',R:'r',SR:'sr',SSR:'ssr',UR:'ur',A:'a',B:'b',C:'c',EX:'ex'});
   function scoreForCounts(counts) {
     if(!counts || typeof counts!=='object')throw new TypeError('缺少獎勵計數');
     let score=0;
@@ -25,10 +25,10 @@
   }
   const TIERS = Object.freeze(Object.keys(WEIGHTS));
   const CONFIG = Object.freeze({
-    continueChance:0.95, prizeA:0.0001, prizeB:0.00005, prizeC:0.0000007,
+    continueChance:0.95, prizeA:0.0001, prizeB:0.00005, prizeC:0.0000015, prizeEX:0.000000324,
     normalMinimum:4, safetyMaxItems:100000, ordinaryWeights:WEIGHTS
   });
-  const GRAND_TOTAL = CONFIG.prizeA + CONFIG.prizeB + CONFIG.prizeC;
+  const GRAND_TOTAL = CONFIG.prizeA + CONFIG.prizeB + CONFIG.prizeC + CONFIG.prizeEX;
   const ORDINARY_TOTAL = 1 - GRAND_TOTAL;
   const WEIGHT_TOTAL = TIERS.reduce((sum,tier)=>sum + WEIGHTS[tier],0);
   const randomNumber = random => {
@@ -36,13 +36,14 @@
     if (!Number.isFinite(v) || v<0 || v>=1) throw new RangeError('隨機值必須介於 [0,1)');
     return v;
   };
-  // One uniform roll is split into three exact jackpot intervals followed by
+  // One uniform roll is split into four exact jackpot intervals followed by
   // the ordinary rarity pool, normalized by the relative weights 50:30:15:4:1.
   function outcome(random=Math.random) {
     const roll=randomNumber(random);
     if (roll<CONFIG.prizeA) return 'A';
     if (roll<CONFIG.prizeA+CONFIG.prizeB) return 'B';
-    if (roll<GRAND_TOTAL) return 'C';
+    if (roll<CONFIG.prizeA+CONFIG.prizeB+CONFIG.prizeC) return 'C';
+    if (roll<GRAND_TOTAL) return 'EX';
     let leftover=(roll-GRAND_TOTAL)/ORDINARY_TOTAL * WEIGHT_TOTAL;
     for (const tier of TIERS) {
       leftover-=WEIGHTS[tier];
@@ -52,7 +53,7 @@
   }
   function createOpening(minimum=CONFIG.normalMinimum,random=Math.random) {
     if (minimum!==CONFIG.normalMinimum) throw new RangeError('僅支援普通開箱 4 件保底');
-    let items=0,a=0,b=0,c=0,n=0,r=0,sr=0,ssr=0,ur=0,ordinary=0;
+    let items=0,a=0,b=0,c=0,ex=0,n=0,r=0,sr=0,ssr=0,ur=0,ordinary=0;
     let continueSuccess=0,continuationChecks=0,finished=false;
     function next() {
       if (finished) return null;
@@ -61,6 +62,7 @@
       if (type==='A') ++a;
       else if (type==='B') ++b;
       else if (type==='C') ++c;
+      else if (type==='EX') ++ex;
       else {
         ++ordinary;
         if (type==='N') ++n;
@@ -75,7 +77,7 @@
         else ++continueSuccess;
       }
       if (items>=CONFIG.safetyMaxItems) finished=true;
-      return {reward:{type,number:items},items,a,b,c,n,r,sr,ssr,ur,ordinary,
+      return {reward:{type,number:items},items,a,b,c,ex,n,r,sr,ssr,ur,ordinary,
         continueSuccess,continuationChecks,minimum,finished,safetyStopped:items>=CONFIG.safetyMaxItems};
     }
     return Object.freeze({next});
@@ -88,19 +90,19 @@
     let stage;
     do {
       stage=opening.next();
-      if (capture&&(rewards.length<visibleLimit||'ABC'.includes(stage.reward.type))) rewards.push(stage.reward);
+      if (capture&&(rewards.length<visibleLimit||['A','B','C','EX'].includes(stage.reward.type))) rewards.push(stage.reward);
     } while (!stage.finished);
     const {reward,finished,...totals}=stage;
     return {...totals,rewards};
   }
   function blankStats() {
-    return {runs:0,items:0,a:0,b:0,c:0,n:0,r:0,sr:0,ssr:0,ur:0,ordinary:0,
+    return {runs:0,items:0,a:0,b:0,c:0,ex:0,n:0,r:0,sr:0,ssr:0,ur:0,ordinary:0,
       hitRuns:0,continueSuccess:0,continuationChecks:0};
   }
   function addStats(stats,draw) {
     ++stats.runs;
-    for (const key of ['items','a','b','c','n','r','sr','ssr','ur','ordinary','continueSuccess','continuationChecks']) stats[key]+=draw[key];
-    if (draw.a+draw.b+draw.c) ++stats.hitRuns;
+    for (const key of ['items','a','b','c','ex','n','r','sr','ssr','ur','ordinary','continueSuccess','continuationChecks']) stats[key]+=draw[key];
+    if (draw.a+draw.b+draw.c+draw.ex) ++stats.hitRuns;
     return stats;
   }
   // Engine-only batch helper for deterministic tests, NOT exposed by the website.
