@@ -6,7 +6,7 @@
   <meta name="description" content="DFCH Treasure 正式挑戰，五次每日挑戰、逐件開箱、斷線還原與世界排名。">
   <title>Treasure 挑戰模式｜DFCH</title>
   <link rel="stylesheet" href="../style.css?v=1.5.4">
-  <link rel="stylesheet" href="./style.css?v=1.0.2">
+  <link rel="stylesheet" href="./style.css?v=1.1.0">
 </head><body>
 <main class="shell challenge-shell">
   <div class="topline">
@@ -76,11 +76,12 @@
     <div id="challengeGrid" class="challenge-grid" role="region" tabindex="0" aria-label="挑戰已揭曉的獎品"></div>
   </section>
   <section class="challenge-prizes" aria-label="稀有大獎與積分">
-    <div class="challenge-heading"><h2>大獎階級</h2><span class="board-kicker">3 TIERS</span></div>
+    <div class="challenge-heading"><h2>大獎階級</h2><span class="board-kicker">4 TIERS</span></div>
     <div class="challenge-prize-grid">
-      <div class="challenge-prize rare-a"><span>✦</span><strong>大獎 A</strong><small>+1,000 分</small></div>
-      <div class="challenge-prize rare-b"><span>◆</span><strong>大獎 B</strong><small>+2,500 分</small></div>
-      <div class="challenge-prize rare-c"><span>✹</span><strong>大獎 C</strong><small>+100,000 分</small></div>
+      <div class="challenge-prize rare-a"><img src="../assets/prize-a.png" alt="" loading="lazy"><strong>終極瓶子</strong><small>0.01% · +1,000 分</small></div>
+      <div class="challenge-prize rare-b"><img src="../assets/prize-b.png" alt="" loading="lazy"><strong>史詩鏡子</strong><small>0.005% · +2,500 分</small></div>
+      <div class="challenge-prize rare-c"><img src="../assets/prize-c.png" alt="" loading="lazy"><strong>皆傳牌子</strong><small>0.00015% · +100,000 分</small><small class="honor" id="cChampion">累積總分第一：尚無玩家</small></div>
+      <div class="challenge-prize rare-ex"><img src="../assets/prize-ex.gif" alt="" loading="lazy"><strong>終極大獎 EX</strong><small id="exRate">??? · +350,000 分</small><small class="honor" id="exChampion">單次最高分第一：尚無玩家</small><small class="honor" id="exDiscoverer">首次發現者：尚未解鎖</small></div>
     </div>
     <p class="challenge-note">每日最多挑戰 5 箱，台灣時間 00:00 重置。首次點擊即消耗 1 次；斷線後保留進度，可跨日繼續，不會重新抽取或重複扣次數。</p>
   </section>
@@ -89,8 +90,10 @@
 <div id="challengeJackpot" class="challenge-jackpot" hidden role="alert" aria-live="assertive">
   <div class="challenge-jackpot-panel">
     <span class="challenge-jackpot-label">稀有大獎！</span>
-    <strong id="jackpotName">大獎 A</strong>
+    <img id="jackpotArt" class="challenge-jackpot-art" src="../assets/prize-a.png" alt="">
+    <strong id="jackpotName">終極瓶子</strong>
     <span id="jackpotPoints">+1,000 分</span>
+    <small id="jackpotHonor" class="challenge-jackpot-honor" hidden></small>
     <button type="button" id="jackpotSkip">繼續</button>
   </div>
 </div>
@@ -109,5 +112,5 @@
   </dialog>
 
 <script src="../auth.js?v=1.6.0"></script>
-<script src="./app.js?v=1.0.2"></script>
+<script src="./app.js?v=1.1.0"></script>
 </body></html>
