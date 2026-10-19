@@ -5,8 +5,8 @@
   <meta name="theme-color" content="#0b0b1a">
   <meta name="description" content="DFCH Treasure 正式挑戰，五次每日挑戰、逐件開箱、斷線還原與世界排名。">
   <title>Treasure 挑戰模式｜DFCH</title>
-  <link rel="stylesheet" href="../style.css?v=1.5.4">
-  <link rel="stylesheet" href="./style.css?v=1.1.0">
+  <link rel="stylesheet" href="../style.css?v=1.6.1">
+  <link rel="stylesheet" href="./style.css?v=1.1.1">
 </head><body>
 <main class="shell challenge-shell">
   <div class="topline">
@@ -78,10 +78,19 @@
   <section class="challenge-prizes" aria-label="稀有大獎與積分">
     <div class="challenge-heading"><h2>大獎階級</h2><span class="board-kicker">4 TIERS</span></div>
     <div class="challenge-prize-grid">
-      <div class="challenge-prize rare-a"><img src="../assets/prize-a.png" alt="" loading="lazy"><strong>終極瓶子</strong><small>0.01% · +1,000 分</small></div>
-      <div class="challenge-prize rare-b"><img src="../assets/prize-b.png" alt="" loading="lazy"><strong>史詩鏡子</strong><small>0.005% · +2,500 分</small></div>
-      <div class="challenge-prize rare-c"><img src="../assets/prize-c.png" alt="" loading="lazy"><strong>皆傳牌子</strong><small>0.00015% · +100,000 分</small><small class="honor" id="cChampion">累積總分第一：尚無玩家</small></div>
-      <div class="challenge-prize rare-ex"><img src="../assets/prize-ex.gif" alt="" loading="lazy"><strong id="exPrizeName">終極大獎 EX</strong><small id="exRate">??? · +350,000 分</small><small class="honor" id="exChampion">單次最高分第一：尚無玩家</small><small class="honor" id="exDiscoverer">首次發現者：尚未解鎖</small></div>
+      <div class="challenge-prize rare-ex ultimate-prize-card">
+        <div class="ultimate-prize-art"><img src="../assets/prize-ex.gif" alt="" loading="lazy" decoding="async"></div>
+        <div class="ultimate-prize-info">
+          <span class="ultimate-prize-tier">ULTIMATE · EX</span>
+          <strong id="exPrizeName">終極大獎 EX</strong>
+          <small class="ultimate-prize-rate" id="exRate">??? · +350,000 分</small>
+          <small class="honor" id="exChampion">單次最高分第一：尚無玩家</small>
+          <small class="honor" id="exDiscoverer">首次發現者：尚未解鎖</small>
+        </div>
+      </div>
+      <div class="challenge-prize rare-a"><img src="../assets/prize-a.png" alt="" loading="lazy"><strong>終極瓶子</strong><small>0.01%</small><small>+1,000 分</small></div>
+      <div class="challenge-prize rare-b"><img src="../assets/prize-b.png" alt="" loading="lazy"><strong>史詩鏡子</strong><small>0.005%</small><small>+2,500 分</small></div>
+      <div class="challenge-prize rare-c"><img src="../assets/prize-c.png" alt="" loading="lazy"><strong>皆傳牌子</strong><small>0.00015%</small><small>+100,000 分</small><small class="honor" id="cChampion">累積總分第一：尚無玩家</small></div>
     </div>
     <p class="challenge-note">每日最多挑戰 5 箱，台灣時間 00:00 重置。首次點擊即消耗 1 次；斷線後保留進度，可跨日繼續，不會重新抽取或重複扣次數。</p>
   </section>
