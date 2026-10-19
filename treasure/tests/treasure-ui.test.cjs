@@ -64,7 +64,7 @@ test('three named jackpots and rarity SSR show separately and cumulative counts 
  assert.deepEqual(map.lootGrid.children.map(x=>x.className),[
   'loot-tile type-A','loot-tile type-B','loot-tile type-C','loot-tile type-SSR']);
  assert.equal(map.lastRare.textContent,'3');
- assert.equal(map.lastPoints.textContent,'本次練習積分：103,520 分（不計入排行榜）');
+ assert.equal(map.lastPoints.textContent,'本次練習積分：103,520 分（僅存於本機）');
  assert.equal(map.statPracticePoints.textContent,'103,520');
  assert.equal(map.statA.textContent,'1');
  assert.equal(map.statB.textContent,'1');
@@ -81,7 +81,7 @@ test('EX counts as a fourth jackpot and old practice records migrate without res
  map.openOnce.dispatch('click');
  assert.equal(map.statEX.textContent,'1');
  assert.equal(map.lastRare.textContent,'1');
- assert.equal(map.lastPoints.textContent,'本次練習積分：350,003 分（不計入排行榜）');
+ assert.equal(map.lastPoints.textContent,'本次練習積分：350,003 分（僅存於本機）');
  assert.equal(map.statPracticePoints.textContent,'350,003');
  assert.equal(JSON.parse(store['dfch-treasure-continuation-v2']).stats.ex,1);
  const old=E.blankStats();
