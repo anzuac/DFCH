@@ -60,6 +60,7 @@
     try{storage?.setItem(storeKey,JSON.stringify({stats,skipAnimation}));}catch(_){/* private browsing */}
   }
   function updateStats() {
+    $('statPracticePoints').textContent=nf.format(E.scoreForCounts(stats));
     for(const [id,key] of [['statRuns','runs'],['statItems','items'],['statA','a'],['statB','b'],['statC','c'],
       ['statN','n'],['statR','r'],['statSR','sr'],['statSSR','ssr'],['statUR','ur'],['statHitRuns','hitRuns']]) {
       $(id).textContent=nf.format(stats[key]);
@@ -98,7 +99,8 @@
     }
     const label=document.createElement('small');
     label.textContent=jackpotTypes.has(reward.type)?'大獎 '+reward.type:reward.type;
-    tile.title=`第 ${reward.number} 件：${label.textContent}`;
+    tile.title=`第 ${reward.number} 件：${label.textContent}（＋${nf.format(E.POINTS[reward.type])} 分）`;
+    tile.setAttribute('aria-label',tile.title);
     tile.append(icon,label);
     return tile;
   }
@@ -113,6 +115,7 @@
     $('lastItems').textContent=nf.format(stage.items);
     $('lastRare').textContent=nf.format(stage.a+stage.b+stage.c);
     $('lastStreak').textContent=nf.format(stage.continueSuccess);
+    $('lastPoints').textContent=`本次練習積分：${nf.format(E.scoreForCounts(stage))} 分（不計入排行榜）`;
     $('lootCaption').textContent=`大獎 A ×${stage.a} · B ×${stage.b} · C ×${stage.c} · 普通 ×${stage.ordinary}`;
     $('liveDropProgress').classList.toggle('is-rare',jackpotTypes.has(stage.reward.type));
     $('liveDropMessage').textContent=jackpotTypes.has(stage.reward.type)?
@@ -185,6 +188,7 @@
       $('lastItems').textContent='0';
       $('lastRare').textContent='0';
       $('lastStreak').textContent='0';
+      $('lastPoints').textContent='本次練習積分：0 分（不計入排行榜）';
       $('lootCaption').textContent='即將揭曉第一件獎勵';
       $('resultPanel').classList.add('is-revealing');
       $('liveDropProgress').hidden=false;
