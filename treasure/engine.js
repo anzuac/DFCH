@@ -9,6 +9,20 @@
   // All prize rates are probabilities PER REWARD, not per chest.
   // C 0.00007% = 0.0000007 probability (not 0.00007 probability).
   const WEIGHTS = Object.freeze({N:50, R:30, SR:15, SSR:4, UR:1});
+  // Practice scoring schedule: NOT official/leaderboard points until server-side draws are enabled.
+  const POINTS = Object.freeze({N:1, R:3, SR:10, SSR:20, UR:50, A:1000, B:2500, C:100000});
+  const COUNT_KEYS = Object.freeze({N:'n',R:'r',SR:'sr',SSR:'ssr',UR:'ur',A:'a',B:'b',C:'c'});
+  function scoreForCounts(counts) {
+    if(!counts || typeof counts!=='object')throw new TypeError('缺少獎勵計數');
+    let score=0;
+    for(const [type,countKey] of Object.entries(COUNT_KEYS)) {
+      const count=counts[countKey];
+      if(!Number.isSafeInteger(count)||count<0)throw new RangeError('無效獎勵計數：'+type);
+      score+=POINTS[type]*count;
+      if(!Number.isSafeInteger(score))throw new RangeError('積分總和超出安全整數範圍');
+    }
+    return score;
+  }
   const TIERS = Object.freeze(Object.keys(WEIGHTS));
   const CONFIG = Object.freeze({
     continueChance:0.95, prizeA:0.0001, prizeB:0.00005, prizeC:0.0000007,
@@ -110,6 +124,6 @@
     const p=CONFIG.continueChance,q=rewardChance;
     return 1-(1-p)*Math.pow(1-q,minimum)/(1-p*(1-q));
   }
-  return {CONFIG,TIERS,GRAND_TOTAL,ORDINARY_TOTAL,WEIGHT_TOTAL,
+  return {CONFIG,TIERS,GRAND_TOTAL,ORDINARY_TOTAL,WEIGHT_TOTAL,POINTS,scoreForCounts,
     outcome,createOpening,drawOnce,blankStats,addStats,simulateBatch,theoreticalAverage,theoreticalHitChance};
 });
