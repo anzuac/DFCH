@@ -282,6 +282,7 @@
       const data=await response.json();
       $('prizeCChampion').textContent='累積總分第一：'+(data.leaderboards?.total?.[0]?.nickname||'尚無玩家');
       $('prizeEXChampion').textContent='單次最高分第一：'+(data.leaderboards?.best?.[0]?.nickname||'尚無玩家');
+      $('prizeEXName').textContent=data.leaderboards?.best?.[0]?.nickname||'終極大獎';
       $('ultimateRate').textContent=data.ultimate?.unlocked?'0.0000324%':'???';
       $('prizeEXDiscoverer').textContent='首次發現者：'+(data.ultimate?.firstDiscoverer||'尚未解鎖');
     }catch(_){/* practice does not require network access */ }
