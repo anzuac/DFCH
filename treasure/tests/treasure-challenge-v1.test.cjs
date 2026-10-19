@@ -40,3 +40,25 @@ test('no challenge URL appears on the Cloudflare homepage',()=>{
   const home=fs.readFileSync(path.join(repo,'cloudflare/home.html'),'utf8');
   assert.ok(!home.includes('/treasure/challenge/'));
 });
+
+test('challenge page has separate login, mobile two-column rankings and tap/hold controls',()=>{
+  const page=fs.readFileSync(path.join(repo,'treasure/challenge/index.html'),'utf8');
+  const js=fs.readFileSync(path.join(repo,'treasure/challenge/app.js'),'utf8');
+  const css=fs.readFileSync(path.join(repo,'treasure/challenge/style.css'),'utf8');
+  const build=fs.readFileSync(path.join(repo,'scripts/build-heroes-pages.cjs'),'utf8');
+  for(const id of ['challengeOpen','challengeGrid','dailyRemaining','rankTotal','rankBest',
+    'rankToggle','challengeJackpot','treasureNicknameDialog','treasureLogin']){
+    assert.ok(page.includes('id="'+id+'"'),'Missing challenge element '+id);
+  }
+  assert.match(page,/href="\.\.\/" class="challenge-mode-link"/);
+  assert.match(js,/const holdDelay=420/);
+  assert.match(js,/step\(true\)/);
+  assert.match(js,/step\(false\)/);
+  assert.match(js,/api\('start',\{requestId:crypto\.randomUUID\(\),fast\}\)/);
+  assert.match(js,/api\('reveal',\{id:previous\.id,expectedCount:previous\.revealedCount,fast\}\)/);
+  assert.ok(!js.includes('Math.random'));
+  assert.ok(!js.includes('setInterval('));
+  assert.match(css,/challenge-ranking-grid\{display:grid;grid-template-columns:repeat\(2,minmax\(0,1fr\)\)/);
+  assert.match(css,/@media\(max-width:510px\)/);
+  assert.match(build,/treasure\/challenge\/index\.html/);
+});
