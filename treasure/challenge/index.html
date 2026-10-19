@@ -1,126 +1,34 @@
 <!doctype html>
-<html lang="zh-Hant"><head>
+<html lang="zh-Hant">
+<head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#0b0b1a">
-  <meta name="description" content="DFCH Treasure 正式挑戰，五次每日挑戰、逐件開箱、斷線還原與世界排名。">
-  <title>Treasure 挑戰模式｜DFCH</title>
-  <link rel="stylesheet" href="../style.css?v=1.6.1">
-  <link rel="stylesheet" href="./style.css?v=1.1.2">
-</head><body>
-<main class="shell challenge-shell">
-  <div class="topline">
-    <span class="eyebrow"><span class="status-led"></span> DFCH / TREASURE</span>
-    <div class="top-actions">
-        <div class="treasure-account" id="treasureLogin" hidden>
-          <div id="treasureSignIn" class="treasure-signin" hidden></div>
-          <div id="treasureSignedIn" hidden>
-            <button type="button" id="treasureAccountToggle" class="treasure-account-toggle" aria-haspopup="true" aria-expanded="false" aria-controls="treasureAccountMenu">
-              <span id="treasurePlayerName">玩家</span><span class="treasure-account-chevron" aria-hidden="true">⌄</span>
-            </button>
-            <div id="treasureAccountMenu" class="treasure-account-menu" hidden>
-              <strong>玩家帳號</strong>
-              <p>已連結 Google 帳號，玩家暱稱會保存在伺服器。</p>
-              <p>挑戰成績會記錄至正式排行榜；練習模式不計入積分。</p>
-              <button type="button" id="treasureLogout" class="treasure-account-logout">登出 Google 帳號</button>
-            </div>
-          </div>
-          <p id="treasureLoginStatus" class="treasure-login-status" role="status" hidden></p>
-        </div>
-    </div>
-  </div>
-  <nav class="challenge-mode-nav" aria-label="遊戲模式">
-    <a href="../" class="challenge-mode-link">練習模式</a>
-    <a href="./" class="challenge-mode-link active" aria-current="page">挑戰模式</a>
-  </nav>
-  <section class="challenge-ranking" aria-label="世界排行榜">
-    <div class="challenge-ranking-head">
-      <h2>🏆 世界排行榜</h2>
-      <button type="button" id="rankToggle" aria-expanded="false" aria-controls="rankContent">展開前三名 <span aria-hidden="true">⌄</span></button>
-    </div>
-    <div id="rankContent" class="challenge-ranking-grid">
-      <section class="ranking-half" aria-label="累積總分排行榜">
-        <h3>累積總分</h3><div id="rankTotal" class="ranking-rows"><p class="ranking-empty">尚無成績</p></div>
-      </section>
-      <section class="ranking-half" aria-label="單次最高分排行榜">
-        <h3>單次最高分</h3><div id="rankBest" class="ranking-rows"><p class="ranking-empty">尚無成績</p></div>
-      </section>
-    </div>
-  </section>
-  <header class="challenge-title">
-    <div><span class="board-kicker">DAILY CHALLENGE</span><h1>秘寶挑戰模式</h1><p>點一下開一格 · 可直接揭曉本箱剩餘獎勵</p></div>
-    <div class="challenge-daily"><small>今日剩餘次數</small><strong id="dailyRemaining">— / 5</strong><span id="challengeDate">台灣時間每日重置</span></div>
-  </header>
-  <div class="challenge-score-grid">
-    <div class="challenge-score"><span>正式累積總分</span><strong id="totalPoints">—</strong></div>
-    <div class="challenge-score"><span>單次最高分</span><strong id="bestPoints">—</strong></div>
-  </div>
-  <section class="challenge-main" aria-labelledby="challengeHeading">
-    <div class="challenge-heading">
-      <div><span class="board-kicker">OPEN ONE BY ONE</span><h2 id="challengeHeading">本次挑戰</h2></div>
-      <div class="challenge-heading-actions">
-        <span class="challenge-rate">95% 持續掉落</span>
-        <button type="button" id="challengeSkip" class="challenge-skip" title="一次揭曉本箱所有剩餘獎勵，不放棄積分、不多扣挑戰次數" disabled>跳過剩餘揭曉 <span aria-hidden="true">⏭</span></button>
-      </div>
-    </div>
-    <p id="challengeStatus" class="challenge-notice" role="status">正在讀取玩家挑戰資料…</p>
-    <div class="challenge-run-stats">
-      <div><span>已開啟</span><strong id="revealedCount">0</strong><small>格</small></div>
-      <div><span>本箱積分</span><strong id="runPoints">0</strong><small>分</small></div>
-      <div><span>本箱狀態</span><strong id="runState" class="run-state">未開始</strong></div>
-    </div>
-    <div class="challenge-actions">
-      <button type="button" id="challengeOpen" class="action-primary" disabled><span aria-hidden="true">✦</span><span id="challengeOpenLabel">讀取中…</span><span aria-hidden="true">↗</span></button>
-      <p class="challenge-tip">每次點擊只開一格；「跳過剩餘揭曉」只完成本箱，不會開始下一箱</p>
-    </div>
-    <div id="challengeGrid" class="challenge-grid" role="region" tabindex="0" aria-label="挑戰已揭曉的獎品"></div>
-  </section>
-  <section class="challenge-prizes" aria-label="稀有大獎與積分">
-    <div class="challenge-heading"><h2>大獎階級</h2><span class="board-kicker">4 TIERS</span></div>
-    <div class="challenge-prize-grid">
-      <div class="challenge-prize rare-ex ultimate-prize-card">
-        <div class="ultimate-prize-art"><img src="../assets/prize-ex.gif" alt="" loading="lazy" decoding="async"></div>
-        <div class="ultimate-prize-info">
-          <span class="ultimate-prize-tier">ULTIMATE · EX</span>
-          <strong id="exPrizeName">終極大獎 EX</strong>
-          <strong class="ultimate-prize-rate" id="exRate">???</strong>
-          <small class="ultimate-prize-points">＋350,000 分</small>
-          <small class="honor" id="exChampion">單次最高分第一：尚無玩家</small>
-          <small class="honor" id="exDiscoverer">首次發現者：尚未解鎖</small>
-        </div>
-      </div>
-      <div class="challenge-prize rare-a"><img src="../assets/prize-a.png" alt="" loading="lazy"><strong>終極瓶子</strong><small>0.01%</small><small>+1,000 分</small></div>
-      <div class="challenge-prize rare-b"><img src="../assets/prize-b.png" alt="" loading="lazy"><strong>史詩鏡子</strong><small>0.005%</small><small>+2,500 分</small></div>
-      <div class="challenge-prize rare-c"><img src="../assets/prize-c.png" alt="" loading="lazy"><strong>皆傳牌子</strong><small>0.00015%</small><small>+100,000 分</small><small class="honor" id="cChampion">累積總分第一：尚無玩家</small></div>
-    </div>
-    <p class="challenge-note">每日最多挑戰 5 箱，台灣時間 00:00 重置。首次點擊即消耗 1 次；斷線後保留進度，可跨日繼續，不會重新抽取或重複扣次數。</p>
-  </section>
-  <footer class="footer"><span>DFCH Treasure · 非官方遊戲工具</span><span>正式挑戰由伺服器決定結果與積分</span></footer>
-</main>
-<div id="challengeJackpot" class="challenge-jackpot" hidden role="alert" aria-live="assertive">
-  <div class="challenge-jackpot-panel">
-    <span class="challenge-jackpot-label">稀有大獎！</span>
-    <img id="jackpotArt" class="challenge-jackpot-art" src="../assets/prize-a.png" alt="">
-    <strong id="jackpotName">終極瓶子</strong>
-    <span id="jackpotPoints">+1,000 分</span>
-    <small id="jackpotHonor" class="challenge-jackpot-honor" hidden></small>
-    <button type="button" id="jackpotSkip">繼續</button>
-  </div>
-</div>
-  <dialog id="treasureNicknameDialog" class="treasure-nickname-dialog" aria-labelledby="treasureNicknameHeading" aria-describedby="treasureNicknameIntro">
-    <div class="treasure-dialog-eyebrow"><span>PLAYER IDENTITY</span><span>首次登入</span></div>
-    <h2 id="treasureNicknameHeading">設定你的遊戲暱稱</h2>
-    <p id="treasureNicknameIntro">歡迎加入 DFCH Treasure！請設定公開顯示的玩家暱稱。暱稱只能設定一次，設定後無法自行修改，也不能與其他玩家重複。</p>
-    <form id="treasureNicknameForm" class="treasure-nickname-form">
-      <label for="treasureNicknameInput">遊戲暱稱</label>
-      <input type="text" id="treasureNicknameInput" name="nickname" minlength="2" maxlength="48" autocomplete="off" spellcheck="false" placeholder="2～16 字，中文／英文／數字" required>
-      <p class="treasure-nickname-hint">不可使用空白或符號。英文大小寫及全半形視為相同暱稱。</p>
-      <p id="treasureNicknameStatus" class="treasure-nickname-feedback" role="status" aria-live="polite"></p>
-      <button type="submit" id="treasureNicknameSave" class="treasure-nickname-save">確認設定</button>
-      <button type="button" id="treasureNicknameLogout" class="treasure-nickname-exit">取消並登出</button>
-    </form>
-  </dialog>
-
-<script src="../auth.js?v=1.6.0"></script>
-<script src="./app.js?v=1.1.2"></script>
-</body></html>
+  <meta name="robots" content="noindex">
+  <title>正式挑戰暫停開放｜DFCH Treasure</title>
+  <style>
+    :root{color-scheme:dark}
+    *{box-sizing:border-box}
+    body{margin:0;min-height:100dvh;display:grid;place-items:center;padding:22px;
+      font-family:system-ui,-apple-system,"Noto Sans TC",sans-serif;color:#f6eaff;
+      background:radial-gradient(circle at 50% 0%,#382945 0%,#141426 65%,#0c0c1c 100%)}
+    main{width:min(100%,520px);padding:32px 26px;border:1px solid #685780;border-radius:18px;
+      background:linear-gradient(145deg,#2b2342,#191a30);text-align:center;box-shadow:0 20px 55px #05051065}
+    .tag{font-size:11px;letter-spacing:.16em;color:#d9b780;font-weight:800}
+    h1{font-size:clamp(22px,5vw,28px);margin:12px 0 16px}
+    p{line-height:1.8;color:#d7cfe0;font-size:14px;margin:0 0 18px}
+    a{display:block;margin-top:24px;padding:15px 20px;border-radius:12px;text-decoration:none;
+      color:#272135;background:linear-gradient(100deg,#ffdda0,#eab5e9);font-weight:800}
+    a:focus-visible{outline:3px solid white;outline-offset:3px}
+  </style>
+</head>
+<body>
+  <main>
+    <span class="tag">DFCH / TREASURE</span>
+    <h1>正式挑戰暫停開放</h1>
+    <p>目前僅保留練習模式。世界排行榜、Google 登入與正式挑戰均已暫停，原有測試資料尚未刪除。</p>
+    <p>練習開箱不需登入，抽獎與統計僅保存在此瀏覽器。</p>
+    <a href="../">返回練習模式</a>
+  </main>
+</body>
+</html>

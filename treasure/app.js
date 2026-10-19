@@ -111,7 +111,7 @@
     $('lastItems').textContent=nf.format(stage.items);
     $('lastRare').textContent=nf.format(stage.a+stage.b+stage.c+stage.ex);
     $('lastStreak').textContent=nf.format(stage.continueSuccess);
-    $('lastPoints').textContent=`本次練習積分：${nf.format(E.scoreForCounts(stage))} 分（不計入排行榜）`;
+    $('lastPoints').textContent=`本次練習積分：${nf.format(E.scoreForCounts(stage))} 分（僅存於本機）`;
     $('lootCaption').textContent=`瓶子 ×${stage.a} · 鏡子 ×${stage.b} · 牌子 ×${stage.c} · EX ×${stage.ex} · 普通 ×${stage.ordinary}`;
     $('liveDropProgress').classList.toggle('is-rare',jackpotTypes.has(stage.reward.type));
     $('liveDropMessage').textContent=jackpotTypes.has(stage.reward.type)?
@@ -184,7 +184,7 @@
       $('lastItems').textContent='0';
       $('lastRare').textContent='0';
       $('lastStreak').textContent='0';
-      $('lastPoints').textContent='本次練習積分：0 分（不計入排行榜）';
+      $('lastPoints').textContent='本次練習積分：0 分（僅存於本機）';
       $('lootCaption').textContent='即將揭曉第一件獎勵';
       $('resultPanel').classList.add('is-revealing');
       $('liveDropProgress').hidden=false;
@@ -272,21 +272,6 @@
     $('lastMode').textContent='尚未開箱';
     persist();
   });
-  // Names and the EX probability unlock are public leaderboard data.
-  // Practice draws never register global first discovery.
-  async function loadPublicHonors(){
-    if(window.location?.hostname!=='dfch.pages.dev')return;
-    try{
-      const response=await fetch('/api/treasure/challenge/public',{cache:'no-store'});
-      if(!response.ok)return;
-      const data=await response.json();
-      $('prizeCChampion').textContent='累積總分第一：'+(data.leaderboards?.total?.[0]?.nickname||'尚無玩家');
-      $('prizeEXChampion').textContent='單次最高分第一：'+(data.leaderboards?.best?.[0]?.nickname||'尚無玩家');
-      $('prizeEXName').textContent=data.leaderboards?.best?.[0]?.nickname||'終極大獎';
-      $('ultimateRate').textContent=data.ultimate?.unlocked?'0.0000324%':'???';
-      $('prizeEXDiscoverer').textContent='首次發現者：'+(data.ultimate?.firstDiscoverer||'尚未解鎖');
-    }catch(_){/* practice does not require network access */ }
-  }
   updateSkipButton();
   updateStats();
   loadPublicHonors();

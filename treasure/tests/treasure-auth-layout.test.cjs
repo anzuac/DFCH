@@ -6,42 +6,33 @@ const path=require('node:path');
 const read=name=>fs.readFileSync(path.join(__dirname,'..',name),'utf8');
 const html=read('index.html');
 const css=read('style.css');
-const auth=read('auth.js');
+const app=read('app.js');
+const build=fs.readFileSync(path.resolve(__dirname,'../../scripts/build-heroes-pages.cjs'),'utf8');
+const auth=read('auth.js'); // historical source remains available for the later PostgreSQL migration
 
-test('account entry is in header rather than a large middle-of-page card',()=>{
-  const header=html.slice(html.indexOf('<div class="topline">'),html.indexOf('<header class="masthead">'));
-  for(const id of ['treasureLogin','treasureSignIn','treasureSignedIn','treasureAccountToggle','treasureAccountMenu','treasurePlayerName','treasureLogout']){
-    assert.equal((html.match(new RegExp('id="'+id+'"','g'))||[]).length,1,id+' should be unique');
-    assert.ok(header.includes('id="'+id+'"'),id+' should be in the masthead area');
-  }
-  assert.ok(!html.includes('treasure-auth-panel'),'old embedded login panel should be removed');
-  assert.ok(css.includes('.treasure-account-menu'),'account menu has local styles');
-  assert.ok(css.includes('@media(max-width:510px)'),'compact mobile header styles exist');
+test('practice page never loads Google login scripts or nickname UI',()=>{
+  for(const name of ['treasureLogin','treasureSignIn','treasureSignedIn','treasureAccountToggle',
+    'treasureNicknameDialog','treasureNicknameForm','treasureLogout'])
+    assert.ok(!html.includes('id="'+name+'"'),'login widget still published: '+name);
+  assert.ok(!html.includes('src="./auth.js'),'login script still loaded');
+  assert.ok(!html.includes('href="./challenge/"'),'challenge mode still available from practice page');
+  assert.match(html,/本頁為純本機練習/);
+  assert.match(css,/\.practice-only-banner/);
 });
-
-test('first-login nickname dialog remains separate from practice simulator',()=>{
-  for(const id of ['treasureNicknameDialog','treasureNicknameForm','treasureNicknameInput','treasureNicknameSave','treasureNicknameLogout','treasureNicknameStatus']){
-    assert.equal((html.match(new RegExp('id="'+id+'"','g'))||[]).length,1,id);
-  }
-  assert.match(html,/<dialog id="treasureNicknameDialog"[^>]*aria-labelledby=/);
-  assert.match(auth,/nicknameDialog\.showModal\(\)/);
-  assert.match(auth,/nicknameDialog\.addEventListener\('cancel',event=>event\.preventDefault\(\)\)/);
-  assert.match(auth,/if \(!player\.nickname\) openNicknameDialog\(\)/);
-  assert.match(auth,/await api\('nickname',\{nickname:nicknameInput\.value\}\)/);
-  assert.match(auth,/await api\('logout',\{\}\)/);
+test('practice rewards and local scores remain functional without database calls',()=>{
   assert.match(html,/id="openOnce"/);
   assert.match(html,/id="resultPanel"/);
   assert.match(html,/id="stats-heading"/);
-  assert.ok(html.indexOf('id="resultPanel"')<html.indexOf('id="stats-heading"'));
-  assert.match(html,/href="\.\/challenge\/"/);
-});
-
-test('Google nonce flow, backend identity and existing draw script are preserved',()=>{
-  assert.match(auth,/const \{nonce\}=await api\('nonce'\)/);
-  assert.match(auth,/client_id:clientId,nonce,auto_select:false/);
-  assert.match(auth,/await api\('google',\{credential\}\)/);
-  assert.match(auth,/const existing=await api\('me'\)/);
+  assert.match(html,/id="ultimateRate">0\.0000324%/);
+  assert.ok(!app.includes('fetch('));
+  assert.ok(!app.includes('challenge/public'));
   assert.match(html,/src="\.\/engine\.js\?v=1\.6\.0"/);
-  assert.match(html,/src="\.\/app\.js\?v=1\.6\.0"/);
-  assert.ok(!auth.includes('official_draws'));
+  assert.match(html,/src="\.\/app\.js\?v=1\.6\.3"/);
+});
+test('historical Google identity handling is retained in the repository but not in deployment',()=>{
+  assert.match(auth,/const \{nonce\}=await api\('nonce'\)/);
+  assert.match(auth,/await api\('google',\{credential\}\)/);
+  assert.match(auth,/await api\('nickname',\{nickname:nicknameInput\.value\}\)/);
+  assert.doesNotMatch(build,/'treasure\/auth\.js'/);
+  assert.match(build,/status:410/);
 });

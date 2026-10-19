@@ -52,13 +52,15 @@ test('official score API stays disabled and no source path overwrites guide view
   assert.match(build,/api\/treasure\/\*/);
   assert.ok(!auth.includes('GUIDE_STATS'));
 });
-test('static standalone page is added to Cloudflare build without activating live scores',()=>{
+test('Cloudflare build publishes only offline practice files and rejects API calls',()=>{
   assert.match(build,/treasureSiteFiles=/);
-  assert.match(build,/treasure\/auth\.js/);
-  assert.match(markup,/id="treasureLogin"/);
-  assert.match(markup,/id="treasureLogin"[^>]+hidden/);
-  assert.match(markup,/src="\.\/auth\.js\?v=1\.5\.1"/);
-  assert.match(read('treasure/auth.js'),/window\.location\.hostname !== 'dfch\.pages\.dev'/);
+  assert.doesNotMatch(build,/'treasure\/auth\.js'/);
+  assert.doesNotMatch(build,/'treasure\/challenge\/app\.js'/);
+  assert.match(build,/status:410/);
+  assert.match(markup,/id="openOnce"/);
+  assert.doesNotMatch(markup,/id="treasureLogin"/);
+  assert.doesNotMatch(markup,/src="\.\/auth\.js/);
+  assert.doesNotMatch(read('treasure/app.js'),/fetch\(/);
 });
 test('SQL schema is safe for repeated initialization and reserves official-score tables',()=>{
   const sql=read('cloudflare/treasure-schema.sql');
@@ -93,6 +95,6 @@ test('nickname is separately nullable and has a database-enforced unique index',
   assert.match(migration,/ALTER TABLE treasure_players ADD COLUMN nickname_key TEXT/);
   assert.match(auth,/nickname_key IS NULL/);
   assert.match(auth,/此暱稱已被使用/);
-  assert.match(markup,/id="treasureNicknameForm"/);
+  assert.doesNotMatch(markup,/id="treasureNicknameForm"/);
   assert.ok(!auth.includes('UPDATE treasure_players SET display_name'));
 });

@@ -39,12 +39,12 @@ test('score labels are real configured points, no official draws activated',()=>
   for(const [type,points] of Object.entries(scores)){
     assert.ok(html.includes('data-score-type="'+type+'">＋'+points.toLocaleString('en-US')+' 分</'),'score '+type);
   }
-  assert.match(html,/id="lastPoints"[^>]*>本次練習積分：0 分（不計入排行榜）/);
+  assert.match(html,/id="lastPoints"[^>]*>本次練習積分：0 分（僅存於本機）/);
   assert.match(html,/id="statPracticePoints"/);
   assert.match(js,/E\.scoreForCounts\(stage\)/);
   assert.match(js,/E\.scoreForCounts\(stats\)/);
   assert.match(js,/nf\.format\(E\.POINTS\[reward.type\]\)/);
   assert.match(js,/E\.createOpening\(MINIMUM,Math\.random\)/);
   assert.match(js,/E\.addStats\(stats,stage\)/);
-  assert.match(js,/challenge\/public/);
+  assert.ok(!js.includes('fetch('));
 });

@@ -45,31 +45,16 @@ test('no challenge URL appears on the Cloudflare homepage',()=>{
   assert.ok(!home.includes('/treasure/challenge/'));
 });
 
-test('challenge page has separate login, mobile two-column rankings and tap/skip controls',()=>{
+test('challenge URL now serves a static maintenance page, not the official game',()=>{
   const page=fs.readFileSync(path.join(repo,'treasure/challenge/index.html'),'utf8');
-  const js=fs.readFileSync(path.join(repo,'treasure/challenge/app.js'),'utf8');
-  const css=fs.readFileSync(path.join(repo,'treasure/challenge/style.css'),'utf8');
   const build=fs.readFileSync(path.join(repo,'scripts/build-heroes-pages.cjs'),'utf8');
-  for(const id of ['challengeOpen','challengeGrid','dailyRemaining','rankTotal','rankBest',
-    'rankToggle','challengeJackpot','treasureNicknameDialog','treasureLogin']){
-    assert.ok(page.includes('id="'+id+'"'),'Missing challenge element '+id);
-  }
-  assert.match(page,/href="\.\.\/" class="challenge-mode-link"/);
-  assert.match(page,/id="challengeSkip"/);
-  for(const prize of ['終極瓶子','史詩鏡子','皆傳牌子','終極大獎 EX'])assert.ok(page.includes(prize),prize);
-  assert.ok(page.includes('id="exDiscoverer"'));
-  assert.ok(page.includes('id="exRate"'));
-  assert.ok(page.includes('prize-ex.gif'));
-  assert.match(js,/prizeImages=\{A:/);
-  assert.ok(!js.includes('holdDelay'));
-  assert.ok(!js.includes("addEventListener('pointerdown'"));
-  assert.match(js,/skip\.addEventListener\('click',\(\)=>step\(true\)\)/);
-  assert.match(js,/open\.addEventListener\('click',\(\)=>step\(false\)\)/);
-  assert.match(js,/api\('start',\{requestId:crypto\.randomUUID\(\),fast\}\)/);
-  assert.match(js,/api\('reveal',\{id:previous\.id,expectedCount:previous\.revealedCount,fast\}\)/);
-  assert.ok(!js.includes('Math.random'));
-  assert.ok(!js.includes('setInterval('));
-  assert.match(css,/challenge-ranking-grid\{display:grid;grid-template-columns:repeat\(2,minmax\(0,1fr\)\)/);
-  assert.match(css,/@media\(max-width:510px\)/);
-  assert.match(build,/treasure\/challenge\/index\.html/);
+  assert.match(page,/正式挑戰暫停開放/);
+  assert.match(page,/href="\.\.\//);
+  assert.doesNotMatch(page,/id="challengeOpen"/);
+  assert.doesNotMatch(page,/id="rankTotal"/);
+  assert.doesNotMatch(page,/src="\.\/app\.js/);
+  assert.doesNotMatch(build,/'treasure\/challenge\/app\.js'/);
+  assert.doesNotMatch(build,/'treasure\/challenge\/style\.css'/);
+  assert.match(build,/status:410/);
+  assert.match(build,/dfchGuideWorker\.fetch/);
 });

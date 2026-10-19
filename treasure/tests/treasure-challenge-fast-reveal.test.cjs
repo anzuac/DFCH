@@ -71,18 +71,15 @@ function build(rewardTypes=['N','N','N','N','N','N']){
   vm.runInNewContext(js,{document,window,fetch,Intl,crypto:{randomUUID:()=>String(++runId).padStart(36,'0')},setTimeout,clearTimeout,console});
   return {map,window,stats:()=>({startCount,revealCount,count,runId,active})};
 }
-test('challenge control remains above reward list even after many rows',()=>{
-  const button=html.indexOf('id="challengeOpen"');
-  const grid=html.indexOf('id="challengeGrid"');
-  const stats=html.indexOf('class="challenge-run-stats"');
-  assert.ok(stats>=0&&stats<button&&button<grid);
-  assert.ok(html.indexOf('id="challengeSkip"')<stats,'skip button should be in the heading');
-  assert.match(css,/\.challenge-main \.challenge-actions\{margin:11px 0 12px\}/);
-  assert.match(css,/\.challenge-grid\{--cell:65px;/);
-  assert.match(css,/max-height:calc\(var\(--cell\)\*5 \+ var\(--gap\)\*4\)/);
+test('public challenge page has been replaced with maintenance notice',()=>{
+  assert.match(html,/正式挑戰暫停開放/);
+  assert.match(html,/href="\.\.\//);
+  assert.doesNotMatch(html,/id="challengeOpen"/);
+  assert.doesNotMatch(html,/src="\.\/app\.js/);
+  // Archived standalone challenge JS still passes its historical simulations;
+  // only the deployment worker must keep the APIs permanently closed.
+  assert.match(js,/skip\.addEventListener\('click',\(\)=>step\(true\)\)/);
   assert.match(css,/\.challenge-main \.challenge-skip/);
-  assert.match(html,/style\.css\?v=1\.1\.0/);
-  assert.match(html,/app\.js\?v=1\.1\.0/);
 });
 test('short taps still open exactly one reward each time',async()=>{
   const {map,stats}=build();
