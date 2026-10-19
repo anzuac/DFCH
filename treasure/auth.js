@@ -42,8 +42,8 @@
     closeAccountMenu();
     message('');
     if (!player.nickname) openNicknameDialog();
-    else {
-      if (nicknameDialog.open) nicknameDialog.close();
+    else if (nicknameDialog.open) {
+      nicknameDialog.close();
       accountToggle.focus();
     }
   }
