@@ -69,8 +69,7 @@
       percent(stats.continueSuccess/stats.continuationChecks):'—';
   }
   function updateSkipButton() {
-    skipButton.setAttribute('aria-pressed',String(skipAnimation));
-    $('skipAnimationLabel').textContent='跳過動畫：'+(skipAnimation?'開啟':'關閉');
+    skipButton.checked=skipAnimation;
     persist();
   }
   function columnsForViewport() {
@@ -250,8 +249,8 @@
     if(suppressClick){event.preventDefault();return;}
     if(!activeOpening){holdDraws=0;startOpening();}
   });
-  skipButton.addEventListener('click',()=>{
-    skipAnimation=!skipAnimation;
+  skipButton.addEventListener('change',()=>{
+    skipAnimation=skipButton.checked;
     updateSkipButton();
     if(skipAnimation&&activeOpening)finishAnimationImmediately();
   });
@@ -273,7 +272,6 @@
     $('lastMode').textContent='尚未開箱';
     persist();
   });
-  $('probPerRun').textContent=percent(E.theoreticalHitChance(MINIMUM),3);
   updateSkipButton();
   updateStats();
 })();
