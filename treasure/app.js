@@ -13,8 +13,10 @@
   const NEXT_CHEST_PAUSE_MS=310;
   const SKIP_NEXT_PAUSE_MS=180;
   const MINIMUM=E.CONFIG.normalMinimum;
-  const jackpotTypes=new Set(['A','B','C']);
-  const icons={A:'✦',B:'◆',C:'✹',N:'◈',R:'◇',SR:'✧',SSR:'✦',UR:'❖'};
+  const jackpotTypes=new Set(['A','B','C','EX']);
+  const prizeNames={A:'終極瓶子',B:'史詩鏡子',C:'皆傳牌子',EX:'終極大獎'};
+  const prizeImages={A:'prize-a.png',B:'prize-b.png',C:'prize-c.png',EX:'prize-ex.gif'};
+  const icons={N:'◈',R:'◇',SR:'✧',SSR:'✦',UR:'❖'};
   const rarityGemFiles=Object.freeze({N:'n',R:'r',SR:'sr',SSR:'ssr',UR:'ur'});
   let stats=E.blankStats();
   let skipAnimation=false;
@@ -34,10 +36,11 @@
     const s=E.blankStats();
     if (!candidate||typeof candidate!=='object') return s;
     for(const key of Object.keys(s)) {
-      if (!Number.isSafeInteger(candidate[key])||candidate[key]<0) return E.blankStats();
-      s[key]=candidate[key];
+      const value=key==='ex'&&candidate.ex===undefined?0:candidate[key];
+      if (!Number.isSafeInteger(value)||value<0) return E.blankStats();
+      s[key]=value;
     }
-    if (s.items!==s.a+s.b+s.c+s.ordinary ||
+    if (s.items!==s.a+s.b+s.c+s.ex+s.ordinary ||
         s.ordinary!==s.n+s.r+s.sr+s.ssr+s.ur ||
         s.continuationChecks!==s.continueSuccess+s.runs ||
         s.hitRuns>s.runs) return E.blankStats();
@@ -62,7 +65,7 @@
   function updateStats() {
     $('statPracticePoints').textContent=nf.format(E.scoreForCounts(stats));
     for(const [id,key] of [['statRuns','runs'],['statItems','items'],['statA','a'],['statB','b'],['statC','c'],
-      ['statN','n'],['statR','r'],['statSR','sr'],['statSSR','ssr'],['statUR','ur'],['statHitRuns','hitRuns']]) {
+      ['statEX','ex'],['statN','n'],['statR','r'],['statSR','sr'],['statSSR','ssr'],['statUR','ur'],['statHitRuns','hitRuns']]) {
       $(id).textContent=nf.format(stats[key]);
     }
     $('statAverage').textContent=stats.runs?(stats.items/stats.runs).toFixed(2)+' 件':'—';
@@ -85,20 +88,13 @@
     tile.className='loot-tile type-'+reward.type;
     tile.dataset.number=String(reward.number);
     const rarityFile=rarityGemFiles[reward.type];
-    const icon=document.createElement(rarityFile?'img':'span');
-    if(rarityFile) {
-      icon.className='tile-gem';
-      icon.src='./assets/rarity-'+rarityFile+'.webp';
-      icon.alt='';
-      icon.width=40;
-      icon.height=40;
-      icon.decoding='async';
-    } else {
-      icon.className='tile-icon';
-      icon.textContent=icons[reward.type];
-    }
+    const icon=document.createElement('img');
+    icon.className=rarityFile?'tile-gem':'tile-gem tile-prize';
+    icon.src=rarityFile?'./assets/rarity-'+rarityFile+'.webp':'./assets/'+prizeImages[reward.type];
+    icon.alt='';
+    icon.width=40;icon.height=40;icon.decoding='async';
     const label=document.createElement('small');
-    label.textContent=jackpotTypes.has(reward.type)?'大獎 '+reward.type:reward.type;
+    label.textContent=prizeNames[reward.type]||reward.type;
     tile.title=`第 ${reward.number} 件：${label.textContent}（＋${nf.format(E.POINTS[reward.type])} 分）`;
     tile.setAttribute('aria-label',tile.title);
     tile.append(icon,label);
@@ -113,13 +109,13 @@
   }
   function updatePartial(stage) {
     $('lastItems').textContent=nf.format(stage.items);
-    $('lastRare').textContent=nf.format(stage.a+stage.b+stage.c);
+    $('lastRare').textContent=nf.format(stage.a+stage.b+stage.c+stage.ex);
     $('lastStreak').textContent=nf.format(stage.continueSuccess);
     $('lastPoints').textContent=`本次練習積分：${nf.format(E.scoreForCounts(stage))} 分（不計入排行榜）`;
-    $('lootCaption').textContent=`大獎 A ×${stage.a} · B ×${stage.b} · C ×${stage.c} · 普通 ×${stage.ordinary}`;
+    $('lootCaption').textContent=`瓶子 ×${stage.a} · 鏡子 ×${stage.b} · 牌子 ×${stage.c} · EX ×${stage.ex} · 普通 ×${stage.ordinary}`;
     $('liveDropProgress').classList.toggle('is-rare',jackpotTypes.has(stage.reward.type));
     $('liveDropMessage').textContent=jackpotTypes.has(stage.reward.type)?
-      `第 ${nf.format(stage.items)} 件 · ✨ 大獎 ${stage.reward.type}！` :
+      `第 ${nf.format(stage.items)} 件 · ✨ ${prizeNames[stage.reward.type]}！` :
       `第 ${nf.format(stage.items)} 件 · ${stage.reward.type} 級獎勵`;
     $('liveDropCount').textContent=`${nf.format(stage.items)} 件`;
   }
@@ -276,6 +272,21 @@
     $('lastMode').textContent='尚未開箱';
     persist();
   });
+  // Names and the EX probability unlock are public leaderboard data.
+  // Practice draws never register global first discovery.
+  async function loadPublicHonors(){
+    if(window.location?.hostname!=='dfch.pages.dev')return;
+    try{
+      const response=await fetch('/api/treasure/challenge/public',{cache:'no-store'});
+      if(!response.ok)return;
+      const data=await response.json();
+      $('prizeCChampion').textContent='累積總分第一：'+(data.leaderboards?.total?.[0]?.nickname||'尚無玩家');
+      $('prizeEXChampion').textContent='單次最高分第一：'+(data.leaderboards?.best?.[0]?.nickname||'尚無玩家');
+      $('ultimateRate').textContent=data.ultimate?.unlocked?'0.0000324%':'???';
+      $('prizeEXDiscoverer').textContent='首次發現者：'+(data.ultimate?.firstDiscoverer||'尚未解鎖');
+    }catch(_){/* practice does not require network access */ }
+  }
   updateSkipButton();
   updateStats();
+  loadPublicHonors();
 })();
