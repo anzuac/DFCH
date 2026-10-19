@@ -8,7 +8,7 @@ test('animated and instant opening produce identical sequences, including rarity
     let s,steps=[];
     while((s=stream.next())!==null){steps.push(s);if(s.finished)break;}
     assert.equal(steps.length,instant.items);
-    for(const k of ['items','a','b','c','ordinary','n','r','sr','ssr','ur','continueSuccess','continuationChecks'])
+    for(const k of ['items','a','b','c','ex','ordinary','n','r','sr','ssr','ur','continueSuccess','continuationChecks'])
       assert.equal(steps.at(-1)[k],instant[k],`seed ${seed} key ${k}`);
     assert.equal(steps.at(-1).finished,true);
     assert.equal(steps.at(-1).reward.number,instant.items);
@@ -22,4 +22,13 @@ test('C is revealed in sequence and does not change continuation rule',()=>{
  assert.deepEqual(steps.map(s=>s.reward.type),['A','B','C','SSR']);
  assert.equal(steps.at(-1).finished,true);
  assert.equal(steps.at(-1).continuationChecks,1);
+});
+
+test('EX reward is streamed as an independent type without altering continuation',()=>{
+ const values=[.0001516,.5,.5,.5,.99];let i=0;
+ const stream=E.createOpening(4,()=>values[i++]);
+ const steps=[stream.next(),stream.next(),stream.next(),stream.next()];
+ assert.equal(steps[0].reward.type,'EX');
+ assert.equal(steps.at(-1).ex,1);
+ assert.equal(steps.at(-1).finished,true);
 });
