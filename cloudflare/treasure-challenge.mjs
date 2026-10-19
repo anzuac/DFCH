@@ -72,6 +72,12 @@ async function challengeInit(db){
   challengeSchemaReady=true;
 }
 async function challengeReconcile(db,playerId){
+  // Most clicks only reveal a tile; avoid any D1 score writes until the run
+  // completes. A failed network response after completion is repaired on GET.
+  const pending=await db.prepare(`SELECT 1 FROM treasure_challenge_runs c
+    LEFT JOIN treasure_official_draws d ON d.request_id=c.request_id
+    WHERE c.player_id=? AND c.completed_at IS NOT NULL AND d.id IS NULL LIMIT 1`).bind(playerId).first();
+  if(!pending)return;
   // Both actions commit together; repeated calls cannot credit a draw twice.
   await db.batch([
     db.prepare(`INSERT OR IGNORE INTO treasure_official_draws
@@ -155,6 +161,8 @@ export async function handleTreasureChallengeRequest(request,env,{treasureReply,
     if(path.endsWith('/start')){
       if(typeof data.requestId!=='string'||!/^[a-f0-9-]{36}$/i.test(data.requestId)||
          typeof data.fast!=='boolean')return treasureReply({error:'開始挑戰參數錯誤'},400);
+      const retry=await db.prepare('SELECT id FROM treasure_challenge_runs WHERE player_id=? AND request_id=? LIMIT 1').bind(player.id,data.requestId).first();
+      if(retry)return treasureReply(await challengePlayerSnapshot(db,player.id,today));
       const old=await db.prepare('SELECT id FROM treasure_challenge_runs WHERE player_id=? AND completed_at IS NULL LIMIT 1').bind(player.id).first();
       if(old)return treasureReply(await challengePlayerSnapshot(db,player.id,today));
       const rewards=challengeGenerate(challengeSecureRandom()),now=Math.floor(Date.now()/1000);
