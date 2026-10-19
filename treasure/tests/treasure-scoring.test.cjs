@@ -4,10 +4,11 @@ const assert=require('node:assert/strict');
 const E=require('../engine.js');
 
 test('practice scoring is fixed for all eight outcomes',()=>{
-  assert.deepEqual(E.POINTS,{N:1,R:3,SR:10,SSR:20,UR:50,A:1000,B:2500,C:100000});
-  assert.equal(E.scoreForCounts({n:1,r:1,sr:1,ssr:1,ur:1,a:1,b:1,c:1}),103584);
+  assert.deepEqual(E.POINTS,{N:1,R:3,SR:10,SSR:20,UR:50,A:1000,B:2500,C:100000,EX:350000});
+  assert.equal(E.scoreForCounts({n:1,r:1,sr:1,ssr:1,ur:1,a:1,b:1,c:1,ex:1}),453584);
   assert.equal(E.scoreForCounts({n:4,r:0,sr:0,ssr:0,ur:0,a:0,b:0,c:0}),4);
   assert.equal(E.scoreForCounts({n:0,r:0,sr:0,ssr:0,ur:0,a:0,b:0,c:1}),100000);
+  assert.equal(E.scoreForCounts({n:0,r:0,sr:0,ssr:0,ur:0,a:0,b:0,c:0,ex:1}),350000);
 });
 test('per-reward scoring sums to the displayed chest score',()=>{
   const rolls=[.5,.5,.5,.5,.99];
