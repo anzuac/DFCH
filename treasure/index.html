@@ -63,6 +63,15 @@
       <p class="weight-explanation">每抽出一件普通獎勵，再按上述相對權重分配稀有度；五級普通獎品合計 99.98493%。</p>
     </section>
 
+    <section class="stats-panel treasure-auth-panel" id="treasureLogin" aria-labelledby="treasureLoginHeading" hidden>
+      <div class="section-heading"><div><span class="board-kicker">PLAYER IDENTITY · V1.5</span><h2 id="treasureLoginHeading">Google 玩家登入</h2></div><span class="treasure-login-pill">帳號整合</span></div>
+      <p id="treasureLoginStatus" class="treasure-login-status" role="status">正在檢查登入服務…</p>
+      <div id="treasureSignIn" hidden></div>
+      <div id="treasureSignedIn" hidden><strong id="treasurePlayerName"></strong><span>已使用 Google 帳號連結此瀏覽器</span></div>
+      <button type="button" id="treasureLogout" class="reset-button treasure-logout" hidden>登出 Google 帳號</button>
+      <p class="treasure-login-note">正式抽獎與世界排名尚未啟用。登入僅建立玩家身分，現階段所有開箱仍為不計分的練習。</p>
+    </section>
+
     <section class="sim-panel" aria-labelledby="settings-heading">
       <div class="section-heading"><div><span class="board-kicker">RETAIN & REPEAT</span><h2 id="settings-heading">開箱設定</h2></div><span class="chance-pill"><span class="pulsing-dot"></span> 連續掉落率 <b>95.00%</b></span></div>
       <div class="retention-bar" role="img" aria-label="成功續掉率 95%，停止率 5%"><div class="retention-fill"></div><span>95% 持續</span><span>5% 停止</span></div>
@@ -121,5 +130,6 @@
   </main>
   <script src="./engine.js?v=1.4.0"></script>
   <script src="./app.js?v=1.4.0"></script>
+  <script src="./auth.js?v=1.5.0"></script>
 </body>
 </html>
