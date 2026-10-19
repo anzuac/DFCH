@@ -283,7 +283,8 @@ teamHtml=teamHtml
 teamHtml=teamHtml.replace('</body>','<script src="../site-counter.js?v=1.0.0"></script></body>');
 fs.writeFileSync(teamPage,teamHtml);
 // Treasure V1.5 is explicitly published as an isolated page, preserving the guide's whitelist.
-const treasureSiteFiles=['treasure/index.html','treasure/style.css','treasure/engine.js','treasure/app.js','treasure/auth.js'];
+const treasureSiteFiles=['treasure/index.html','treasure/style.css','treasure/engine.js','treasure/app.js','treasure/auth.js',
+  ...['n','r','sr','ssr','ur'].map(tier=>'treasure/assets/rarity-'+tier+'.webp')];
 for(const relativePath of treasureSiteFiles){
   const source=path.join(repoRoot,relativePath);
   if(!fs.existsSync(source))throw new Error('Missing treasure asset: '+relativePath);

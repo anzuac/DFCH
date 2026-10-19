@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#0b0b1a">
   <meta name="description" content="以每件大獎 A 0.01%／B 0.005%／C 0.00007%、連續掉落 95% 模擬禁斷與深淵秘寶。">
   <title>秘寶連續掉落模擬器｜DFCH 機率實驗室</title>
-  <link rel="stylesheet" href="./style.css?v=1.5.2">
+  <link rel="stylesheet" href="./style.css?v=1.5.3">
 </head>
 <body>
   <main class="shell">
@@ -74,11 +74,11 @@
       <div class="rates-footer"><span>普通獎勵 <strong>99.98493%</strong></span><span class="bullet">•</span><span>八種結果互斥，總和 100%</span></div>
       <div class="ordinary-head"><strong>普通獎池 · 稀有度權重</strong><span>暫訂比例，非官方數據</span></div>
       <div class="ordinary-weight-grid" aria-label="普通獎品相對權重">
-        <div class="tier-card tier-n"><span>N</span><strong>50</strong><small>權重</small></div>
-        <div class="tier-card tier-r"><span>R</span><strong>30</strong><small>權重</small></div>
-        <div class="tier-card tier-sr"><span>SR</span><strong>15</strong><small>權重</small></div>
-        <div class="tier-card tier-ssr"><span>SSR</span><strong>4</strong><small>權重</small></div>
-        <div class="tier-card tier-ur"><span>UR</span><strong>1</strong><small>權重</small></div>
+        <div class="tier-card tier-n" title="N：基礎素材"><img class="tier-gem" src="./assets/rarity-n.webp" width="56" height="56" loading="lazy" decoding="async" alt=""><span>N</span><small class="tier-material">基礎素材</small><strong>50</strong><small>權重</small></div>
+        <div class="tier-card tier-r" title="R：寶石"><img class="tier-gem" src="./assets/rarity-r.webp" width="56" height="56" loading="lazy" decoding="async" alt=""><span>R</span><small class="tier-material">寶石</small><strong>30</strong><small>權重</small></div>
+        <div class="tier-card tier-sr" title="SR：綠寶石"><img class="tier-gem" src="./assets/rarity-sr.webp" width="56" height="56" loading="lazy" decoding="async" alt=""><span>SR</span><small class="tier-material">綠寶石</small><strong>15</strong><small>權重</small></div>
+        <div class="tier-card tier-ssr" title="SSR：月光石"><img class="tier-gem" src="./assets/rarity-ssr.webp" width="56" height="56" loading="lazy" decoding="async" alt=""><span>SSR</span><small class="tier-material">月光石</small><strong>4</strong><small>權重</small></div>
+        <div class="tier-card tier-ur" title="UR：鑽石"><img class="tier-gem" src="./assets/rarity-ur.webp" width="56" height="56" loading="lazy" decoding="async" alt=""><span>UR</span><small class="tier-material">鑽石</small><strong>1</strong><small>權重</small></div>
       </div>
       <p class="weight-explanation">每抽出一件普通獎勵，再按上述相對權重分配稀有度；五級普通獎品合計 99.98493%。</p>
     </section>
@@ -154,7 +154,7 @@
     </form>
   </dialog>
   <script src="./engine.js?v=1.4.0"></script>
-  <script src="./app.js?v=1.4.0"></script>
+  <script src="./app.js?v=1.5.3"></script>
   <script src="./auth.js?v=1.5.2"></script>
 </body>
 </html>

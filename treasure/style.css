@@ -113,3 +113,17 @@ button,input,select{font:inherit}button{cursor:pointer}button:disabled{opacity:.
 .treasure-nickname-exit{width:100%;padding:10px;border:0;background:transparent;color:#ccd4e8}
 .treasure-nickname-save:focus-visible,.treasure-nickname-exit:focus-visible,.treasure-account-toggle:focus-visible,.treasure-account-logout:focus-visible,.treasure-nickname-form input:focus-visible{outline:3px solid #b5ebff;outline-offset:3px}
 @media(max-width:510px){.topline{height:auto;min-height:52px}.top-actions{gap:8px}.top-actions .lab-tag{display:none}.treasure-account-toggle{max-width:158px;padding:7px 10px}.treasure-signin{min-height:38px}.treasure-nickname-dialog{padding:20px}.treasure-nickname-dialog h2{font-size:21px}}
+
+/* Rarity art v1.5.3: visual-only N–UR assets shared with the reward tiles. */
+.ordinary-weight-grid .tier-card{display:flex;flex-direction:column;align-items:center;justify-content:center}
+.tier-card .tier-gem{display:block;width:min(60px,100%);height:60px;object-fit:contain;flex:none;margin:2px auto 5px;filter:drop-shadow(0 0 6px #0009)}
+.tier-card .tier-material{display:block;min-height:1.2em;font-size:9px;font-weight:700;line-height:1.3;white-space:nowrap;color:#d6dcf0}
+.tier-card.tier-r .tier-gem{filter:drop-shadow(0 0 7px #67aeef77)}
+.tier-card.tier-sr .tier-gem{filter:drop-shadow(0 0 7px #29e58b88)}
+.tier-card.tier-ssr .tier-gem{filter:drop-shadow(0 0 8px #b4bcff99)}
+.tier-card.tier-ur .tier-gem{filter:drop-shadow(0 0 9px #ff9feeaa)}
+.loot-tile .tile-gem{display:block;width:min(38px,90%);height:38px;object-fit:contain;flex:none;filter:drop-shadow(0 0 5px #0008)}
+.loot-tile.type-SR .tile-gem{filter:drop-shadow(0 0 7px #3dfb84a3)}
+.loot-tile.type-SSR .tile-gem{filter:drop-shadow(0 0 7px #c0c9ffad)}
+.loot-tile.type-UR .tile-gem{filter:drop-shadow(0 0 9px #fba6ffb0)}
+@media(max-width:510px){.tier-card .tier-gem{width:min(45px,100%);height:45px;margin:2px auto 4px}.tier-card .tier-material{font-size:8px}.loot-tile .tile-gem{width:min(32px,90%);height:32px}}

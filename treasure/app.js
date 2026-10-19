@@ -15,6 +15,7 @@
   const MINIMUM=E.CONFIG.normalMinimum;
   const jackpotTypes=new Set(['A','B','C']);
   const icons={A:'✦',B:'◆',C:'✹',N:'◈',R:'◇',SR:'✧',SSR:'✦',UR:'❖'};
+  const rarityGemFiles=Object.freeze({N:'n',R:'r',SR:'sr',SSR:'ssr',UR:'ur'});
   let stats=E.blankStats();
   let skipAnimation=false;
   let activeOpening=null;
@@ -83,9 +84,19 @@
     const tile=document.createElement('div');
     tile.className='loot-tile type-'+reward.type;
     tile.dataset.number=String(reward.number);
-    const icon=document.createElement('span');
-    icon.className='tile-icon';
-    icon.textContent=icons[reward.type];
+    const rarityFile=rarityGemFiles[reward.type];
+    const icon=document.createElement(rarityFile?'img':'span');
+    if(rarityFile) {
+      icon.className='tile-gem';
+      icon.src='./assets/rarity-'+rarityFile+'.webp';
+      icon.alt='';
+      icon.width=40;
+      icon.height=40;
+      icon.decoding='async';
+    } else {
+      icon.className='tile-icon';
+      icon.textContent=icons[reward.type];
+    }
     const label=document.createElement('small');
     label.textContent=jackpotTypes.has(reward.type)?'大獎 '+reward.type:reward.type;
     tile.title=`第 ${reward.number} 件：${label.textContent}`;
