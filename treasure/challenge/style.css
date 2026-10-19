@@ -110,3 +110,14 @@
 }
 @media(max-width:360px){.challenge-shell .eyebrow{font-size:8px}.challenge-title h1{font-size:19px}.challenge-daily{min-width:94px}.challenge-daily strong{font-size:17px}}
 @media(prefers-reduced-motion:reduce){.challenge-jackpot-panel,.challenge-jackpot-panel::after{animation:none}}
+
+/* V1.0.1: keep draw control fixed above the growing reward list. */
+.challenge-main .challenge-run-stats{margin-bottom:0}
+.challenge-main .challenge-actions{margin:11px 0 12px}
+.challenge-main .challenge-grid{margin-top:0}
+.challenge-item.is-revealing{animation:challengeTileReveal .22s ease-out both}
+@keyframes challengeTileReveal{
+  0%{opacity:0;transform:scale(.72) translateY(-7px);filter:brightness(1.8)}
+  100%{opacity:1;transform:scale(1) translateY(0);filter:brightness(1)}
+}
+@media(prefers-reduced-motion:reduce){.challenge-item.is-revealing{animation:none}}

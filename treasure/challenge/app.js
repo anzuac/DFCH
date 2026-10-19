@@ -9,6 +9,7 @@ let snapshot=null,busy=false,rankExpanded=false;
 let holdingPointer=null,holdTimer=null,suppressClick=false;
 const effectQueue=[];
 let effectTimer=null;
+const effectWaiters=[];
 const open=$('challengeOpen'),status=$('challengeStatus'),overlay=$('challengeJackpot');
 
 function message(text,error=false){
@@ -94,7 +95,11 @@ function render(data){
 function advanceEffect(){
   if(effectTimer!==null){clearTimeout(effectTimer);effectTimer=null;}
   const reward=effectQueue.shift();
-  if(!reward){overlay.hidden=true;overlay.className='challenge-jackpot';return;}
+  if(!reward){
+    overlay.hidden=true;overlay.className='challenge-jackpot';
+    while(effectWaiters.length)effectWaiters.shift()();
+    return;
+  }
   overlay.className='challenge-jackpot tier-'+reward.type;
   overlay.hidden=false;
   $('jackpotName').textContent='大獎 '+reward.type;
@@ -125,6 +130,44 @@ async function reload(){
     open.disabled=true;
   }finally{busy=false;if(snapshot)render(snapshot);}
 }
+// Server seals and completes a fast-forwarded chest at once, but its visual
+// reveal is strictly one reward at a time. Never call the start endpoint again
+// during playback: all rewards belong to the same daily challenge entry.
+const fastRevealDelay=count=>count<=80?72:count<=200?45:count<=1000?18:5;
+async function animateFastReveal(current,newlyShown,previous){
+  const run=current.run;
+  const sameRun=!!previous&&previous.id===run.id;
+  const grid=$('challengeGrid');
+  if(!sameRun)grid.replaceChildren();
+  let count=sameRun?previous.revealedCount:0;
+  let points=sameRun?previous.revealedPoints:0;
+  const interval=fastRevealDelay(newlyShown.length);
+  $('dailyRemaining').textContent=nf.format(current.remaining)+' / '+nf.format(current.dailyLimit);
+  $('challengeOpenLabel').textContent='快速逐格開箱中…';
+  $('runState').textContent='揭曉中';
+  for(let i=0;i<newlyShown.length;i++){
+    const reward=newlyShown[i];
+    const followBottom=grid.scrollHeight-grid.scrollTop-grid.clientHeight<40;
+    const tile=itemTile(reward);
+    tile.classList.add('is-revealing');
+    grid.append(tile);
+    if(followBottom)grid.scrollTop=grid.scrollHeight;
+    count++;
+    points+=scores[reward.type];
+    $('revealedCount').textContent=nf.format(count);
+    $('runPoints').textContent=nf.format(points);
+    message('快速開箱中 · 已揭曉 '+nf.format(count)+' 格');
+    if(reward.type in jackpotSymbol){
+      // Pause the stream for the appropriate A/B/C tier reveal; afterwards
+      // continue with the next tile without consuming another challenge.
+      enqueueEffects([reward]);
+      await new Promise(resolve=>effectWaiters.push(resolve));
+    }
+    if(i+1<newlyShown.length)
+      await new Promise(resolve=>setTimeout(resolve,interval));
+  }
+  render(current);
+}
 async function step(fast){
   if(busy||!snapshot)return;
   if(!snapshot.hasActive&&snapshot.remaining<=0)return;
@@ -137,9 +180,13 @@ async function step(fast){
     const current=snapshot.hasActive
       ? await api('reveal',{id:previous.id,expectedCount:previous.revealedCount,fast})
       : await api('start',{requestId:crypto.randomUUID(),fast});
-    render(current);
     const newlyShown=current.run?.id===previousId?current.run.rewards.slice(before):current.run?.rewards||[];
-    enqueueEffects(newlyShown);
+    if(fast&&newlyShown.length){
+      await animateFastReveal(current,newlyShown,previous);
+    }else{
+      render(current);
+      enqueueEffects(newlyShown);
+    }
   }catch(error){
     message(error.message,true);
     try{render(await api('status'));}catch(_){/* Keep first error visible. */}
