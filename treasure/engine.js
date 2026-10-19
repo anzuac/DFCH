@@ -29,7 +29,11 @@
     continueChance:0.95, prizeA:0.0001, prizeB:0.00005, prizeC:0.0000015, prizeEX:0.000000324,
     normalMinimum:4, safetyMaxItems:100000, ordinaryWeights:WEIGHTS
   });
-  const GRAND_TOTAL = CONFIG.prizeA + CONFIG.prizeB + CONFIG.prizeC + CONFIG.prizeEX;
+  // Exact integer cutoffs on a one-billion-unit roll scale avoid floating
+  // additions moving the C/EX boundary by one representable number.
+  const PRIZE_B_END=150000/1e9;
+  const PRIZE_C_END=151500/1e9;
+  const GRAND_TOTAL=151824/1e9;
   const ORDINARY_TOTAL = 1 - GRAND_TOTAL;
   const WEIGHT_TOTAL = TIERS.reduce((sum,tier)=>sum + WEIGHTS[tier],0);
   const randomNumber = random => {
@@ -42,8 +46,8 @@
   function outcome(random=Math.random) {
     const roll=randomNumber(random);
     if (roll<CONFIG.prizeA) return 'A';
-    if (roll<CONFIG.prizeA+CONFIG.prizeB) return 'B';
-    if (roll<CONFIG.prizeA+CONFIG.prizeB+CONFIG.prizeC) return 'C';
+    if (roll<PRIZE_B_END) return 'B';
+    if (roll<PRIZE_C_END) return 'C';
     if (roll<GRAND_TOTAL) return 'EX';
     let leftover=(roll-GRAND_TOTAL)/ORDINARY_TOTAL * WEIGHT_TOTAL;
     for (const tier of TIERS) {
