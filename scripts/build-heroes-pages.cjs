@@ -293,6 +293,21 @@ for(const relativePath of treasureSiteFiles){
   fs.mkdirSync(path.dirname(dest),{recursive:true});
   fs.copyFileSync(source,dest);
 }
+// Prize artwork comes from existing authored repository assets (no remote hotlink).
+// The C image is intentionally stored with a literal percent-encoded filename.
+const treasurePrizeArt={
+  'prize-a.png':'Home page picture/icon-abyss_af_900_2.png',
+  'prize-b.png':'Home page picture/icon-abyss_af_300_1.png',
+  'prize-c.png':'Home page picture/%E7%A6%81%E6%96%B7%E8%A8%8E%E4%BC%90_%E5%85%8D%E8%A8%B1%E7%9A%86%E5%82%B3_%E5%8E%9F%E5%A7%8B%E5%9C%96%E7%A4%BA.png',
+  'prize-ex.gif':'Home page picture/144F145D-634B-4E62-93AE-53531CCCA1E8.gif'
+};
+for(const [name,relativePath] of Object.entries(treasurePrizeArt)){
+  const source=path.join(repoRoot,relativePath);
+  if(!fs.existsSync(source))throw new Error('Missing authored Treasure prize image: '+relativePath);
+  const dest=path.join(outputDir,'treasure/assets',name);
+  fs.mkdirSync(path.dirname(dest),{recursive:true});
+  fs.copyFileSync(source,dest);
+}
 // Combine auth + the existing guide worker into ONE advanced-mode Pages worker.
 // This keeps the old GUIDE_STATS route and env.ASSETS.fetch fallback unchanged.
 const authWorkerSource=fs.readFileSync(path.join(repoRoot,'cloudflare/treasure-auth.mjs'),'utf8');
