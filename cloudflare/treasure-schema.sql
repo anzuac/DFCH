@@ -57,3 +57,13 @@ CREATE UNIQUE INDEX IF NOT EXISTS idx_treasure_challenge_active
  ON treasure_challenge_runs(player_id) WHERE completed_at IS NULL;
 CREATE INDEX IF NOT EXISTS idx_treasure_challenge_day
  ON treasure_challenge_runs(player_id, day_key);
+
+-- EX secret prize: first server-side REVEAL unlocks the displayed odds.
+-- Nickname is snapshotted permanently and survives later leaderboard changes.
+CREATE TABLE IF NOT EXISTS treasure_ultimate_discovery (
+ prize_type TEXT PRIMARY KEY CHECK(prize_type='EX'),
+ player_id INTEGER REFERENCES treasure_players(id) ON DELETE SET NULL,
+ nickname TEXT NOT NULL,
+ challenge_id INTEGER NOT NULL UNIQUE,
+ discovered_at INTEGER NOT NULL
+);
