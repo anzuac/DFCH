@@ -2,11 +2,13 @@
  * DFCH Treasure challenge V1: authoritative RNG, atomic quota admission,
  * resumable reveals, and idempotent scoring. The client never rolls draws.
  */
-const CHALLENGE_POINTS=Object.freeze({N:1,R:3,SR:10,SSR:20,UR:50,A:1000,B:2500,C:100000});
+const CHALLENGE_POINTS=Object.freeze({N:1,R:3,SR:10,SSR:20,UR:50,A:1000,B:2500,C:100000,EX:350000});
 const CHALLENGE_WEIGHTS=Object.freeze({N:50,R:30,SR:15,SSR:4,UR:1});
 const CHALLENGE_LIMIT=5;
 const CHALLENGE_MAX_REWARDS=5000;
-const CHALLENGE_POOL=0.9998493;
+const CHALLENGE_POOL=0.999848176;
+const CHALLENGE_C_END=0.0001515;
+const CHALLENGE_EX_END=0.000151824;
 const CHALLENGE_REVEAL_LIMIT=5000;
 let challengeSchemaReady=false;
 
@@ -32,9 +34,10 @@ function challengeGenerate(random){
     let tier;
     if(roll<0.0001)tier='A';
     else if(roll<0.00015)tier='B';
-    else if(roll<0.0001507)tier='C';
+    else if(roll<CHALLENGE_C_END)tier='C';
+    else if(roll<CHALLENGE_EX_END)tier='EX';
     else{
-      let remaining=(roll-0.0001507)/CHALLENGE_POOL*100;
+      let remaining=(roll-CHALLENGE_EX_END)/CHALLENGE_POOL*100;
       tier='UR';
       for(const type of ['N','R','SR','SSR','UR']){
         remaining-=CHALLENGE_WEIGHTS[type];
@@ -67,7 +70,14 @@ async function challengeInit(db){
       started_at INTEGER NOT NULL, completed_at INTEGER
     )`),
     db.prepare('CREATE UNIQUE INDEX IF NOT EXISTS idx_treasure_challenge_active ON treasure_challenge_runs(player_id) WHERE completed_at IS NULL'),
-    db.prepare('CREATE INDEX IF NOT EXISTS idx_treasure_challenge_day ON treasure_challenge_runs(player_id,day_key)')
+    db.prepare('CREATE INDEX IF NOT EXISTS idx_treasure_challenge_day ON treasure_challenge_runs(player_id,day_key)'),
+    db.prepare(`CREATE TABLE IF NOT EXISTS treasure_ultimate_discovery (
+      prize_type TEXT PRIMARY KEY CHECK(prize_type='EX'),
+      player_id INTEGER REFERENCES treasure_players(id) ON DELETE SET NULL,
+      nickname TEXT NOT NULL,
+      challenge_id INTEGER NOT NULL UNIQUE,
+      discovered_at INTEGER NOT NULL
+    )`)
   ]);
   challengeSchemaReady=true;
 }
@@ -92,6 +102,36 @@ async function challengeReconcile(db,playerId){
       WHERE player_id=?`).bind(playerId,playerId,playerId,playerId)
   ]);
 }
+// EX is unlocked by the first player who REVEALS one in a server-side
+// challenge. An EX sealed in an unfinished chest does not count as discovered.
+// The UNIQUE prize_type key makes the first successful INSERT permanent.
+async function challengeRecordUltimate(db,playerId){
+  await db.prepare(`INSERT OR IGNORE INTO treasure_ultimate_discovery
+    (prize_type,player_id,nickname,challenge_id,discovered_at)
+    SELECT 'EX',c.player_id,p.nickname,c.id,?
+    FROM treasure_challenge_runs c JOIN treasure_players p ON p.id=c.player_id
+    WHERE c.player_id=? AND p.nickname IS NOT NULL
+      AND EXISTS (SELECT 1 FROM json_each(c.rewards_json) j
+        WHERE j.value='EX' AND CAST(j.key AS INTEGER)<c.revealed_count)
+    ORDER BY c.id ASC LIMIT 1`
+  ).bind(Math.floor(Date.now()/1000),playerId).run();
+}
+async function challengePublicSnapshot(db){
+  const [total,best,discovery]=await db.batch([
+    db.prepare(`SELECT p.nickname, s.total_points AS points FROM treasure_player_scores s
+      JOIN treasure_players p ON p.id=s.player_id
+      WHERE s.official_draw_count>0 AND p.nickname IS NOT NULL
+      ORDER BY s.total_points DESC,s.player_id ASC LIMIT 3`),
+    db.prepare(`SELECT p.nickname, s.best_single_points AS points FROM treasure_player_scores s
+      JOIN treasure_players p ON p.id=s.player_id
+      WHERE s.official_draw_count>0 AND p.nickname IS NOT NULL
+      ORDER BY s.best_single_points DESC,s.player_id ASC LIMIT 3`),
+    db.prepare("SELECT nickname,discovered_at AS discoveredAt FROM treasure_ultimate_discovery WHERE prize_type='EX' LIMIT 1")
+  ]);
+  const first=discovery.results[0]||null;
+  return {leaderboards:{total:total.results,best:best.results},
+    ultimate:{unlocked:!!first,firstDiscoverer:first?.nickname||null,discoveredAt:first?.discoveredAt||null}};
+}
 function challengeView(row){
   if(!row)return null;
   const rewards=JSON.parse(row.rewards_json);
@@ -107,7 +147,8 @@ function challengeView(row){
 }
 async function challengePlayerSnapshot(db,playerId,dayKey){
   await challengeReconcile(db,playerId);
-  const [active,last,quota,score,totals,best]=await db.batch([
+  await challengeRecordUltimate(db,playerId);
+  const [active,last,quota,score,totals,best,discovery]=await db.batch([
     db.prepare('SELECT * FROM treasure_challenge_runs WHERE player_id=? AND completed_at IS NULL LIMIT 1').bind(playerId),
     db.prepare('SELECT * FROM treasure_challenge_runs WHERE player_id=? ORDER BY id DESC LIMIT 1').bind(playerId),
     db.prepare('SELECT COUNT(*) AS used FROM treasure_challenge_runs WHERE player_id=? AND day_key=?').bind(playerId,dayKey),
@@ -119,14 +160,17 @@ async function challengePlayerSnapshot(db,playerId,dayKey){
     db.prepare(`SELECT p.nickname, s.best_single_points AS points FROM treasure_player_scores s
       JOIN treasure_players p ON p.id=s.player_id
       WHERE s.official_draw_count>0 AND p.nickname IS NOT NULL
-      ORDER BY s.best_single_points DESC,s.player_id ASC LIMIT 3`)
+      ORDER BY s.best_single_points DESC,s.player_id ASC LIMIT 3`),
+    db.prepare("SELECT nickname,discovered_at AS discoveredAt FROM treasure_ultimate_discovery WHERE prize_type='EX' LIMIT 1")
   ]);
   const current=active.results[0]||last.results[0]||null;
   const used=quota.results[0]?.used||0;
   return {day:dayKey,dailyLimit:CHALLENGE_LIMIT,used,remaining:Math.max(0,CHALLENGE_LIMIT-used),
     hasActive:!!active.results[0],run:challengeView(current),
     totals:score.results[0]||{totalPoints:0,bestSinglePoints:0,drawCount:0},
-    leaderboards:{total:totals.results,best:best.results}};
+    leaderboards:{total:totals.results,best:best.results},
+    ultimate:{unlocked:!!discovery.results[0],firstDiscoverer:discovery.results[0]?.nickname||null,
+      discoveredAt:discovery.results[0]?.discoveredAt||null}};
 }
 async function challengeBody(request){
   if(Number(request.headers.get('Content-Length')||0)>1000)throw new Error('invalid');
@@ -139,6 +183,11 @@ async function challengeBody(request){
 export async function handleTreasureChallengeRequest(request,env,{treasureReply,treasureLoggedInPlayer}){
   const url=new URL(request.url),path=url.pathname,db=env.TREASURE_DB;
   if(!db)return treasureReply({error:'挑戰模式資料庫尚未設定'},503);
+  if(path==='/api/treasure/challenge/public'){
+    if(request.method!=='GET')return treasureReply({error:'請求方法不支援'},405);
+    try{await challengeInit(db);return treasureReply(await challengePublicSnapshot(db));}
+    catch(_){return treasureReply({error:'無法取得公開排行榜'},503);}
+  }
   if(!['/api/treasure/challenge/status','/api/treasure/challenge/start','/api/treasure/challenge/reveal'].includes(path))
     return treasureReply({error:'找不到挑戰功能'},404);
   if(path.endsWith('/status')&&request.method!=='GET')return treasureReply({error:'請求方法不支援'},405);
