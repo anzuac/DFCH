@@ -16,7 +16,8 @@
     if(!counts || typeof counts!=='object')throw new TypeError('缺少獎勵計數');
     let score=0;
     for(const [type,countKey] of Object.entries(COUNT_KEYS)) {
-      const count=counts[countKey];
+      // Older stored practice records (before EX) have no ex field.
+      const count=countKey==='ex'&&counts.ex===undefined?0:counts[countKey];
       if(!Number.isSafeInteger(count)||count<0)throw new RangeError('無效獎勵計數：'+type);
       score+=POINTS[type]*count;
       if(!Number.isSafeInteger(score))throw new RangeError('積分總和超出安全整數範圍');
