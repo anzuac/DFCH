@@ -40,16 +40,16 @@ test('EX first-discovery is awarded only on reveal and is immutable',()=>{
   assert.match(backend,/CHALLENGE_EX_END=0\.000151824/);
   assert.match(backend,/CHALLENGE_POOL=0\.999848176/);
 });
-test('EX odds are concealed on screen until server confirms discovery',()=>{
-  assert.match(practiceHtml,/<strong id="ultimateRate">\?\?\?<\/strong>/);
-  assert.match(challengeHtml,/id="exRate">\?\?\?<\/strong>/);
-  assert.match(challengeHtml,/class="ultimate-prize-points">＋350,000 分/);
-  assert.match(read('treasure/app.js'),/data\.ultimate\?\.unlocked\?'0\.0000324%':'\?\?\?'/);
-  assert.match(read('treasure/challenge/app.js'),/data\.ultimate\?\.unlocked\?'0\.0000324%':'\?\?\?'/);
-  assert.match(practiceHtml,/id="prizeEXDiscoverer"/);
-  assert.match(challengeHtml,/id="exDiscoverer"/);
-  assert.match(practiceHtml,/id="prizeCChampion"/);
-  assert.match(challengeHtml,/id="cChampion"/);
+test('EX practice chance is static while all global discovery APIs are frozen',()=>{
+  assert.match(practiceHtml,/id="ultimateRate">0\.0000324%/);
+  assert.match(practiceHtml,/僅供練習，不記錄正式發現者/);
+  assert.doesNotMatch(practiceHtml,/id="prizeEXDiscoverer"/);
+  assert.doesNotMatch(practiceHtml,/id="prizeEXChampion"/);
+  assert.doesNotMatch(practiceHtml,/id="prizeCChampion"/);
+  assert.doesNotMatch(read('treasure/app.js'),/fetch\(/);
+  assert.match(challengeHtml,/正式挑戰暫停開放/);
+  assert.doesNotMatch(challengeHtml,/id="exRate"/);
+  assert.match(build,/status:410/);
   assert.match(read('cloudflare/treasure-schema.sql'),/treasure_ultimate_discovery/);
 });
 test('all four authored images are present and included in Cloudflare build',()=>{
@@ -63,7 +63,7 @@ test('all four authored images are present and included in Cloudflare build',()=
     assert.ok(fs.existsSync(path.join(root,source)),'source file missing: '+source);
     assert.ok(build.includes("'"+target+"':'"+source+"'"),'not published: '+target);
     assert.ok(practiceHtml.includes('./assets/'+target));
-    assert.ok(challengeHtml.includes('../assets/'+target));
+    assert.ok(!challengeHtml.includes('../assets/'+target)); // maintenance page is intentionally image-free
   }
   assert.ok(!read('cloudflare/home.html').includes('/treasure/'));
 });
