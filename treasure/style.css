@@ -174,3 +174,20 @@ button,input,select{font:inherit}button{cursor:pointer}button:disabled{opacity:.
   .sim-heading .chance-pill-label{display:none}
   .sim-heading .chance-pill b{font-size:12px}
 }
+
+/* Treasure v1.6: four authored prize images, ranked-holder labels. */
+.prize-art .prize-image{position:relative;z-index:2;display:block;width:100%;height:100%;max-width:85px;max-height:85px;object-fit:contain;filter:drop-shadow(0 0 6px #e4beff77)}
+.prize-card.prize-c .prize-image{filter:drop-shadow(0 0 9px #ffd99e99)}
+.prize-card.prize-ex{border-color:#e8bd79;background:linear-gradient(125deg,#4d352bdd,#28233f);box-shadow:inset 0 0 23px #fff0b910}
+.prize-card.prize-ex::after{background:#ffc96724}
+.prize-card.prize-ex .prize-image-ex{filter:drop-shadow(0 0 10px #ffe39bbb)}
+.prize-details .prize-honor{color:#e5cdab;font-size:10px;font-weight:700;line-height:1.5;margin:4px 0 0;overflow-wrap:anywhere}
+.prize-card.prize-ex .prize-details strong{color:#ffe8bc}
+.loot-tile .tile-prize{width:min(40px,95%);height:40px;filter:drop-shadow(0 0 8px #eab9ff55)}
+.loot-tile.type-EX{border-color:#ffe0a0;background:linear-gradient(150deg,#5c3e2a,#332c49);box-shadow:inset 0 0 18px #fac96e4d}
+.loot-tile.type-EX .tile-prize{filter:drop-shadow(0 0 10px #ffe18caa)}
+@media(max-width:510px){
+ .prize-art .prize-image{max-width:52px;max-height:52px}
+ .prize-details .prize-honor{font-size:8px;line-height:1.4}
+ .loot-tile .tile-prize{width:min(32px,95%);height:32px}
+}

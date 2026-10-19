@@ -12,10 +12,10 @@ const sandbox={Intl,Date,Number,Object,Math,JSON,Uint32Array};
 vm.runInNewContext(source,sandbox);
 const {challengeScore,challengeGenerate,challengeTaiwanDay}=sandbox.CHALLENGE_TEST;
 test('server-side prize boundaries match unchanged practice-engine jackpot odds',()=>{
-  const rolls=[0,0.00011,0.0001502,0.999,0.99];let i=0;
+  const rolls=[0,0.00011,0.0001502,0.0001516,0.999,0.99];let i=0;
   const result=challengeGenerate(()=>rolls[i++]);
-  assert.equal(JSON.stringify(result),JSON.stringify(['A','B','C','UR']));
-  assert.equal(challengeScore(result),103550);
+  assert.equal(JSON.stringify(result),JSON.stringify(['A','B','C','EX','UR']));
+  assert.equal(challengeScore(result),453550);
 });
 test('one challenge chest terminates on a failed continuation check',()=>{
   const rolls=[.5,.5,.5,.5,.99];let i=0;
@@ -35,13 +35,17 @@ test('server selects full reward list but API returns only revealed prefix',()=>
   assert.match(backend,/INSERT OR IGNORE INTO treasure_official_draws/);
   assert.match(backend,/WHERE player_id=\? AND id=\? AND revealed_count=\? AND completed_at IS NULL/);
   assert.match(backend,/url\.hostname!=='dfch\.pages\.dev'/);
+  assert.match(backend,/INSERT OR IGNORE INTO treasure_ultimate_discovery/);
+  assert.match(backend,/json_each\(c\.rewards_json\)/);
+  assert.match(backend,/challengePublicSnapshot/);
+  assert.match(backend,/CHALLENGE_POOL=0\.999848176/);
 });
 test('no challenge URL appears on the Cloudflare homepage',()=>{
   const home=fs.readFileSync(path.join(repo,'cloudflare/home.html'),'utf8');
   assert.ok(!home.includes('/treasure/challenge/'));
 });
 
-test('challenge page has separate login, mobile two-column rankings and tap/hold controls',()=>{
+test('challenge page has separate login, mobile two-column rankings and tap/skip controls',()=>{
   const page=fs.readFileSync(path.join(repo,'treasure/challenge/index.html'),'utf8');
   const js=fs.readFileSync(path.join(repo,'treasure/challenge/app.js'),'utf8');
   const css=fs.readFileSync(path.join(repo,'treasure/challenge/style.css'),'utf8');
@@ -52,6 +56,11 @@ test('challenge page has separate login, mobile two-column rankings and tap/hold
   }
   assert.match(page,/href="\.\.\/" class="challenge-mode-link"/);
   assert.match(page,/id="challengeSkip"/);
+  for(const prize of ['終極瓶子','史詩鏡子','皆傳牌子','終極大獎 EX'])assert.ok(page.includes(prize),prize);
+  assert.ok(page.includes('id="exDiscoverer"'));
+  assert.ok(page.includes('id="exRate"'));
+  assert.ok(page.includes('prize-ex.gif'));
+  assert.match(js,/prizeImages=\{A:/);
   assert.ok(!js.includes('holdDelay'));
   assert.ok(!js.includes("addEventListener('pointerdown'"));
   assert.match(js,/skip\.addEventListener\('click',\(\)=>step\(true\)\)/);

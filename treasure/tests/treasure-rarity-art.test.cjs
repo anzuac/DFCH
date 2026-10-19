@@ -25,7 +25,7 @@ test('weight cards and reveal tiles use the same rarity art without altering dra
   }
   assert.equal((html.match(/class="tier-gem"/g)||[]).length,5);
   assert.match(js,/rarityGemFiles=Object\.freeze\(\{N:'n',R:'r',SR:'sr',SSR:'ssr',UR:'ur'\}\)/);
-  assert.match(js,/icon\.src='\.\/assets\/rarity-'\+rarityFile\+'\.webp'/);
+  assert.match(js,/icon\.src=rarityFile\?'\.\/assets\/rarity-'\+rarityFile\+'\.webp'/);
   assert.match(build,/treasure\/assets\/rarity-'\+tier\+'\.webp'/);
   assert.match(html,/id="lootGrid"/);
   assert.match(html,/id="openOnce"/);

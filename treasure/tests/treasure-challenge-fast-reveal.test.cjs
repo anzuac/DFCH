@@ -28,7 +28,7 @@ class FakeNode {
   setAttribute(name,value){this.attributes[name]=String(value);}
 }
 function build(rewardTypes=['N','N','N','N','N','N']){
-  const ids=['challengeOpen','challengeSkip','challengeStatus','challengeJackpot','jackpotName','jackpotPoints',
+  const ids=['challengeOpen','challengeSkip','challengeStatus','challengeJackpot','jackpotName','jackpotPoints','jackpotArt','jackpotHonor','cChampion','exChampion','exRate','exDiscoverer',
     'jackpotSkip','rankToggle','rankTotal','rankBest','dailyRemaining','challengeDate',
     'totalPoints','bestPoints','revealedCount','runPoints','runState','challengeGrid','challengeOpenLabel'];
   const map=Object.fromEntries(ids.map(id=>[id,new FakeNode(id)]));
@@ -40,7 +40,7 @@ function build(rewardTypes=['N','N','N','N','N','N']){
   const window=new FakeNode('window');
   window.matchMedia=()=>({matches:false});
   let count=0,runId=0,active=null,startCount=0,revealCount=0;
-  const mkRewards=()=>rewardTypes.map((type,i)=>({type,number:i+1,points:({N:1,R:3,SR:10,SSR:20,UR:50,A:1000,B:2500,C:100000})[type]}));
+  const mkRewards=()=>rewardTypes.map((type,i)=>({type,number:i+1,points:({N:1,R:3,SR:10,SSR:20,UR:50,A:1000,B:2500,C:100000,EX:350000})[type]}));
   const rewards=mkRewards();
   function snap(){
     const revealed=active?.shown||0;
@@ -81,8 +81,8 @@ test('challenge control remains above reward list even after many rows',()=>{
   assert.match(css,/\.challenge-grid\{--cell:65px;/);
   assert.match(css,/max-height:calc\(var\(--cell\)\*5 \+ var\(--gap\)\*4\)/);
   assert.match(css,/\.challenge-main \.challenge-skip/);
-  assert.match(html,/style\.css\?v=1\.0\.2/);
-  assert.match(html,/app\.js\?v=1\.0\.2/);
+  assert.match(html,/style\.css\?v=1\.1\.0/);
+  assert.match(html,/app\.js\?v=1\.1\.0/);
 });
 test('short taps still open exactly one reward each time',async()=>{
   const {map,stats}=build();
@@ -141,7 +141,7 @@ test('skip still shows A-tier jackpot effect without hiding the whole-box result
   map.challengeSkip.dispatch('click');
   await sleep(35);
   assert.equal(map.challengeJackpot.hidden,false);
-  assert.equal(map.jackpotName.textContent,'大獎 A');
+  assert.equal(map.jackpotName.textContent,'終極瓶子');
   assert.equal(map.challengeGrid.children.length,4,'skip must reveal the complete chest immediately');
   assert.equal(map.runPoints.textContent,'1,005');
   map.jackpotSkip.dispatch('click');

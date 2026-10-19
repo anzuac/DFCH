@@ -11,7 +11,7 @@ test('N–UR drawer defaults closed; all five gem assets and weights remain in t
   assert.doesNotMatch(html,/<details class="ordinary-drawer" id="ordinaryRewards" open/);
   assert.match(html,/ordinary-summary/);
   assert.match(html,/普通獎勵 N～UR/);
-  assert.match(html,/99\.98493%/);
+  assert.match(html,/99\.9848176%/);
   assert.match(html,/暫訂比例，非官方數據/);
   for(const [type,weight] of [['n',50],['r',30],['sr',15],['ssr',4],['ur',1]]){
     assert.match(html,new RegExp('tier-'+type+'[^>]*>[\\s\\S]*?rarity-'+type+'\\.webp[^>]*>[\\s\\S]*?<strong>'+weight+'</strong>'));
@@ -34,7 +34,7 @@ test('draw panel is compact; checkbox appears before rate; crossed-out blocks ar
 
 test('score labels are real configured points, no official draws activated',()=>{
   const E=require('../engine.js');
-  const scores={N:1,R:3,SR:10,SSR:20,UR:50,A:1000,B:2500,C:100000};
+  const scores={N:1,R:3,SR:10,SSR:20,UR:50,A:1000,B:2500,C:100000,EX:350000};
   assert.deepEqual(E.POINTS,scores);
   for(const [type,points] of Object.entries(scores)){
     assert.ok(html.includes('data-score-type="'+type+'">＋'+points.toLocaleString('en-US')+' 分</'),'score '+type);
@@ -46,5 +46,5 @@ test('score labels are real configured points, no official draws activated',()=>
   assert.match(js,/nf\.format\(E\.POINTS\[reward.type\]\)/);
   assert.match(js,/E\.createOpening\(MINIMUM,Math\.random\)/);
   assert.match(js,/E\.addStats\(stats,stage\)/);
-  assert.ok(!js.includes('fetch('));
+  assert.match(js,/challenge\/public/);
 });
