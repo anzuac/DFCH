@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#0b0b1a">
   <meta name="description" content="以每件大獎 A 0.01%／B 0.005%／C 0.00007%、連續掉落 95% 模擬禁斷與深淵秘寶。">
   <title>秘寶連續掉落模擬器｜DFCH 機率實驗室</title>
-  <link rel="stylesheet" href="./style.css?v=1.5.3">
+  <link rel="stylesheet" href="./style.css?v=1.5.4">
 </head>
 <body>
   <main class="shell">
@@ -33,9 +33,8 @@
     </div>
     <header class="masthead">
       <div class="masthead-copy">
-        <p class="small-caps">禁斷與深淵秘寶・連續開箱測試</p>
         <h1><span>秘寶連續掉落</span><em>模擬器</em></h1>
-        <p class="lead">以遊戲連續開箱機制為基礎，設定三個自訂稀有大獎，觀察 95% 持續率下的抽取結果。</p>
+        <p class="lead">4 件保底 · 95% 持續掉落</p>
       </div>
       <div class="chest-hero" aria-hidden="true">
         <div class="chest-aura"></div>
@@ -56,42 +55,47 @@
     </header>
 
     <section class="probability-board" aria-label="獎勵機率">
-      <div class="board-head"><span class="board-kicker">PRIZE POOL</span><span class="board-note">每抽取 1 件獎勵的機率</span></div>
+      <div class="board-head"><span class="board-kicker">PRIZE POOL</span><span class="board-note">每件掉落機率</span></div>
       <div class="prize-grid">
         <article class="prize-card prize-a">
           <div class="prize-art" aria-hidden="true"><span class="prize-sigil">✦</span><span class="prize-shimmer"></span></div>
-          <div class="prize-details"><span class="prize-tier">ULTRA RARE · A</span><h2>大獎 A</h2><strong>0.01<small>%</small></strong><p>約每 10,000 件獎勵命中 1 件</p></div>
+          <div class="prize-details"><span class="prize-tier">ULTRA RARE · A</span><h2>大獎 A</h2><strong>0.01<small>%</small></strong><p class="prize-points" data-score-type="A">＋1,000 分</p></div>
         </article>
         <article class="prize-card prize-b">
           <div class="prize-art" aria-hidden="true"><span class="prize-sigil">◆</span><span class="prize-shimmer"></span></div>
-          <div class="prize-details"><span class="prize-tier">MYTHIC RARE · B</span><h2>大獎 B</h2><strong>0.005<small>%</small></strong><p>約每 20,000 件獎勵命中 1 件</p></div>
+          <div class="prize-details"><span class="prize-tier">MYTHIC RARE · B</span><h2>大獎 B</h2><strong>0.005<small>%</small></strong><p class="prize-points" data-score-type="B">＋2,500 分</p></div>
         </article>
         <article class="prize-card prize-c">
           <div class="prize-art" aria-hidden="true"><span class="prize-sigil">✹</span><span class="prize-shimmer"></span></div>
-          <div class="prize-details"><span class="prize-tier">LEGENDARY RARE · C</span><h2>大獎 C</h2><strong>0.00007<small>%</small></strong><p>約每 1,428,571 件獎勵命中 1 件</p></div>
+          <div class="prize-details"><span class="prize-tier">LEGENDARY RARE · C</span><h2>大獎 C</h2><strong>0.00007<small>%</small></strong><p class="prize-points" data-score-type="C">＋100,000 分</p></div>
         </article>
       </div>
-      <div class="rates-footer"><span>普通獎勵 <strong>99.98493%</strong></span><span class="bullet">•</span><span>八種結果互斥，總和 100%</span></div>
-      <div class="ordinary-head"><strong>普通獎池 · 稀有度權重</strong><span>暫訂比例，非官方數據</span></div>
-      <div class="ordinary-weight-grid" aria-label="普通獎品相對權重">
-        <div class="tier-card tier-n" title="N：基礎素材"><img class="tier-gem" src="./assets/rarity-n.webp" width="56" height="56" loading="lazy" decoding="async" alt=""><span>N</span><small class="tier-material">基礎素材</small><strong>50</strong><small>權重</small></div>
-        <div class="tier-card tier-r" title="R：寶石"><img class="tier-gem" src="./assets/rarity-r.webp" width="56" height="56" loading="lazy" decoding="async" alt=""><span>R</span><small class="tier-material">寶石</small><strong>30</strong><small>權重</small></div>
-        <div class="tier-card tier-sr" title="SR：綠寶石"><img class="tier-gem" src="./assets/rarity-sr.webp" width="56" height="56" loading="lazy" decoding="async" alt=""><span>SR</span><small class="tier-material">綠寶石</small><strong>15</strong><small>權重</small></div>
-        <div class="tier-card tier-ssr" title="SSR：月光石"><img class="tier-gem" src="./assets/rarity-ssr.webp" width="56" height="56" loading="lazy" decoding="async" alt=""><span>SSR</span><small class="tier-material">月光石</small><strong>4</strong><small>權重</small></div>
-        <div class="tier-card tier-ur" title="UR：鑽石"><img class="tier-gem" src="./assets/rarity-ur.webp" width="56" height="56" loading="lazy" decoding="async" alt=""><span>UR</span><small class="tier-material">鑽石</small><strong>1</strong><small>權重</small></div>
-      </div>
-      <p class="weight-explanation">每抽出一件普通獎勵，再按上述相對權重分配稀有度；五級普通獎品合計 99.98493%。</p>
+      <details class="ordinary-drawer" id="ordinaryRewards">
+        <summary class="ordinary-summary"><span class="ordinary-summary-text"><strong>普通獎勵 N～UR</strong><small>99.98493% · 權重 50／30／15／4／1</small></span><span class="ordinary-summary-action" aria-hidden="true">展開 <span class="ordinary-chevron">⌄</span></span></summary>
+        <div class="ordinary-drawer-content">
+          <p class="ordinary-drawer-note">稀有度權重為暫訂比例，非官方數據。</p>
+          <div class="ordinary-weight-grid" aria-label="普通獎品相對權重">
+          <div class="tier-card tier-n" title="N：基礎素材"><img class="tier-gem" src="./assets/rarity-n.webp" width="56" height="56" loading="lazy" decoding="async" alt=""><span>N</span><small class="tier-material">基礎素材</small><strong>50</strong><small>權重</small><small class="tier-points" data-score-type="N">＋1 分</small></div>
+          <div class="tier-card tier-r" title="R：寶石"><img class="tier-gem" src="./assets/rarity-r.webp" width="56" height="56" loading="lazy" decoding="async" alt=""><span>R</span><small class="tier-material">寶石</small><strong>30</strong><small>權重</small><small class="tier-points" data-score-type="R">＋3 分</small></div>
+          <div class="tier-card tier-sr" title="SR：綠寶石"><img class="tier-gem" src="./assets/rarity-sr.webp" width="56" height="56" loading="lazy" decoding="async" alt=""><span>SR</span><small class="tier-material">綠寶石</small><strong>15</strong><small>權重</small><small class="tier-points" data-score-type="SR">＋10 分</small></div>
+          <div class="tier-card tier-ssr" title="SSR：月光石"><img class="tier-gem" src="./assets/rarity-ssr.webp" width="56" height="56" loading="lazy" decoding="async" alt=""><span>SSR</span><small class="tier-material">月光石</small><strong>4</strong><small>權重</small><small class="tier-points" data-score-type="SSR">＋20 分</small></div>
+          <div class="tier-card tier-ur" title="UR：鑽石"><img class="tier-gem" src="./assets/rarity-ur.webp" width="56" height="56" loading="lazy" decoding="async" alt=""><span>UR</span><small class="tier-material">鑽石</small><strong>1</strong><small>權重</small><small class="tier-points" data-score-type="UR">＋50 分</small></div>
+          </div>
+        </div>
+      </details>
     </section>
 
-        <section class="sim-panel" aria-labelledby="settings-heading">
-      <div class="section-heading"><div><span class="board-kicker">RETAIN & REPEAT</span><h2 id="settings-heading">開箱設定</h2></div><span class="chance-pill"><span class="pulsing-dot"></span> 連續掉落率 <b>95.00%</b></span></div>
-      <div class="retention-bar" role="img" aria-label="成功續掉率 95%，停止率 5%"><div class="retention-fill"></div><span>95% 持續</span><span>5% 停止</span></div>
-      <div class="chance-interpretation"><span class="icon-spark" aria-hidden="true">✧</span><p>先保證 <b>4</b> 件，再以 <b>95%</b> 的成功率逐件追加；首次失敗即結束這一段開箱。</p></div>
-      <p class="expected-hint">單次開箱至少中一種大獎的理論機率約 <strong id="probPerRun">0.346%</strong>（不是每件獎勵機率）。</p>
+    <section class="sim-panel" aria-labelledby="settings-heading">
+      <div class="section-heading sim-heading">
+        <div class="sim-heading-title"><span class="board-kicker">RETAIN &amp; REPEAT</span><h2 id="settings-heading">開箱設定</h2></div>
+        <div class="sim-heading-actions">
+          <label class="skip-check" for="skipAnimation"><input type="checkbox" id="skipAnimation"><span id="skipAnimationLabel">跳過動畫</span></label>
+          <span class="chance-pill"><span class="pulsing-dot"></span> <span class="chance-pill-label">連續掉落率</span> <b>95.00%</b></span>
+        </div>
+      </div>
       <div class="action-group">
         <button type="button" id="openOnce" class="action-primary" aria-describedby="drawControlHint" aria-label="點擊開箱一次，長按逐件揭曉並連續開箱，放開後完成目前這箱即停止"><span aria-hidden="true">✦</span><span id="drawButtonText">點擊開始抽獎</span><span class="btn-arrow" aria-hidden="true">↗</span></button>
-        <div id="drawControlHint" class="press-help"><span>點一下：抽取 1 次</span><span>長按：逐件揭曉，完成一箱才接下一箱；放開停止連開</span></div>
-        <button type="button" id="skipAnimation" class="skip-animation" aria-pressed="false"><span aria-hidden="true">⏭</span><span id="skipAnimationLabel">跳過動畫：關閉</span></button>
+        <div id="drawControlHint" class="press-help"><span>點擊開 1 箱 · 長按連續開箱，放開即停</span></div>
         <div id="liveDropProgress" class="live-drop-progress" role="status" aria-live="off" hidden>
           <span class="live-drop-glow" aria-hidden="true">✦</span>
           <span id="liveDropMessage">準備開啟秘寶…</span>
@@ -107,17 +111,18 @@
       <div id="resultContent" hidden>
         <div class="result-summary"><div><span>本次獲得</span><strong id="lastItems">—</strong><small>件獎勵</small></div><div><span>本次大獎</span><strong id="lastRare">—</strong><small>件命中</small></div><div><span>連續成功</span><strong id="lastStreak">—</strong><small>次判定</small></div></div>
         <div class="loot-head"><strong id="lootHeadline">掉落清單</strong><span id="lootCaption">—</span></div>
+        <p class="pending-points" id="lastPoints" role="status">本次練習積分：0 分（不計入排行榜）</p>
         <div id="lootGrid" class="loot-grid" role="region" tabindex="0" aria-label="本次獎勵清單，最多顯示五列，多餘內容在此上下滑動"></div>
         <p id="lootRemainder" class="loot-remainder" hidden>↓ 超過五列的獎勵可在上方清單內上下滑動查看</p>
       </div>
     </section>
 
-    <!-- Future official leaderboard: place here, between results and local practice statistics. -->
     <section class="stats-panel" aria-labelledby="stats-heading">
       <div class="section-heading"><div><span class="board-kicker">LOCAL STATISTICS</span><h2 id="stats-heading">累計抽獎統計</h2></div><button type="button" class="reset-button" id="resetStats">重置紀錄</button></div>
       <div class="stats-grid">
         <div class="stat-box"><span>累計開箱</span><strong id="statRuns">0</strong><small>次</small></div>
         <div class="stat-box"><span>累計獎勵</span><strong id="statItems">0</strong><small>件</small></div>
+        <div class="stat-box"><span>練習累計積分</span><strong id="statPracticePoints">0</strong><small>不計入排行榜</small></div>
         <div class="stat-box"><span class="a-color">大獎 A</span><strong id="statA">0</strong><small>件 · 0.01%</small></div>
         <div class="stat-box"><span class="b-color">大獎 B</span><strong id="statB">0</strong><small>件 · 0.005%</small></div>
         <div class="stat-box"><span class="c-color">大獎 C</span><strong id="statC">0</strong><small>件 · 0.00007%</small></div>
@@ -153,8 +158,8 @@
       <button type="button" id="treasureNicknameLogout" class="treasure-nickname-exit">取消並登出</button>
     </form>
   </dialog>
-  <script src="./engine.js?v=1.4.0"></script>
-  <script src="./app.js?v=1.5.3"></script>
+  <script src="./engine.js?v=1.5.4"></script>
+  <script src="./app.js?v=1.5.4"></script>
   <script src="./auth.js?v=1.5.2"></script>
 </body>
 </html>
