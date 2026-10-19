@@ -76,7 +76,7 @@ function render(data){
   drawRank(data.leaderboards?.total||[],'rankTotal');
   drawRank(data.leaderboards?.best||[],'rankBest');
   if(data.hasActive){
-    message('本箱正在進行中；已揭曉 '+nf.format(run.revealedCount)+' 格，可繼續點擊或長按。');
+    message('本箱正在進行中；已揭曉 '+nf.format(run.revealedCount)+' 格，可逐格開啟，或直接跳過剩餘揭曉。');
     $('challengeOpenLabel').textContent='開啟下一格';
     open.disabled=busy;
     skip.disabled=busy;
