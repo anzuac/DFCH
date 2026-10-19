@@ -86,23 +86,30 @@ button,input,select{font:inherit}button{cursor:pointer}button:disabled{opacity:.
 @media(max-width:780px){.prize-card{display:block;text-align:center;padding:11px 6px}.prize-art{width:58px;height:58px;margin:0 auto 7px}.prize-details strong,.prize-c .prize-details strong{font-size:21px}.prize-details h2{font-size:13px}}
 @media(max-width:510px){.prize-grid{gap:6px}.prize-card{padding:9px 4px}.prize-art{width:45px;height:45px;flex-basis:45px}.prize-sigil{font-size:31px}.prize-details h2{font-size:12px}.prize-details strong,.prize-c .prize-details strong{font-size:18px}.prize-details strong small{font-size:11px}.prize-tier{font-size:7px}.prize-details p{font-size:8px;line-height:1.5}.ordinary-head{flex-wrap:wrap}.ordinary-weight-grid{gap:4px}.tier-card{padding:7px 1px}.tier-card strong{font-size:18px}.tier-card span{font-size:11px}.tier-stats{gap:4px}.tier-stats b{font-size:12px}.stats-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 
-/* Player sign-in staging area — no official scores or draws yet. */
-.treasure-auth-panel{border-color:#586482;background:linear-gradient(150deg,#1d243a,#11172a)}
-.treasure-login-pill{border:1px solid #647b98;border-radius:30px;padding:6px 10px;color:#c6ddf6;font-size:10px;white-space:nowrap}
-.treasure-login-status{font-size:12px;color:#cfcee0;line-height:1.7;margin:0 0 12px}
-#treasureSignIn{min-height:42px;max-width:100%;overflow:hidden}
-#treasureSignedIn{display:flex;gap:10px;align-items:center;flex-wrap:wrap;border-radius:9px;border:1px solid #4c806a;background:#1b3633;padding:12px;color:#def8e9}
-#treasureSignedIn span{font-size:11px;color:#adc3b8}
-.treasure-logout{margin:12px 0}
-.treasure-login-note{border-top:1px solid #3a4058;padding-top:10px;margin:12px 0 0;color:#a3adc4;font-size:11px;line-height:1.65}
-
-/* V1.5.1 — First-login unique nickname form */
-.treasure-auth-panel [hidden]{display:none!important}
-.treasure-nickname-form{margin-top:12px;padding:12px;border-radius:10px;border:1px solid #59698e;background:#141d34}
-.treasure-nickname-form label{display:block;font-weight:700;font-size:14px;color:#f4e9ff}
-.treasure-nickname-form p{font-size:11px;line-height:1.7;color:#bac5da;margin:7px 0}
-.treasure-nickname-controls{display:flex;align-items:stretch;gap:9px;flex-wrap:wrap}
-.treasure-nickname-controls input{min-width:0;flex:1 1 180px;background:#0b1429;color:#fff;border:1px solid #7581a1;border-radius:8px;padding:11px;font:inherit;font-size:13px}
-.treasure-nickname-controls button{border:1px solid #9b87d4;background:#52418a;color:white;border-radius:8px;padding:10px 15px;font:inherit;font-weight:700;cursor:pointer}
-.treasure-nickname-controls button:disabled{opacity:.6;cursor:wait}
-.treasure-nickname-form .treasure-nickname-feedback{min-height:1em;color:#ffcc9d}
+/* V1.5.2 — compact account header; official game logic remains disabled. */
+.topline{height:auto;min-height:63px;padding:8px 0;flex-wrap:wrap;gap:8px 12px}
+.top-actions{display:flex;align-items:center;justify-content:flex-end;gap:12px;margin-left:auto;min-width:0}
+.treasure-account{position:relative;z-index:30;min-width:0}
+.treasure-signin{min-height:40px;max-width:100%;display:flex;align-items:center;justify-content:flex-end}
+.treasure-account-toggle{display:inline-flex;align-items:center;gap:9px;max-width:220px;min-height:39px;padding:8px 12px;border:1px solid #517b70;border-radius:22px;background:#1a3d3c;color:#e1fff0;font-size:12px;font-weight:800;box-shadow:0 4px 14px #080d1b80}
+#treasurePlayerName{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.treasure-account-chevron{font-size:16px;line-height:1;color:#a5dfce}
+.treasure-account-menu{position:absolute;right:0;top:calc(100% + 9px);width:min(285px,calc(100vw - 24px));padding:16px;background:#19223b;color:#f0edff;border:1px solid #586381;border-radius:14px;box-shadow:0 12px 38px #000b;line-height:1.65}
+.treasure-account-menu strong{font-size:14px;color:#ffe5ae}
+.treasure-account-menu p{font-size:11px;color:#c3cee1;margin:9px 0}
+.treasure-account-logout{width:100%;margin-top:8px;padding:10px;border:1px solid #6e7394;border-radius:9px;background:#31344e;color:#f2e9ff;font-weight:700}
+.treasure-login-status{position:absolute;right:0;top:calc(100% + 8px);width:min(290px,calc(100vw - 24px));padding:10px 12px;border:1px solid #775b70;border-radius:9px;background:#2b1e32;box-shadow:0 8px 28px #0008;color:#ffe6eb;font-size:11px;line-height:1.6;margin:0}
+.treasure-nickname-dialog{width:min(460px,calc(100vw - 28px));max-height:calc(100dvh - 32px);overflow:auto;margin:auto;border:1px solid #826eaa;border-radius:20px;padding:26px;background:linear-gradient(155deg,#232743,#11172b);color:#fff4eb;box-shadow:0 30px 90px #000b}
+.treasure-nickname-dialog::backdrop{background:#050817cb;backdrop-filter:blur(5px)}
+.treasure-dialog-eyebrow{display:flex;justify-content:space-between;gap:12px;color:#c9afd7;font-size:11px;font-weight:800;letter-spacing:.11em}
+.treasure-nickname-dialog h2{font-size:24px;line-height:1.3;margin:18px 0 12px;color:#ffe2a2}
+#treasureNicknameIntro{font-size:13px;line-height:1.8;color:#cbd2e5;margin:0 0 18px}
+.treasure-nickname-form{display:grid;gap:11px}
+.treasure-nickname-form label{font-size:13px;font-weight:800;color:#f2e7ff}
+.treasure-nickname-form input{display:block;width:100%;min-width:0;border:1px solid #8790ba;border-radius:10px;background:#0b1429;color:#fff;padding:13px 14px;font-size:15px}
+.treasure-nickname-hint{font-size:11px;line-height:1.7;color:#aebcd3;margin:0}
+.treasure-nickname-feedback{min-height:1.2em;font-size:12px;color:#ffd2aa;margin:0}
+.treasure-nickname-save{width:100%;border:1px solid #f4d391;border-radius:11px;background:linear-gradient(110deg,#c28d4c,#f0c97f);color:#201429;padding:13px;font-weight:900;font-size:15px}
+.treasure-nickname-exit{width:100%;padding:10px;border:0;background:transparent;color:#ccd4e8}
+.treasure-nickname-save:focus-visible,.treasure-nickname-exit:focus-visible,.treasure-account-toggle:focus-visible,.treasure-account-logout:focus-visible,.treasure-nickname-form input:focus-visible{outline:3px solid #b5ebff;outline-offset:3px}
+@media(max-width:510px){.topline{height:auto;min-height:52px}.top-actions{gap:8px}.top-actions .lab-tag{display:none}.treasure-account-toggle{max-width:158px;padding:7px 10px}.treasure-signin{min-height:38px}.treasure-nickname-dialog{padding:20px}.treasure-nickname-dialog h2{font-size:21px}}
