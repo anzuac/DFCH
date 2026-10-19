@@ -160,6 +160,9 @@ function releasePointer(event){
   if(holdingPointer!==event.pointerId)return;
   holdingPointer=null;
   if(holdTimer!==null){clearTimeout(holdTimer);holdTimer=null;}
+  // A long hold may disable the button before its synthetic click fires.
+  // Clear suppression after the pointer event task, not on the next real tap.
+  if(suppressClick)setTimeout(()=>{suppressClick=false;},0);
 }
 window.addEventListener('pointerup',releasePointer);
 window.addEventListener('pointercancel',releasePointer);
