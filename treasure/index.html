@@ -4,18 +4,18 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#0b0b1a">
-  <meta name="description" content="以每件大獎 0.01%／0.005%、連續掉落 95% 模擬禁斷與深淵秘寶。">
+  <meta name="description" content="以每件大獎 A 0.01%／B 0.005%／C 0.00007%、連續掉落 95% 模擬禁斷與深淵秘寶。">
   <title>秘寶連續掉落模擬器｜DFCH 機率實驗室</title>
-  <link rel="stylesheet" href="./style.css?v=1.3.0">
+  <link rel="stylesheet" href="./style.css?v=1.4.0">
 </head>
 <body>
   <main class="shell">
-    <div class="topline"><span class="eyebrow"><span class="status-led"></span> DFCH / PROBABILITY LAB</span><span class="lab-tag">獨立模擬器 · v1.3</span></div>
+    <div class="topline"><span class="eyebrow"><span class="status-led"></span> DFCH / PROBABILITY LAB</span><span class="lab-tag">獨立模擬器 · v1.4</span></div>
     <header class="masthead">
       <div class="masthead-copy">
         <p class="small-caps">禁斷與深淵秘寶・連續開箱測試</p>
         <h1><span>秘寶連續掉落</span><em>模擬器</em></h1>
-        <p class="lead">以遊戲連續開箱機制為基礎，設定兩個自訂稀有大獎，觀察 95% 持續率下的抽取結果。</p>
+        <p class="lead">以遊戲連續開箱機制為基礎，設定三個自訂稀有大獎，觀察 95% 持續率下的抽取結果。</p>
       </div>
       <div class="chest-hero" aria-hidden="true">
         <div class="chest-aura"></div>
@@ -46,19 +46,28 @@
           <div class="prize-art" aria-hidden="true"><span class="prize-sigil">◆</span><span class="prize-shimmer"></span></div>
           <div class="prize-details"><span class="prize-tier">MYTHIC RARE · B</span><h2>大獎 B</h2><strong>0.005<small>%</small></strong><p>約每 20,000 件獎勵命中 1 件</p></div>
         </article>
+        <article class="prize-card prize-c">
+          <div class="prize-art" aria-hidden="true"><span class="prize-sigil">✹</span><span class="prize-shimmer"></span></div>
+          <div class="prize-details"><span class="prize-tier">LEGENDARY RARE · C</span><h2>大獎 C</h2><strong>0.00007<small>%</small></strong><p>約每 1,428,571 件獎勵命中 1 件</p></div>
+        </article>
       </div>
-      <div class="rates-footer"><span>普通獎勵 <strong>99.985%</strong></span><span class="bullet">•</span><span>三種結果互斥，總和 100%</span></div>
+      <div class="rates-footer"><span>普通獎勵 <strong>99.98493%</strong></span><span class="bullet">•</span><span>八種結果互斥，總和 100%</span></div>
+      <div class="ordinary-head"><strong>普通獎池 · 稀有度權重</strong><span>暫訂比例，非官方數據</span></div>
+      <div class="ordinary-weight-grid" aria-label="普通獎品相對權重">
+        <div class="tier-card tier-n"><span>N</span><strong>50</strong><small>權重</small></div>
+        <div class="tier-card tier-r"><span>R</span><strong>30</strong><small>權重</small></div>
+        <div class="tier-card tier-sr"><span>SR</span><strong>15</strong><small>權重</small></div>
+        <div class="tier-card tier-ssr"><span>SSR</span><strong>4</strong><small>權重</small></div>
+        <div class="tier-card tier-ur"><span>UR</span><strong>1</strong><small>權重</small></div>
+      </div>
+      <p class="weight-explanation">每抽出一件普通獎勵，再按上述相對權重分配稀有度；五級普通獎品合計 99.98493%。</p>
     </section>
 
     <section class="sim-panel" aria-labelledby="settings-heading">
       <div class="section-heading"><div><span class="board-kicker">RETAIN & REPEAT</span><h2 id="settings-heading">開箱設定</h2></div><span class="chance-pill"><span class="pulsing-dot"></span> 連續掉落率 <b>95.00%</b></span></div>
       <div class="retention-bar" role="img" aria-label="成功續掉率 95%，停止率 5%"><div class="retention-fill"></div><span>95% 持續</span><span>5% 停止</span></div>
-      <div class="mode-picker" role="group" aria-label="開箱保底模式">
-        <button type="button" class="mode-option selected" data-minimum="4" aria-pressed="true"><span class="mode-name">普通開箱</span><span class="mode-sub">最少掉落 4 件</span></button>
-        <button type="button" class="mode-option" data-minimum="11" aria-pressed="false"><span class="mode-name">特殊續開試算</span><span class="mode-sub">最少掉落 11 件</span></button>
-      </div>
-      <div class="chance-interpretation"><span class="icon-spark" aria-hidden="true">✧</span><p>先保證 <b id="minItemCaption">4</b> 件，再以 <b>95%</b> 的成功率逐件追加；首次失敗即結束這一段開箱。</p></div>
-      <p class="expected-hint">此模式單段至少中一種大獎的理論機率約 <strong id="probPerRun">0.344%</strong>（不是每件獎勵機率）。</p>
+      <div class="chance-interpretation"><span class="icon-spark" aria-hidden="true">✧</span><p>先保證 <b>4</b> 件，再以 <b>95%</b> 的成功率逐件追加；首次失敗即結束這一段開箱。</p></div>
+      <p class="expected-hint">單次開箱至少中一種大獎的理論機率約 <strong id="probPerRun">0.346%</strong>（不是每件獎勵機率）。</p>
       <div class="action-group">
         <button type="button" id="openOnce" class="action-primary" aria-describedby="drawControlHint" aria-label="點擊開箱一次，長按逐件揭曉並連續開箱，放開後完成目前這箱即停止"><span aria-hidden="true">✦</span><span id="drawButtonText">點擊開始抽獎</span><span class="btn-arrow" aria-hidden="true">↗</span></button>
         <div id="drawControlHint" class="press-help"><span>點一下：抽取 1 次</span><span>長按：逐件揭曉，完成一箱才接下一箱；放開停止連開</span></div>
@@ -83,33 +92,34 @@
       </div>
     </section>
 
-    <section class="stats-panel player-panel" aria-labelledby="stats-heading">
-      <div class="section-heading"><div><span class="board-kicker">PLAYER PANEL · LOCAL PROFILE</span><h2 id="stats-heading">玩家個人面板</h2></div><button type="button" class="reset-button" id="resetStats">重置紀錄</button></div>
-      <div class="player-identity">
-        <div class="player-avatar" aria-hidden="true">✦</div>
-        <div class="player-identity-info"><label for="playerNickname">玩家暱稱 <span>（此裝置）</span></label><input id="playerNickname" maxlength="16" autocomplete="off" placeholder="訪客玩家" aria-describedby="playerNicknameHint"><small id="playerNicknameHint">暱稱及個人紀錄只儲存在此瀏覽器</small></div>
-        <span class="player-local-mark">本機玩家</span>
+    <section class="stats-panel" aria-labelledby="stats-heading">
+      <div class="section-heading"><div><span class="board-kicker">LOCAL STATISTICS</span><h2 id="stats-heading">累計抽獎統計</h2></div><button type="button" class="reset-button" id="resetStats">重置紀錄</button></div>
+      <div class="stats-grid">
+        <div class="stat-box"><span>累計開箱</span><strong id="statRuns">0</strong><small>次</small></div>
+        <div class="stat-box"><span>累計獎勵</span><strong id="statItems">0</strong><small>件</small></div>
+        <div class="stat-box"><span class="a-color">大獎 A</span><strong id="statA">0</strong><small>件 · 0.01%</small></div>
+        <div class="stat-box"><span class="b-color">大獎 B</span><strong id="statB">0</strong><small>件 · 0.005%</small></div>
+        <div class="stat-box"><span class="c-color">大獎 C</span><strong id="statC">0</strong><small>件 · 0.00007%</small></div>
       </div>
-      <div class="player-section-label">個人最佳紀錄 <span>從此功能推出後開始統計</span></div>
-      <div class="best-grid">
-        <div class="best-card"><span>普通開箱 · 最高掉落</span><strong id="bestNormal">—</strong><small>單次最多件數</small></div>
-        <div class="best-card"><span>特殊續開 · 最高掉落</span><strong id="bestSpecial">—</strong><small>單次最多件數</small></div>
-        <div class="best-card best-rare"><span>單次最多大獎</span><strong id="bestJackpots">—</strong><small>A + B 合計</small></div>
+      <div class="tier-stats" aria-label="普通獎品累計數量">
+        <div><span class="tier-n">N</span><b id="statN">0</b></div>
+        <div><span class="tier-r">R</span><b id="statR">0</b></div>
+        <div><span class="tier-sr">SR</span><b id="statSR">0</b></div>
+        <div><span class="tier-ssr">SSR</span><b id="statSSR">0</b></div>
+        <div><span class="tier-ur">UR</span><b id="statUR">0</b></div>
       </div>
-      <div class="player-section-label">累計模擬統計</div>
-      <div class="stats-grid"><div class="stat-box"><span>累計開箱</span><strong id="statRuns">0</strong><small>次</small></div><div class="stat-box"><span>累計獎勵</span><strong id="statItems">0</strong><small>件</small></div><div class="stat-box"><span class="a-color">大獎 A</span><strong id="statA">0</strong><small>件 · 0.01%</small></div><div class="stat-box"><span class="b-color">大獎 B</span><strong id="statB">0</strong><small>件 · 0.005%</small></div></div>
       <div class="insight-grid"><div><span>平均每次開箱</span><b id="statAverage">—</b></div><div><span>實際連續成功率</span><b id="statRetention">—</b></div><div><span>至少中一種大獎的開箱次數</span><b id="statHitRuns">0</b></div></div>
-      <div class="world-preview" aria-label="未來世界排行榜預留區">
-        <div class="world-preview-head"><strong>🏆 世界幸運榜 · TOP 3</strong><span>尚未連接排行榜</span></div>
-        <div class="world-preview-rows"><div><b>01</b><span>待開放</span><span>—</span></div><div><b>02</b><span>待開放</span><span>—</span></div><div><b>03</b><span>待開放</span><span>—</span></div></div>
-        <p>此處僅保留世界前三名版位，目前不會上傳玩家成績。</p>
-      </div>
-      <details class="explanation"><summary>查看機率規則與理論平均值 <span>＋</span></summary><div class="explain-body"><p>大獎機率是「<b>每件獎勵</b>」的機率，不是每開一箱直接有 0.015% 中獎。</p><p>普通開箱（4 件保底）在 95% 持續率下，理論平均每次獲得 <b>23 件</b>；特殊續開的獨立抽選段（11 件保底）則平均 <b>30 件</b>。這是期望值，不是固定數量。</p><p>每件抽獎僅可能是普通、大獎 A 或大獎 B，兩種大獎不會在同一件獎勵重複命中。同一次開箱可以中多件大獎。</p><p>「特殊續開」僅模擬最低 11 件與追加掉落，不計入遊戲實際續開券、鑽石成本、剩餘續開次數與獎勵權重。</p><p>此處大獎 0.01%／0.005% 是自訂測試機率，<b>並非宣稱官方秘寶的原始掉落權重</b>。</p></div></details>
+      <details class="explanation"><summary>查看機率規則與權重說明 <span>＋</span></summary>
+        <div class="explain-body"><p>每件獎勵只會出現八種結果之一：大獎 A、B、C，或普通稀有度 N、R、SR、SSR、UR。大獎固定機率合計 <b>0.01507%</b>，普通獎池合計 <b>99.98493%</b>。</p>
+        <p>N／R／SR／SSR／UR 暫訂相對權重 <b>50／30／15／4／1</b>，不是遊戲官方掉率；例如 N 的實際每件機率是 99.98493% × 50%，約 49.992465%。</p>
+        <p>每次保證 4 件獎勵，之後每次以 95% 機率多掉 1 件，第一次失敗即停止。理論平均每箱 <b>23 件</b>。跳過動畫不改變機率。</p>
+        <p>此頁僅為本機模擬，抽取結果不計入世界排行榜；新獎池由本版起重新累計，舊版本機存檔不會刪除。</p></div>
+      </details>
     </section>
 
-    <footer class="footer"><span>DFCH / 非官方研究工具</span><span>僅點擊或長按抽取 · 紀錄保存在此瀏覽器（不計入世界排行）</span></footer>
+    <footer class="footer"><span>DFCH / 非官方研究工具</span><span>抽獎紀錄僅保存在此瀏覽器 · 未啟用世界排行榜</span></footer>
   </main>
-  <script src="./engine.js?v=1.2.0"></script>
-  <script src="./app.js?v=1.3.0"></script>
+  <script src="./engine.js?v=1.4.0"></script>
+  <script src="./app.js?v=1.4.0"></script>
 </body>
 </html>

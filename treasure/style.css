@@ -41,33 +41,47 @@ button,input,select{font:inherit}button{cursor:pointer}button:disabled{opacity:.
 .loot-grid::-webkit-scrollbar-track{background:#181d33}
 .loot-remainder{color:#b9adce;margin:9px 0 0;text-align:center;font-size:11px}
 @media(max-width:510px){.loot-grid{--loot-cell-height:56px;--loot-cell-gap:6px}}
-/* Player profile: local-first data, ready for later authenticated ranking integration. */
-.player-panel{border-color:#4b4967}
-.player-identity{display:flex;align-items:center;gap:13px;padding:15px;background:linear-gradient(120deg,#2a2343,#181e37);border:1px solid #585076;border-radius:12px;margin:-1px 0 17px}
-.player-avatar{display:grid;place-items:center;flex:0 0 49px;height:49px;border-radius:50%;border:2px solid #a98bcb;background:radial-gradient(circle,#62448b,#2b2454);font-size:29px;color:#f7d9ff;text-shadow:0 0 14px #ec9cff}
-.player-identity-info{display:flex;flex:1;min-width:0;flex-direction:column;gap:5px}
-.player-identity-info label{font-size:12px;color:#f8e7d1;font-weight:800}
-.player-identity-info label span{font-size:10px;color:#afa5c7;font-weight:500}
-.player-identity-info input{width:100%;min-width:0;max-width:310px;height:35px;border-radius:7px;background:#14192e;border:1px solid #565474;color:#fff1d7;padding:5px 10px;outline-offset:2px;font-size:14px}
-.player-identity-info input:focus{border-color:#cfa6ff}
-.player-identity-info small{font-size:10px;color:#a9acc5}
-.player-local-mark{display:inline-flex;align-items:center;white-space:nowrap;border-radius:20px;background:#292c46;border:1px solid #676581;padding:6px 9px;color:#c5c0e3;font-size:10px}
-.player-section-label{display:flex;align-items:center;gap:8px;margin:14px 0 10px;color:#edd3ae;font-weight:900;font-size:13px}
-.player-section-label span{font-weight:500;font-size:10px;color:#8e9ab3}
-.best-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
-.best-card{padding:13px 12px;background:linear-gradient(145deg,#28233d,#1a1f37);border:1px solid #585072;border-radius:10px;min-width:0}
-.best-card span{display:block;color:#d1bcdf;font-size:11px}
-.best-card strong{display:block;font-size:27px;line-height:1.5;font-variant-numeric:tabular-nums;color:#ffe0a1}
-.best-card small{color:#969bb7;font-size:10px}
-.best-rare{border-color:#6a536c;background:linear-gradient(145deg,#30243d,#191f37)}
-.best-rare strong{color:#ebb1ff}
-.world-preview{border:1px solid #4e4969;border-radius:11px;background:linear-gradient(120deg,#22223c,#151b32);padding:13px;margin-top:16px}
-.world-preview-head{display:flex;justify-content:space-between;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:10px}
-.world-preview-head strong{font-size:13px;color:#f5d496}
-.world-preview-head>span{font-size:10px;color:#aaa6bd}
-.world-preview-rows{display:grid;gap:6px}
-.world-preview-rows>div{display:flex;align-items:center;gap:11px;border:1px solid #343650;border-radius:7px;padding:8px 12px;font-size:11px;color:#8f93ae}
-.world-preview-rows b{font-size:14px;color:#a6a5b7;min-width:22px}
-.world-preview-rows>div span:nth-child(2){flex:1}
-.world-preview p{color:#868ca6;font-size:10px;margin:10px 0 0}
-@media(max-width:510px){.player-identity{gap:9px;padding:10px}.player-avatar{flex-basis:40px;height:40px;font-size:24px}.player-local-mark{font-size:9px;padding:5px 6px}.best-grid{gap:5px}.best-card{padding:10px 7px}.best-card span{font-size:9px;min-height:2.4em}.best-card strong{font-size:22px}.best-card small{font-size:9px}.player-section-label{flex-wrap:wrap}}
+/* V1.4 3 jackpots and weighted common rarity pool */
+.prize-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+.prize-card{gap:9px;padding:12px 10px}
+.prize-art{flex-basis:60px;height:60px}
+.prize-sigil{font-size:43px}
+.prize-details strong{font-size:24px}
+.prize-c{border-color:#8e6941;background:linear-gradient(135deg,#463226bb,#23203d)}
+.prize-c::after{background:#e6b85f20}
+.prize-c .prize-art{border-color:#c9a16a;background:radial-gradient(circle,#f9d39570,#a65b3c55 62%,#322039)}
+.prize-c .prize-sigil{color:#ffe6ab;text-shadow:0 0 14px #ffca66,0 0 25px #fca04b}
+.prize-c .prize-tier{color:#f6cc86}
+.prize-c .prize-details strong{color:#ffdc97;font-size:23px}
+.rates-footer{flex-wrap:wrap}
+.ordinary-head{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:18px 1px 9px;padding-top:13px;border-top:1px solid #595174}
+.ordinary-head strong{font-size:12px;color:#f5e8d1}
+.ordinary-head span{font-size:10px;color:#aaa6bd}
+.ordinary-weight-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px}
+.tier-card{min-width:0;border:1px solid #45516b;background:#1e253d;border-radius:9px;padding:9px 4px;text-align:center}
+.tier-card span,.tier-card strong,.tier-card small{display:block}
+.tier-card span{font-weight:900;font-size:13px}
+.tier-card strong{font-size:22px;color:#f9e8c6;font-variant-numeric:tabular-nums}
+.tier-card small{font-size:9px;color:#909bb3}
+.tier-n{color:#bbc3cf}.tier-r{color:#8ab5ff}.tier-sr{color:#c8a1ff}.tier-ssr{color:#ffce82}.tier-ur{color:#89f1d1}
+.tier-card.tier-n{border-color:#4d596c}.tier-card.tier-r{border-color:#456aa1}.tier-card.tier-sr{border-color:#735297}.tier-card.tier-ssr{border-color:#ae834f}.tier-card.tier-ur{border-color:#41866d}
+.weight-explanation{margin:9px 0 0;color:#aea9bd;font-size:10px;line-height:1.6}
+.loot-tile.type-N{border-color:#515e71;background:linear-gradient(140deg,#29334a,#1d2234)}
+.loot-tile.type-R{border-color:#558dce;background:linear-gradient(140deg,#293f62,#19243d)}
+.loot-tile.type-R .tile-icon{color:#9ccaff}
+.loot-tile.type-SR{border-color:#aa7be0;background:linear-gradient(140deg,#4e3469,#27213d)}
+.loot-tile.type-SR .tile-icon{color:#dbb9ff}
+.loot-tile.type-SSR{border-color:#e2b65a;background:linear-gradient(140deg,#5c452a,#31283c)}
+.loot-tile.type-SSR .tile-icon{color:#ffde95}
+.loot-tile.type-UR{border-color:#6fe5ae;background:linear-gradient(140deg,#1b564e,#1e2d47);box-shadow:inset 0 0 12px #6fe5ae2d}
+.loot-tile.type-UR .tile-icon{color:#aaffdb}
+.loot-tile.type-C{border-color:#ffe29b;background:linear-gradient(140deg,#78532c,#3c2841);box-shadow:0 0 18px #ffcd7f82,inset 0 0 13px #fff4b84b}
+.loot-tile.type-C .tile-icon{color:#fff4bf;text-shadow:0 0 17px #ffe6a5}
+.c-color{color:#ffdb98!important}
+.stats-grid{grid-template-columns:repeat(5,minmax(0,1fr))}
+.tier-stats{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px;margin-top:11px}
+.tier-stats>div{display:flex;flex-direction:column;align-items:center;gap:6px;padding:9px 3px;border:1px solid #38415e;background:#1c243a;border-radius:8px;min-width:0}
+.tier-stats span{font-size:12px;font-weight:900}
+.tier-stats b{font-variant-numeric:tabular-nums;font-size:16px;color:#eae6f2;word-break:break-all}
+@media(max-width:780px){.prize-card{display:block;text-align:center;padding:11px 6px}.prize-art{width:58px;height:58px;margin:0 auto 7px}.prize-details strong,.prize-c .prize-details strong{font-size:21px}.prize-details h2{font-size:13px}}
+@media(max-width:510px){.prize-grid{gap:6px}.prize-card{padding:9px 4px}.prize-art{width:45px;height:45px;flex-basis:45px}.prize-sigil{font-size:31px}.prize-details h2{font-size:12px}.prize-details strong,.prize-c .prize-details strong{font-size:18px}.prize-details strong small{font-size:11px}.prize-tier{font-size:7px}.prize-details p{font-size:8px;line-height:1.5}.ordinary-head{flex-wrap:wrap}.ordinary-weight-grid{gap:4px}.tier-card{padding:7px 1px}.tier-card strong{font-size:18px}.tier-card span{font-size:11px}.tier-stats{gap:4px}.tier-stats b{font-size:12px}.stats-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
