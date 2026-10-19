@@ -4,13 +4,10 @@ const $=id=>document.getElementById(id);
 const nf=new Intl.NumberFormat('zh-TW');
 const scores=Object.freeze({N:1,R:3,SR:10,SSR:20,UR:50,A:1000,B:2500,C:100000});
 const jackpotSymbol={A:'✦',B:'◆',C:'✹'};
-const holdDelay=420;
 let snapshot=null,busy=false,rankExpanded=false;
-let holdingPointer=null,holdTimer=null,suppressClick=false;
 const effectQueue=[];
 let effectTimer=null;
-const effectWaiters=[];
-const open=$('challengeOpen'),status=$('challengeStatus'),overlay=$('challengeJackpot');
+const open=$('challengeOpen'),skip=$('challengeSkip'),status=$('challengeStatus'),overlay=$('challengeJackpot');
 
 function message(text,error=false){
   status.textContent=text;
@@ -79,17 +76,20 @@ function render(data){
   drawRank(data.leaderboards?.total||[],'rankTotal');
   drawRank(data.leaderboards?.best||[],'rankBest');
   if(data.hasActive){
-    message('本箱正在進行中；已揭曉 '+nf.format(run.revealedCount)+' 格，可繼續點擊或長按。');
+    message('本箱正在進行中；已揭曉 '+nf.format(run.revealedCount)+' 格，可逐格開啟，或直接跳過剩餘揭曉。');
     $('challengeOpenLabel').textContent='開啟下一格';
     open.disabled=busy;
+    skip.disabled=busy;
   }else if(data.remaining>0){
     message(run?.completed?'上一箱已完成並結算。要繼續，請重新點擊開始下一箱。':'點擊開始第 1 格，才會消耗今日 1 次挑戰。');
     $('challengeOpenLabel').textContent=run?.completed?'開始下一箱':'開始挑戰 · 第 1 格';
     open.disabled=busy;
+    skip.disabled=true;
   }else{
     message('今日 5 次挑戰已用完；請於台灣時間 00:00 後再來。');
     $('challengeOpenLabel').textContent='今日挑戰已用完';
     open.disabled=true;
+    skip.disabled=true;
   }
 }
 function advanceEffect(){
@@ -97,7 +97,6 @@ function advanceEffect(){
   const reward=effectQueue.shift();
   if(!reward){
     overlay.hidden=true;overlay.className='challenge-jackpot';
-    while(effectWaiters.length)effectWaiters.shift()();
     return;
   }
   overlay.className='challenge-jackpot tier-'+reward.type;
@@ -121,105 +120,41 @@ $('rankToggle').addEventListener('click',()=>{
 });
 async function reload(){
   if(busy)return;
-  busy=true;open.disabled=true;
+  busy=true;open.disabled=true;skip.disabled=true;
   try{render(await api('status'));}
   catch(error){
     snapshot=null;
     message(error.message,error.message!=='請先使用 Google 帳號登入');
     $('challengeOpenLabel').textContent='登入後可挑戰';
     open.disabled=true;
+    skip.disabled=true;
   }finally{busy=false;if(snapshot)render(snapshot);}
 }
-// Server seals and completes a fast-forwarded chest at once, but its visual
-// reveal is strictly one reward at a time. Never call the start endpoint again
-// during playback: all rewards belong to the same daily challenge entry.
-const fastRevealDelay=count=>count<=80?72:count<=200?45:count<=1000?18:5;
-async function animateFastReveal(current,newlyShown,previous){
-  const run=current.run;
-  const sameRun=!!previous&&previous.id===run.id;
-  const grid=$('challengeGrid');
-  if(!sameRun)grid.replaceChildren();
-  let count=sameRun?previous.revealedCount:0;
-  let points=sameRun?previous.revealedPoints:0;
-  const interval=fastRevealDelay(newlyShown.length);
-  $('dailyRemaining').textContent=nf.format(current.remaining)+' / '+nf.format(current.dailyLimit);
-  $('challengeOpenLabel').textContent='快速逐格開箱中…';
-  $('runState').textContent='揭曉中';
-  for(let i=0;i<newlyShown.length;i++){
-    const reward=newlyShown[i];
-    const followBottom=grid.scrollHeight-grid.scrollTop-grid.clientHeight<40;
-    const tile=itemTile(reward);
-    tile.classList.add('is-revealing');
-    grid.append(tile);
-    if(followBottom)grid.scrollTop=grid.scrollHeight;
-    count++;
-    points+=scores[reward.type];
-    $('revealedCount').textContent=nf.format(count);
-    $('runPoints').textContent=nf.format(points);
-    message('快速開箱中 · 已揭曉 '+nf.format(count)+' 格');
-    if(reward.type in jackpotSymbol){
-      // Pause the stream for the appropriate A/B/C tier reveal; afterwards
-      // continue with the next tile without consuming another challenge.
-      enqueueEffects([reward]);
-      await new Promise(resolve=>effectWaiters.push(resolve));
-    }
-    if(i+1<newlyShown.length)
-      await new Promise(resolve=>setTimeout(resolve,interval));
-  }
-  render(current);
-}
+// Skipping reveals the rest of the EXISTING chest instantly.
+// The backend owns the completed result, score, and daily quota.
 async function step(fast){
   if(busy||!snapshot)return;
   if(!snapshot.hasActive&&snapshot.remaining<=0)return;
-  busy=true;open.disabled=true;
+  if(fast&&!snapshot.hasActive)return;
+  busy=true;open.disabled=true;skip.disabled=true;
   const previous=snapshot.run;
   const previousId=snapshot.hasActive?previous?.id:null;
   const before=snapshot.hasActive?previous.revealedCount:0;
-  message(fast?'正在快速揭曉本箱…':'正在揭曉下一格…');
+  message(fast?'正在揭曉本箱剩餘獎勵…':'正在揭曉下一格…');
   try{
     const current=snapshot.hasActive
       ? await api('reveal',{id:previous.id,expectedCount:previous.revealedCount,fast})
       : await api('start',{requestId:crypto.randomUUID(),fast});
     const newlyShown=current.run?.id===previousId?current.run.rewards.slice(before):current.run?.rewards||[];
-    if(fast&&newlyShown.length){
-      await animateFastReveal(current,newlyShown,previous);
-    }else{
-      render(current);
-      enqueueEffects(newlyShown);
-    }
+    render(current);
+    enqueueEffects(newlyShown);
   }catch(error){
     message(error.message,true);
     try{render(await api('status'));}catch(_){/* Keep first error visible. */}
   }finally{busy=false;if(snapshot)render(snapshot);}
 }
-open.addEventListener('pointerdown',event=>{
-  if(busy||open.disabled||holdingPointer!==null||!event.isPrimary||
-      event.pointerType==='mouse'&&event.button!==0)return;
-  suppressClick=false;holdingPointer=event.pointerId;
-  holdTimer=setTimeout(()=>{
-    if(holdingPointer!==event.pointerId)return;
-    holdTimer=null;
-    suppressClick=true;
-    step(true);
-  },holdDelay);
-});
-function releasePointer(event){
-  if(holdingPointer!==event.pointerId)return;
-  holdingPointer=null;
-  if(holdTimer!==null){clearTimeout(holdTimer);holdTimer=null;}
-  // A long hold may disable the button before its synthetic click fires.
-  // Clear suppression after the pointer event task, not on the next real tap.
-  if(suppressClick)setTimeout(()=>{suppressClick=false;},0);
-}
-window.addEventListener('pointerup',releasePointer);
-window.addEventListener('pointercancel',releasePointer);
-open.addEventListener('pointerleave',releasePointer);
-open.addEventListener('contextmenu',event=>event.preventDefault());
-open.addEventListener('click',event=>{
-  if(suppressClick){suppressClick=false;event.preventDefault();return;}
-  step(false);
-});
-window.addEventListener('blur',()=>{if(holdingPointer!==null){holdingPointer=null;clearTimeout(holdTimer);holdTimer=null;}});
+open.addEventListener('click',()=>step(false));
+skip.addEventListener('click',()=>step(true));
 document.addEventListener('treasure:auth-changed',()=>{reload();});
 reload();
 })();

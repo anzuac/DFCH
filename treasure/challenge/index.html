@@ -6,7 +6,7 @@
   <meta name="description" content="DFCH Treasure 正式挑戰，五次每日挑戰、逐件開箱、斷線還原與世界排名。">
   <title>Treasure 挑戰模式｜DFCH</title>
   <link rel="stylesheet" href="../style.css?v=1.5.4">
-  <link rel="stylesheet" href="./style.css?v=1.0.1">
+  <link rel="stylesheet" href="./style.css?v=1.0.2">
 </head><body>
 <main class="shell challenge-shell">
   <div class="topline">
@@ -48,7 +48,7 @@
     </div>
   </section>
   <header class="challenge-title">
-    <div><span class="board-kicker">DAILY CHALLENGE</span><h1>秘寶挑戰模式</h1><p>點一次開一格 · 長按快速完成本箱</p></div>
+    <div><span class="board-kicker">DAILY CHALLENGE</span><h1>秘寶挑戰模式</h1><p>點一下開一格 · 可直接揭曉本箱剩餘獎勵</p></div>
     <div class="challenge-daily"><small>今日剩餘次數</small><strong id="dailyRemaining">— / 5</strong><span id="challengeDate">台灣時間每日重置</span></div>
   </header>
   <div class="challenge-score-grid">
@@ -58,7 +58,10 @@
   <section class="challenge-main" aria-labelledby="challengeHeading">
     <div class="challenge-heading">
       <div><span class="board-kicker">OPEN ONE BY ONE</span><h2 id="challengeHeading">本次挑戰</h2></div>
-      <span class="challenge-rate">95% 持續掉落</span>
+      <div class="challenge-heading-actions">
+        <span class="challenge-rate">95% 持續掉落</span>
+        <button type="button" id="challengeSkip" class="challenge-skip" title="一次揭曉本箱所有剩餘獎勵，不放棄積分、不多扣挑戰次數" disabled>跳過剩餘揭曉 <span aria-hidden="true">⏭</span></button>
+      </div>
     </div>
     <p id="challengeStatus" class="challenge-notice" role="status">正在讀取玩家挑戰資料…</p>
     <div class="challenge-run-stats">
@@ -68,7 +71,7 @@
     </div>
     <div class="challenge-actions">
       <button type="button" id="challengeOpen" class="action-primary" disabled><span aria-hidden="true">✦</span><span id="challengeOpenLabel">讀取中…</span><span aria-hidden="true">↗</span></button>
-      <p class="challenge-tip">輕點：揭曉下一格｜長按：快速逐格揭曉本箱，不會連開下一箱</p>
+      <p class="challenge-tip">每次點擊只開一格；「跳過剩餘揭曉」只完成本箱，不會開始下一箱</p>
     </div>
     <div id="challengeGrid" class="challenge-grid" role="region" tabindex="0" aria-label="挑戰已揭曉的獎品"></div>
   </section>
@@ -106,5 +109,5 @@
   </dialog>
 
 <script src="../auth.js?v=1.6.0"></script>
-<script src="./app.js?v=1.0.1"></script>
+<script src="./app.js?v=1.0.2"></script>
 </body></html>
