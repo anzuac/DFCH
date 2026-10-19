@@ -8,8 +8,8 @@ test('scrollable reward grid retains exactly five visible rows per breakpoint',(
  assert.match(html,/id="lootGrid"[^>]+tabindex="0"/);
  assert.ok(!js.includes('ordinary[0].remove()'));
 });
-test('three jackpots and all five tier weights are visible, local profile and ranking are removed',()=>{
- for(const term of ['大獎 A','大獎 B','大獎 C','0.00007','99.98493%','tier-n','tier-r','tier-sr','tier-ssr','tier-ur'])assert.ok(html.includes(term),term);
+test('four jackpots and all five tier weights are visible, local profile and ranking are removed',()=>{
+ for(const term of ['終極瓶子','史詩鏡子','皆傳牌子','終極大獎','0.00015','99.9848176%','tier-n','tier-r','tier-sr','tier-ssr','tier-ur'])assert.ok(html.includes(term),term);
  for(const term of ['PLAYER PANEL','playerNickname','bestJackpots','world-preview','世界幸運榜','特殊續開'])assert.ok(!html.includes(term),term);
- for(const term of ['statC','statN','statR','statSR','statSSR','statUR'])assert.ok(html.includes('id="'+term+'"'),term);
+ for(const term of ['statC','statEX','statN','statR','statSR','statSSR','statUR'])assert.ok(html.includes('id="'+term+'"'),term);
 });
