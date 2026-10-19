@@ -74,7 +74,7 @@ function render(data){
   $('cChampion').textContent='累積總分第一：'+(data.leaderboards?.total?.[0]?.nickname||'尚無玩家');
   $('exChampion').textContent='單次最高分第一：'+(data.leaderboards?.best?.[0]?.nickname||'尚無玩家');
   $('exPrizeName').textContent=data.leaderboards?.best?.[0]?.nickname||'終極大獎 EX';
-  $('exRate').textContent=(data.ultimate?.unlocked?'0.0000324%':'???')+' · +350,000 分';
+  $('exRate').textContent=data.ultimate?.unlocked?'0.0000324%':'???';
   $('exDiscoverer').textContent='首次發現者：'+(data.ultimate?.firstDiscoverer||'尚未解鎖');
   if(data.hasActive){
     message('本箱正在進行中；已揭曉 '+nf.format(run.revealedCount)+' 格，可逐格開啟，或直接跳過剩餘揭曉。');

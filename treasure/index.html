@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#0b0b1a">
   <meta name="description" content="Treasure 四階稀有大獎（含 EX 首次發現）與 95% 連續掉落練習。">
   <title>秘寶連續掉落模擬器｜DFCH 機率實驗室</title>
-  <link rel="stylesheet" href="./style.css?v=1.6.0">
+  <link rel="stylesheet" href="./style.css?v=1.6.1">
   <link rel="stylesheet" href="./challenge/style.css?v=1.0.0">
 </head>
 <body>
@@ -59,6 +59,10 @@
     <section class="probability-board" aria-label="獎勵機率">
       <div class="board-head"><span class="board-kicker">PRIZE POOL</span><span class="board-note">每件掉落機率</span></div>
       <div class="prize-grid">
+        <article class="prize-card prize-ex ultimate-prize-card">
+          <div class="prize-art ultimate-prize-art" aria-hidden="true"><img class="prize-image prize-image-ex" src="./assets/prize-ex.gif" alt="" loading="lazy"><span class="prize-shimmer"></span></div>
+          <div class="prize-details ultimate-prize-info"><span class="prize-tier">ULTIMATE · EX</span><h2 id="prizeEXName">終極大獎</h2><strong id="ultimateRate">???</strong><p class="prize-points" data-score-type="EX">＋350,000 分</p><p class="prize-honor" id="prizeEXChampion">單次最高分第一：待揭曉</p><p class="prize-honor" id="prizeEXDiscoverer">首次發現者：尚未解鎖</p></div>
+        </article>
         <article class="prize-card prize-a">
           <div class="prize-art" aria-hidden="true"><img class="prize-image" src="./assets/prize-a.png" alt="" loading="lazy"><span class="prize-shimmer"></span></div>
           <div class="prize-details"><span class="prize-tier">ULTRA RARE · A</span><h2>終極瓶子</h2><strong>0.01<small>%</small></strong><p class="prize-points" data-score-type="A">＋1,000 分</p></div>
@@ -71,10 +75,7 @@
           <div class="prize-art" aria-hidden="true"><img class="prize-image" src="./assets/prize-c.png" alt="" loading="lazy"><span class="prize-shimmer"></span></div>
           <div class="prize-details"><span class="prize-tier">LEGENDARY RARE · C</span><h2>皆傳牌子</h2><strong>0.00015<small>%</small></strong><p class="prize-points" data-score-type="C">＋100,000 分</p><p class="prize-honor" id="prizeCChampion">累積總分第一：待揭曉</p></div>
         </article>
-        <article class="prize-card prize-ex">
-          <div class="prize-art" aria-hidden="true"><img class="prize-image prize-image-ex" src="./assets/prize-ex.gif" alt="" loading="lazy"><span class="prize-shimmer"></span></div>
-          <div class="prize-details"><span class="prize-tier">ULTIMATE · EX</span><h2 id="prizeEXName">終極大獎</h2><strong id="ultimateRate">???</strong><p class="prize-points" data-score-type="EX">＋350,000 分</p><p class="prize-honor" id="prizeEXChampion">單次最高分第一：待揭曉</p><p class="prize-honor" id="prizeEXDiscoverer">首次發現者：尚未解鎖</p></div>
-        </article>
+
       </div>
       <details class="ordinary-drawer" id="ordinaryRewards">
         <summary class="ordinary-summary"><span class="ordinary-summary-text"><strong>普通獎勵 N～UR</strong><small>99.9848176% · 權重 50／30／15／4／1</small></span><span class="ordinary-summary-action" aria-hidden="true">展開 <span class="ordinary-chevron">⌄</span></span></summary>

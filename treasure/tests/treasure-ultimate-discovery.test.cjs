@@ -42,7 +42,8 @@ test('EX first-discovery is awarded only on reveal and is immutable',()=>{
 });
 test('EX odds are concealed on screen until server confirms discovery',()=>{
   assert.match(practiceHtml,/<strong id="ultimateRate">\?\?\?<\/strong>/);
-  assert.match(challengeHtml,/id="exRate">\?\?\? · \+350,000 分/);
+  assert.match(challengeHtml,/id="exRate">\?\?\?<\/strong>/);
+  assert.match(challengeHtml,/class="ultimate-prize-points">＋350,000 分/);
   assert.match(read('treasure/app.js'),/data\.ultimate\?\.unlocked\?'0\.0000324%':'\?\?\?'/);
   assert.match(read('treasure/challenge/app.js'),/data\.ultimate\?\.unlocked\?'0\.0000324%':'\?\?\?'/);
   assert.match(practiceHtml,/id="prizeEXDiscoverer"/);

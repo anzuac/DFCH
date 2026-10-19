@@ -191,3 +191,96 @@ button,input,select{font:inherit}button{cursor:pointer}button:disabled{opacity:.
  .prize-details .prize-honor{font-size:8px;line-height:1.4}
  .loot-tile .tile-prize{width:min(32px,95%);height:32px}
 }
+
+/* V1.6.1 — single full-width EX above A/B/C, same visual hierarchy in both modes. */
+.prize-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+.prize-grid>.ultimate-prize-card,
+.challenge-prize-grid>.ultimate-prize-card{
+  grid-column:1/-1;
+  display:grid;
+  grid-template-columns:minmax(0,180px) minmax(0,1fr);
+  column-gap:22px;
+  align-items:center;
+  text-align:left;
+  padding:18px;
+  min-height:175px;
+}
+.ultimate-prize-card .ultimate-prize-art{
+  width:100%;
+  height:auto;
+  min-height:0;
+  aspect-ratio:1/1;
+  display:grid;
+  place-items:center;
+  margin:0;
+  border-radius:12px;
+  overflow:hidden;
+}
+.ultimate-prize-card .ultimate-prize-art img,
+.prize-art.ultimate-prize-art .prize-image{
+  display:block;
+  width:100%;
+  height:100%;
+  max-width:none;
+  max-height:none;
+  object-fit:contain;
+  margin:auto;
+  filter:drop-shadow(0 0 12px #f4d59288);
+}
+.ultimate-prize-card .ultimate-prize-info{
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  justify-content:center;
+  text-align:left;
+  gap:4px;
+}
+.ultimate-prize-card .ultimate-prize-info h2,
+.ultimate-prize-card .ultimate-prize-info strong[id="exPrizeName"]{
+  font-size:clamp(18px,3.1vw,26px);
+  line-height:1.25;
+  margin:0;
+  overflow-wrap:anywhere;
+}
+.ultimate-prize-card .ultimate-prize-info .prize-honor,
+.ultimate-prize-card .ultimate-prize-info .honor{
+  display:block;
+  font-size:11px;
+  line-height:1.45;
+  margin:2px 0 0;
+  overflow-wrap:anywhere;
+}
+@media(max-width:510px){
+  .prize-grid>.ultimate-prize-card,
+  .challenge-prize-grid>.ultimate-prize-card{
+    grid-template-columns:minmax(0,112px) minmax(0,1fr);
+    column-gap:11px;
+    padding:12px 10px;
+    min-height:145px;
+    border-radius:12px;
+  }
+  .ultimate-prize-card .ultimate-prize-art{width:100%;height:auto;aspect-ratio:1/1;margin:0}
+  .ultimate-prize-card .ultimate-prize-info{gap:3px}
+  .ultimate-prize-card .ultimate-prize-info h2,
+  .ultimate-prize-card .ultimate-prize-info strong[id="exPrizeName"]{
+    font-size:18px;
+  }
+  .ultimate-prize-card .ultimate-prize-info .prize-honor,
+  .ultimate-prize-card .ultimate-prize-info .honor{
+    font-size:9px;
+    line-height:1.4;
+    margin-top:1px;
+  }
+  .prize-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+}
+@media(max-width:360px){
+  .prize-grid>.ultimate-prize-card,
+  .challenge-prize-grid>.ultimate-prize-card{
+    grid-template-columns:minmax(0,93px) minmax(0,1fr);
+    column-gap:8px;
+    padding:10px 8px;
+  }
+  .ultimate-prize-card .ultimate-prize-info h2,
+  .ultimate-prize-card .ultimate-prize-info strong[id="exPrizeName"]{font-size:16px}
+}
