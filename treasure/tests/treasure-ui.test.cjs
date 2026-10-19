@@ -16,7 +16,7 @@ class FakeElement {
  getAttribute(k){return this.attributes[k]}
 }
 function build(randomSequence=null,existingStore=null) {
- const ids=['openOnce','skipAnimation','skipAnimationLabel','probPerRun','statRuns','statItems','statA','statB','statC','statN','statR','statSR','statSSR','statUR','statAverage','statRetention','statHitRuns','emptyResult','resultContent','lastMode','lastItems','lastRare','lastStreak','lootCaption','lootHeadline','lootGrid','lootRemainder','liveDropProgress','liveDropMessage','liveDropCount','autoDrawStatus','drawButtonText','resetStats','resultPanel'];
+ const ids=['openOnce','skipAnimation','skipAnimationLabel','statRuns','statItems','statA','statB','statC','statN','statR','statSR','statSSR','statUR','statAverage','statRetention','statHitRuns','emptyResult','resultContent','lastMode','lastItems','lastRare','lastStreak','lootCaption','lootHeadline','lootGrid','lootRemainder','liveDropProgress','liveDropMessage','liveDropCount','autoDrawStatus','drawButtonText','resetStats','resultPanel'];
  const map=Object.fromEntries(ids.map(id=>[id,new FakeElement(id)]));
  const document=new FakeElement();document.hidden=false;
  document.getElementById=id=>{if(!map[id])throw Error('Unknown id '+id);return map[id]};
@@ -45,13 +45,13 @@ test('tap reveals one item at a time, stats only committed at chest completion',
 });
 test('skip reveals immediately and mid-opening skip does not double count',async()=>{
  const {map,store}=build();
- map.skipAnimation.dispatch('click');
+ map.skipAnimation.checked=!map.skipAnimation.checked;map.skipAnimation.dispatch('change');
  map.openOnce.dispatch('click');
  assert.equal(map.statRuns.textContent,'1');
- map.skipAnimation.dispatch('click');
+ map.skipAnimation.checked=!map.skipAnimation.checked;map.skipAnimation.dispatch('change');
  map.openOnce.dispatch('click');
  assert.equal(map.statRuns.textContent,'1');
- await sleep(120);map.skipAnimation.dispatch('click');
+ await sleep(120);map.skipAnimation.checked=!map.skipAnimation.checked;map.skipAnimation.dispatch('change');
  assert.equal(map.statRuns.textContent,'2');
  await sleep(350);
  assert.equal(map.statRuns.textContent,'2');
@@ -59,7 +59,7 @@ test('skip reveals immediately and mid-opening skip does not double count',async
 });
 test('three jackpots and rarity SSR show separately and cumulative counts are exact',()=>{
  const {map,store}=build([.00001,.00011,.0001502,.97,.99]);
- map.skipAnimation.dispatch('click');map.openOnce.dispatch('click');
+ map.skipAnimation.checked=!map.skipAnimation.checked;map.skipAnimation.dispatch('change');map.openOnce.dispatch('click');
  assert.deepEqual(map.lootGrid.children.map(x=>x.className),[
   'loot-tile type-A','loot-tile type-B','loot-tile type-C','loot-tile type-SSR']);
  assert.equal(map.lastRare.textContent,'3');
@@ -75,7 +75,7 @@ test('three jackpots and rarity SSR show separately and cumulative counts are ex
 test('60 rewards remain in five-row scroll viewport without truncation',()=>{
  const seq=[];for(let i=1;i<=60;i++){seq.push(.5);if(i>=4)seq.push(i===60?.99:.2);}
  const {map}=build(seq);
- map.skipAnimation.dispatch('click');map.openOnce.dispatch('click');
+ map.skipAnimation.checked=!map.skipAnimation.checked;map.skipAnimation.dispatch('change');map.openOnce.dispatch('click');
  assert.equal(map.lootGrid.children.length,60);
  assert.equal(map.lootRemainder.hidden,false);
  assert.equal(map.statRuns.textContent,'1');
@@ -99,7 +99,7 @@ test('reset creates a fresh valid v2 record, legacy profile and old statistics r
  const store={'dfch-treasure-continuation-v1':JSON.stringify(old)};
  const {map}=build(null,store);
  assert.equal(map.statRuns.textContent,'0','old result distribution must never mix with new pool');
- assert.equal(map.skipAnimation.getAttribute('aria-pressed'),'true','old animation preference retained');
+ assert.equal(map.skipAnimation.checked,true,'old animation preference retained');
  map.openOnce.dispatch('click');assert.equal(map.statRuns.textContent,'1');
  map.resetStats.dispatch('click');assert.equal(map.statRuns.textContent,'0');
  assert.deepEqual(JSON.parse(store['dfch-treasure-continuation-v1']),old);
