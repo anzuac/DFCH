@@ -32,8 +32,8 @@ test('first-login nickname dialog remains separate from practice simulator',()=>
   assert.match(html,/id="openOnce"/);
   assert.match(html,/id="resultPanel"/);
   assert.match(html,/id="stats-heading"/);
-  assert.ok(html.indexOf('Future official leaderboard')>html.indexOf('id="resultPanel"'));
-  assert.ok(html.indexOf('Future official leaderboard')<html.indexOf('id="stats-heading"'));
+  assert.ok(html.indexOf('id="resultPanel"')<html.indexOf('id="stats-heading"'));
+  assert.match(html,/href="\.\/challenge\/"/);
 });
 
 test('Google nonce flow, backend identity and existing draw script are preserved',()=>{
@@ -41,7 +41,7 @@ test('Google nonce flow, backend identity and existing draw script are preserved
   assert.match(auth,/client_id:clientId,nonce,auto_select:false/);
   assert.match(auth,/await api\('google',\{credential\}\)/);
   assert.match(auth,/const existing=await api\('me'\)/);
-  assert.match(html,/src="\.\/engine\.js\?v=1\.4\.0"/);
-  assert.match(html,/src="\.\/app\.js\?v=1\.4\.0"/);
+  assert.match(html,/src="\.\/engine\.js\?v=1\.6\.0"/);
+  assert.match(html,/src="\.\/app\.js\?v=1\.6\.0"/);
   assert.ok(!auth.includes('official_draws'));
 });
