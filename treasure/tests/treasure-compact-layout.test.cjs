@@ -32,13 +32,18 @@ test('draw panel is compact; checkbox appears before rate; crossed-out blocks ar
   assert.ok(!js.includes("skipButton.setAttribute('aria-pressed'"));
 });
 
-test('score slots are explicit placeholders, never pretend to be scored official draws',()=>{
-  assert.equal((html.match(/data-score-type=/g)||[]).length,8);
-  assert.equal((html.match(/積分待設定/g)||[]).length,8);
-  assert.match(html,/id="lastPoints"[^>]*>本次練習積分：待設定（不計入排行榜）/);
-  assert.match(html,/id="openOnce"/);
-  assert.match(html,/id="lootGrid"/);
-  assert.match(html,/id="stats-heading"/);
+test('score labels are real configured points, no official draws activated',()=>{
+  const E=require('../engine.js');
+  const scores={N:1,R:3,SR:10,SSR:20,UR:50,A:1000,B:2500,C:100000};
+  assert.deepEqual(E.POINTS,scores);
+  for(const [type,points] of Object.entries(scores)){
+    assert.ok(html.includes('data-score-type="'+type+'">＋'+points.toLocaleString('en-US')+' 分</'),'score '+type);
+  }
+  assert.match(html,/id="lastPoints"[^>]*>本次練習積分：0 分（不計入排行榜）/);
+  assert.match(html,/id="statPracticePoints"/);
+  assert.match(js,/E\.scoreForCounts\(stage\)/);
+  assert.match(js,/E\.scoreForCounts\(stats\)/);
+  assert.match(js,/nf\.format\(E\.POINTS\[reward.type\]\)/);
   assert.match(js,/E\.createOpening\(MINIMUM,Math\.random\)/);
   assert.match(js,/E\.addStats\(stats,stage\)/);
   assert.ok(!js.includes('fetch('));
