@@ -4,8 +4,12 @@ CREATE TABLE IF NOT EXISTS treasure_players (
  id INTEGER PRIMARY KEY AUTOINCREMENT,
  google_sub TEXT NOT NULL UNIQUE,
  display_name TEXT NOT NULL DEFAULT '玩家',
+ nickname TEXT,
+ nickname_key TEXT,
  created_at INTEGER NOT NULL
 );
+CREATE UNIQUE INDEX IF NOT EXISTS idx_treasure_players_nickname_key ON treasure_players(nickname_key);
+-- NULL means this player has not yet chosen a nickname; SQLite UNIQUE permits multiple NULLs.
 CREATE TABLE IF NOT EXISTS treasure_sessions (
  token_hash TEXT PRIMARY KEY,
  player_id INTEGER NOT NULL REFERENCES treasure_players(id) ON DELETE CASCADE,

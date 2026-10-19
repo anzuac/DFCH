@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#0b0b1a">
   <meta name="description" content="以每件大獎 A 0.01%／B 0.005%／C 0.00007%、連續掉落 95% 模擬禁斷與深淵秘寶。">
   <title>秘寶連續掉落模擬器｜DFCH 機率實驗室</title>
-  <link rel="stylesheet" href="./style.css?v=1.4.0">
+  <link rel="stylesheet" href="./style.css?v=1.5.1">
 </head>
 <body>
   <main class="shell">
@@ -68,6 +68,15 @@
       <p id="treasureLoginStatus" class="treasure-login-status" role="status">正在檢查登入服務…</p>
       <div id="treasureSignIn" hidden></div>
       <div id="treasureSignedIn" hidden><strong id="treasurePlayerName"></strong><span>已使用 Google 帳號連結此瀏覽器</span></div>
+      <form id="treasureNicknameForm" class="treasure-nickname-form" hidden>
+        <label for="treasureNicknameInput">設定專屬遊戲暱稱</label>
+        <p>每個玩家的暱稱都不重複。僅首次設定開放，請確認後再儲存。</p>
+        <div class="treasure-nickname-controls">
+          <input type="text" id="treasureNicknameInput" name="nickname" maxlength="48" autocomplete="off" spellcheck="false" placeholder="2～16 字，中文／英文／數字" required>
+          <button type="submit" id="treasureNicknameSave">確認暱稱</button>
+        </div>
+        <p id="treasureNicknameStatus" class="treasure-nickname-feedback" role="status"></p>
+      </form>
       <button type="button" id="treasureLogout" class="reset-button treasure-logout" hidden>登出 Google 帳號</button>
       <p class="treasure-login-note">正式抽獎與世界排名尚未啟用。登入僅建立玩家身分，現階段所有開箱仍為不計分的練習。</p>
     </section>
@@ -130,6 +139,6 @@
   </main>
   <script src="./engine.js?v=1.4.0"></script>
   <script src="./app.js?v=1.4.0"></script>
-  <script src="./auth.js?v=1.5.0"></script>
+  <script src="./auth.js?v=1.5.1"></script>
 </body>
 </html>

@@ -21,6 +21,13 @@
 在這個新資料庫中執行 **cloudflare/treasure-schema.sql**。
 請絕對不要在 dfch-guide-stats 執行，並且不要刪除既有資料表。
 
+**既有資料庫（已手動建立四張表）額外執行 cloudflare/treasure-nickname-migration.sql 三條指令，一次一條，ALTER TABLE 成功後勿重複執行。**
+1. ALTER TABLE treasure_players ADD COLUMN nickname TEXT;
+2. ALTER TABLE treasure_players ADD COLUMN nickname_key TEXT;
+3. CREATE UNIQUE INDEX IF NOT EXISTS idx_treasure_players_nickname_key ON treasure_players(nickname_key);
+
+暱稱與 Google display_name 分開：未設定暱稱用 NULL（可有多人未設定），已設定之暱稱以 NFKC + 小寫正規化，比對唯一值，由 D1 唯一索引保證。僅支援第一次設定（後續改名政策另議）。若未完成 migration，auth/config 會顯示 enabled=false。
+
 SQL 使用 IF NOT EXISTS，可重複執行而不會重新清空紀錄。完成後確認資料表：
 treasure_players、treasure_sessions、treasure_player_scores、treasure_official_draws。
 
@@ -53,7 +60,8 @@ Cloudflare Pages 的原設定請維持：
 
 - 開啟 https://dfch.pages.dev/treasure/
 - 應顯示 Google 登入。若顯示未啟用，檢查 SQL 與環境變數、是否已重新部署。
-- 第一次登入後 D1 應新增一筆 treasure_players 與 treasure_sessions。
+- 第一次登入後 D1 應新增一筆 treasure_players 與 treasure_sessions，登入後可設定唯一遊戲暱稱。
+- 同一暱稱大小寫或全形相同時應收到 409「此暱稱已被使用」；登入者不可重設已定暱稱。
 - 重新整理仍應保持登入；按「登出」後應解除工作階段。
 - 關閉／開啟瀏覽器，預期在 30 天有效期內可恢復登入（瀏覽器須保留 Cookie）。
 - 原本 https://dfch.pages.dev/ 及 /api/guide-views 應維持正常。

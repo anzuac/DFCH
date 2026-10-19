@@ -95,3 +95,14 @@ button,input,select{font:inherit}button{cursor:pointer}button:disabled{opacity:.
 #treasureSignedIn span{font-size:11px;color:#adc3b8}
 .treasure-logout{margin:12px 0}
 .treasure-login-note{border-top:1px solid #3a4058;padding-top:10px;margin:12px 0 0;color:#a3adc4;font-size:11px;line-height:1.65}
+
+/* V1.5.1 — First-login unique nickname form */
+.treasure-auth-panel [hidden]{display:none!important}
+.treasure-nickname-form{margin-top:12px;padding:12px;border-radius:10px;border:1px solid #59698e;background:#141d34}
+.treasure-nickname-form label{display:block;font-weight:700;font-size:14px;color:#f4e9ff}
+.treasure-nickname-form p{font-size:11px;line-height:1.7;color:#bac5da;margin:7px 0}
+.treasure-nickname-controls{display:flex;align-items:stretch;gap:9px;flex-wrap:wrap}
+.treasure-nickname-controls input{min-width:0;flex:1 1 180px;background:#0b1429;color:#fff;border:1px solid #7581a1;border-radius:8px;padding:11px;font:inherit;font-size:13px}
+.treasure-nickname-controls button{border:1px solid #9b87d4;background:#52418a;color:white;border-radius:8px;padding:10px 15px;font:inherit;font-weight:700;cursor:pointer}
+.treasure-nickname-controls button:disabled{opacity:.6;cursor:wait}
+.treasure-nickname-form .treasure-nickname-feedback{min-height:1em;color:#ffcc9d}

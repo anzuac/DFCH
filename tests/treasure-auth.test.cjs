@@ -57,7 +57,7 @@ test('static standalone page is added to Cloudflare build without activating liv
   assert.match(build,/treasure\/auth\.js/);
   assert.match(markup,/id="treasureLogin"/);
   assert.match(markup,/id="treasureLogin"[^>]+hidden/);
-  assert.match(markup,/src="\.\/auth\.js\?v=1\.5\.0"/);
+  assert.match(markup,/src="\.\/auth\.js\?v=1\.5\.1"/);
   assert.match(read('treasure/auth.js'),/window\.location\.hostname !== 'dfch\.pages\.dev'/);
 });
 test('SQL schema is safe for repeated initialization and reserves official-score tables',()=>{
@@ -68,4 +68,31 @@ test('SQL schema is safe for repeated initialization and reserves official-score
   assert.match(auth,/__Host-dfch_treasure_session/);
   assert.match(auth,/crypto\.subtle\.verify/);
   assert.match(auth,/SameSite=Lax/);
+});
+
+test('nickname normalization blocks duplicate case/fullwidth and invalid symbols',()=>{
+  const context=vm.createContext({});
+  vm.runInContext(auth.replace('export async function handleTreasureRequest','async function handleTreasureRequest')
+    +'\nglobalThis.normalize=treasureNormalizeNickname;',context);
+  assert.equal(context.normalize(' Ａｎｚｕ ').nicknameKey,'anzu');
+  assert.equal(context.normalize('Anzu').nicknameKey,'anzu');
+  assert.equal(context.normalize('玩家一').nicknameKey,'玩家一');
+  assert.equal(context.normalize('AB').nicknameKey,'ab');
+  assert.equal(context.normalize('A'),null);
+  assert.equal(context.normalize('A B'),null);
+  assert.equal(context.normalize('<script>'),null);
+  assert.equal(context.normalize('長'.repeat(17)),null);
+});
+test('nickname is separately nullable and has a database-enforced unique index',()=>{
+  const sql=read('cloudflare/treasure-schema.sql');
+  const migration=read('cloudflare/treasure-nickname-migration.sql');
+  assert.match(sql,/nickname TEXT/);
+  assert.match(sql,/nickname_key TEXT/);
+  assert.match(sql,/CREATE UNIQUE INDEX IF NOT EXISTS idx_treasure_players_nickname_key ON treasure_players\(nickname_key\)/);
+  assert.match(migration,/ALTER TABLE treasure_players ADD COLUMN nickname TEXT/);
+  assert.match(migration,/ALTER TABLE treasure_players ADD COLUMN nickname_key TEXT/);
+  assert.match(auth,/nickname_key IS NULL/);
+  assert.match(auth,/此暱稱已被使用/);
+  assert.match(markup,/id="treasureNicknameForm"/);
+  assert.ok(!auth.includes('UPDATE treasure_players SET display_name'));
 });

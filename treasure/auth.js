@@ -10,6 +10,10 @@
   const profile=$('treasureSignedIn');
   const name=$('treasurePlayerName');
   const logout=$('treasureLogout');
+  const nicknameForm=$('treasureNicknameForm');
+  const nicknameInput=$('treasureNicknameInput');
+  const nicknameSave=$('treasureNicknameSave');
+  const nicknameStatus=$('treasureNicknameStatus');
   function message(text) {status.textContent=text;}
   async function api(path, body) {
     const response=await fetch('/api/treasure/auth/'+path,{
@@ -26,7 +30,9 @@
     signIn.hidden=true;
     profile.hidden=false;
     logout.hidden=false;
-    name.textContent=player.displayName||'玩家';
+    name.textContent=player.nickname || player.displayName || '玩家';
+    nicknameForm.hidden=!!player.nickname;
+    nicknameStatus.textContent='';
     message('已登入 · 正式抽獎每日五次功能尚未啟用，目前可使用原本練習抽獎。');
   }
   function loadGoogleScript() {
@@ -61,11 +67,29 @@
     });
     signIn.hidden=false;
   }
+  nicknameForm.addEventListener('submit',async event=>{
+    event.preventDefault();
+    nicknameSave.disabled=true;
+    nicknameStatus.textContent='正在檢查並儲存暱稱…';
+    try {
+      const result=await api('nickname',{nickname:nicknameInput.value});
+      if (result.player) {
+        signedIn(result.player);
+        nicknameStatus.textContent='';
+        message('暱稱「'+result.nickname+'」設定成功！正式開箱與排名目前仍未啟用。');
+        nicknameInput.value='';
+      }
+    } catch(error) {
+      nicknameStatus.textContent=error.message;
+    } finally {nicknameSave.disabled=false;}
+  });
   logout.addEventListener('click',async ()=>{
     logout.disabled=true;
     try {
       await api('logout',{});
       profile.hidden=true;
+      nicknameForm.hidden=true;
+      nicknameInput.value='';
       logout.hidden=true;
       message('已登出，可以重新使用 Google 帳號登入。');
       await startSignIn(window.treasureGoogleClientId);

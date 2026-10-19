@@ -80,12 +80,56 @@ async function treasureVerifyIdToken(credential, audience, nonce) {
       !nonce || claims.nonce !== nonce) throw new Error('invalid claims');
   return {sub:claims.sub, name:typeof claims.name === 'string' ? claims.name.slice(0,80) : '玩家'};
 }
+// Separate publicly unique game nickname from Google's non-unique profile name.
+// Unicode normalization + case folding ensure e.g. Ａｎｚｕ and Anzu are the same nickname.
+function treasureNormalizeNickname(value) {
+  if (typeof value !== 'string' || value.length > 64) return null;
+  const nickname = value.normalize('NFKC').trim();
+  const size = Array.from(nickname).length;
+  if (size < 2 || size > 16 || !/^[\p{L}\p{N}]+$/u.test(nickname)) return null;
+  return {nickname, nicknameKey:nickname.toLowerCase().normalize('NFKC')};
+}
+function treasurePublicPlayer(player) {
+  return {id:player.id, displayName:player.displayName, nickname:player.nickname || null};
+}
+async function treasureSetNickname(request, db) {
+  const player=await treasureLoggedInPlayer(request,db);
+  if (!player) return treasureReply({error:'請先使用 Google 帳號登入'},401);
+  if (player.nickname) return treasureReply({error:'此帳號已設定暱稱'},409);
+  let selection;
+  try {
+    if (Number(request.headers.get('Content-Length') || 0) > 2000) throw new Error('size');
+    const raw=await request.text();
+    if (raw.length > 2000) throw new Error('size');
+    selection=treasureNormalizeNickname(JSON.parse(raw)?.nickname);
+  } catch (_) { return treasureReply({error:'暱稱資料格式不正確'},400); }
+  if (!selection) return treasureReply({error:'暱稱需為 2～16 個中文字、英文字或數字，不可包含空白或符號'},400);
+  try {
+    await db.prepare(
+      'UPDATE treasure_players SET nickname=?,nickname_key=? WHERE id=? AND nickname_key IS NULL'
+    ).bind(selection.nickname,selection.nicknameKey,player.id).run();
+    const saved=await db.prepare(
+      'SELECT nickname,nickname_key FROM treasure_players WHERE id=?'
+    ).bind(player.id).first();
+    if (!saved || saved.nickname_key !== selection.nicknameKey)
+      return treasureReply({error:'此帳號已設定暱稱'},409);
+    return treasureReply({nickname:saved.nickname, player:{
+      ...treasurePublicPlayer(player),nickname:saved.nickname
+    }});
+  } catch (error) {
+    // The UNIQUE index is authoritative even for concurrent signups.
+    if (/UNIQUE constraint failed.*treasure_players\.nickname_key/i.test(String(error?.message || error)) ||
+        /idx_treasure_players_nickname_key/i.test(String(error?.message || error)))
+      return treasureReply({error:'此暱稱已被使用，請換一個'},409);
+    return treasureReply({error:'暱稱設定暫時失敗，請稍後重試'},503);
+  }
+}
 async function treasureLoggedInPlayer(request, db) {
   const token = treasureGetCookie(request, TREASURE_COOKIE);
   if (!/^[A-Za-z0-9_-]{43}$/.test(token)) return null;
   const hash = await treasureHash(token);
   return db.prepare(
-    'SELECT p.id, p.display_name AS displayName FROM treasure_sessions s ' +
+    'SELECT p.id, p.display_name AS displayName, p.nickname FROM treasure_sessions s ' +
     'JOIN treasure_players p ON p.id = s.player_id WHERE s.token_hash=? AND s.expires_at>?'
   ).bind(hash, Math.floor(Date.now()/1000)).first();
 }
@@ -99,7 +143,8 @@ async function treasureHandleAuth(request, env) {
     if (db && clientId) {
       try { await db.prepare('SELECT 1 FROM treasure_players LIMIT 1').first();
         await db.prepare('SELECT 1 FROM treasure_sessions LIMIT 1').first();
-        await db.prepare('SELECT 1 FROM treasure_player_scores LIMIT 1').first(); ready = true;
+        await db.prepare('SELECT 1 FROM treasure_player_scores LIMIT 1').first();
+        await db.prepare('SELECT nickname,nickname_key FROM treasure_players LIMIT 1').first(); ready = true;
       } catch (_) { ready = false; }
     }
     return treasureReply({enabled:ready, clientId:ready ? clientId : null, officialDrawsEnabled:false});
@@ -107,7 +152,7 @@ async function treasureHandleAuth(request, env) {
   if (!db || !clientId) return treasureReply({error:'登入服務尚未設定完成'},503);
   if (route === '/api/treasure/auth/me' && request.method === 'GET') {
     try { const player = await treasureLoggedInPlayer(request,db);
-      return treasureReply({loggedIn:!!player, player:player ? {id:player.id, displayName:player.displayName} : null});
+      return treasureReply({loggedIn:!!player, player:player ? treasurePublicPlayer(player) : null});
     } catch (_) { return treasureReply({error:'目前無法讀取登入狀態'},503); }
   }
   if (route === '/api/treasure/auth/nonce' && request.method === 'GET') {
@@ -115,11 +160,16 @@ async function treasureHandleAuth(request, env) {
     return treasureReply({nonce},200,treasureCookie(TREASURE_NONCE_COOKIE,nonce,TREASURE_NONCE_SECONDS));
   }
   if (request.method !== 'POST' ||
-      (route !== '/api/treasure/auth/google' && route !== '/api/treasure/auth/logout'))
+      (route !== '/api/treasure/auth/google' && route !== '/api/treasure/auth/logout' &&
+       route !== '/api/treasure/auth/nickname'))
     return treasureReply({error:'找不到登入功能'},404);
   if (request.headers.get('Origin') !== url.origin ||
       !request.headers.get('Content-Type')?.toLowerCase().startsWith('application/json'))
     return treasureReply({error:'請求來源不正確'},403);
+  if (route === '/api/treasure/auth/nickname') {
+    try { return await treasureSetNickname(request, db); }
+    catch (_) { return treasureReply({error:'無法設定暱稱，請稍後再試'},503); }
+  }
   if (route === '/api/treasure/auth/logout') {
     try {
       const token=treasureGetCookie(request,TREASURE_COOKIE);
@@ -146,7 +196,7 @@ async function treasureHandleAuth(request, env) {
       'INSERT INTO treasure_players (google_sub,display_name,created_at) VALUES (?,?,?) ' +
       'ON CONFLICT(google_sub) DO NOTHING'
     ).bind(identity.sub,identity.name,now).run();
-    const player=await db.prepare('SELECT id,display_name AS displayName FROM treasure_players WHERE google_sub=?')
+    const player=await db.prepare('SELECT id,display_name AS displayName,nickname FROM treasure_players WHERE google_sub=?')
       .bind(identity.sub).first();
     if (!player) throw new Error('user insert error');
     await db.prepare('INSERT OR IGNORE INTO treasure_player_scores (player_id) VALUES (?)').bind(player.id).run();
@@ -154,7 +204,7 @@ async function treasureHandleAuth(request, env) {
     await db.prepare(
       'INSERT INTO treasure_sessions (token_hash,player_id,created_at,expires_at) VALUES (?,?,?,?)'
     ).bind(await treasureHash(token),player.id,now,now+TREASURE_SESSION_SECONDS).run();
-    return treasureReply({loggedIn:true, player:{id:player.id,displayName:player.displayName}},
+    return treasureReply({loggedIn:true, player:treasurePublicPlayer(player)},
       200,[treasureCookie(TREASURE_COOKIE,token,TREASURE_SESSION_SECONDS),
            treasureCookie(TREASURE_NONCE_COOKIE,'',0)]);
   } catch (_) { return treasureReply({error:'儲存玩家登入資料失敗，請稍後重試'},503); }
