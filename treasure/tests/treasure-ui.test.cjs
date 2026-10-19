@@ -40,6 +40,7 @@ test('tap reveals one item at a time, stats only committed at chest completion',
  assert.equal(map.statRuns.textContent,'0');
  await sleep(275);
  assert.equal(map.statRuns.textContent,'1');
+ assert.equal(map.statPracticePoints.textContent,'4');
  assert.equal(map.lootGrid.children.length,4);
  assert.equal(map.lastMode.textContent,'普通開箱 · 已完成');
 });
@@ -63,6 +64,8 @@ test('three jackpots and rarity SSR show separately and cumulative counts are ex
  assert.deepEqual(map.lootGrid.children.map(x=>x.className),[
   'loot-tile type-A','loot-tile type-B','loot-tile type-C','loot-tile type-SSR']);
  assert.equal(map.lastRare.textContent,'3');
+ assert.equal(map.lastPoints.textContent,'本次練習積分：103,520 分（不計入排行榜）');
+ assert.equal(map.statPracticePoints.textContent,'103,520');
  assert.equal(map.statA.textContent,'1');
  assert.equal(map.statB.textContent,'1');
  assert.equal(map.statC.textContent,'1');
@@ -102,6 +105,7 @@ test('reset creates a fresh valid v2 record, legacy profile and old statistics r
  assert.equal(map.skipAnimation.checked,true,'old animation preference retained');
  map.openOnce.dispatch('click');assert.equal(map.statRuns.textContent,'1');
  map.resetStats.dispatch('click');assert.equal(map.statRuns.textContent,'0');
+ assert.equal(map.statPracticePoints.textContent,'0');
  assert.deepEqual(JSON.parse(store['dfch-treasure-continuation-v1']),old);
  assert.equal(JSON.parse(store['dfch-treasure-continuation-v2']).stats.runs,0);
 });
