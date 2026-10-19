@@ -6,11 +6,31 @@
   <meta name="theme-color" content="#0b0b1a">
   <meta name="description" content="以每件大獎 A 0.01%／B 0.005%／C 0.00007%、連續掉落 95% 模擬禁斷與深淵秘寶。">
   <title>秘寶連續掉落模擬器｜DFCH 機率實驗室</title>
-  <link rel="stylesheet" href="./style.css?v=1.5.1">
+  <link rel="stylesheet" href="./style.css?v=1.5.2">
 </head>
 <body>
   <main class="shell">
-    <div class="topline"><span class="eyebrow"><span class="status-led"></span> DFCH / PROBABILITY LAB</span><span class="lab-tag">獨立模擬器 · v1.4</span></div>
+    <div class="topline">
+      <span class="eyebrow"><span class="status-led"></span> DFCH / PROBABILITY LAB</span>
+      <div class="top-actions">
+        <span class="lab-tag">獨立模擬器 · v1.5</span>
+        <div class="treasure-account" id="treasureLogin" hidden>
+          <div id="treasureSignIn" class="treasure-signin" hidden></div>
+          <div id="treasureSignedIn" hidden>
+            <button type="button" id="treasureAccountToggle" class="treasure-account-toggle" aria-haspopup="true" aria-expanded="false" aria-controls="treasureAccountMenu">
+              <span id="treasurePlayerName">玩家</span><span class="treasure-account-chevron" aria-hidden="true">⌄</span>
+            </button>
+            <div id="treasureAccountMenu" class="treasure-account-menu" hidden>
+              <strong>玩家帳號</strong>
+              <p>已連結 Google 帳號，玩家暱稱會保存在伺服器。</p>
+              <p>正式開箱與世界排行榜尚未啟用，目前抽獎仍為不計分的練習。</p>
+              <button type="button" id="treasureLogout" class="treasure-account-logout">登出 Google 帳號</button>
+            </div>
+          </div>
+          <p id="treasureLoginStatus" class="treasure-login-status" role="status" hidden></p>
+        </div>
+      </div>
+    </div>
     <header class="masthead">
       <div class="masthead-copy">
         <p class="small-caps">禁斷與深淵秘寶・連續開箱測試</p>
@@ -63,25 +83,7 @@
       <p class="weight-explanation">每抽出一件普通獎勵，再按上述相對權重分配稀有度；五級普通獎品合計 99.98493%。</p>
     </section>
 
-    <section class="stats-panel treasure-auth-panel" id="treasureLogin" aria-labelledby="treasureLoginHeading" hidden>
-      <div class="section-heading"><div><span class="board-kicker">PLAYER IDENTITY · V1.5</span><h2 id="treasureLoginHeading">Google 玩家登入</h2></div><span class="treasure-login-pill">帳號整合</span></div>
-      <p id="treasureLoginStatus" class="treasure-login-status" role="status">正在檢查登入服務…</p>
-      <div id="treasureSignIn" hidden></div>
-      <div id="treasureSignedIn" hidden><strong id="treasurePlayerName"></strong><span>已使用 Google 帳號連結此瀏覽器</span></div>
-      <form id="treasureNicknameForm" class="treasure-nickname-form" hidden>
-        <label for="treasureNicknameInput">設定專屬遊戲暱稱</label>
-        <p>每個玩家的暱稱都不重複。僅首次設定開放，請確認後再儲存。</p>
-        <div class="treasure-nickname-controls">
-          <input type="text" id="treasureNicknameInput" name="nickname" maxlength="48" autocomplete="off" spellcheck="false" placeholder="2～16 字，中文／英文／數字" required>
-          <button type="submit" id="treasureNicknameSave">確認暱稱</button>
-        </div>
-        <p id="treasureNicknameStatus" class="treasure-nickname-feedback" role="status"></p>
-      </form>
-      <button type="button" id="treasureLogout" class="reset-button treasure-logout" hidden>登出 Google 帳號</button>
-      <p class="treasure-login-note">正式抽獎與世界排名尚未啟用。登入僅建立玩家身分，現階段所有開箱仍為不計分的練習。</p>
-    </section>
-
-    <section class="sim-panel" aria-labelledby="settings-heading">
+        <section class="sim-panel" aria-labelledby="settings-heading">
       <div class="section-heading"><div><span class="board-kicker">RETAIN & REPEAT</span><h2 id="settings-heading">開箱設定</h2></div><span class="chance-pill"><span class="pulsing-dot"></span> 連續掉落率 <b>95.00%</b></span></div>
       <div class="retention-bar" role="img" aria-label="成功續掉率 95%，停止率 5%"><div class="retention-fill"></div><span>95% 持續</span><span>5% 停止</span></div>
       <div class="chance-interpretation"><span class="icon-spark" aria-hidden="true">✧</span><p>先保證 <b>4</b> 件，再以 <b>95%</b> 的成功率逐件追加；首次失敗即結束這一段開箱。</p></div>
@@ -110,6 +112,7 @@
       </div>
     </section>
 
+    <!-- Future official leaderboard: place here, between results and local practice statistics. -->
     <section class="stats-panel" aria-labelledby="stats-heading">
       <div class="section-heading"><div><span class="board-kicker">LOCAL STATISTICS</span><h2 id="stats-heading">累計抽獎統計</h2></div><button type="button" class="reset-button" id="resetStats">重置紀錄</button></div>
       <div class="stats-grid">
@@ -137,8 +140,21 @@
 
     <footer class="footer"><span>DFCH / 非官方研究工具</span><span>抽獎紀錄僅保存在此瀏覽器 · 未啟用世界排行榜</span></footer>
   </main>
+  <dialog id="treasureNicknameDialog" class="treasure-nickname-dialog" aria-labelledby="treasureNicknameHeading" aria-describedby="treasureNicknameIntro">
+    <div class="treasure-dialog-eyebrow"><span>PLAYER IDENTITY</span><span>首次登入</span></div>
+    <h2 id="treasureNicknameHeading">設定你的遊戲暱稱</h2>
+    <p id="treasureNicknameIntro">歡迎加入 DFCH Treasure！請設定公開顯示的玩家暱稱。暱稱只能設定一次，設定後無法自行修改，也不能與其他玩家重複。</p>
+    <form id="treasureNicknameForm" class="treasure-nickname-form">
+      <label for="treasureNicknameInput">遊戲暱稱</label>
+      <input type="text" id="treasureNicknameInput" name="nickname" minlength="2" maxlength="48" autocomplete="off" spellcheck="false" placeholder="2～16 字，中文／英文／數字" required>
+      <p class="treasure-nickname-hint">不可使用空白或符號。英文大小寫及全半形視為相同暱稱。</p>
+      <p id="treasureNicknameStatus" class="treasure-nickname-feedback" role="status" aria-live="polite"></p>
+      <button type="submit" id="treasureNicknameSave" class="treasure-nickname-save">確認設定</button>
+      <button type="button" id="treasureNicknameLogout" class="treasure-nickname-exit">取消並登出</button>
+    </form>
+  </dialog>
   <script src="./engine.js?v=1.4.0"></script>
   <script src="./app.js?v=1.4.0"></script>
-  <script src="./auth.js?v=1.5.1"></script>
+  <script src="./auth.js?v=1.5.2"></script>
 </body>
 </html>
