@@ -210,8 +210,9 @@ async function treasureHandleAuth(request, env) {
   } catch (_) { return treasureReply({error:'儲存玩家登入資料失敗，請稍後重試'},503); }
 }
 export async function handleTreasureRequest(request, env) {
-  if (new URL(request.url).pathname.startsWith('/api/treasure/auth/'))
-    return treasureHandleAuth(request, env);
-  // Keep unfinished official scoring routes inaccessible until server-side draws exist.
-  return treasureReply({error:'正式抽獎及排行榜尚未啟用'},501);
+  const path=new URL(request.url).pathname;
+  if (path.startsWith('/api/treasure/auth/'))return treasureHandleAuth(request, env);
+  if (path.startsWith('/api/treasure/challenge/'))
+    return handleTreasureChallengeRequest(request,env,{treasureReply,treasureLoggedInPlayer});
+  return treasureReply({error:'未知 Treasure API'},404);
 }
