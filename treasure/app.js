@@ -11,9 +11,10 @@
   const REVEAL_INTERVAL_MS = 105;
   const NEXT_CHEST_PAUSE_MS = 310;
   const SKIP_NEXT_PAUSE_MS = 180;
-  const MAX_ORDINARY_TILES = 56;
+  // The reward list now retains all revealed tiles; CSS limits only its viewport.
   let minimum = 4;
   let stats = E.blankStats();
+  let profile = { nickname: '', bestNormal: null, bestSpecial: null, bestJackpots: null };
   let skipAnimation = false;
   let activeOpening = null;
   let fastForwarding = false;
@@ -40,15 +41,31 @@
         s.hitRuns > s.runs) return E.blankStats();
     return s;
   }
+  function sanitizeBest(best, minimum = null) {
+    if (!best || typeof best !== 'object') return null;
+    const {items,a,b} = best;
+    if (![items,a,b].every(x => Number.isSafeInteger(x) && x >= 0) || items < (minimum || 4) || a + b > items) return null;
+    return { items, a, b };
+  }
+  function sanitizeProfile(value) {
+    if (!value || typeof value !== 'object') return { nickname: '', bestNormal: null, bestSpecial: null, bestJackpots: null };
+    return {
+      nickname: typeof value.nickname === 'string' ? value.nickname.trim().slice(0,16) : '',
+      bestNormal: sanitizeBest(value.bestNormal,4),
+      bestSpecial: sanitizeBest(value.bestSpecial,11),
+      bestJackpots: sanitizeBest(value.bestJackpots)
+    };
+  }
   try {
     const saved = storage && JSON.parse(storage.getItem(storeKey));
     if (saved && [4, 11].includes(saved.minimum)) minimum = saved.minimum;
     stats = sanitizeStats(saved?.stats);
+    profile = sanitizeProfile(saved?.profile);
     if (typeof saved?.skipAnimation === 'boolean') skipAnimation = saved.skipAnimation;
     else if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) skipAnimation = true;
   } catch (_) { /* storage is optional */ }
   function persist() {
-    try { storage?.setItem(storeKey, JSON.stringify({ minimum, stats, skipAnimation })); }
+    try { storage?.setItem(storeKey, JSON.stringify({ minimum, stats, skipAnimation, profile })); }
     catch (_) { /* private browsing */ }
   }
   function updateStats() {
@@ -59,6 +76,29 @@
     $('statAverage').textContent = stats.runs ? (stats.items / stats.runs).toFixed(2) + ' 件' : '—';
     $('statRetention').textContent = stats.continuationChecks ? percent(stats.continueSuccess / stats.continuationChecks) : '—';
     $('statHitRuns').textContent = nf.format(stats.hitRuns);
+  }
+  function updatePlayerPanel() {
+    $('playerNickname').value = profile.nickname;
+    $('bestNormal').textContent = profile.bestNormal ? nf.format(profile.bestNormal.items) : '—';
+    $('bestSpecial').textContent = profile.bestSpecial ? nf.format(profile.bestSpecial.items) : '—';
+    $('bestJackpots').textContent = profile.bestJackpots ? nf.format(profile.bestJackpots.a + profile.bestJackpots.b) : '—';
+  }
+  function recordPersonalBest(stage) {
+    const entry = { items: stage.items, a: stage.a, b: stage.b };
+    const key = stage.minimum === 4 ? 'bestNormal' : 'bestSpecial';
+    if (!profile[key] || stage.items > profile[key].items) profile[key] = entry;
+    const old = profile.bestJackpots;
+    if (!old || stage.a + stage.b > old.a + old.b ||
+       (stage.a + stage.b === old.a + old.b && (stage.b > old.b ||
+        (stage.b === old.b && stage.items > old.items)))) profile.bestJackpots = entry;
+    updatePlayerPanel();
+  }
+  function columnsForViewport() {
+    return window.matchMedia?.('(max-width:510px)').matches ? 6 :
+      window.matchMedia?.('(max-width:780px)').matches ? 8 : 10;
+  }
+  function updateScrollHint() {
+    $('lootRemainder').hidden = $('lootGrid').children.length <= columnsForViewport() * 5;
   }
   function updateMode() {
     document.querySelectorAll('.mode-option').forEach(button => {
@@ -90,17 +130,12 @@
   }
   function appendReward(reward, stage) {
     const grid = $('lootGrid');
+    const followLatest = grid.scrollHeight - grid.clientHeight - grid.scrollTop <= 32;
     grid.append(createTile(reward));
-    // Keep the latest ordinary rewards visible, and never hide a rare prize.
-    // The counter always includes all rolled rewards, including compacted tiles.
-    if (reward.type === 'ordinary') {
-      const ordinary = grid.querySelectorAll('.type-ordinary');
-      if (ordinary.length > MAX_ORDINARY_TILES) ordinary[0].remove();
-    }
-    const hidden = stage.ordinary - Math.min(stage.ordinary, MAX_ORDINARY_TILES);
-    $('lootRemainder').hidden = hidden <= 0;
-    $('lootRemainder').textContent = hidden > 0 ?
-      `已收起較早的 ${nf.format(hidden)} 件普通獎勵；保留最近 ${MAX_ORDINARY_TILES} 件普通獎勵和所有大獎。` : '';
+    updateScrollHint();
+    if (followLatest) grid.scrollTop = grid.scrollHeight;
+    // Never remove previous rewards. A five-row scroll viewport constrains height,
+    // not the actual prize history of the current chest.
   }
   function updatePartial(stage) {
     $('lastItems').textContent = nf.format(stage.items);
@@ -128,6 +163,7 @@
     $('resultPanel').classList.remove('is-revealing');
     $('lastMode').textContent = stage.minimum === 4 ? '普通開箱 · 已完成' : '特殊續開 · 已完成';
     E.addStats(stats, stage);
+    recordPersonalBest(stage);
     updateStats();
     persist();
     holdDraws += wasHeldOpening ? 1 : 0;
@@ -177,6 +213,7 @@
       $('emptyResult').hidden = true;
       $('resultContent').hidden = false;
       $('lootGrid').replaceChildren();
+      $('lootGrid').scrollTop = 0;
       $('lootRemainder').hidden = true;
       $('lootHeadline').textContent = '掉落清單 · 逐件揭曉中';
       $('lastMode').textContent = minimum === 4 ? '普通開箱 · 進行中' : '特殊續開 · 進行中';
@@ -264,10 +301,19 @@
     minimum = Number(button.dataset.minimum);
     updateMode();
   }));
+  $('playerNickname').addEventListener('input', () => {
+    profile.nickname = $('playerNickname').value.slice(0,16);
+    persist();
+  });
+  window.addEventListener('resize', updateScrollHint);
   $('resetStats').addEventListener('click', () => {
     if (activeOpening || holdActive || activePointer !== null ||
-        !window.confirm('確定重置全部累計開箱紀錄？')) return;
+        !window.confirm('確定重置全部累計與個人最佳開箱紀錄？暱稱會保留。')) return;
     stats = E.blankStats();
+    profile.bestNormal = null;
+    profile.bestSpecial = null;
+    profile.bestJackpots = null;
+    updatePlayerPanel();
     holdDraws = 0;
     updateStats();
     $('autoDrawStatus').hidden = true;
@@ -280,4 +326,5 @@
   updateMode();
   updateSkipButton();
   updateStats();
+  updatePlayerPanel();
 })();
