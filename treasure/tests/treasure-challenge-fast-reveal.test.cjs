@@ -28,7 +28,7 @@ class FakeNode {
   setAttribute(name,value){this.attributes[name]=String(value);}
 }
 function build(rewardTypes=['N','N','N','N','N','N']){
-  const ids=['challengeOpen','challengeStatus','challengeJackpot','jackpotName','jackpotPoints',
+  const ids=['challengeOpen','challengeSkip','challengeStatus','challengeJackpot','jackpotName','jackpotPoints',
     'jackpotSkip','rankToggle','rankTotal','rankBest','dailyRemaining','challengeDate',
     'totalPoints','bestPoints','revealedCount','runPoints','runState','challengeGrid','challengeOpenLabel'];
   const map=Object.fromEntries(ids.map(id=>[id,new FakeNode(id)]));
@@ -75,13 +75,13 @@ test('challenge control remains above reward list even after many rows',()=>{
   const button=html.indexOf('id="challengeOpen"');
   const grid=html.indexOf('id="challengeGrid"');
   const stats=html.indexOf('class="challenge-run-stats"');
-  assert.ok(stats>=0&&stats<button&&button<grid);
+  assert.ok(stats>=0&&stats<button&&button<grid);\n  assert.ok(html.indexOf('id=\"challengeSkip\"')<stats,'skip button should be in the heading');
   assert.match(css,/\.challenge-main \.challenge-actions\{margin:11px 0 12px\}/);
   assert.match(css,/\.challenge-grid\{--cell:65px;/);
   assert.match(css,/max-height:calc\(var\(--cell\)\*5 \+ var\(--gap\)\*4\)/);
-  assert.match(css,/\.challenge-item\.is-revealing\{animation:/);
-  assert.match(html,/style\.css\?v=1\.0\.1/);
-  assert.match(html,/app\.js\?v=1\.0\.1/);
+  assert.match(css,/\.challenge-main \.challenge-skip/);
+  assert.match(html,/style\.css\?v=1\.0\.2/);
+  assert.match(html,/app\.js\?v=1\.0\.2/);
 });
 test('short taps still open exactly one reward each time',async()=>{
   const {map,stats}=build();
@@ -98,36 +98,52 @@ test('short taps still open exactly one reward each time',async()=>{
   assert.equal(stats().revealCount,1);
   assert.equal(stats().count,1);
 });
-test('a long hold progressively reveals the entire ONE chest, never next chest',async()=>{
+test('long press is not a separate opening action and a tap reveals one cell',async()=>{
   const {map,window,stats}=build();
   await sleep(20);
   map.challengeOpen.dispatch('pointerdown',{pointerId:9});
-  await sleep(550);
-  const midway=map.challengeGrid.children.length;
-  assert.ok(midway>=1&&midway<6,'at 550ms expected sequential items, saw '+midway);
-  assert.equal(stats().startCount,1);
+  await sleep(540);
   window.dispatch('pointerup',{pointerId:9});
-  await sleep(600);
+  assert.equal(map.challengeGrid.children.length,0);
+  assert.equal(stats().startCount,0);
+  map.challengeOpen.dispatch('click');
+  await sleep(20);
+  assert.equal(map.challengeGrid.children.length,1);
+  assert.equal(stats().startCount,1);
+});
+test('explicit skip reveals all remaining rewards immediately, but never starts another chest',async()=>{
+  const {map,stats}=build();
+  await sleep(20);
+  assert.equal(map.challengeSkip.disabled,true,'skip not available before a challenge begins');
+  map.challengeOpen.dispatch('click');
+  await sleep(20);
+  assert.equal(map.challengeGrid.children.length,1);
+  assert.equal(map.challengeSkip.disabled,false);
+  map.challengeSkip.dispatch('click');
+  await sleep(30);
   assert.equal(map.challengeGrid.children.length,6);
   assert.equal(map.revealedCount.textContent,'6');
   assert.equal(map.runPoints.textContent,'6');
   assert.equal(map.challengeOpenLabel.textContent,'開始下一箱');
+  assert.equal(map.challengeSkip.disabled,true);
+  assert.equal(stats().startCount,1);
+  assert.equal(stats().revealCount,1);
   assert.equal(stats().count,1);
-  await sleep(180);
-  assert.equal(stats().startCount,1,'long hold must never auto-start the second chest');
+  await sleep(170);
+  assert.equal(stats().startCount,1,'skipping must never automatically start the next chest');
 });
-test('A-tier effect pauses the fast stream before following rewards',async()=>{
-  const {map,window,stats}=build(['N','A','R','N']);
+test('skip still shows A-tier jackpot effect without hiding the whole-box result',async()=>{
+  const {map,stats}=build(['N','A','R','N']);
   await sleep(20);
-  map.challengeOpen.dispatch('pointerdown',{pointerId:13});
-  await sleep(650);
-  window.dispatch('pointerup',{pointerId:13});
+  map.challengeOpen.dispatch('click');
+  await sleep(20);
+  map.challengeSkip.dispatch('click');
+  await sleep(35);
   assert.equal(map.challengeJackpot.hidden,false);
   assert.equal(map.jackpotName.textContent,'大獎 A');
-  assert.equal(map.challengeGrid.children.length,2,'later items must wait for A-tier prompt');
+  assert.equal(map.challengeGrid.children.length,4,'skip must reveal the complete chest immediately');
+  assert.equal(map.runPoints.textContent,'1,005');
   map.jackpotSkip.dispatch('click');
-  await sleep(260);
-  assert.equal(map.challengeGrid.children.length,4);
   assert.equal(map.challengeJackpot.hidden,true);
   assert.equal(stats().count,1);
 });
