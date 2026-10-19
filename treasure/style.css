@@ -127,3 +127,50 @@ button,input,select{font:inherit}button{cursor:pointer}button:disabled{opacity:.
 .loot-tile.type-SSR .tile-gem{filter:drop-shadow(0 0 7px #c0c9ffad)}
 .loot-tile.type-UR .tile-gem{filter:drop-shadow(0 0 9px #fba6ffb0)}
 @media(max-width:510px){.tier-card .tier-gem{width:min(45px,100%);height:45px;margin:2px auto 4px}.tier-card .tier-material{font-size:8px}.loot-tile .tile-gem{width:min(32px,90%);height:32px}}
+
+/* Treasure v1.5.4: collapsed ordinary drops, compact settings, reserved score fields. */
+.prize-card .prize-points{font-size:10px;color:#edd3ff;line-height:1.4;margin:5px 0 0}
+.ordinary-drawer{margin-top:15px;border-top:1px solid #595174;padding-top:12px}
+.ordinary-summary{display:flex;align-items:center;justify-content:space-between;gap:10px;list-style:none;cursor:pointer;padding:7px 2px;min-height:43px}
+.ordinary-summary::-webkit-details-marker{display:none}
+.ordinary-summary-text{min-width:0;display:flex;flex-direction:column;gap:3px}
+.ordinary-summary strong{font-size:13px;color:#f5e8d1}
+.ordinary-summary small{font-size:10px;color:#a9a6bb;line-height:1.4}
+.ordinary-summary-action{white-space:nowrap;border:1px solid #695d8e;color:#e0d2ff;background:#29233e;border-radius:16px;padding:6px 9px;font-size:11px}
+.ordinary-chevron{display:inline-block;margin-left:2px;transition:transform .15s}
+.ordinary-drawer[open] .ordinary-chevron{transform:rotate(180deg)}
+.ordinary-drawer[open] .ordinary-summary-action{background:#3d3059}
+.ordinary-drawer-content{padding-top:7px}
+.ordinary-drawer-note{font-size:10px;color:#b6aebf;margin:0 2px 10px}
+.tier-card .tier-points{display:block;min-height:1.3em;font-size:9px;color:#e8c9fa;margin-top:4px;white-space:nowrap}
+.sim-heading{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:14px}
+.sim-heading-title{min-width:0;flex-shrink:0}
+.sim-heading-actions{display:flex;align-items:center;justify-content:flex-end;gap:10px;min-width:0}
+.skip-check{display:inline-flex;align-items:center;justify-content:center;gap:6px;white-space:nowrap;cursor:pointer;color:#dce7f0;font-size:12px;font-weight:700;min-height:40px}
+.skip-check input{appearance:auto;accent-color:#79e7c4;width:17px;height:17px;min-width:17px;cursor:pointer;margin:0}
+.skip-check:has(input:checked){color:#a7f6e4}
+.skip-check input:focus-visible{outline:2px solid #b5ebff;outline-offset:3px}
+.sim-heading .chance-pill{padding:7px 10px;gap:5px}
+.sim-heading .chance-pill b{font-size:14px}
+.sim-panel .action-group{margin-top:0}
+.sim-panel .press-help{margin-top:7px}
+.sim-panel .press-help span+span::before{display:none}
+.pending-points{font-size:11px;color:#c5b5d9;margin:0 0 10px}
+@media(max-width:510px){
+  .sim-heading{gap:4px}
+  .sim-heading .board-kicker{font-size:8px;letter-spacing:.08em}
+  .sim-heading h2{font-size:15px;margin-top:3px}
+  .sim-heading-actions{gap:5px}
+  .skip-check{font-size:10px;gap:4px}
+  .skip-check input{width:15px;height:15px;min-width:15px}
+  .sim-heading .chance-pill{padding:5px 7px;gap:4px;font-size:9px}
+  .sim-heading .chance-pill b{font-size:12px}
+  .sim-heading .pulsing-dot{width:5px;height:5px}
+  .ordinary-summary strong{font-size:12px}
+  .ordinary-summary small{font-size:9px}
+  .tier-card .tier-points{font-size:8px;letter-spacing:-.04em}
+}
+@media(max-width:365px){
+  .sim-heading .chance-pill-label{display:none}
+  .sim-heading .chance-pill b{font-size:12px}
+}
