@@ -73,6 +73,7 @@ function render(data){
   drawRank(data.leaderboards?.best||[],'rankBest');
   $('cChampion').textContent='累積總分第一：'+(data.leaderboards?.total?.[0]?.nickname||'尚無玩家');
   $('exChampion').textContent='單次最高分第一：'+(data.leaderboards?.best?.[0]?.nickname||'尚無玩家');
+  $('exPrizeName').textContent=data.leaderboards?.best?.[0]?.nickname||'終極大獎 EX';
   $('exRate').textContent=(data.ultimate?.unlocked?'0.0000324%':'???')+' · +350,000 分';
   $('exDiscoverer').textContent='首次發現者：'+(data.ultimate?.firstDiscoverer||'尚未解鎖');
   if(data.hasActive){
