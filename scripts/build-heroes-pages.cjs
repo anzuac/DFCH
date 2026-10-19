@@ -284,6 +284,7 @@ teamHtml=teamHtml.replace('</body>','<script src="../site-counter.js?v=1.0.0"></
 fs.writeFileSync(teamPage,teamHtml);
 // Treasure V1.5 is explicitly published as an isolated page, preserving the guide's whitelist.
 const treasureSiteFiles=['treasure/index.html','treasure/style.css','treasure/engine.js','treasure/app.js','treasure/auth.js',
+  'treasure/challenge/index.html','treasure/challenge/style.css','treasure/challenge/app.js',
   ...['n','r','sr','ssr','ur'].map(tier=>'treasure/assets/rarity-'+tier+'.webp')];
 for(const relativePath of treasureSiteFiles){
   const source=path.join(repoRoot,relativePath);
@@ -295,12 +296,15 @@ for(const relativePath of treasureSiteFiles){
 // Combine auth + the existing guide worker into ONE advanced-mode Pages worker.
 // This keeps the old GUIDE_STATS route and env.ASSETS.fetch fallback unchanged.
 const authWorkerSource=fs.readFileSync(path.join(repoRoot,'cloudflare/treasure-auth.mjs'),'utf8');
+const challengeWorkerSource=fs.readFileSync(path.join(repoRoot,'cloudflare/treasure-challenge.mjs'),'utf8');
 const originalGuideWorker=fs.readFileSync(path.join(repoRoot,'cloudflare/guide-worker.mjs'),'utf8');
 const marker='export async function handleTreasureRequest';
+const challengeMarker='export async function handleTreasureChallengeRequest';
 const guideMarker='export default {';
-if(!authWorkerSource.includes(marker)||!originalGuideWorker.includes(guideMarker))
+if(!authWorkerSource.includes(marker)||!challengeWorkerSource.includes(challengeMarker)||!originalGuideWorker.includes(guideMarker))
   throw new Error('Unexpected Cloudflare Worker exports; cannot safely compose');
 const composedWorker=authWorkerSource.replace(marker,'async function handleTreasureRequest')+'\n'
+  +challengeWorkerSource.replace(challengeMarker,'async function handleTreasureChallengeRequest')+'\n'
   +originalGuideWorker.replace(guideMarker,'const dfchGuideWorker = {')+'\n'
   +'export default { async fetch(request,env,ctx) {'
   +' if (new URL(request.url).pathname.startsWith("/api/treasure/")) return handleTreasureRequest(request,env);'
@@ -331,7 +335,7 @@ fs.writeFileSync(
 
 // Fail the deployment rather than silently publishing broken scripts or stylesheets.
 for(const page of ['index.html','heroes.html','heroes/index.html',
-  'recruit/index.html','bond30/index.html','diamond/index.html','team/index.html','treasure/index.html']){
+  'recruit/index.html','bond30/index.html','diamond/index.html','team/index.html','treasure/index.html','treasure/challenge/index.html']){
  const htmlPath=path.join(outputDir,page);
  const markup=fs.readFileSync(htmlPath,'utf8');
  const base=markup.includes('<base href="/">')?outputDir:path.dirname(htmlPath);
