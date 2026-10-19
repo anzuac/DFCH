@@ -318,13 +318,13 @@ const originalGuideWorker=fs.readFileSync(path.join(repoRoot,'cloudflare/guide-w
 const guideMarker='export default {';
 if(!originalGuideWorker.includes(guideMarker))
   throw new Error('Unexpected guide worker export; cannot safely compose');
-const composedWorker=originalGuideWorker.replace(guideMarker,'const dfchGuideWorker = {')+'\\n'
+const composedWorker=originalGuideWorker.replace(guideMarker,'const dfchGuideWorker = {')+'\n'
   +'export default { async fetch(request,env,ctx) {'
   +' const path=new URL(request.url).pathname;'
   +' if (path.startsWith("/api/treasure/")) return new Response(JSON.stringify({error:"Treasure 正式服務暫停開放，請使用練習模式"}),'
   +' {status:410,headers:{"Content-Type":"application/json; charset=utf-8","Cache-Control":"no-store","X-Content-Type-Options":"nosniff"}});'
   +' return dfchGuideWorker.fetch(request,env,ctx);'
-  +' }};\\n';
+  +' }};\n';
 fs.writeFileSync(path.join(outputDir,'_worker.js'),composedWorker);
 fs.writeFileSync(path.join(outputDir,'_routes.json'),JSON.stringify({
   version:1,include:['/api/guide-views','/api/treasure/*'],exclude:[]
