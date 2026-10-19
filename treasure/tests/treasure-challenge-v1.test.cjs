@@ -51,9 +51,11 @@ test('challenge page has separate login, mobile two-column rankings and tap/hold
     assert.ok(page.includes('id="'+id+'"'),'Missing challenge element '+id);
   }
   assert.match(page,/href="\.\.\/" class="challenge-mode-link"/);
-  assert.match(js,/const holdDelay=420/);
-  assert.match(js,/step\(true\)/);
-  assert.match(js,/step\(false\)/);
+  assert.match(page,/id="challengeSkip"/);
+  assert.ok(!js.includes('holdDelay'));
+  assert.ok(!js.includes("addEventListener('pointerdown'"));
+  assert.match(js,/skip\.addEventListener\('click',\(\)=>step\(true\)\)/);
+  assert.match(js,/open\.addEventListener\('click',\(\)=>step\(false\)\)/);
   assert.match(js,/api\('start',\{requestId:crypto\.randomUUID\(\),fast\}\)/);
   assert.match(js,/api\('reveal',\{id:previous\.id,expectedCount:previous\.revealedCount,fast\}\)/);
   assert.ok(!js.includes('Math.random'));
