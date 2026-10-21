@@ -13,7 +13,7 @@
 .dfch-tool-section{margin:0 0 26px}
 .dfch-tool-section h2,.dfch-update-panel h2{font-size:1.13em;margin:0 0 12px}
 .dfch-main-cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}
-.dfch-other-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}
+.dfch-other-cards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:13px}
 .dfch-tool-card{border:1px solid var(--line-strong);border-radius:15px;overflow:hidden;
  background:var(--panel);display:flex;flex-direction:column;min-width:0;
  transition:transform .14s,border-color .14s;min-height:205px}
@@ -27,6 +27,8 @@
  display:block;position:absolute;inset:0;width:100%;height:100%;
  object-fit:cover;object-position:center;
 }
+.dfch-treasure-card .dfch-card-image{background:radial-gradient(ellipse at 50% 75%,rgba(117,184,134,.23),transparent 65%),var(--panel-2)}
+.dfch-treasure-card .dfch-card-image img{object-fit:contain;padding:14px}
 .dfch-card-content{padding:14px 17px 18px;display:flex;flex-direction:column;gap:6px}
 .dfch-card-content strong{font-size:1.05em;color:var(--text)}
 .dfch-card-content>span{font-size:.82em;color:var(--muted)}
@@ -48,6 +50,7 @@ html[data-guide-theme="blue"] .dfch-home{--bg:#091a2e;--panel:#152d47;--panel-2:
  --text:#edf5ff;--muted:#b4cce3;--line-strong:#6896c0;--teal:#9ad7fc;background:var(--bg)}
 html[data-guide-theme="green"] .dfch-home{--bg:#13241c;--panel:#1d3629;--panel-2:#2a4737;
  --text:#e9f5e4;--muted:#b9d0b4;--line-strong:#85a782;--teal:#b7e2ac;background:var(--bg)}
+@media(max-width:900px){.dfch-other-cards{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:650px){
  .dfch-home-shell{width:calc(100% - 18px)}
  .dfch-main-cards{grid-template-columns:1fr}
