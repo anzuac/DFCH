@@ -5,9 +5,11 @@ const path=require('node:path');
 const vm=require('node:vm');
 const root=path.resolve(__dirname,'..');
 const data=JSON.parse(fs.readFileSync(path.join(root,'data/hero-preferences.json'),'utf8'));
-test('3.18.0 bond gift additions preserve original 23 heroes and common preferences',()=>{
+test('3.18.0 bond gift additions preserve original 23 heroes while expanding universal favorites',()=>{
   assert.equal(data.heroes.length,23);
-  assert.deepEqual(data.commonFavorite,[305000020,305000021,305000022,305000023,305000024,305000025,305000026]);
+  assert.deepEqual(data.commonFavorite.slice(0,7),[305000020,305000021,305000022,305000023,305000024,305000025,305000026]);
+  assert.equal(data.commonFavorite.length,19);
+  for(let id=305001028;id<=305001039;id++)assert.ok(data.commonFavorite.includes(id));
   assert.equal(data.items.length,44);
   assert.equal(new Set(data.items.map(x=>x.id)).size,44);
   for(let id=305001028;id<=305001039;id++){
