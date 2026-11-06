@@ -17,7 +17,7 @@ const {heroes,items,commonFavorite,bondGains}=window.DFCHHeroPreferences;
 const {evaluate}=window.DFCHGiftRanking;
 
 test('all 23 official six-star heroes and 32 gifts have known base values',()=>{
-  assert.equal(heroes.length,23);assert.equal(items.length,32);
+  assert.equal(heroes.length,31);assert.equal(items.length,46);
   for(const gift of items)assert.equal(Number.isFinite(bondGains.baseValues[gift.id]),true);
 });
 test('each individual gift produces a complete, sorted ranking in both artifact states',()=>{

@@ -82,7 +82,7 @@ test('All published entrypoints refresh caches for the language scripts',()=>{
   if(file!=='index.html')assert.match(source,/display-settings\.js\?v=2\.1\.1/);
   if(file!=='team/index.html')assert.match(source,/public-tool-i18n\.js\?v=1\.0\.1/);
  }
- for(const file of ['heroes.html','index.html'])assert.match(read(file),/hero-preferences-view\.js\?v=2\.7\.1/);
+ for(const file of ['heroes.html','index.html'])assert.match(read(file),/hero-preferences-view\.js\?v=2\.8\.6/);
 });
 
 test('Team titles use official localizations and missing UI strings use explicit fallbacks',()=>{
