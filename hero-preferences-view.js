@@ -75,7 +75,7 @@
       const entry=node('li',null,'gift-shortcut-item'),jump=node('button',null,'gift-shortcut'),icon=node('img',null,'gift-icon'),detail=node('span',null,'gift-detail');
       jump.type='button';jump.setAttribute('aria-label',`${names.get(id)} → ${locationUI[lang][1]}`);
       jump.addEventListener('click',()=>openGiftLocation(id));
-      icon.src=`./assets/gifts/${id}.${id>=305001028&&id<=305001039?'png':'webp'}`;icon.alt='';icon.width=36;icon.height=36;icon.loading='lazy';icon.addEventListener('error',()=>icon.remove(),{once:true});
+      icon.src=`./assets/gifts/${id}${id>=305001028&&id<=305001039?'-upright.png':'.webp'}`;icon.alt='';icon.width=36;icon.height=36;icon.loading='lazy';icon.addEventListener('error',()=>icon.remove(),{once:true});
       const base=rules.baseValues[id],multiplier=rules.preferenceMultipliers[preference],artifact=ownsBondStatue?rules.artifact.multiplier:1;
       const gain=Math.floor(base*multiplier*artifact);
       entry.dataset.gift=id;entry.dataset.bondGain=gain;
@@ -398,7 +398,7 @@
       if(selectedMap&&!maps.some(m=>m.id===selectedMap))continue;
       if(query&&!normalize([name,...maps.map(m=>m.translations[lang]||m.translations.ja)].join(' ')).includes(query))continue;
       const card=node('article',null,'hero-preference-card gift-location-card'),header=node('div',null,'gift-location-header'),icon=node('img',null,'gift-icon');
-      icon.src=`./assets/gifts/${item.id}.${item.id>=305001028&&item.id<=305001039?'png':'webp'}`;icon.alt='';icon.width=48;icon.height=48;icon.loading='lazy';icon.addEventListener('error',()=>icon.remove(),{once:true});header.append(icon,node('h3',name));card.append(header);
+      icon.src=`./assets/gifts/${item.id}${item.id>=305001028&&item.id<=305001039?'-upright.png':'.webp'}`;icon.alt='';icon.width=48;icon.height=48;icon.loading='lazy';icon.addEventListener('error',()=>icon.remove(),{once:true});header.append(icon,node('h3',name));card.append(header);
       if(maps.length){
         card.append(node('h4',labels[4]));
         const list=node('ul',null,'gift-location-maps');for(const map of maps)list.append(node('li',map.translations[lang]||map.translations.ja));card.append(list);
