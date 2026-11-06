@@ -48,7 +48,7 @@ test('3.18.0 bond thresholds span Lv0-Lv50 and 172 player-visible icon reference
   for(let i=1;i<data.bondThresholds.length;i++)assert.ok(data.bondThresholds[i]>data.bondThresholds[i-1]);
   assert.equal(Object.keys(data.icons).length,172);
   for(const s of data.heroes.flatMap(h=>h.skills))assert.ok(s.icon && Object.hasOwn(data.icons,s.icon),s.name);
-  assert.doesNotMatch(JSON.stringify(data),/\\b30300\\d{4}\\b|sab_[a-z]/);
+  assert.doesNotMatch(JSON.stringify(data),/\b30300\d{4}\b|sab_[a-z]/);
 });
 test('collector II skill remains explicitly pending, never fabricated as verified',()=>{
   const skill=heroes.find(h=>h.slug==='chilchack').skills.find(s=>s.name==='收集家 II');
