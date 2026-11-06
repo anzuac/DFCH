@@ -12,3 +12,9 @@ test('all four 3.18 five-star shapeshifter templates have correct source IDs, cl
  assert.deepEqual(f.fiveStar[3].fixed,[303000000,303000119,303000123,303001136,303001137]);
  for(const pool of core.pools)assert.deepEqual(pool.rarityHeroGroups[2],[76,77,78,79]);
 });
+
+test('four five-star names and seven unique lesser fixed skills use official 3.18 Chinese localization',()=>{
+ assert.deepEqual(f.fiveStar.map(x=>x.name),["萊歐斯（變形者）","瑪露希爾（變形者）","奇爾查克（變形者）","先西（變形者）"]);
+ assert.equal(f.fiveStarAbilities[303001131],'領袖的資質？');
+ assert.equal(f.fiveStarAbilities[303001137],'營養滿分的魔物料理？');
+});

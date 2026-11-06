@@ -5,7 +5,7 @@
     {
       "id": 76,
       "key": "shapeshifter_laios",
-      "name": "變形者・萊歐斯",
+      "name": "萊歐斯（變形者）",
       "job": 1,
       "fixed": [
         303000000,
@@ -13,12 +13,13 @@
         303000123,
         303000806,
         303001131
-      ]
+      ],
+      "title": "非比尋常嗜好的擬態"
     },
     {
       "id": 77,
       "key": "shapeshifter_marcille",
-      "name": "變形者・瑪露希爾",
+      "name": "瑪露希爾（變形者）",
       "job": 4,
       "fixed": [
         303000000,
@@ -26,12 +27,13 @@
         303000123,
         303001132,
         303001133
-      ]
+      ],
+      "title": "令人畏懼的心理虛像"
     },
     {
       "id": 78,
       "key": "shapeshifter_chilchack",
-      "name": "變形者・奇爾查克",
+      "name": "奇爾查克（變形者）",
       "job": 2,
       "fixed": [
         303000000,
@@ -39,12 +41,13 @@
         303000123,
         303001134,
         303001135
-      ]
+      ],
+      "title": "成長期的誤會"
     },
     {
       "id": 79,
       "key": "shapeshifter_senshi",
-      "name": "變形者・先西",
+      "name": "先西（變形者）",
       "job": 1,
       "fixed": [
         303000000,
@@ -52,7 +55,8 @@
         303000123,
         303001136,
         303001137
-      ]
+      ],
+      "title": "對雄壯的憧憬"
     }
   ],
   "visibleSixStar": [
@@ -82,5 +86,14 @@
       "name": "法琳"
     }
   ],
-  "note": "The five-star shapeshifter names are descriptive labels derived from official keys; candidate appearance assets and 3.18 initial-status vectors require independent validation."
+  "note": "Four five-star names, titles and lesser fixed ability names verified directly from APK 3.18.0 localize_master-collabo-delicious; portraits have not been extracted yet.",
+  "fiveStarAbilities": {
+    "303001131": "領袖的資質？",
+    "303001132": "學校有史以來最優秀的才女？",
+    "303001133": "古代魔法的知識？",
+    "303001134": "老練的開鎖匠？",
+    "303001135": "敏銳的五感？",
+    "303001136": "魔物料理專家？",
+    "303001137": "營養滿分的魔物料理？"
+  }
 }
