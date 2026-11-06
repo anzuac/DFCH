@@ -8,7 +8,7 @@ const root = path.resolve(__dirname, '..');
 const data = require('../data/sixstar-visible-abilities.json');
 const heroes = require('../data/hero-preferences.json');
 const read = name => fs.readFileSync(path.join(root,name), 'utf8');
-test('23 player-facing six-star portraits map one-to-one to ability sets', () => {
+test('31 player-facing six-star portraits map one-to-one to ability sets', () => {
   assert.equal(data.heroes.length,31);
   const keys = data.heroes.map(h=>h.slug);
   assert.equal(new Set(keys).size,31);
@@ -49,4 +49,12 @@ test('Every portrait invokes the shared ability modal on both pages', () => {
 });
 test('New modal JavaScript parses without depending on DOM evaluation', () => {
   assert.doesNotThrow(()=>new vm.Script(read('sixstar-abilities.js')));
+});
+
+test('ability modal loader accepts the 31 hero dataset, including all eight collaboration heroes',()=>{
+ const src=read('sixstar-abilities.js');
+ assert.match(src,/doc\.heroes\.length !== 31/);
+ assert.doesNotMatch(src,/doc\.heroes\.length !== 23/);
+ const added=['laios','marcille','chilchack','senshi','izutsumi','falin','mithrun','thistle'];
+ for(const slug of added)assert.ok(data.heroes.some(h=>h.slug===slug),slug);
 });

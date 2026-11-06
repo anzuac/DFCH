@@ -51,7 +51,7 @@
         if (!response.ok) throw new Error('Unavailable');
         return response.json();
       }).then(doc => {
-        if (!doc || !Array.isArray(doc.heroes) || doc.heroes.length !== 23 || !Array.isArray(doc.bondRewards)) throw new Error('Incomplete');
+        if (!doc || !Array.isArray(doc.heroes) || doc.heroes.length !== 31 || !Array.isArray(doc.bondRewards)) throw new Error('Incomplete');
         if (!Array.isArray(doc.bondThresholds) || doc.bondThresholds.length !== 51 ||
             !doc.bondThresholds.every((value,index,values) => Number.isSafeInteger(value) && value >= 0 && (!index || value > values[index-1]))) {
           throw new Error('Invalid bond thresholds');
