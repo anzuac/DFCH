@@ -24,7 +24,7 @@
     try{
       const saved=JSON.parse(localStorage.getItem(storeKey)||'null');
       if(!saved||typeof saved!=='object')return;
-      if(Number.isInteger(saved.pool)&&saved.pool>=0&&saved.pool<9)state.pool=saved.pool;
+      if(Number.isInteger(saved.pool)&&saved.pool>=0&&saved.pool<C.keys.length)state.pool=saved.pool;
       state.hiddenEye=!!saved.hiddenEye;state.hiddenSword=!!saved.hiddenSword;
       state.ownedEye=!!saved.ownedEye;state.ownedSword=!!saved.ownedSword;
       state.bonusValkyrja=!!saved.bonusValkyrja;
@@ -36,13 +36,13 @@
       state.seen=Array.isArray(saved.seen)?saved.seen.filter(x=>C.six.some(a=>a.includes(x))):[];
       if(saved.progress&&typeof saved.progress==='object')
         for(const [k,v] of Object.entries(saved.progress))
-          if(/^[0-8]$/.test(k)&&v&&Number.isInteger(v.count)&&v.count>=0&&v.count<50&&Number.isInteger(v.round)&&v.round>=0&&v.round<=5)
+          if(/^(?:[0-9]|1[01])$/.test(k)&&v&&Number.isInteger(v.count)&&v.count>=0&&v.count<50&&Number.isInteger(v.round)&&v.round>=0&&v.round<=5)
             state.progress[k]={count:v.count,round:v.round};
       if(Number.isInteger(saved.confirmed)&&saved.confirmed>=0)state.confirmed=saved.confirmed;
       // Older versions only retained confirmed draws; use that as the available baseline.
       state.drawCount=Number.isSafeInteger(saved.drawCount)&&saved.drawCount>=state.confirmed
         ?saved.drawCount:state.confirmed;
-      if(Array.isArray(saved.history))state.history=saved.history.filter(r=>r&&Number.isInteger(r.pool)&&r.pool>=0&&r.pool<9&&Array.isArray(r.candidates)&&r.candidates.length===3&&Number.isInteger(r.selected)&&r.selected>=0&&r.selected<3).slice(0,50);
+      if(Array.isArray(saved.history))state.history=saved.history.filter(r=>r&&Number.isInteger(r.pool)&&r.pool>=0&&r.pool<C.keys.length&&Array.isArray(r.candidates)&&r.candidates.length===3&&Number.isInteger(r.selected)&&r.selected>=0&&r.selected<3).slice(0,50);
     }catch(_){/* Private mode can block storage */}
   }
   function save(){
@@ -74,7 +74,7 @@
     const isSprite=lowStarPortraitIds.has(Number(id));
     if(!isSprite&&!info)return null;
     const img=el('img',isSprite?'hero-portrait sprite':'hero-portrait');
-    img.src=isSprite?'./images/'+id+'.webp':'../assets/heroes/'+encodeURIComponent(info.key)+'.webp';
+    img.src=isSprite?'./images/'+id+'.webp':'../assets/heroes/'+encodeURIComponent(info.key?.replace('shapeshifter_','')||'laios')+'.webp';
     img.alt=isSprite?nameOf(id):(info.name+'（'+info.title+'）');
     img.loading='lazy';
     img.onerror=()=>img.remove();
@@ -99,7 +99,7 @@
     const arr=weights(),total=arr.reduce((a,b)=>a+b,0);
     return arr.map(w=>total?w/total:0);
   }
-  function currentProgress(){return state.progress[state.pool]||{count:0,round:0};}
+  function currentProgress(){return state.progress[state.pool>=9?9:state.pool]||{count:0,round:0};}
   function currentMode(){
     const p=currentProgress(),six=rarityList(6).length;
     if(p.count+1<50)return 'normal';
@@ -161,6 +161,11 @@
     return true;
   }
   function pickAbilities(rows,group,num,star,heroId,already){
+    if(state.pool>=9){const X=window.DFCHRecruitCollab318;
+      const r=X.drawGroup(poolKey(),group,num,{star,heroId,jobMask:D.heroRoster[String(heroId)]?.job||0,
+        selected:already.map(a=>a.id),artifactIds:[...(state.ownedEye?[301008017]:[]),...(state.ownedSword?[301008020]:[])],hiddenEye:state.hiddenEye,hiddenSword:state.hiddenSword});
+      for(const id of r.drawn)already.push({id,role:group===1?'自由':group===2?'攻擊增益':'HP 增益'});return;
+    }
     const items=rows.filter(r=>r.group===group&&r.weight>0);
     let tries=0,done=0;
     while(done<num&&tries<1000&&items.length){
@@ -549,7 +554,7 @@
       if(mode==='six'||r.star===6)round=0;
       else round++;
     }else if(r.star===6)round=0;
-    state.progress[state.pool]={count,round};
+    state.progress[state.pool>=9?9:state.pool]={count,round};
     if(r.star===6&&!state.seen.includes(r.id))state.seen.push(r.id);
     state.confirmed++;
     // Stats are stored as tiny independent counters. Never clear them with first-page history.
