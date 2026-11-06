@@ -96,8 +96,8 @@ test('Each hero retains a separate bond amount, without losing older ability lev
   assert.equal(ui.control('.s6-progress-input').value,'472');
   const stored=JSON.parse(ui.storage.get('dfch-sixstar-abilities-v1'));
   assert.equal(stored.frigg.progress,472);
-  assert.equal(stored.freya.bond,10);
-  assert.equal(stored.freya.progress,150);
+  assert.equal(stored.freya.bond,11);
+  assert.equal(stored.freya.progress,50);
 });
 
 test('Submitting a full current level automatically advances levels, clamps max, and dragging resets progress',async()=>{
