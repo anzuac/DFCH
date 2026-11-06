@@ -28,8 +28,8 @@ assert.equal(calc(['thistle']).greedSum,8);
 assert.equal(calc(['thistle'],{thistle:{'貪欲 II':{up:true}}}).greedSum,9);
 });
 test('Three new Forbidden Gatekeeper III users contribute 15% each',()=>{
-for(const slug of ['marcille','mithrun','thistle']){const r=calc([slug]);assert.equal(r.guardSkills,15);assert.equal(r.total,3.4);}
-assert.equal(calc(['marcille','mithrun','thistle']).guardSkills,45);
+for(const slug of ['marcille','mithrun','thistle']){const r=calc([slug]);assert.equal(r.forbidden.reduce((sum,x)=>sum+x.amount,0),15);assert.equal(r.total,3.4);}
+assert.equal(calc(['marcille','mithrun','thistle']).forbidden.reduce((sum,x)=>sum+x.amount,0),45);
 });
 test('Original rate formulas and browser storage keys remain intact',()=>{
 assert.deepEqual(SKILL_RATES['貪欲 III'].levels,[5,7,9,11,13,15]);
