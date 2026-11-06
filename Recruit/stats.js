@@ -23,11 +23,11 @@
   const origin=current();
   const statsPoolKey='dfch-recruit-stats-view-pool-v1';
   const abilityPoolKey='dfch-recruit-ability-view-pool-v1';
-  const fallbackPool=Number.isInteger(origin.pool)&&origin.pool>=0&&origin.pool<9?origin.pool:0;
+  const fallbackPool=Number.isInteger(origin.pool)&&origin.pool>=0&&origin.pool<C.keys.length?origin.pool:0;
   function storedPool(key){
     try{
       const raw=localStorage.getItem(key),value=Number(raw);
-      if(raw!==null&&Number.isInteger(value)&&value>=0&&value<9)return value;
+      if(raw!==null&&Number.isInteger(value)&&value>=0&&value<C.keys.length)return value;
     }catch(_){}
     return fallbackPool;
   }
@@ -37,7 +37,7 @@
   const startPool=storedPool(statsPoolKey);
   const startAbilityPool=storedPool(abilityPoolKey);
   function poolList(){
-    for(let i=0;i<9;i++){
+    for(let i=0;i<C.keys.length;i++){
       const option=el('option','',D.poolNames[C.keys[i]]||C.keys[i]);option.value=String(i);
       $('analysisPool').append(option);
       $('abilityPool').append(option.cloneNode(true));

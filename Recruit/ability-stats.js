@@ -32,11 +32,11 @@
   }
   const emptySide=()=>({total:0,regular:{},mixed:{},bond2:0,bond3:0});
   const emptyBucket=()=>({candidates:emptySide(),obtained:emptySide()});
-  const fresh=()=>({version:1,pools:Array.from({length:9},emptyBucket)});
+  const fresh=()=>({version:1,pools:Array.from({length:C.keys.length},emptyBucket)});
   function read(){
     try{
       const obj=JSON.parse(localStorage.getItem(KEY)||'null');
-      if(obj?.version===1&&Array.isArray(obj.pools)&&obj.pools.length===9)return obj;
+      if(obj?.version===1&&Array.isArray(obj.pools)&&obj.pools.length>=9)return {...obj,pools:[...obj.pools,...Array.from({length:Math.max(0,C.keys.length-obj.pools.length)},emptyBucket)]};
     }catch(_){}
     return fresh();
   }
@@ -68,6 +68,9 @@
     try{localStorage.removeItem(KEY);return true;}catch(_){return false;}
   }
   function allowed(row,star,heroId,selected,options,poolKey){
+    const X=window.DFCHRecruitCollab318;
+    if(X?.sourcePool(poolKey))return X.allowed(X.byId.get(row[0]),{star,heroId,jobMask:D.heroRoster[String(heroId)]?.job||0,selected,
+      artifactIds:[...(options.ownedEye?[301008017]:[]),...(options.ownedSword?[301008020]:[])],hiddenEye:options.hiddenEye,hiddenSword:options.hiddenSword});
     const id=row[0],rank=star-1;
     if(selected.includes(id))return false;
     if(C.lowOnly.includes(id)&&rank>3)return false;

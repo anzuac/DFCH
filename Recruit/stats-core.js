@@ -4,11 +4,11 @@
   'use strict';
   const key='dfch-recruit-stats-v1';
   const emptyBucket=()=>({rounds:0,candidates:{rarity:[0,0,0,0],types:[0,0,0,0],lowTypes:[0,0,0,0],g:0,slow:0,heroes:{}},obtained:{rarity:[0,0,0,0],types:[0,0,0,0],lowTypes:[0,0,0,0],g:0,slow:0,heroes:{}}});
-  const fresh=()=>({version:1,pools:Array.from({length:9},emptyBucket)});
+  const fresh=()=>({version:1,pools:Array.from({length:window.DFCHRecruitConfig?.keys.length||9},emptyBucket)});
   function read(){
     try{
       const saved=JSON.parse(localStorage.getItem(key)||'null');
-      if(saved?.version===1&&Array.isArray(saved.pools)&&saved.pools.length===9)return saved;
+      if(saved?.version===1&&Array.isArray(saved.pools)&&saved.pools.length>=9)return {...saved,pools:[...saved.pools,...Array.from({length:Math.max(0,(window.DFCHRecruitConfig?.keys.length||9)-saved.pools.length)},emptyBucket)]};
     }catch(_){}
     return fresh();
   }
@@ -29,7 +29,7 @@
     }
   }
   function record(pool,candidates,selected){
-    if(!Number.isInteger(pool)||pool<0||pool>=9||!Array.isArray(candidates)||
+    if(!Number.isInteger(pool)||pool<0||pool>=(window.DFCHRecruitConfig?.keys.length||9)||!Array.isArray(candidates)||
        !Number.isInteger(selected)||selected<0||selected>=candidates.length)return false;
     try{
       const data=read(),bucket=data.pools[pool];
