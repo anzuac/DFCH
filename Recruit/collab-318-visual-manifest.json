@@ -1,0 +1,110 @@
+{
+  "version": "3.18.0",
+  "purpose": "P1-P3 official visual asset provenance & per-batch verification; independent from drawing probabilities",
+  "status": "asset-extraction-pending",
+  "sources": [
+    {
+      "file": "startup_.bundle",
+      "driveId": "1SnxdK7YDGaLIybOd9of8TIWNxjH99I3F",
+      "finding": "Contains profile/item icons; no confirmed P1-P3 banner"
+    },
+    {
+      "file": "event-9_.bundle",
+      "driveId": "108batvf3v3ZcGiAo_3NA2Vh2SI0x4mjQ",
+      "finding": "9-arm_wrestling event banner; unrelated"
+    },
+    {
+      "file": "event-10_.bundle",
+      "driveId": "1MWOX6HBsrhNa_oKgQ2spo2KarIJ8cWbq",
+      "finding": "10-tokoyonokuni event banner; unrelated"
+    },
+    {
+      "file": "event-3_.bundle",
+      "driveId": "1RS_1riTiSkL1WpgLSKyRsHXQcj_tuVJp",
+      "finding": "3-under_world event banner; unrelated"
+    },
+    {
+      "file": "individual_.part1.rar + part2.rar + part3.rar",
+      "driveIds": [
+        "1I4JaROOzT_BUnqpEU9FFSryM_7aAGhPM",
+        "1aCoHJNu1kIh5iErgUppcAVrtSGishzzV",
+        "1lOw3YJGoC725rsGq538OG9XMVwj4TPVc"
+      ],
+      "finding": "Original individual asset bundle archive; fetched but extraction/image verification pending"
+    }
+  ],
+  "pools": [
+    {
+      "poolId": 9,
+      "key": "delicious_first_half",
+      "seriesIndex": 0,
+      "bannerPath": null,
+      "sourceTextureName": null,
+      "sourceAssetBundle": null,
+      "verified": false,
+      "expectedSixStarIds": [
+        71,
+        74,
+        75
+      ],
+      "expectedFiveStarIds": [
+        76,
+        77,
+        78,
+        79
+      ],
+      "note": "Do not use generated composite images, portraits or unrelated event banners as official pool art"
+    },
+    {
+      "poolId": 10,
+      "key": "delicious_second_half",
+      "seriesIndex": 1,
+      "bannerPath": null,
+      "sourceTextureName": null,
+      "sourceAssetBundle": null,
+      "verified": false,
+      "expectedSixStarIds": [
+        72,
+        73,
+        75
+      ],
+      "expectedFiveStarIds": [
+        76,
+        77,
+        78,
+        79
+      ],
+      "note": "Do not use generated composite images, portraits or unrelated event banners as official pool art"
+    },
+    {
+      "poolId": 11,
+      "key": "delicious_final",
+      "seriesIndex": 2,
+      "bannerPath": null,
+      "sourceTextureName": null,
+      "sourceAssetBundle": null,
+      "verified": false,
+      "expectedSixStarIds": [
+        71,
+        72,
+        73,
+        74,
+        75
+      ],
+      "expectedFiveStarIds": [
+        76,
+        77,
+        78,
+        79
+      ],
+      "note": "Do not use generated composite images, portraits or unrelated event banners as official pool art"
+    }
+  ],
+  "qualityGates": [
+    "Each banner traced to a verified source asset",
+    "P1/P2/P3 mapping checked against original pool key and visual text",
+    "Original orientation, aspect and transparency retained",
+    "Only verified image paths are used by Recruit UI",
+    "No change to existing nine pools or Bond30"
+  ]
+}
