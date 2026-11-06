@@ -84,7 +84,7 @@
     if(extra&&v.state.poolBonusOwned?.[String(pool)])active.push(extra.name);
     if(v.ability731>0)active.push('天才加成 +'+v.ability731+'%');
     $('theorySettings').textContent=active.length?'目前加成：'+active.join('、'):'目前未啟用機率加成神器';
-    const progress=v.state.progress?.[pool]||{count:0,round:0};
+    const progress=v.state.progress?.[pool>=9?9:pool]||{count:0,round:0};
     const count=Number.isInteger(progress.count)?progress.count:0;
     const round=Number.isInteger(progress.round)?progress.round:0;
     const ceil=C.publicCeiling[pool];

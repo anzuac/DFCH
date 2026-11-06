@@ -74,7 +74,7 @@
     const isSprite=lowStarPortraitIds.has(Number(id));
     if(!isSprite&&!info)return null;
     const img=el('img',isSprite?'hero-portrait sprite':'hero-portrait');
-    img.src=isSprite?'./images/'+id+'.webp':'../assets/heroes/'+encodeURIComponent(info.key?.replace('shapeshifter_','')||'laios')+'.webp';
+    img.src=isSprite?'./images/'+id+'.webp':'../assets/heroes/'+encodeURIComponent(info.key)+'.webp';
     img.alt=isSprite?nameOf(id):(info.name+'（'+info.title+'）');
     img.loading='lazy';
     img.onerror=()=>img.remove();

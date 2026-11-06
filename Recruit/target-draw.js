@@ -410,7 +410,8 @@
       b.type='button';b.setAttribute('aria-pressed',String(chosen));
       photo.loading='lazy';photo.alt=nameOf(c.id);
       const pref=guides.get(c.id);
-      photo.src=pref?.key?'../assets/heroes/'+encodeURIComponent(pref.key)+'.webp':(c.id>=76&&c.id<=79?'../assets/heroes/'+encodeURIComponent(D.heroRoster[String(c.id)]?.key?.replace('shapeshifter_','')||'laios')+'.webp':'./images/'+c.id+'.webp');
+      photo.src=pref?.key?'../assets/heroes/'+encodeURIComponent(pref.key)+'.webp':'./images/'+c.id+'.webp';
+      if(c.id>=76&&c.id<=79)photo.hidden=true; // Official five-star variant sprite pending; do not substitute six-star portrait.
       photo.onerror=()=>photo.remove();
       b.append(photo,el('strong','',nameOf(c.id)),el('small','',c.star+' ★'),
         el('small','',hit?'符合指定能力':'其他候選'));

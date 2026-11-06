@@ -13,6 +13,6 @@ D.poolRows[p.key]=X.abilities(p.key).map(row=>[row.id,row.group,row.weight]);}
 for(const h of five)for(const id of h.fixed)if(!D.displayNames[String(id)])D.displayNames[String(id)]='能力 '+id;
 window.DFCHRecruitConfig=Object.freeze({...C,keys,weights,six:sixPools,pickups,publicCeiling,sixFixed:{...C.sixFixed,...fixed},
 groupExclusive:{...C.groupExclusive,...Object.fromEntries(X.pools.map(p=>[p.key,[[303000709,303000722]]]))},
-targetPlayerIndexes:{...C.targetPlayerIndexes,303000604:X.byId.get(303000604).targetPlayers}});
+targetPlayerIndexes:C.targetPlayerIndexes});
 window.DFCHRecruitCollab318Adapter=Object.freeze({five,levels:{"71":[60,83,38,75.2,70,55,50,25,45,12.5,10],"72":[55,72,65,60,0,65,8,21,52,20,10],"73":[75,70,27.8,5.2,20,60,80,52,65,12,10],"74":[60,80,68,50,0,72,13,32,58,12,10],"75":[70,72,40,65,60,32,0,35,60,15,10],"76":[70,63,40,8.5,0,60,22,38,55,18,10],"77":[55,76,35,72.3,65.1,50,45,28,45,15,10],"78":[50,70,63,60,0,60,5,15,47,25,10],"79":[73,60,27.8,5,20,60,75,49,60,15,10]}});
 })();
