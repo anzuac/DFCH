@@ -42,7 +42,7 @@ test('Every portrait invokes the shared ability modal on both pages', () => {
   assert.doesNotMatch(view,/if\(h\.key==='frigg'\)/);
   for(const page of ['index.html','heroes.html']){
     const html=read(page);
-    assert.match(html,/sixstar-abilities\.js\?v=1\.5\.2/);
+    assert.match(html,/sixstar-abilities\.js\?v=1\.5\.3/);
     assert.match(html,/sixstar-abilities\.css\?v=1\.1\.0/);
     assert.doesNotMatch(html,/frigg-abilities\.js\?v=0\.2\.0/);
   }
