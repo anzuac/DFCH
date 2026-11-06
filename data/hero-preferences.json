@@ -89,6 +89,19 @@
       }
     },
     {
+      "id": 305000026,
+      "name": "幽靈南瓜塔",
+      "translations": {
+        "zh_tw": "幽靈南瓜塔",
+        "zh_cn": "",
+        "ja": "パンプキンパイ仮",
+        "en": "",
+        "ko": "",
+        "th": "",
+        "vi": ""
+      }
+    },
+    {
       "id": 305001000,
       "name": "發光蘑菇",
       "translations": {
@@ -414,14 +427,157 @@
       }
     },
     {
-      "id": 305000026,
-      "name": "幽靈南瓜塔",
+      "id": 305001028,
+      "name": "祈求解厄的除靈雪酪",
       "translations": {
-        "zh_tw": "幽靈南瓜塔",
+        "zh_tw": "祈求解厄的除靈雪酪",
+        "ja": "厄よけ祈願！除霊ソルベ",
+        "en": "Exorcism sorbet to drive away evils",
+        "ko": "액막이를 기원하는 사령 퇴치 셔벗",
         "zh_cn": "",
-        "ja": "パンプキンパイ仮",
+        "th": "",
+        "vi": ""
+      }
+    },
+    {
+      "id": 305001029,
+      "name": "食人植物餡餅",
+      "translations": {
+        "zh_tw": "食人植物餡餅",
+        "ja": "人喰い植物のタルト",
+        "en": "Man-eating plants fruit tart",
+        "ko": "식인 식물 타르트",
+        "zh_cn": "",
+        "th": "",
+        "vi": ""
+      }
+    },
+    {
+      "id": 305001030,
+      "name": "靈魂班尼迪克蛋",
+      "translations": {
+        "zh_tw": "靈魂班尼迪克蛋",
+        "ja": "魂のエッグベネディクト",
+        "en": "SOUL EGGS BENEDICT",
+        "ko": "영혼의 에그베네딕트",
+        "zh_cn": "",
+        "th": "",
+        "vi": ""
+      }
+    },
+    {
+      "id": 305001031,
+      "name": "傑克燈籠濃湯",
+      "translations": {
+        "zh_tw": "傑克燈籠濃湯",
+        "ja": "ジャック・オー・ランタンのポタージュ",
+        "en": "JACK-O'-LANTERN POTAGE",
+        "ko": "잭 오 랜턴 포타주",
+        "zh_cn": "",
+        "th": "",
+        "vi": ""
+      }
+    },
+    {
+      "id": 305001032,
+      "name": "水煮高麗菜",
+      "translations": {
+        "zh_tw": "水煮高麗菜",
+        "ja": "丸ごとキャベツ煮",
+        "en": "Whole Stewed Cabbage",
+        "ko": "통양배추 조림",
+        "zh_cn": "",
+        "th": "",
+        "vi": ""
+      }
+    },
+    {
+      "id": 305001033,
+      "name": "甜煮過的曼德拉草",
+      "translations": {
+        "zh_tw": "甜煮過的曼德拉草",
+        "ja": "マンドレイクの甘露煮",
+        "en": "Mandrakes boiled sweet",
+        "ko": "맨드레이크를 달콤하게 조린 것",
+        "zh_cn": "",
+        "th": "",
+        "vi": ""
+      }
+    },
+    {
+      "id": 305001034,
+      "name": "刃魚糕",
+      "translations": {
+        "zh_tw": "刃魚糕",
+        "ja": "刃魚のローフ",
+        "en": "BLADE FISH LOAF",
+        "ko": "칼날치 로프",
+        "zh_cn": "",
+        "th": "",
+        "vi": ""
+      }
+    },
+    {
+      "id": 305001035,
+      "name": "會動的鎧甲燜肉",
+      "translations": {
+        "zh_tw": "會動的鎧甲燜肉",
+        "ja": "動く鎧の蒸し焼き",
+        "en": "Steam-baked Living Armor",
+        "ko": "움직이는 갑옷 찜",
+        "zh_cn": "",
+        "th": "",
+        "vi": ""
+      }
+    },
+    {
+      "id": 305001036,
+      "name": "附近散落的大麥雜炊粥",
+      "translations": {
+        "zh_tw": "附近散落的大麥雜炊粥",
+        "ja": "そのへんに落ちてた大麦の雑炊",
+        "en": "Porridge with scattered barley",
+        "ko": "떨어져 있던 보리를 주워서 끓인 죽",
+        "zh_cn": "",
+        "th": "",
+        "vi": ""
+      }
+    },
+    {
+      "id": 305001037,
+      "name": "哈比蛋玉子燒",
+      "translations": {
+        "zh_tw": "哈比蛋玉子燒",
+        "ja": "ハーピーの卵で作った卵焼き",
+        "en": "Harpy egg omelet",
+        "ko": "하피 알로 만든 달걀말이",
+        "zh_cn": "",
+        "th": "",
+        "vi": ""
+      }
+    },
+    {
+      "id": 305001038,
+      "name": "藉由仙女環調換的變身餃子",
+      "translations": {
+        "zh_tw": "藉由仙女環調換的變身餃子",
+        "ja": "<size=0.9em>ダンプリング</size>\n<size=0.7em>をフェアリーリングでチェンジリング</size>",
+        "en": "DUMPLINGS TRANSFORMED",
+        "ko": "덤플링을 페어리 링으로 체인질링",
+        "zh_cn": "",
+        "th": "",
+        "vi": ""
+      }
+    },
+    {
+      "id": 305001039,
+      "name": "ウロボロス鍋",
+      "translations": {
+        "zh_tw": "",
+        "ja": "ウロボロス鍋",
         "en": "",
         "ko": "",
+        "zh_cn": "",
         "th": "",
         "vi": ""
       }
@@ -1929,7 +2085,7 @@
     "th": "ไทย",
     "vi": "Tiếng Việt"
   },
-  "giftSupplementVersion": "3.16.1",
+  "giftSupplementVersion": "3.18.0",
   "acquisitionVersion": "3.16.1",
   "bondGains": {
     "gameVersion": "3.16.1",
@@ -1940,6 +2096,7 @@
       "305000023": 40,
       "305000024": 40,
       "305000025": 40,
+      "305000026": 40,
       "305001000": 20,
       "305001001": 20,
       "305001002": 20,
@@ -1964,8 +2121,7 @@
       "305001022": 40,
       "305001023": 20,
       "305001024": 30,
-      "305001027": 20,
-      "305000026": 40
+      "305001027": 20
     },
     "preferenceMultipliers": {
       "normal": 1,
