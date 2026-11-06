@@ -1,0 +1,86 @@
+{
+  "version": "3.18.0",
+  "source": "UniquePlayerParamTable / UniqueSoldierTemplateTable, APK 3.18.0",
+  "fiveStar": [
+    {
+      "id": 76,
+      "key": "shapeshifter_laios",
+      "name": "變形者・萊歐斯",
+      "job": 1,
+      "fixed": [
+        303000000,
+        303000119,
+        303000123,
+        303000806,
+        303001131
+      ]
+    },
+    {
+      "id": 77,
+      "key": "shapeshifter_marcille",
+      "name": "變形者・瑪露希爾",
+      "job": 4,
+      "fixed": [
+        303000000,
+        303000119,
+        303000123,
+        303001132,
+        303001133
+      ]
+    },
+    {
+      "id": 78,
+      "key": "shapeshifter_chilchack",
+      "name": "變形者・奇爾查克",
+      "job": 2,
+      "fixed": [
+        303000000,
+        303000119,
+        303000123,
+        303001134,
+        303001135
+      ]
+    },
+    {
+      "id": 79,
+      "key": "shapeshifter_senshi",
+      "name": "變形者・先西",
+      "job": 1,
+      "fixed": [
+        303000000,
+        303000119,
+        303000123,
+        303001136,
+        303001137
+      ]
+    }
+  ],
+  "visibleSixStar": [
+    {
+      "id": 71,
+      "key": "marcille",
+      "name": "瑪露希爾"
+    },
+    {
+      "id": 72,
+      "key": "chilchack",
+      "name": "奇爾查克"
+    },
+    {
+      "id": 73,
+      "key": "senshi",
+      "name": "先西"
+    },
+    {
+      "id": 74,
+      "key": "izutsumi",
+      "name": "莞苞"
+    },
+    {
+      "id": 75,
+      "key": "falin",
+      "name": "法琳"
+    }
+  ],
+  "note": "The five-star shapeshifter names are descriptive labels derived from official keys; candidate appearance assets and 3.18 initial-status vectors require independent validation."
+}
