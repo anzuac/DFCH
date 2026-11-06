@@ -11,7 +11,7 @@ function guideManifest(){
   assert.ok(match,'Cloudflare guide file manifest exists');
   return new Set([...match[1].matchAll(/'([^']+)'/g)].map(x=>x[1]));
 }
-test('Cloudflare Pages copies the 23-hero modal JavaScript, CSS and public data',()=>{
+test('Cloudflare Pages copies the 31-hero modal JavaScript, CSS and public data',()=>{
   const manifest=guideManifest();
   for(const asset of [
     'sixstar-abilities.js',
@@ -33,8 +33,8 @@ test('Every locally referenced Cloudflare guide script and stylesheet is publish
   assert.match(get('sixstar-abilities.js'),/\.\/data\/sixstar-visible-abilities\.json/);
   assert.ok(manifest.has('data/sixstar-visible-abilities.json'));
 });
-test('Cloudflare homepage is built from the guide which includes the 23-hero modal',()=>{
+test('Cloudflare homepage is built from the guide which includes the 31-hero modal',()=>{
   assert.match(build,/fs\.readFileSync\(path\.join\(repoRoot,'heroes\.html'\),'utf8'\)/);
-  assert.match(get('heroes.html'),/sixstar-abilities\.js\?v=1\.4\.0/);
+  assert.match(get('heroes.html'),/sixstar-abilities\.js\?v=1\.5\.0/);
   assert.match(get('heroes.html'),/sixstar-abilities\.css\?v=1\.1\.0/);
 });

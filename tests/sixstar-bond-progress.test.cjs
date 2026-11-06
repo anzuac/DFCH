@@ -47,7 +47,7 @@ function fixture(){
 }
 
 test('Official 51 cumulative requirements are consistent for every six-star hero',()=>{
-  assert.equal(data.heroes.length,23);
+  assert.equal(data.heroes.length,31);
   assert.equal(data.bondThresholds.length,51);
   assert.equal(data.bondThresholds[0],0);
   assert.equal(data.bondThresholds[1],100);

@@ -7,12 +7,12 @@ const root=path.resolve(__dirname,'..');
 const read=name=>fs.readFileSync(path.join(root,name),'utf8');
 const data=JSON.parse(read('data/sixstar-visible-abilities.json'));
 
-test('All 23 six-star heroes have official pictures for every supported ability',()=>{
-  assert.equal(data.heroes.length,23);
+test('All 31 six-star heroes have official pictures for every supported ability',()=>{
+  assert.equal(data.heroes.length,31);
   const skills=data.heroes.flatMap(hero=>hero.skills);
-  assert.equal(skills.length,253);
-  assert.equal(Object.keys(data.icons).length,138);
-  assert.equal(new Set(skills.map(skill=>skill.icon)).size,138);
+  assert.equal(skills.length,341);
+  assert.equal(Object.keys(data.icons).length,172);
+  assert.equal(new Set(skills.map(skill=>skill.icon)).size,172);
   for(const skill of skills) {
     assert.ok(skill.icon,'Missing picture for '+skill.name);
     assert.ok(Object.hasOwn(data.icons,skill.icon),'Picture lookup missing for '+skill.name);
@@ -48,10 +48,10 @@ test('Website keeps private original names and numeric ability IDs out of public
   }
 });
 
-test('Both sites load the refreshed 23-hero picture data and Cloudflare publishes it',()=>{
-  assert.match(read('sixstar-abilities.js'),/sixstar-visible-abilities\.json\?v=1\.3\.0/);
+test('Both sites load the refreshed 31-hero picture data and Cloudflare publishes it',()=>{
+  assert.match(read('sixstar-abilities.js'),/sixstar-visible-abilities\.json\?v=3\.18\.0/);
   for(const entry of ['index.html','heroes.html'])
-    assert.match(read(entry),/sixstar-abilities\.js\?v=1\.4\.0/);
+    assert.match(read(entry),/sixstar-abilities\.js\?v=1\.5\.0/);
   const manifest=read('scripts/build-heroes-pages.cjs');
   assert.match(manifest,/'data\/sixstar-visible-abilities\.json'/);
   assert.match(manifest,/'sixstar-abilities\.js'/);
