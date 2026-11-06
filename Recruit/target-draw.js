@@ -21,12 +21,12 @@
     pool:0,sixMode:'exclude',hiddenEye:false,hiddenSword:false,
     ownedEye:false,ownedSword:false,bonusValkyrja:false,poolBonusOwned:{},
     maneLevel:0,emmaLevel:0
-  },slots:[0,0,0,0,0,0],run:null,lastRun:null,stats:Array.from({length:9},bucket)});
+  },slots:[0,0,0,0,0,0],run:null,lastRun:null,stats:Array.from({length:C.keys.length},bucket)});
   let state=initial(),timer=null,refreshStamp=0,roundsInBatch=0;
   try{
     const saved=JSON.parse(localStorage.getItem(KEY)||'null');
-    if(saved?.version===1&&Array.isArray(saved.stats)&&saved.stats.length===9&&saved.settings){
-      state={...initial(),...saved};
+    if(saved?.version===1&&Array.isArray(saved.stats)&&saved.stats.length>=9&&saved.settings){
+      state={...initial(),...saved,stats:[...saved.stats,...Array.from({length:Math.max(0,C.keys.length-saved.stats.length)},bucket)]};
       state.settings={...initial().settings,...saved.settings};
       state.slots=Array.from({length:6},(_,i)=>Number(saved.slots?.[i])||0);
       if(state.run?.status==='running')state.run.status='paused';
@@ -141,6 +141,11 @@
     return picked.slice(0,max);
   }
   function pickAbilities(rows,group,num,star,heroId,picked){
+    if(pool()>=9){const X=window.DFCHRecruitCollab318,o=config();
+      const r=X.drawGroup(poolKey(),group,num,{star,heroId,jobMask:D.heroRoster[String(heroId)]?.job||0,
+        selected:picked.map(a=>a.id),artifactIds:[...(o.ownedEye?[301008017]:[]),...(o.ownedSword?[301008020]:[])],hiddenEye:o.hiddenEye,hiddenSword:o.hiddenSword});
+      for(const id of r.drawn)picked.push({id,role:group===1?'自由':group===2?'攻擊增益':'HP 增益'});return;
+    }
     const options=rows.filter(r=>r.group===group&&r.weight>0);
     const base=options.map(x=>x.weight);
     let tries=0,done=0;
@@ -405,7 +410,7 @@
       b.type='button';b.setAttribute('aria-pressed',String(chosen));
       photo.loading='lazy';photo.alt=nameOf(c.id);
       const pref=guides.get(c.id);
-      photo.src=pref?.key?'../assets/heroes/'+encodeURIComponent(pref.key)+'.webp':'./images/'+c.id+'.webp';
+      photo.src=pref?.key?'../assets/heroes/'+encodeURIComponent(pref.key)+'.webp':(c.id>=76&&c.id<=79?'../assets/heroes/'+encodeURIComponent(D.heroRoster[String(c.id)]?.key?.replace('shapeshifter_','')||'laios')+'.webp':'./images/'+c.id+'.webp');
       photo.onerror=()=>photo.remove();
       b.append(photo,el('strong','',nameOf(c.id)),el('small','',c.star+' ★'),
         el('small','',hit?'符合指定能力':'其他候選'));
@@ -535,7 +540,7 @@
     $('targetClearStats').addEventListener('click',()=>{
       if(state.run?.status==='running')return;
       if(!confirm('清除第四頁所有累積能力紀錄？不影響前三頁資料及本次暫停進度。'))return;
-      state.stats=Array.from({length:9},bucket);
+      state.stats=Array.from({length:C.keys.length},bucket);
       persist();render();$('targetNotice').textContent='第四頁累積統計已清除。';
     });
     document.addEventListener('visibilitychange',()=>{if(document.hidden)pause();});
