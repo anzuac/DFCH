@@ -461,25 +461,6 @@
     $('heroSearch').placeholder=t(1);$('heroClearFilters').textContent=t(10);panel.querySelector('.hero-common-gifts h3').textContent=t(11);
     options('heroSelect',data.heroes.map(h=>[h.index,`${h.name}｜${h.title}`]),t(3));options('heroItemFilter',[...data.items].sort((a,b)=>a.name.localeCompare(b.name)).map(i=>[i.id,i.name]),t(5));options('heroPreferenceFilter',[['loved',t(8)],['favorite',t(9)]],t(7));
     $('heroCommonGifts').replaceChildren(chips(data.commonFavorite));
-    const extras=$('heroNewGifts');
-    if(extras){
-      const labels={zh_tw:['3.18.0 新增羈絆道具','這些道具並非全體六星通用喜愛；下列數值是單次贈送的基礎羈絆值。圖片正在校正。','基礎羈絆'],ja:['3.18.0 新しい絆の贈り物','全員共通の好物ではありません。表示値は基礎絆値です。画像は確認中です。','基本の絆'],ko:['3.18.0 신규 인연 선물','모든 영령이 좋아하는 공통 선물은 아닙니다. 표시된 값은 기본 인연 상승량입니다. 이미지는 확인 중입니다.','기본 인연'],en:['New 3.18.0 bond gifts','These are not universally liked gifts. Values show base bond gain per gift. Icons are under review.','Base bond']};
-      const l=labels[lang]||labels.en;
-      panel.querySelector('.hero-new-gifts h3').textContent=l[0];
-      panel.querySelector('.hero-new-gifts .unit-note').textContent=l[1];
-      const ul=node('ul',null,'gift-list');
-      for(let id=305001028;id<=305001039;id++){
-        const item=source.items.find(g=>g.id===id);
-        if(!item)continue;
-        const li=node('li',null,'gift-shortcut-item'),name=node('span',item.translations?.[lang]||item.translations?.ja||item.name,'gift-name');
-        const info=node('span',null,'gift-detail');
-        info.append(name,node('strong',l[2]+' +'+source.bondGains.baseValues[id],'gift-bond-gain'));
-        li.dataset.gift=id;
-        li.append(info);
-        ul.append(li);
-      }
-      extras.replaceChildren(ul);
-    }
     for(const e of guideBody.querySelectorAll(':scope > .helper,:scope > .unit-note,.hero-common-gifts > .unit-note'))localizeGuideCopy(e);
     localizeGuideCopy(panel.querySelector('.hero-standalone-link'));
     panel.querySelector('.status-chip').textContent='3.16.0';
