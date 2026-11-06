@@ -50,8 +50,12 @@ test('3.18.0 bond thresholds span Lv0-Lv50 and 172 player-visible icon reference
   for(const s of data.heroes.flatMap(h=>h.skills))assert.ok(s.icon && Object.hasOwn(data.icons,s.icon),s.name);
   assert.doesNotMatch(JSON.stringify(data),/\b30300\d{4}\b|sab_[a-z]/);
 });
-test('collector II skill remains explicitly pending, never fabricated as verified',()=>{
+test('collector II has APK-grounded 10512 affection-gift event weight effects at levels 1–3',()=>{
   const skill=heroes.find(h=>h.slug==='chilchack').skills.find(s=>s.name==='收集家 II');
   assert.ok(skill);
-  assert.ok(skill.levelEffects.every(x=>x.includes('尚待遊戲畫面核實')));
+  assert.equal(skill.baseCap,2);
+  assert.equal(skill.fullCap,3);
+  assert.equal(skill.evolveAt,20);
+  assert.deepEqual(skill.levelEffects,[1,2,3].map(n=>`遠征中羈絆道具取得事件的抽選權重提高 ${n}%（不是最終掉落率）。`));
+  assert.ok(skill.levelEffects.every(x=>!x.includes('尚待遊戲畫面核實')));
 });
