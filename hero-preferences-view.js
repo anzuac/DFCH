@@ -39,7 +39,7 @@
   }
   /* Public notes remain visible in the four supported languages. */
   const guideCopy={
-    "找到英靈，選對禮物。收錄 23 位六星英靈的固定喜好。":{en:"Find the right gifts for 23 six-star heroes.",ja:"23人の星6英霊が好む贈り物を探せます。",ko:"6성 영령 23명의 선호 선물을 확인하세요."},
+    "找到英靈，選對禮物。收錄 31 位六星英靈的固定喜好。":{en:"Find the right gifts for 31 six-star heroes.",ja:"31人の星6英霊が好む贈り物を探せます。",ko:"6성 영령 31명의 선호 선물을 확인하세요."},
     "依英靈名稱、稱號或物品查找喜愛與最愛。同名的不同版本分開列出。":{en:"Search liked and loved gifts by hero, title, or gift. Different versions appear separately.",ja:"英霊名・称号・贈り物で好みを検索できます。別バージョンは個別に表示します。",ko:"영령 이름, 칭호 또는 선물로 선호도를 검색하세요. 다른 버전은 별도로 표시됩니다."},
     "以下英靈的喜愛項目皆包含這些物品；各卡片另外列出個別喜好。":{en:"All listed heroes like these common gifts; each card shows individual preferences.",ja:"下記の英霊全員がこれらの贈り物を好みます。個別の好みは各カードをご覧ください。",ko:"아래 영령은 모두 이 공통 선물을 좋아하며, 개별 선호도는 각 카드에 표시됩니다."},
     "僅列出官方中的六星英靈；缺少所選語言翻譯時保留日文原名。。":{en:"Shows six-star heroes from official data only. Where translations are unavailable, Japanese names are retained.",ja:"公式データに含まれる星6英霊のみ表示します。翻訳がない名前は日本語の原名を使います。",ko:"공식 데이터의 6성 영령만 표시합니다. 번역이 없으면 일본어 원명을 유지합니다."},
@@ -77,15 +77,16 @@
       jump.addEventListener('click',()=>openGiftLocation(id));
       icon.src=`./assets/gifts/${id}.webp`;icon.alt='';icon.width=36;icon.height=36;icon.loading='lazy';icon.addEventListener('error',()=>icon.remove(),{once:true});
       const base=rules.baseValues[id],multiplier=rules.preferenceMultipliers[preference],artifact=ownsBondStatue?rules.artifact.multiplier:1;
-      const gain=Math.floor(base*multiplier*artifact);
-      entry.dataset.gift=id;entry.dataset.bondGain=gain;
-      detail.append(node('span',names.get(id),'gift-name'),node('strong',`${text.gain} +${gain}`,'gift-bond-gain'));
+      const verified=Number.isFinite(base)&&base>=0;
+      const gain=verified?Math.floor(base*multiplier*artifact):null;
+      entry.dataset.gift=id;if(verified)entry.dataset.bondGain=gain;
+      detail.append(node('span',names.get(id)||String(id),'gift-name'),node('strong',verified?`${text.gain} +${gain}`:rankingUI[lang].noBase,'gift-bond-gain'));
       jump.append(icon,detail);entry.append(jump);
       const recommendation=node('button',rankingUI[lang].shortcut,'gift-rank-shortcut');
       recommendation.type='button';
       recommendation.addEventListener('click',()=>openGiftRank(id));
       entry.append(recommendation);
-      if(!source.items.find(i=>i.id===id).translations[lang])entry.title=t(15);
+      if(!source.items.find(i=>i.id===id)?.translations?.[lang])entry.title=t(15);
       list.append(entry);
     }
     return list;
@@ -463,7 +464,7 @@
     $('heroCommonGifts').replaceChildren(chips(data.commonFavorite));
     for(const e of guideBody.querySelectorAll(':scope > .helper,:scope > .unit-note,.hero-common-gifts > .unit-note'))localizeGuideCopy(e);
     localizeGuideCopy(panel.querySelector('.hero-standalone-link'));
-    panel.querySelector('.status-chip').textContent='3.16.0';
+    panel.querySelector('.status-chip').textContent=source.gameVersion;
     const header=document.querySelector('.hero-guide-header');if(header){header.querySelector('h1').textContent=t(0);localizeGuideCopy(header.querySelector('.helper'));document.title=t(0);document.documentElement.lang=lang.replace('_','-');}
     applyLocationLanguage();render();
   }

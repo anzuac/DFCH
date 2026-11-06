@@ -81,6 +81,19 @@
       }
     },
     {
+      "id": 305000026,
+      "name": "幽靈南瓜塔",
+      "translations": {
+        "zh_tw": "幽靈南瓜塔",
+        "zh_cn": "",
+        "ja": "パンプキンパイ仮",
+        "en": "",
+        "ko": "",
+        "th": "",
+        "vi": ""
+      }
+    },
+    {
       "id": 305001000,
       "name": "發光蘑菇",
       "translations": {
@@ -341,6 +354,16 @@
       }
     },
     {
+      "id": 305001020,
+      "name": "用途不明的鑰匙",
+      "translations": {
+        "zh_tw": "用途不明的鑰匙",
+        "ja": "用途不明の鍵",
+        "en": "Key of unknown use",
+        "ko": "용도불명의 열쇠"
+      }
+    },
+    {
       "id": 305001021,
       "name": "可疑的藥瓶",
       "translations": {
@@ -393,6 +416,16 @@
       }
     },
     {
+      "id": 305001025,
+      "name": "魔石的碎片",
+      "translations": {
+        "zh_tw": "魔石的碎片",
+        "ja": "魔石の欠片",
+        "en": "Magic stone fragment",
+        "ko": "마석의 조각"
+      }
+    },
+    {
       "id": 305001027,
       "name": "冥界骸花椒",
       "translations": {
@@ -401,19 +434,6 @@
         "ja": "冥界の骸花椒",
         "en": "Underworld carcass pepper",
         "ko": "명계의 해골 후추",
-        "th": "",
-        "vi": ""
-      }
-    },
-    {
-      "id": 305000026,
-      "name": "幽靈南瓜塔",
-      "translations": {
-        "zh_tw": "幽靈南瓜塔",
-        "zh_cn": "",
-        "ja": "パンプキンパイ仮",
-        "en": "",
-        "ko": "",
         "th": "",
         "vi": ""
       }
