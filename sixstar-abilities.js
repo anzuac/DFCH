@@ -1,7 +1,7 @@
 (() => {
   'use strict';
   // Only player-visible skill descriptions and rewards are used in this client-side view.
-  const DATA_URL = './data/sixstar-visible-abilities.json?v=3.18.0';
+  const DATA_URL = './data/sixstar-visible-abilities.json?v=1.3.0';
   const STORAGE = 'dfch-sixstar-abilities-v1';
   const maxBond = 50;
   let dataPromise = null;
@@ -51,7 +51,7 @@
         if (!response.ok) throw new Error('Unavailable');
         return response.json();
       }).then(doc => {
-        if (!doc || !Array.isArray(doc.heroes) || doc.heroes.length !== 31 || !Array.isArray(doc.bondRewards)) throw new Error('Incomplete');
+        if (!doc || !Array.isArray(doc.heroes) || doc.heroes.length !== 23 || !Array.isArray(doc.bondRewards)) throw new Error('Incomplete');
         if (!Array.isArray(doc.bondThresholds) || doc.bondThresholds.length !== 51 ||
             !doc.bondThresholds.every((value,index,values) => Number.isSafeInteger(value) && value >= 0 && (!index || value > values[index-1]))) {
           throw new Error('Invalid bond thresholds');

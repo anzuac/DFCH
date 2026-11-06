@@ -16,14 +16,14 @@ const skill=(key,name)=>{
   return result;
 };
 const at=(key,name,level)=>skill(key,name).levelEffects[level-1];
-test('All 31 heroes have complete, player-readable ability effects for every supported level',()=>{
-  assert.equal(data.heroes.length,31);
-  assert.equal(data.heroes.reduce((sum,h)=>sum+h.skills.length,0),341);
+test('All 23 heroes have complete, player-readable ability effects for every supported level',()=>{
+  assert.equal(data.heroes.length,23);
+  assert.equal(data.heroes.reduce((sum,h)=>sum+h.skills.length,0),253);
   for(const h of data.heroes)for(const s of h.skills){
     assert.equal(s.levelEffects.length,s.fullCap);
     assert.ok(s.levelEffects.every(text=>typeof text==='string'&&text.trim().length>0));
   }
-  assert.equal(new Set(data.heroes.flatMap(h=>h.skills.map(s=>s.name))).size,172);
+  assert.equal(new Set(data.heroes.flatMap(h=>h.skills.map(s=>s.name))).size,138);
   assert.doesNotMatch(JSON.stringify(data),/能力名稱核對中|\b30300\d{4}\b/);
 });
 test('All missing skills use the matched official player descriptions',()=>{
@@ -48,7 +48,7 @@ test('Two-element Flaming Aureola levels split holy and fire growth correctly',(
 });
 test('Main-site and Cloudflare Pages references use the same refreshed ability data',()=>{
   const get=p=>fs.readFileSync(path.join(root,p),'utf8');
-  for(const name of ['index.html','heroes.html'])assert.match(get(name),/sixstar-abilities\.js\?v=1\.5\.0/);
-  assert.match(get('sixstar-abilities.js'),/sixstar-visible-abilities\.json\?v=3\.18\.0/);
+  for(const name of ['index.html','heroes.html'])assert.match(get(name),/sixstar-abilities\.js\?v=1\.4\.0/);
+  assert.match(get('sixstar-abilities.js'),/sixstar-visible-abilities\.json\?v=1\.3\.0/);
   assert.match(get('scripts/build-heroes-pages.cjs'),/'data\/sixstar-visible-abilities\.json'/);
 });

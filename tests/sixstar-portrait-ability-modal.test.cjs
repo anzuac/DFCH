@@ -8,10 +8,10 @@ const root = path.resolve(__dirname, '..');
 const data = require('../data/sixstar-visible-abilities.json');
 const heroes = require('../data/hero-preferences.json');
 const read = name => fs.readFileSync(path.join(root,name), 'utf8');
-test('31 player-facing six-star portraits map one-to-one to ability sets', () => {
-  assert.equal(data.heroes.length,31);
+test('23 player-facing six-star portraits map one-to-one to ability sets', () => {
+  assert.equal(data.heroes.length,23);
   const keys = data.heroes.map(h=>h.slug);
-  assert.equal(new Set(keys).size,31);
+  assert.equal(new Set(keys).size,23);
   assert.deepEqual([...keys].sort(), heroes.heroes.map(h=>h.key).sort());
   for (const hero of data.heroes) {
     assert.ok(hero.title);
@@ -42,7 +42,7 @@ test('Every portrait invokes the shared ability modal on both pages', () => {
   assert.doesNotMatch(view,/if\(h\.key==='frigg'\)/);
   for(const page of ['index.html','heroes.html']){
     const html=read(page);
-    assert.match(html,/sixstar-abilities\.js\?v=1\.5\.0/);
+    assert.match(html,/sixstar-abilities\.js\?v=1\.4\.0/);
     assert.match(html,/sixstar-abilities\.css\?v=1\.1\.0/);
     assert.doesNotMatch(html,/frigg-abilities\.js\?v=0\.2\.0/);
   }

@@ -47,7 +47,7 @@ function fixture(){
 }
 
 test('Official 51 cumulative requirements are consistent for every six-star hero',()=>{
-  assert.equal(data.heroes.length,31);
+  assert.equal(data.heroes.length,23);
   assert.equal(data.bondThresholds.length,51);
   assert.equal(data.bondThresholds[0],0);
   assert.equal(data.bondThresholds[1],100);
@@ -96,8 +96,8 @@ test('Each hero retains a separate bond amount, without losing older ability lev
   assert.equal(ui.control('.s6-progress-input').value,'472');
   const stored=JSON.parse(ui.storage.get('dfch-sixstar-abilities-v1'));
   assert.equal(stored.frigg.progress,472);
-  assert.equal(stored.freya.bond,11);
-  assert.equal(stored.freya.progress,50);
+  assert.equal(stored.freya.bond,10);
+  assert.equal(stored.freya.progress,150);
 });
 
 test('Submitting a full current level automatically advances levels, clamps max, and dragging resets progress',async()=>{
@@ -124,10 +124,10 @@ test('Submitting a full current level automatically advances levels, clamps max,
 test('Both deployment entrypoints have versioned assets in Cloudflare whitelist',()=>{
   for(const entry of ['index.html','heroes.html']){
     const html=fs.readFileSync(path.join(root,entry),'utf8');
-    assert.match(html,/sixstar-abilities\.js\?v=1\.5\.0/);
+    assert.match(html,/sixstar-abilities\.js\?v=1\.4\.0/);
     assert.match(html,/sixstar-abilities\.css\?v=1\.1\.0/);
   }
-  assert.match(source,/sixstar-visible-abilities\.json\?v=3\.18\.0/);
+  assert.match(source,/sixstar-visible-abilities\.json\?v=1\.3\.0/);
   const manifest=fs.readFileSync(path.join(root,'scripts/build-heroes-pages.cjs'),'utf8');
   for(const p of ['sixstar-abilities.js','sixstar-abilities.css','data/sixstar-visible-abilities.json'])
     assert.ok(manifest.includes("'"+p+"'"));

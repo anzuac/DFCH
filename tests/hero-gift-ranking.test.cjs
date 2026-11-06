@@ -15,16 +15,13 @@ for(const file of ['hero-preferences-data.js','hero-gift-ranking.js']){
 }
 const {heroes,items,commonFavorite,bondGains}=window.DFCHHeroPreferences;
 const {evaluate}=window.DFCHGiftRanking;
-const verifiedGifts=items.filter(item=>Number.isFinite(bondGains.baseValues[item.id]));
-const unavailableGifts=items.filter(item=>!Number.isFinite(bondGains.baseValues[item.id]));
 
-test('31 official six-star heroes, with supported and pending gift base values',()=>{
-  assert.equal(heroes.length,31);assert.equal(items.length,46);
-  assert.equal(verifiedGifts.length,32);assert.equal(unavailableGifts.length,14);
-  for(const gift of verifiedGifts)assert.equal(Number.isFinite(bondGains.baseValues[gift.id]),true);
+test('all 23 official six-star heroes and 32 gifts have known base values',()=>{
+  assert.equal(heroes.length,23);assert.equal(items.length,32);
+  for(const gift of items)assert.equal(Number.isFinite(bondGains.baseValues[gift.id]),true);
 });
 test('each individual gift produces a complete, sorted ranking in both artifact states',()=>{
-  for(const gift of verifiedGifts){
+  for(const gift of items){
     for(const statue of [false,true]){
       const result=evaluate(gift.id,heroes,bondGains,statue);
       assert.equal(result.rows.length,heroes.length);
@@ -40,7 +37,7 @@ test('each individual gift produces a complete, sorted ranking in both artifact 
   }
 });
 test('statue increase uses the same floor-after-product formula as gift cards',()=>{
-  for(const gift of verifiedGifts){
+  for(const gift of items){
     const baseline=evaluate(gift.id,heroes,bondGains,false);
     const statue=evaluate(gift.id,heroes,bondGains,true);
     for(const row of baseline.rows){
@@ -60,7 +57,7 @@ test('universal favorite gifts share the same rank for all six-star heroes',()=>
 });
 test('personal preference filters candidates without ever overwriting official weights',()=>{
   const selection=new Set(heroes.slice(0,3).map(hero=>hero.index));
-  const gift=verifiedGifts.find(item=>!commonFavorite.includes(item.id));
+  const gift=items.find(item=>!commonFavorite.includes(item.id));
   const all=evaluate(gift.id,heroes,bondGains,true);
   const personal=evaluate(gift.id,heroes,bondGains,true,selection);
   assert.equal(personal.rows.length,3);
@@ -72,8 +69,4 @@ test('personal preference filters candidates without ever overwriting official w
 });
 test('gift IDs absent from source data do not fabricate a percentage or value',()=>{
   assert.equal(evaluate(123456789,heroes,bondGains,false),null);
-});
-
-test('unknown collaboration gift base points are not guessed',()=>{
-  for(const item of unavailableGifts)assert.equal(evaluate(item.id,heroes,bondGains,false),null);
 });
