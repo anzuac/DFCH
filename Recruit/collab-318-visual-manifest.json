@@ -31,6 +31,10 @@
         "1lOw3YJGoC725rsGq538OG9XMVwj4TPVc"
       ],
       "finding": "Official source located, archive fully extracted and Sprite/Texture2D links confirmed"
+    },
+    {
+      "file": "startup_.bundle",
+      "finding": "Official item-abilities_Atlas / ETC2 1024×512 image source for three newly mapped fixed abilities"
     }
   ],
   "pools": [
@@ -107,8 +111,13 @@
     "Only verified image paths are used by Recruit UI",
     "No change to existing nine pools or Bond30"
   ],
-  "extractedImageCount": 33,
+  "extractedImageCount": 38,
   "iconMappings": {
+    "303000515": "./images/collab-318/303000515.png",
+    "303000732": "./images/collab-318/303000732.png",
+    "303000806": "./images/collab-318/303000806.png",
+    "303001061": "./images/collab-318/303001061.png",
+    "303001087": "./images/collab-318/303001087.png",
     "303001112": "./images/collab-318/303001112.png",
     "303001113": "./images/collab-318/303001113.png",
     "303001114": "./images/collab-318/303001114.png",
@@ -145,5 +154,10 @@
   "unmappedAbilityKeys": [
     "sab_event_jewel_hunter_4",
     "sab_quest_master_2"
-  ]
+  ],
+  "fixedAbilityIconCount": 31,
+  "remainingUnmappedArtworks": [
+    "sab_quest_master_2"
+  ],
+  "fixedAbilityCoverage": "All P1-P3 six-star and five-star fixed skill IDs have image paths"
 }

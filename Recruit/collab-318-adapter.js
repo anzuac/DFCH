@@ -17,6 +17,7 @@ for(const [id,name] of Object.entries(collabSixNames))if(!D.displayNames[id])D.d
 for(const h of five)for(const id of h.fixed)if(!D.displayNames[String(id)])D.displayNames[String(id)]='能力 '+id;
 // Verified APK 3.18.0 Texture2D mappings; do not alter legacy nine-pool icons.
 for(let id=303001112;id<=303001137;id++)D.images[String(id)]='./images/collab-318/'+id+'.png';
+for(const id of [303000515,303000806,303000732,303001061,303001087])D.images[String(id)]='./images/collab-318/'+id+'.png';
 window.DFCHRecruitConfig=Object.freeze({...C,keys,weights,six:sixPools,pickups,publicCeiling,sixFixed:{...C.sixFixed,...fixed},
 groupExclusive:{...C.groupExclusive,...Object.fromEntries(X.pools.map(p=>[p.key,[[303000709,303000722]]]))},
 targetPlayerIndexes:C.targetPlayerIndexes});
