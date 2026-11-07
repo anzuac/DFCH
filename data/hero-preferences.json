@@ -2450,7 +2450,12 @@
           "title": ""
         }
       },
-      "acquisition": null,
+      "acquisition": {
+        "version": null,
+        "paidPack": false,
+        "pools": [],
+        "sourceType": "limited_collab_gift"
+      },
       "tribeId": 100,
       "altTribeNameKey": "tribe-alt-name-tallman"
     },
