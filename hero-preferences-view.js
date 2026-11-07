@@ -3,10 +3,10 @@
   const source=window.DFCHHeroPreferences,$=id=>document.getElementById(id),common=new Set(source.commonFavorite),nativeCommon=new Set(source.nativeCommonFavorite||source.commonFavorite),collabHeroIds=new Set([70,71,72,73,74,75,80,81]);
   const ui={"zh_tw": ["六星英靈喜好", "搜尋英靈／稱號／物品", "指定英靈", "全部六星英靈", "找出喜歡這個物品的英靈", "全部物品", "喜好範圍", "喜愛與最愛", "只查最愛", "只查喜愛", "清除篩選", "所有六星皆喜愛的通用物品", "最愛", "喜愛", "找不到符合條件的英靈", "缺少此語言翻譯，顯示日文原名。", "另喜愛上方 {n} 種通用物品。", "顯示 {n}／{total} 位六星英靈", "無個別喜愛物品", "未設定固定最愛物品"], "en": ["Six-star hero gift guide", "Search hero / title / gift", "Hero", "All six-star heroes", "Heroes who like this gift", "All gifts", "Preference", "Liked and loved", "Loved only", "Liked only", "Clear filters", "Gifts liked by all six-star heroes", "Loved", "Liked", "No matching heroes", "Translation unavailable; showing Japanese.", "Also likes the {n} common gifts above.", "Showing {n} / {total} six-star heroes", "No individual liked gifts", "No fixed loved gifts"], "ja": ["六星英霊の好み", "英霊・称号・贈り物を検索", "英霊", "すべての六星英霊", "この贈り物が好きな英霊", "すべての贈り物", "好み", "好き・大好き", "大好きのみ", "好きのみ", "絞り込みをクリア", "すべての六星英霊が好きな贈り物", "大好き", "好き", "該当する英霊がいません", "翻訳がないため日本語を表示します。", "上記の共通の贈り物 {n} 種も好きです。", "六星英霊 {n}／{total} 体を表示", "個別の好きな贈り物なし", "固定の大好きな贈り物なし"], "zh_cn": ["六星英灵喜好", "搜索英灵／称号／物品", "指定英灵", "全部六星英灵", "喜欢此物品的英灵", "全部物品", "喜好范围", "喜爱与最爱", "仅最爱", "仅喜爱", "清除筛选", "所有六星均喜爱的通用物品", "最爱", "喜爱", "没有符合条件的英灵", "缺少此语言翻译，显示日文原名。", "另外喜爱上方 {n} 种通用物品。", "显示 {n}／{total} 位六星英灵", "无个别喜爱物品", "未设置固定最爱物品"], "ko": ["6성 영령 선물 도감", "영령 / 칭호 / 선물 검색", "영령 선택", "모든 6성 영령", "이 선물을 좋아하는 영령", "모든 선물", "선호도", "좋아함 및 매우 좋아함", "매우 좋아함만", "좋아함만", "필터 초기화", "모든 6성 영령이 좋아하는 선물", "매우 좋아함", "좋아함", "일치하는 영령이 없습니다", "번역이 없어 일본어로 표시합니다.", "위의 공통 선물 {n}종도 좋아합니다.", "6성 영령 {n} / {total}명 표시", "개별 선호 선물 없음", "고정된 최애 선물 없음"], "th": ["คู่มือของขวัญวีรชน 6 ดาว", "ค้นหาวีรชน / ฉายา / ของขวัญ", "เลือกวีรชน", "วีรชน 6 ดาวทั้งหมด", "วีรชนที่ชอบของขวัญนี้", "ของขวัญทั้งหมด", "ความชอบ", "ชอบและชอบที่สุด", "ชอบที่สุดเท่านั้น", "ชอบเท่านั้น", "ล้างตัวกรอง", "ของขวัญที่วีรชน 6 ดาวทุกคนชอบ", "ชอบที่สุด", "ชอบ", "ไม่พบวีรชนที่ตรงกัน", "ไม่มีคำแปล จึงแสดงภาษาญี่ปุ่น", "ชอบของขวัญร่วม {n} ชนิดด้านบนด้วย", "แสดงวีรชน 6 ดาว {n} / {total} คน", "ไม่มีของขวัญที่ชอบเฉพาะตัว", "ไม่มีของขวัญที่ชอบที่สุดแบบตายตัว"], "vi": ["Quà tặng anh linh 6 sao", "Tìm anh linh / danh hiệu / quà", "Chọn anh linh", "Tất cả anh linh 6 sao", "Anh linh thích món quà này", "Tất cả quà", "Sở thích", "Thích và yêu thích nhất", "Chỉ yêu thích nhất", "Chỉ thích", "Xóa bộ lọc", "Quà mọi anh linh 6 sao đều thích", "Yêu thích nhất", "Thích", "Không tìm thấy anh linh phù hợp", "Chưa có bản dịch; hiển thị tiếng Nhật.", "Cũng thích {n} món quà chung ở trên.", "Hiển thị {n} / {total} anh linh 6 sao", "Không có quà thích riêng", "Không có quà yêu thích nhất cố định"]};
   const preferenceCopy={
-    zh_tw:{nativeHeading:'本家 23 位六星英靈共同喜愛的物品',nativeNote:'這 19 種禮物對本家 23 位皆為「喜愛」；《迷宮飯》英靈的料理喜好則以各角色卡片為準。',nativeCardNote:'另喜愛上方 19 種本家共同禮物。',collabCardNote:'另喜愛 7 種全員共同禮物；迷宮飯料理依此英靈個別喜好判定。',mithrunNote:'3.18.0 官方資料未設定米斯倫的個別喜愛或最愛物品；僅有 7 種全員共同喜愛道具。'},
-    ja:{nativeHeading:'通常の星6英霊23人が共通して好きな贈り物',nativeNote:'この19種は通常の23人全員が好きな贈り物です。ダンジョン飯の8人は各キャラクターのカードで好みをご確認ください。',nativeCardNote:'上記の通常英霊共通の贈り物19種も好きです。',collabCardNote:'全英霊共通の贈り物7種も好きです。コラボ料理の好みは英霊ごとに異なります。',mithrunNote:'公式3.18.0ではミスルンの固有の好き・大好きな贈り物は未設定です。共通の7種のみ好きです。'},
-    en:{nativeHeading:'19 gifts liked by all 23 original six-star heroes',nativeNote:'All 23 original heroes like these 19 gifts. The eight Delicious in Dungeon heroes have individual preferences shown on their cards.',nativeCardNote:'Also likes the 19 original-hero shared gifts above.',collabCardNote:'Also likes the 7 gifts shared by all heroes. Collaboration dish preferences vary by hero.',mithrunNote:'The official 3.18.0 data defines no individual liked or loved gifts for Mithrun; only the 7 shared gifts are liked.'},
-    ko:{nativeHeading:'기존 6성 영령 23명이 공통으로 좋아하는 선물',nativeNote:'이 19종은 기존 23명이 모두 좋아합니다. 던전밥 영령 8명의 개별 선호도는 각 카드에서 확인하세요.',nativeCardNote:'위의 기존 영령 공통 선물 19종도 좋아합니다.',collabCardNote:'전원 공통 선물 7종도 좋아합니다. 콜라보 요리의 선호도는 영령마다 다릅니다.',mithrunNote:'3.18.0 공식 데이터에서 미스룬의 개별 선호 선물은 설정되지 않았으며, 공통 7종만 좋아합니다.'}
+    zh_tw:{heading:'六星英靈喜愛物品',baseHeading:'基礎共同喜愛・7 種',collabHeading:'迷宮飯聯動禮物・12 種',nativeNote:'聯動 12 種禮物對本家 23 位英靈皆為「喜愛」；《迷宮飯》8 位則依各角色個別喜好判定。',nativeCardNote:'另喜愛上方的 7 種基礎禮物與 12 種聯動禮物。',collabCardNote:'另喜愛 7 種基礎共同禮物；聯動料理依角色個別喜好判定。'},
+    ja:{heading:'六星英霊が好きな贈り物',baseHeading:'全員共通・7種',collabHeading:'ダンジョン飯コラボ・12種',nativeNote:'コラボの12種は既存の23人全員が好きです。ダンジョン飯の8人は英霊ごとに好みが異なります。',nativeCardNote:'上記の共通7種とコラボ12種も好きです。',collabCardNote:'共通7種も好きです。コラボ料理の好みは英霊ごとに異なります。'},
+    en:{heading:'Gifts liked by six-star heroes',baseHeading:'Shared by all · 7 gifts',collabHeading:'Delicious in Dungeon · 12 gifts',nativeNote:'All 23 original heroes like all 12 collaboration gifts. The eight collaboration heroes have individual preferences.',nativeCardNote:'Also likes the 7 shared gifts and all 12 collaboration gifts above.',collabCardNote:'Also likes the 7 shared gifts; collaboration dish preferences vary by hero.'},
+    ko:{heading:'6성 영령이 좋아하는 선물',baseHeading:'모두 공통 · 7종',collabHeading:'던전밥 콜라보 · 12종',nativeNote:'기존 영령 23명은 콜라보 선물 12종을 모두 좋아합니다. 던전밥 영령 8명은 개별 선호도가 다릅니다.',nativeCardNote:'위의 공통 7종과 콜라보 12종도 좋아합니다.',collabCardNote:'공통 선물 7종도 좋아합니다. 콜라보 요리 선호도는 영령마다 다릅니다.'}
   };
   const proofList=window.DFCHHeroProofOfBond||{},proofYes=new Set(proofList.yes||[]),proofNo=new Set(proofList.no||[]);
   const acquisitionUI={
@@ -136,11 +136,23 @@
     return list;
   }
 
+  // One unified panel: seven gifts shared by all six-stars, then twelve liked by all native 23.
+  function renderCommonGifts(){
+    const copy=preferenceCopy[lang]||preferenceCopy.zh_tw;
+    $('heroCommonGifts').replaceChildren(
+      node('p',copy.baseHeading,'hero-common-group-title'),
+      chips(data.commonFavorite),
+      node('hr',null,'hero-common-divider'),
+      node('p',copy.collabHeading,'hero-common-group-title'),
+      chips(data.collabGiftIds||[])
+    );
+  }
+
   const panel=$('heroPreferenceTitle').closest('.hero-preferences-panel'),languageLabel=node('label',null,'field hero-language'),language=node('select');language.id='heroLanguage';languageLabel.append(node('span','Language / 語言'),language);panel.querySelector('.panel-head').after(languageLabel);
   const bondPanel=node('section',null,'hero-bond-settings'),bondHeading=node('h3'),bondLabel=node('label',null,'hero-bond-toggle'),bondCheckbox=node('input'),bondLabelText=node('span'),bondNote=node('p',null,'unit-note');
   bondCheckbox.type='checkbox';bondCheckbox.id='heroBondStatue';bondCheckbox.checked=ownsBondStatue;
   bondLabel.append(bondCheckbox,bondLabelText);bondPanel.append(bondLabel);languageLabel.after(bondPanel);
-  bondCheckbox.addEventListener('change',()=>{ownsBondStatue=bondCheckbox.checked;try{localStorage.setItem('dfch-hero-bond-statue',String(ownsBondStatue));}catch{}$('heroCommonGifts').replaceChildren(chips(data.nativeCommonFavorite||data.commonFavorite));render();renderRank();});
+  bondCheckbox.addEventListener('change',()=>{ownsBondStatue=bondCheckbox.checked;try{localStorage.setItem('dfch-hero-bond-statue',String(ownsBondStatue));}catch{}renderCommonGifts();render();renderRank();});
   const locationUI={
     zh_tw:['英靈喜好','羈絆道具取得方式','搜尋道具／遠征地圖','全部遠征地圖','遠征地圖','找不到符合條件的道具','指定羈絆道具','全部羈絆道具','目前未收錄此道具的遠征地圖取得來源。'],
     ja:['英霊の好み','贈り物の入手方法','贈り物・遠征先を検索','すべての遠征先','遠征先','該当する贈り物がありません','贈り物を指定','すべての贈り物','この贈り物の遠征先での入手情報は未収録です。'],
@@ -504,9 +516,9 @@
     languageLabel.querySelector('span').textContent=({zh_tw:'語言',ja:'言語',ko:'언어',en:'Language'})[lang];
     panel.lang=lang.replace('_','-');$('heroPreferenceTitle').textContent=t(0);
     for(const [id,i] of [['heroSearch',1],['heroSelect',2],['heroItemFilter',4],['heroPreferenceFilter',6]])$(id).previousElementSibling.textContent=t(i);
-    $('heroSearch').placeholder=t(1);$('heroClearFilters').textContent=t(10);panel.querySelector('.hero-common-gifts h3').textContent=(preferenceCopy[lang]||preferenceCopy.zh_tw).nativeHeading;
+    $('heroSearch').placeholder=t(1);$('heroClearFilters').textContent=t(10);panel.querySelector('.hero-common-gifts h3').textContent=(preferenceCopy[lang]||preferenceCopy.zh_tw).heading;
     options('heroSelect',data.heroes.map(h=>[h.index,`${h.name}｜${h.title}`]),t(3));options('heroItemFilter',[...data.items].sort((a,b)=>a.name.localeCompare(b.name)).map(i=>[i.id,i.name]),t(5));options('heroPreferenceFilter',[['loved',t(8)],['favorite',t(9)]],t(7));
-    $('heroCommonGifts').replaceChildren(chips(data.nativeCommonFavorite||data.commonFavorite));
+    renderCommonGifts();
     for(const e of guideBody.querySelectorAll(':scope > .helper,:scope > .unit-note'))localizeGuideCopy(e);
     guideBody.querySelector('.hero-common-gifts > .unit-note').textContent=(preferenceCopy[lang]||preferenceCopy.zh_tw).nativeNote;
     localizeGuideCopy(panel.querySelector('.hero-standalone-link'));
@@ -540,7 +552,7 @@
       const favorite=node('section',null,'gift-group favorite'),isCollab=collabHeroIds.has(h.index),shared=isCollab?common:nativeCommon;
       const specific=h.favorite.filter(id=>!shared.has(id));
       const note=(preferenceCopy[lang]||preferenceCopy.zh_tw)[isCollab?'collabCardNote':'nativeCardNote'];
-      favorite.append(node('h4',t(13)),specific.length?chips(specific):node('p',h.index===80?(preferenceCopy[lang]||preferenceCopy.zh_tw).mithrunNote:t(18)),...(h.index===80?[]:[node('p',note,'unit-note')]));card.append(favorite);root.append(card);
+      favorite.append(node('h4',t(13)),specific.length?chips(specific):node('p',t(18)),node('p',note,'unit-note'));card.append(favorite);root.append(card);
     }
   }
   $('heroSearch').addEventListener('input',render);
