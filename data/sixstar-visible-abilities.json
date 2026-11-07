@@ -2937,7 +2937,15 @@
             "精靈種族的攻擊力與最大 HP 以乘算方式提升 70%",
             "精靈種族的攻擊力與最大 HP 以乘算方式提升 80%"
           ],
-          "icon": "icon-55"
+          "icon": "icon-55",
+          "tribeRule": {
+            "kind": "fixed-tribe-bonus",
+            "abilityId": 303001044,
+            "abilityType": 4015,
+            "tribeId": 101,
+            "rawTargetIndex": 101,
+            "verification": "3.18.0 UniqueSoldierAbilityTable, PathID 77039"
+          }
         },
         {
           "name": "神木的聖弓",
@@ -2991,7 +2999,15 @@
           "levelEffects": [
             "精靈種族的英靈戰士不會戰死（死亡後經過一段時間會復活），老化速度變為 1/900"
           ],
-          "icon": "icon-58"
+          "icon": "icon-58",
+          "tribeRule": {
+            "kind": "fixed-tribe-bonus",
+            "abilityId": 303001047,
+            "abilityType": 1338,
+            "tribeId": 101,
+            "rawTargetIndex": 101,
+            "verification": "3.18.0 UniqueSoldierAbilityTable, PathID 77039"
+          }
         },
         {
           "name": "特殊追加射擊",
@@ -5778,7 +5794,15 @@
             "當沒有其他人類種族的英靈戰士時，除費用外的所有能力值（攻擊力、HP、射程、擊退、移動速度、攻擊範圍、攻擊速度、體重、耐力）會提升為 50 倍",
             "當沒有其他人類種族的英靈戰士時，除費用外的所有能力值（攻擊力、HP、射程、擊退、移動速度、攻擊範圍、攻擊速度、體重、耐力）會提升為 60 倍"
           ],
-          "icon": "icon-114"
+          "icon": "icon-114",
+          "tribeRule": {
+            "kind": "no-other-same-tribe",
+            "abilityId": 303001095,
+            "abilityType": 4020,
+            "tribeId": 100,
+            "rawTargetIndex": 9999,
+            "verification": "3.18.0 UniqueSoldierAbilityTable, PathID 77039"
+          }
         },
         {
           "name": "復仇之心",
@@ -7883,7 +7907,15 @@
             "隊伍中沒有其他精靈族英靈戰士時，除僱用費用外的所有能力值提升至 1.5 倍。",
             "隊伍中沒有其他精靈族英靈戰士時，除僱用費用外的所有能力值提升至 1.6 倍。"
           ],
-          "icon": "icon-143"
+          "icon": "icon-143",
+          "tribeRule": {
+            "kind": "no-other-same-tribe",
+            "abilityId": 303001114,
+            "abilityType": 4020,
+            "tribeId": 101,
+            "rawTargetIndex": 9999,
+            "verification": "3.18.0 UniqueSoldierAbilityTable, PathID 77039"
+          }
         },
         {
           "name": "古代魔法的知識",
@@ -9473,23 +9505,31 @@
           "baseCap": 10,
           "fullCap": 15,
           "levelEffects": [
-            "指定種族的攻擊力及 HP 以乘算方式提升 5%。",
-            "指定種族的攻擊力及 HP 以乘算方式提升 10%。",
-            "指定種族的攻擊力及 HP 以乘算方式提升 15%。",
-            "指定種族的攻擊力及 HP 以乘算方式提升 20%。",
-            "指定種族的攻擊力及 HP 以乘算方式提升 25%。",
-            "指定種族的攻擊力及 HP 以乘算方式提升 30%。",
-            "指定種族的攻擊力及 HP 以乘算方式提升 35%。",
-            "指定種族的攻擊力及 HP 以乘算方式提升 40%。",
-            "指定種族的攻擊力及 HP 以乘算方式提升 45%。",
-            "指定種族的攻擊力及 HP 以乘算方式提升 50%。",
-            "指定種族的攻擊力及 HP 以乘算方式提升 55%。",
-            "指定種族的攻擊力及 HP 以乘算方式提升 60%。",
-            "指定種族的攻擊力及 HP 以乘算方式提升 65%。",
-            "指定種族的攻擊力及 HP 以乘算方式提升 70%。",
-            "指定種族的攻擊力及 HP 以乘算方式提升 75%。"
+            "精靈族的攻擊力及 HP 以乘算方式提升 5%。",
+            "精靈族的攻擊力及 HP 以乘算方式提升 10%。",
+            "精靈族的攻擊力及 HP 以乘算方式提升 15%。",
+            "精靈族的攻擊力及 HP 以乘算方式提升 20%。",
+            "精靈族的攻擊力及 HP 以乘算方式提升 25%。",
+            "精靈族的攻擊力及 HP 以乘算方式提升 30%。",
+            "精靈族的攻擊力及 HP 以乘算方式提升 35%。",
+            "精靈族的攻擊力及 HP 以乘算方式提升 40%。",
+            "精靈族的攻擊力及 HP 以乘算方式提升 45%。",
+            "精靈族的攻擊力及 HP 以乘算方式提升 50%。",
+            "精靈族的攻擊力及 HP 以乘算方式提升 55%。",
+            "精靈族的攻擊力及 HP 以乘算方式提升 60%。",
+            "精靈族的攻擊力及 HP 以乘算方式提升 65%。",
+            "精靈族的攻擊力及 HP 以乘算方式提升 70%。",
+            "精靈族的攻擊力及 HP 以乘算方式提升 75%。"
           ],
-          "icon": "icon-165"
+          "icon": "icon-165",
+          "tribeRule": {
+            "kind": "fixed-tribe-bonus",
+            "abilityId": 303001126,
+            "abilityType": 4015,
+            "tribeId": 101,
+            "rawTargetIndex": 101,
+            "verification": "3.18.0 UniqueSoldierAbilityTable, PathID 77039"
+          }
         },
         {
           "name": "生命的代價",
