@@ -8,6 +8,15 @@
     en:{heading:'Gifts liked by six-star heroes',baseHeading:'Shared by all · 7 gifts',collabHeading:'Delicious in Dungeon · 12 gifts',nativeNote:'All 23 original heroes like all 12 collaboration gifts. The eight collaboration heroes have individual preferences.',nativeCardNote:'Also likes the 7 shared gifts and all 12 collaboration gifts above.',collabCardNote:'Also likes the 7 shared gifts; collaboration dish preferences vary by hero.'},
     ko:{heading:'6성 영령이 좋아하는 선물',baseHeading:'모두 공통 · 7종',collabHeading:'던전밥 콜라보 · 12종',nativeNote:'기존 영령 23명은 콜라보 선물 12종을 모두 좋아합니다. 던전밥 영령 8명은 개별 선호도가 다릅니다.',nativeCardNote:'위의 공통 7종과 콜라보 12종도 좋아합니다.',collabCardNote:'공통 선물 7종도 좋아합니다. 콜라보 요리 선호도는 영령마다 다릅니다.'}
   };
+  const raceUI={zh_tw:'種族',zh_cn:'种族',ja:'種族',en:'Race',ko:'종족',th:'เผ่าพันธุ์',vi:'Chủng tộc'};
+  const alternateTribeKeys={
+    'tribe-alt-name-tallman':'トールマン',
+    'tribe-alt-name-harffoot':'ハーフフット'
+  };
+  function heroRaceName(hero){
+    const values=source.tribeDefinitions?.[hero.tribeId]?.translations;
+    return values?.[lang]||values?.zh_tw||values?.ja||'';
+  }
   const proofList=window.DFCHHeroProofOfBond||{},proofYes=new Set(proofList.yes||[]),proofNo=new Set(proofList.no||[]);
   const acquisitionUI={
     zh_tw:{version:'版本',pool:'卡池',source:'取得來源',paidPack:'付費禮包',original:'原版',swimsuit:'泳裝',christmas:'聖誕',journey:'勇躍壯途',
@@ -530,7 +539,7 @@
     const query=normalize($('heroSearch').value),selected=$('heroSelect').value,item=Number($('heroItemFilter').value),kind=$('heroPreferenceFilter').value;
     const result=data.heroes.filter(h=>{
       const ids=kind==='loved'?h.loved:kind==='favorite'?h.favorite:[...h.loved,...h.favorite];
-      return (!selected||h.index===Number(selected))&&(!item||ids.includes(item))&&(!query||normalize([h.name,h.title,...ids.map(id=>names.get(id))].join(' ')).includes(query));
+      return (!selected||h.index===Number(selected))&&(!item||ids.includes(item))&&(!query||normalize([h.name,h.title,...ids.map(id=>names.get(id)),heroRaceName(h)].join(' ')).includes(query));
     });
     const root=$('heroPreferenceResults');root.replaceChildren();$('heroPreferenceCount').textContent=t(17,{n:result.length,total:data.heroes.length});
     if(!result.length){root.append(node('p',t(14),'hero-empty'));return;}
@@ -539,7 +548,11 @@
       const header=node('div',null,'hero-card-header'),portrait=node('img',null,'hero-portrait'),identity=node('div',null,'hero-identity');
       portrait.src=`./assets/heroes/${h.key}.webp`;portrait.alt=`${h.title} ${h.name}`;portrait.width=112;portrait.height=112;portrait.loading='lazy';portrait.decoding='async';
       portrait.addEventListener('error',()=>{const fallback=node('span',guideCopy['圖片暫時無法載入']?.[lang]||'圖片暫時無法載入','hero-portrait-fallback');portrait.replaceWith(fallback);},{once:true});
-      identity.append(node('p',h.title,'hero-title'),node('h3',h.name),node('span','★★★★★★','hero-stars'));
+      const race=node('span',(raceUI[lang]||raceUI.zh_tw)+'：'+heroRaceName(h),'hero-race');
+      if(h.altTribeNameKey&&alternateTribeKeys[h.altTribeNameKey]){
+        race.title='TribeType '+h.tribeId+' · '+h.altTribeNameKey+'（'+alternateTribeKeys[h.altTribeNameKey]+'）';
+      }
+      identity.append(node('p',h.title,'hero-title'),node('h3',h.name),node('span','★★★★★★','hero-stars'),race);
       const trigger=node('button',null,'sixstar-avatar-trigger');trigger.type='button';
       const text={zh_tw:'查看能力',zh_cn:'查看能力',ja:'能力を見る',en:'Abilities',ko:'능력 보기',th:'ดูความสามารถ',vi:'Xem kỹ năng'}[lang]||'查看能力';
       trigger.setAttribute('aria-label',h.name+' · '+text);
