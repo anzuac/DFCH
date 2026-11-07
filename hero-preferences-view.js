@@ -36,16 +36,17 @@
     const info=hero.acquisition;
     const labels=acquisitionUI[lang]||acquisitionUI.zh_tw,rows=[];
     const copy={
-      zh_tw:{source:'取得方式',draw:'抽卡',gift:'贈送',pending:'待確認'},
-      ja:{source:'入手方法',draw:'召喚',gift:'配布',pending:'未確認'},
-      en:{source:'Acquisition',draw:'Summon',gift:'Gift',pending:'Unconfirmed'},
-      ko:{source:'획득 방법',draw:'소환',gift:'지급',pending:'미확인'}
-    }[lang]||{source:'Acquisition',draw:'Summon',gift:'Gift',pending:'Unconfirmed'};
+      zh_tw:{source:'取得方式',draw:'抽卡',gift:'贈送',pending:'待確認',limitedCollabGift:'限定合作贈送'},
+      ja:{source:'入手方法',draw:'召喚',gift:'配布',pending:'未確認',limitedCollabGift:'期間限定コラボ配布'},
+      en:{source:'Acquisition',draw:'Summon',gift:'Gift',pending:'Unconfirmed',limitedCollabGift:'Limited collaboration gift'},
+      ko:{source:'획득 방법',draw:'소환',gift:'지급',pending:'미확인',limitedCollabGift:'기간 한정 콜라보 지급'}
+    }[lang]||{source:'Acquisition',draw:'Summon',gift:'Gift',pending:'Unconfirmed',limitedCollabGift:'Limited collaboration gift'};
     if(info?.version)rows.push([labels.version,labels[info.version]||copy.pending]);
     // An absent acquisition record means undocumented, not a confirmed free gift.
-    // Explicit records with neither pack nor pool indicate a gifted hero.
+    // A limited collaboration gift must be explicitly marked; other gift/pack/pool records keep their behavior.
     const pools=info?.pools||[];
     const source=info===null||info===undefined?copy.pending:
+      info.sourceType==='limited_collab_gift'?copy.limitedCollabGift:
       info.paidPack?labels.paidPack:pools.length?copy.draw:copy.gift;
     rows.push([copy.source,source]);
     const block=node('dl',null,'hero-acquisition');
