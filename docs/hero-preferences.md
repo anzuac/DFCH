@@ -56,3 +56,25 @@
 以 3.16.1（1923）UniqueSoldierInheritanceStatusTable（pathID 76279）補入 rewardId 305000026 / i_affection_pumpkin_pie，affectionValue=40、commonPreference=2、三組例外皆空。全部 23 位六星都列為喜愛，通用清單增為 7 種、物品選單增為 32 種。原六星資料仍來自 3.16.0，未宣稱完成新版全表更新。
 
 繁中名稱採使用者提供的遊戲截圖「幽靈南瓜塔」。3.16.1 本地翻譯表只有日文暫名「パンプキンパイ仮」，其他語言維持缺漏回退，未自行冒充官方譯名。補充來源及原始欄位保存在 data/hero-gift-supplements.json，重建腳本會套用。圖片取自新版 datapack 的同名 Sprite（pathID 3306），可用 scripts/extract-pumpkin-image.py 重建。
+
+## 3.18.0《迷宮飯》聯動禮物個別喜好修正（2026-11-07）
+
+來源：3.18.0 `UniqueSoldierInheritanceStatusTable`（Unity PathID 77043）逐筆解析的
+`commonPreference` 與 `exceptionNormalUniqueIndices`，交叉核對 8 位六星 ID 70–75、80、81。
+
+- 本家 23 位六星對新增 12 種（305001028–305001039）全部是「喜愛」；
+  連同舊有 7 種，這 19 種只可稱為「本家 23 位共同喜愛」。
+- 原有 7 種（305000020–305000026）仍是全 31 位六星的共同喜愛。
+- 12 種聯動禮物的 `commonPreference=2`（喜愛）具有指定英靈的
+  `exceptionNormalUniqueIndices`（一般）例外；不能把 12 種當作全員喜愛。
+- 新增 8 位 × 12 種共 96 組，實際 25 組喜愛、71 組一般、0 組最愛；
+  米斯倫（80）及希斯路（81）對 12 種全部為一般。
+- 資料存於 `data/hero-preferences.json` 與 `hero-preferences-data.js`，
+  `commonFavorite` 為全員通用 7 種，`nativeCommonFavorite` 為本家 23 位共同喜愛 19 種；
+  `collabGiftIds`、`collabGiftExceptionNormal` 保留可追溯的原始例外名單。
+- 界面上方分成本家共通禮物及聯動 12 種對照；每位聯動英靈卡片只列真正喜愛的聯動料理，
+  未列入喜愛者按照「一般」倍率計算。搜尋、贈送排行同樣依角色的 `favorite`／`loved` 判定。
+- 不影響已核對的取得方式、羈絆證明、英靈能力與原有 23 位的喜好設定。
+
+特別注意：舊段落中「全部六星通用」的描述僅適用於當時的 23 位或舊有 7 種，
+不得套用到 3.18.0《迷宮飯》新增 8 位及 12 種料理上。
