@@ -683,7 +683,8 @@
             }
           }
         ]
-      }
+      },
+      "tribeId": 2
     },
     {
       "index": 16,
@@ -753,7 +754,8 @@
         "version": "original",
         "paidPack": false,
         "pools": []
-      }
+      },
+      "tribeId": 101
     },
     {
       "index": 19,
@@ -835,7 +837,8 @@
             }
           }
         ]
-      }
+      },
+      "tribeId": 2
     },
     {
       "index": 21,
@@ -907,7 +910,8 @@
         "version": null,
         "paidPack": false,
         "pools": []
-      }
+      },
+      "tribeId": 104
     },
     {
       "index": 22,
@@ -988,7 +992,8 @@
             }
           }
         ]
-      }
+      },
+      "tribeId": 2
     },
     {
       "index": 23,
@@ -1069,7 +1074,8 @@
             }
           }
         ]
-      }
+      },
+      "tribeId": 101
     },
     {
       "index": 27,
@@ -1150,7 +1156,8 @@
             }
           }
         ]
-      }
+      },
+      "tribeId": 2
     },
     {
       "index": 32,
@@ -1220,7 +1227,8 @@
         "version": "original",
         "paidPack": true,
         "pools": []
-      }
+      },
+      "tribeId": 100
     },
     {
       "index": 33,
@@ -1291,7 +1299,8 @@
         "version": null,
         "paidPack": true,
         "pools": []
-      }
+      },
+      "tribeId": 101
     },
     {
       "index": 34,
@@ -1374,7 +1383,8 @@
             }
           }
         ]
-      }
+      },
+      "tribeId": 1
     },
     {
       "index": 39,
@@ -1445,7 +1455,8 @@
         "version": null,
         "paidPack": true,
         "pools": []
-      }
+      },
+      "tribeId": 107
     },
     {
       "index": 43,
@@ -1527,7 +1538,8 @@
             }
           }
         ]
-      }
+      },
+      "tribeId": 2
     },
     {
       "index": 44,
@@ -1609,7 +1621,8 @@
             }
           }
         ]
-      }
+      },
+      "tribeId": 108
     },
     {
       "index": 45,
@@ -1679,7 +1692,8 @@
         "version": null,
         "paidPack": false,
         "pools": []
-      }
+      },
+      "tribeId": 108
     },
     {
       "index": 46,
@@ -1749,7 +1763,8 @@
         "version": null,
         "paidPack": true,
         "pools": []
-      }
+      },
+      "tribeId": 100
     },
     {
       "index": 47,
@@ -1830,7 +1845,8 @@
             }
           }
         ]
-      }
+      },
+      "tribeId": 2
     },
     {
       "index": 51,
@@ -1902,7 +1918,8 @@
         "version": null,
         "paidPack": true,
         "pools": []
-      }
+      },
+      "tribeId": 2
     },
     {
       "index": 52,
@@ -1973,7 +1990,8 @@
         "version": null,
         "paidPack": true,
         "pools": []
-      }
+      },
+      "tribeId": 100
     },
     {
       "index": 53,
@@ -2054,7 +2072,8 @@
             }
           }
         ]
-      }
+      },
+      "tribeId": 100
     },
     {
       "index": 54,
@@ -2136,7 +2155,8 @@
             }
           }
         ]
-      }
+      },
+      "tribeId": 1
     },
     {
       "index": 58,
@@ -2207,7 +2227,8 @@
         "version": null,
         "paidPack": true,
         "pools": []
-      }
+      },
+      "tribeId": 101
     },
     {
       "index": 59,
@@ -2288,7 +2309,8 @@
             }
           }
         ]
-      }
+      },
+      "tribeId": 1
     },
     {
       "index": 60,
@@ -2369,7 +2391,8 @@
             }
           }
         ]
-      }
+      },
+      "tribeId": 1
     },
     {
       "index": 70,
@@ -2427,7 +2450,9 @@
           "title": ""
         }
       },
-      "acquisition": null
+      "acquisition": null,
+      "tribeId": 100,
+      "altTribeNameKey": "tribe-alt-name-tallman"
     },
     {
       "index": 71,
@@ -2510,7 +2535,8 @@
             }
           }
         ]
-      }
+      },
+      "tribeId": 101
     },
     {
       "index": 72,
@@ -2593,7 +2619,9 @@
             }
           }
         ]
-      }
+      },
+      "tribeId": 102,
+      "altTribeNameKey": "tribe-alt-name-harffoot"
     },
     {
       "index": 73,
@@ -2676,7 +2704,8 @@
             }
           }
         ]
-      }
+      },
+      "tribeId": 103
     },
     {
       "index": 74,
@@ -2758,7 +2787,8 @@
             }
           }
         ]
-      }
+      },
+      "tribeId": 108
     },
     {
       "index": 75,
@@ -2851,7 +2881,9 @@
             }
           }
         ]
-      }
+      },
+      "tribeId": 100,
+      "altTribeNameKey": "tribe-alt-name-tallman"
     },
     {
       "index": 80,
@@ -2904,7 +2936,8 @@
         "version": null,
         "paidPack": true,
         "pools": []
-      }
+      },
+      "tribeId": 101
     },
     {
       "index": 81,
@@ -2962,7 +2995,8 @@
         "version": null,
         "paidPack": true,
         "pools": []
-      }
+      },
+      "tribeId": 101
     }
   ],
   "languages": {
@@ -3639,5 +3673,128 @@
     "pathId": 77043,
     "rule": "commonPreference=2 unless hero index is in exceptionNormalUniqueIndices",
     "note": "12 gifts are all liked by 23 native heroes, but have per-hero normal-preference exceptions for the eight collaboration heroes."
+  },
+  "tribeDefinitions": {
+    "1": {
+      "key": "god",
+      "translations": {
+        "en": "Deity",
+        "ja": "神",
+        "ko": "신",
+        "zh_cn": "",
+        "zh_tw": "神族",
+        "th": "พระเจ้า",
+        "vi": "Chúa"
+      }
+    },
+    "2": {
+      "key": "godfallen",
+      "translations": {
+        "en": "Fallen deity",
+        "ja": "堕神",
+        "ko": "타락신",
+        "zh_cn": "",
+        "zh_tw": "墮落的神族",
+        "th": "เทพเจ้าที่ตกสวรรค์",
+        "vi": "vị thần sa ngã"
+      }
+    },
+    "100": {
+      "key": "human",
+      "translations": {
+        "en": "Human",
+        "ja": "人間",
+        "ko": "인간",
+        "zh_cn": "",
+        "zh_tw": "人類族",
+        "th": "มนุษย์",
+        "vi": "nhân loại"
+      }
+    },
+    "101": {
+      "key": "elf",
+      "translations": {
+        "en": "Elf",
+        "ja": "エルフ",
+        "ko": "엘프",
+        "zh_cn": "",
+        "zh_tw": "精靈族",
+        "th": "เอลฟ์",
+        "vi": "Tiên"
+      }
+    },
+    "102": {
+      "key": "pygmy",
+      "translations": {
+        "en": "Pigmy",
+        "ja": "コロポックル",
+        "ko": "고블린",
+        "zh_cn": "",
+        "zh_tw": "地精族",
+        "th": "โคโรโปคุรุ",
+        "vi": "koropokkuru"
+      }
+    },
+    "103": {
+      "key": "dwarf",
+      "translations": {
+        "en": "Dwarf",
+        "ja": "ドワーフ",
+        "ko": "드워프",
+        "zh_cn": "",
+        "zh_tw": "矮人族",
+        "th": "แคระ",
+        "vi": "Người lùn"
+      }
+    },
+    "104": {
+      "key": "brownie",
+      "translations": {
+        "en": "Brauni",
+        "ja": "ブラウニー",
+        "ko": "브라우니",
+        "zh_cn": "",
+        "zh_tw": "褐精族",
+        "th": "บราวนี่",
+        "vi": "bánh brownie"
+      }
+    },
+    "107": {
+      "key": "mermaid",
+      "translations": {
+        "en": "Mermaid",
+        "ja": "人魚",
+        "ko": "인어",
+        "zh_cn": "",
+        "zh_tw": "人魚",
+        "th": "เงือก",
+        "vi": "nàng tiên cá"
+      }
+    },
+    "108": {
+      "key": "therianthrope",
+      "translations": {
+        "en": "Demibeast",
+        "ja": "獣人",
+        "ko": "수인",
+        "zh_cn": "",
+        "zh_tw": "獸人",
+        "th": "มนุษย์สัตว์ร้าย",
+        "vi": "Người thú"
+      }
+    }
+  },
+  "tribeSource": {
+    "gameVersion": "3.18.0",
+    "table": "UniquePlayerParamTable",
+    "pathId": 77034,
+    "rowsValidated": 76,
+    "sixStarRowsValidated": 31,
+    "enum": "TribeType",
+    "localizationTable": "localize_master",
+    "localizationPathId": 77775,
+    "altNameLocalization": "localize_master-collabo-delicious",
+    "altNameLocalizationPathId": 77774,
+    "note": "Uses actual tribe IDs for ability targeting; alternate collaboration race names do not alter tribeId."
   }
 }
