@@ -38,16 +38,30 @@
     if(pools.length){
       const row=node('div',null,'hero-pool-row'),value=node('dd');
       row.append(node('dt',labels.pool));
-      if(pools.length===1){
+      const isDelicious=pools.every(pool=>['delicious_first_half','delicious_second_half','delicious_final'].includes(pool.key));
+      if(pools.length===1&&!isDelicious){
         value.textContent=pools[0].translations[lang]||pools[0].translations.ja||copy.pending;
       }else{
-        // Keep multi-pool heroes compact, while preserving every full pool name.
+        // Show the collaboration name first; reveal the exact P1/P2/P3 pools on demand.
         const codes=pools.map(pool=>({9:'P1',10:'P2',11:'P3'})[pool.id]);
-        const short=codes.every(Boolean)?codes.join(' · '):String(pools.length)+' '+labels.pool;
+        const collabNames={zh_tw:'迷宮飯聯動',ja:'ダンジョン飯コラボ',en:'Delicious in Dungeon',ko:'던전밥 콜라보'};
+        const short=isDelicious?(collabNames[lang]||collabNames.zh_tw):
+          codes.every(Boolean)?codes.join(' · '):String(pools.length)+' '+labels.pool;
         const detail=node('details',null,'hero-pool-details'),summary=node('summary',null,'hero-pool-summary');
-        const detailLabel={zh_tw:'詳情',ja:'詳細',en:'Details',ko:'상세'}[lang]||'Details';
+        const detailLabel={zh_tw:'查看卡池',ja:'選定を見る',en:'View pools',ko:'소환 보기'}[lang]||'View pools';
+        const stages={
+          zh_tw:{9:'P1（前半）',10:'P2（後半）',11:'P3（最終）'},
+          ja:{9:'P1（前半）',10:'P2（後半）',11:'P3（最終）'},
+          en:{9:'P1 (First half)',10:'P2 (Second half)',11:'P3 (Final)'},
+          ko:{9:'P1 (전반)',10:'P2 (후반)',11:'P3 (최종)'}
+        };
         const list=node('ul',null,'hero-pool-full-list');
-        for(const pool of pools)list.append(node('li',pool.translations[lang]||pool.translations.ja||copy.pending));
+        for(const pool of pools){
+          const full=pool.translations[lang]||pool.translations.ja||copy.pending;
+          const item=node('li',isDelicious?(stages[lang]?.[pool.id]||full):full);
+          item.title=full;
+          list.append(item);
+        }
         summary.append(node('span',short,'hero-pool-short'),node('span',detailLabel,'hero-pool-expand-label'));
         summary.setAttribute('aria-label',labels.pool+'：'+short+'，'+detailLabel);
         detail.append(summary,list);value.append(detail);
