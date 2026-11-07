@@ -19,22 +19,20 @@
   };
   function acquisitionInfo(hero){
     const info=hero.acquisition;
-    const labels=acquisitionUI[lang],rows=[];
-    if(!info&&!proofYes.has(hero.index)&&!proofNo.has(hero.index))return null;
-    if(info?.version)rows.push([labels.version,labels[info.version]]);
+    const labels=acquisitionUI[lang]||acquisitionUI.zh_tw,rows=[];
+    const pending={zh_tw:'待確認',ja:'未確認',en:'Unconfirmed',ko:'미확인'}[lang]||'Unconfirmed';
+    if(info?.version)rows.push([labels.version,labels[info.version]||pending]);
     if(info?.paidPack)rows.push([labels.source,labels.paidPack]);
-    for(const pool of info?.pools||[])rows.push([labels.pool,pool.translations[lang]||pool.translations.ja]);
-    if(!rows.length&&!proofYes.has(hero.index)&&!proofNo.has(hero.index))return null;
+    for(const pool of info?.pools||[])rows.push([labels.pool,pool.translations[lang]||pool.translations.ja||pending]);
+    if(!(info?.pools||[]).length&&!info?.paidPack)rows.push([labels.pool,pending]);
     const block=node('dl',null,'hero-acquisition');
     for(const [label,value] of rows){const row=node('div');row.append(node('dt',label),node('dd',value));block.append(row);}
-    if(proofYes.has(hero.index)||proofNo.has(hero.index)){
-      const eligible=proofYes.has(hero.index);
-      const row=node('div',null,'hero-proof-row'),value=node('dd',null,'hero-proof-state '+(eligible?'hero-proof-yes':'hero-proof-no'));
-      value.append(node('span',eligible?'♥':'×','hero-proof-symbol'),node('span',eligible?labels.proofYes:labels.proofNo));
-      value.title=eligible?labels.proofYesHint:labels.proofNoHint;
-      row.append(node('dt',labels.proof),value);
-      block.append(row);
-    }
+    const eligible=proofYes.has(hero.index),ineligible=proofNo.has(hero.index);
+    const row=node('div',null,'hero-proof-row'),value=node('dd',null,'hero-proof-state '+(eligible?'hero-proof-yes':ineligible?'hero-proof-no':'hero-proof-unknown'));
+    value.append(node('span',eligible?'♥':ineligible?'×':'?','hero-proof-symbol'),node('span',eligible?labels.proofYes:ineligible?labels.proofNo:pending));
+    if(eligible||ineligible)value.title=eligible?labels.proofYesHint:labels.proofNoHint;
+    row.append(node('dt',labels.proof),value);
+    block.append(row);
     return block;
   }
   /* Public notes remain visible in the four supported languages. */
