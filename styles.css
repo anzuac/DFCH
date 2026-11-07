@@ -1184,6 +1184,27 @@ input,select{border-color:#9fbccc35!important;border-radius:9px!important;backgr
 .hero-acquisition dd{margin:0;font-size:13px;line-height:1.5}
 @container(max-width:450px){.hero-acquisition{flex:1 1 100%;margin:0;display:flex;gap:16px}.hero-acquisition>div{min-width:0}.hero-acquisition>div+div{margin-top:0}}
 
+/* Multi-pool labels remain one compact row until the visitor expands details. */
+.hero-acquisition .hero-pool-row dd{min-width:0}
+.hero-acquisition .hero-pool-details{min-width:0}
+.hero-acquisition .hero-pool-summary{
+  display:flex;align-items:center;flex-wrap:wrap;gap:3px 7px;
+  cursor:pointer;list-style:none;color:var(--teal-2);line-height:1.45;
+}
+.hero-acquisition .hero-pool-summary::-webkit-details-marker{display:none}
+.hero-acquisition .hero-pool-summary::after{
+  content:'▾';display:inline-block;font-size:12px;transition:transform .15s;
+}
+.hero-acquisition .hero-pool-details[open] .hero-pool-summary::after{transform:rotate(180deg)}
+.hero-acquisition .hero-pool-summary:focus-visible{outline:2px solid var(--teal);outline-offset:3px;border-radius:3px}
+.hero-acquisition .hero-pool-short{font-weight:650;white-space:nowrap}
+.hero-acquisition .hero-pool-expand-label{font-size:11px;opacity:.85}
+.hero-acquisition .hero-pool-full-list{
+  margin:7px 0 0;padding-left:16px;font-size:12px;line-height:1.55;overflow-wrap:anywhere;
+}
+.hero-acquisition .hero-pool-full-list li+li{margin-top:5px}
+
+
 .hero-bond-settings{padding:16px;border:1px solid var(--line);border-radius:12px;background:var(--panel-2);margin:0 0 20px}
 .hero-bond-settings h3{margin:0 0 10px;font-size:16px}
 .hero-bond-toggle{display:flex;align-items:center;gap:10px;cursor:pointer;line-height:1.5}
