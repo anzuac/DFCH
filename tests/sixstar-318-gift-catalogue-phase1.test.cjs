@@ -49,14 +49,22 @@ test('3.18 official normal-exception list produces exactly 25 liked and 71 norma
   }
   assert.equal(likedCount,25);assert.equal(normalCount,71);
 });
-test('the two gift panels are separate, and preference search uses source data',()=>{
+test('the redundant collaboration summary is removed; gift preferences stay in hero cards',()=>{
   const view=fs.readFileSync(path.join(root,'hero-preferences-view.js'),'utf8');
-  assert.match(view,/hero-collab-gifts/);
+  assert.doesNotMatch(view,/hero-collab-gifts|renderCollabGifts|collabGiftList/);
   assert.match(view,/data\.nativeCommonFavorite\|\|data\.commonFavorite/);
-  assert.match(view,/h\.favorite\.includes\(id\)/);
+  assert.match(view,/h\.favorite\.filter\(id=>!shared\.has\(id\)\)/);
+  const mithrun=data.heroes.find(h=>h.index===80);
+  assert.ok(mithrun);
+  assert.deepEqual(mithrun.loved,[]);
+  assert.deepEqual(mithrun.favorite,data.commonFavorite);
+  assert.match(view,/mithrunNote/);
+  const untranslated=data.items.find(x=>x.id===305001039);
+  assert.equal(untranslated.translations.zh_tw,'');
+  assert.equal(untranslated.translations.ja,'ウロボロス鍋');
   for(const p of ['index.html','heroes.html']){
     const html=fs.readFileSync(path.join(root,p),'utf8');
     assert.match(html,/id="heroCommonGifts"/);
-    assert.match(html,/hero-preferences-view\.js\?v=2\.9\.1/);
+    assert.match(html,/hero-preferences-view\.js\?v=2\.9\.2/);
   }
 });
