@@ -49,22 +49,25 @@ test('3.18 official normal-exception list produces exactly 25 liked and 71 norma
   }
   assert.equal(likedCount,25);assert.equal(normalCount,71);
 });
-test('the redundant collaboration summary is removed; gift preferences stay in hero cards',()=>{
+test('the single shared gift panel has a divider, and individual collaboration preferences stay on hero cards',()=>{
   const view=fs.readFileSync(path.join(root,'hero-preferences-view.js'),'utf8');
   assert.doesNotMatch(view,/hero-collab-gifts|renderCollabGifts|collabGiftList/);
-  assert.match(view,/data\.nativeCommonFavorite\|\|data\.commonFavorite/);
+  assert.match(view,/hero-common-divider/);
+  assert.match(view,/chips\(data\.commonFavorite\)/);
+  assert.match(view,/chips\(data\.collabGiftIds\|\|\[\]\)/);
   assert.match(view,/h\.favorite\.filter\(id=>!shared\.has\(id\)\)/);
   const mithrun=data.heroes.find(h=>h.index===80);
   assert.ok(mithrun);
   assert.deepEqual(mithrun.loved,[]);
   assert.deepEqual(mithrun.favorite,data.commonFavorite);
-  assert.match(view,/mithrunNote/);
+  assert.doesNotMatch(view,/mithrunNote/);
   const untranslated=data.items.find(x=>x.id===305001039);
-  assert.equal(untranslated.translations.zh_tw,'');
+  assert.equal(untranslated.translations.zh_tw,'銜尾蛇鍋');
+  assert.equal(untranslated.name,'銜尾蛇鍋');
   assert.equal(untranslated.translations.ja,'ウロボロス鍋');
   for(const p of ['index.html','heroes.html']){
     const html=fs.readFileSync(path.join(root,p),'utf8');
     assert.match(html,/id="heroCommonGifts"/);
-    assert.match(html,/hero-preferences-view\.js\?v=2\.9\.2/);
+    assert.match(html,/hero-preferences-view\.js\?v=2\.9\.3/);
   }
 });
