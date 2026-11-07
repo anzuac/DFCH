@@ -20,16 +20,25 @@
   function acquisitionInfo(hero){
     const info=hero.acquisition;
     const labels=acquisitionUI[lang]||acquisitionUI.zh_tw,rows=[];
-    const pending={zh_tw:'待確認',ja:'未確認',en:'Unconfirmed',ko:'미확인'}[lang]||'Unconfirmed';
-    if(info?.version)rows.push([labels.version,labels[info.version]||pending]);
-    if(info?.paidPack)rows.push([labels.source,labels.paidPack]);
-    for(const pool of info?.pools||[])rows.push([labels.pool,pool.translations[lang]||pool.translations.ja||pending]);
-    if(!(info?.pools||[]).length&&!info?.paidPack)rows.push([labels.pool,pending]);
+    const copy={
+      zh_tw:{source:'取得方式',draw:'抽卡',gift:'贈送',pending:'待確認'},
+      ja:{source:'入手方法',draw:'召喚',gift:'配布',pending:'未確認'},
+      en:{source:'Acquisition',draw:'Summon',gift:'Gift',pending:'Unconfirmed'},
+      ko:{source:'획득 방법',draw:'소환',gift:'지급',pending:'미확인'}
+    }[lang]||{source:'Acquisition',draw:'Summon',gift:'Gift',pending:'Unconfirmed'};
+    if(info?.version)rows.push([labels.version,labels[info.version]||copy.pending]);
+    // An absent acquisition record means undocumented, not a confirmed free gift.
+    // Explicit records with neither pack nor pool indicate a gifted hero.
+    const pools=info?.pools||[];
+    const source=info===null||info===undefined?copy.pending:
+      info.paidPack?labels.paidPack:pools.length?copy.draw:copy.gift;
+    rows.push([copy.source,source]);
+    for(const pool of pools)rows.push([labels.pool,pool.translations[lang]||pool.translations.ja||copy.pending]);
     const block=node('dl',null,'hero-acquisition');
     for(const [label,value] of rows){const row=node('div');row.append(node('dt',label),node('dd',value));block.append(row);}
     const eligible=proofYes.has(hero.index),ineligible=proofNo.has(hero.index);
     const row=node('div',null,'hero-proof-row'),value=node('dd',null,'hero-proof-state '+(eligible?'hero-proof-yes':ineligible?'hero-proof-no':'hero-proof-unknown'));
-    value.append(node('span',eligible?'♥':ineligible?'×':'?','hero-proof-symbol'),node('span',eligible?labels.proofYes:ineligible?labels.proofNo:pending));
+    value.append(node('span',eligible?'♥':ineligible?'×':'?','hero-proof-symbol'),node('span',eligible?labels.proofYes:ineligible?labels.proofNo:copy.pending));
     if(eligible||ineligible)value.title=eligible?labels.proofYesHint:labels.proofNoHint;
     row.append(node('dt',labels.proof),value);
     block.append(row);
