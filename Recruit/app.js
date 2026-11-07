@@ -322,6 +322,8 @@
   }
   function effectiveBondLevel(){return 50;}
   function eventsFor(r,doc){
+    if(r.star===6&&window.DFCHRecruitCollabBond318?.milestones(r.id).length)
+      return window.DFCHRecruitCollabBond318.events(r.id,r.skills);
     return r.star===6?BD.sixEvents(doc,r.skills):Array.isArray(r.bondEvents)?r.bondEvents:[];
   }
   function decoratedSkills(r,doc,level=effectiveBondLevel()){
@@ -389,7 +391,11 @@
       if(!doc)$('detail').append(el('p','desc','技能資料載入中…'));
       else {
         const later=doc.skills.filter(x=>Number(x.unlockAt)>0);
-        if(later.length)$('detail').append(el('p','bond-note','羈絆額外解鎖：'+later.map(x=>x.name+'（羈絆 '+x.unlockAt+'）').join('、')));
+        if(later.length){
+          const gate=window.DFCHRecruitCollabBond318?.unlock(r.id);
+          const suffix=gate?'；Lv.30 新能力另須完成指定劇情條件（StoryIndex '+gate.storyConditionIndex+'），不能只憑羈絆等級視為已取得。':'';
+          $('detail').append(el('p','bond-note','羈絆額外解鎖：'+later.map(x=>x.name+'（羈絆 '+x.unlockAt+'）').join('、')+suffix));
+        }
       }
     }
   }

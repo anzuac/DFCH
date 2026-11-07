@@ -1,0 +1,256 @@
+{
+  "version": "3.18.0",
+  "source": "datapack.unity3d UniqueAffectionRewardOverrideTable (190 rows) + UniqueAffectionRewardTemplateTable",
+  "fiveStarOverrides": [
+    {
+      "id": 76,
+      "key": "shapeshifter_laios",
+      "level": 13,
+      "abilityId": 303001131,
+      "rewardId": 411001131
+    },
+    {
+      "id": 77,
+      "key": "shapeshifter_marcille",
+      "level": 23,
+      "abilityId": 303001133,
+      "rewardId": 411001133
+    },
+    {
+      "id": 78,
+      "key": "shapeshifter_chilchack",
+      "level": 23,
+      "abilityId": 303001135,
+      "rewardId": 411001135
+    },
+    {
+      "id": 79,
+      "key": "shapeshifter_senshi",
+      "level": 13,
+      "abilityId": 303001136,
+      "rewardId": 411001136
+    }
+  ],
+  "sixStar": {
+    "71": [
+      {
+        "level": 5,
+        "abilityId": 303000506,
+        "kind": "fixed-evolution",
+        "storyConditionIndex": 0
+      },
+      {
+        "level": 10,
+        "abilityId": 303000608,
+        "kind": "fixed-evolution",
+        "storyConditionIndex": 0
+      },
+      {
+        "level": 20,
+        "abilityId": 303001115,
+        "kind": "fixed-evolution",
+        "storyConditionIndex": 0
+      },
+      {
+        "level": 25,
+        "abilityId": 303001114,
+        "kind": "fixed-evolution",
+        "storyConditionIndex": 0
+      },
+      {
+        "level": 30,
+        "abilityId": 303000510,
+        "kind": "unlock-new-ability",
+        "storyConditionIndex": 5
+      },
+      {
+        "level": 35,
+        "abilityId": 303000131,
+        "kind": "hp-evolution",
+        "storyConditionIndex": 0
+      },
+      {
+        "level": 45,
+        "abilityId": 303000127,
+        "kind": "attack-evolution",
+        "storyConditionIndex": 0
+      }
+    ],
+    "72": [
+      {
+        "level": 5,
+        "abilityId": 303000805,
+        "kind": "fixed-evolution",
+        "storyConditionIndex": 0
+      },
+      {
+        "level": 10,
+        "abilityId": 303001117,
+        "kind": "fixed-evolution",
+        "storyConditionIndex": 0
+      },
+      {
+        "level": 20,
+        "abilityId": 303000907,
+        "kind": "fixed-evolution",
+        "storyConditionIndex": 0
+      },
+      {
+        "level": 25,
+        "abilityId": 303001116,
+        "kind": "fixed-evolution",
+        "storyConditionIndex": 0
+      },
+      {
+        "level": 30,
+        "abilityId": 303000723,
+        "kind": "unlock-new-ability",
+        "storyConditionIndex": 5
+      },
+      {
+        "level": 35,
+        "abilityId": 303000131,
+        "kind": "hp-evolution",
+        "storyConditionIndex": 0
+      },
+      {
+        "level": 45,
+        "abilityId": 303000127,
+        "kind": "attack-evolution",
+        "storyConditionIndex": 0
+      }
+    ],
+    "73": [
+      {
+        "level": 5,
+        "abilityId": 303000605,
+        "kind": "fixed-evolution",
+        "storyConditionIndex": 0
+      },
+      {
+        "level": 10,
+        "abilityId": 303001066,
+        "kind": "fixed-evolution",
+        "storyConditionIndex": 0
+      },
+      {
+        "level": 20,
+        "abilityId": 303001119,
+        "kind": "fixed-evolution",
+        "storyConditionIndex": 0
+      },
+      {
+        "level": 25,
+        "abilityId": 303001010,
+        "kind": "fixed-evolution",
+        "storyConditionIndex": 0
+      },
+      {
+        "level": 30,
+        "abilityId": 303000001,
+        "kind": "unlock-new-ability",
+        "storyConditionIndex": 5
+      },
+      {
+        "level": 35,
+        "abilityId": 303000131,
+        "kind": "hp-evolution",
+        "storyConditionIndex": 0
+      },
+      {
+        "level": 45,
+        "abilityId": 303000127,
+        "kind": "attack-evolution",
+        "storyConditionIndex": 0
+      }
+    ],
+    "74": [
+      {
+        "level": 5,
+        "abilityId": 303001015,
+        "kind": "fixed-evolution",
+        "storyConditionIndex": 0
+      },
+      {
+        "level": 10,
+        "abilityId": 303001023,
+        "kind": "fixed-evolution",
+        "storyConditionIndex": 0
+      },
+      {
+        "level": 20,
+        "abilityId": 303001120,
+        "kind": "fixed-evolution",
+        "storyConditionIndex": 0
+      },
+      {
+        "level": 25,
+        "abilityId": 303001121,
+        "kind": "fixed-evolution",
+        "storyConditionIndex": 0
+      },
+      {
+        "level": 30,
+        "abilityId": 303000404,
+        "kind": "unlock-new-ability",
+        "storyConditionIndex": 5
+      },
+      {
+        "level": 35,
+        "abilityId": 303000131,
+        "kind": "hp-evolution",
+        "storyConditionIndex": 0
+      },
+      {
+        "level": 45,
+        "abilityId": 303000127,
+        "kind": "attack-evolution",
+        "storyConditionIndex": 0
+      }
+    ],
+    "75": [
+      {
+        "level": 5,
+        "abilityId": 303000506,
+        "kind": "fixed-evolution",
+        "storyConditionIndex": 0
+      },
+      {
+        "level": 10,
+        "abilityId": 303001125,
+        "kind": "fixed-evolution",
+        "storyConditionIndex": 0
+      },
+      {
+        "level": 20,
+        "abilityId": 303001124,
+        "kind": "fixed-evolution",
+        "storyConditionIndex": 0
+      },
+      {
+        "level": 25,
+        "abilityId": 303001005,
+        "kind": "fixed-evolution",
+        "storyConditionIndex": 0
+      },
+      {
+        "level": 30,
+        "abilityId": 303000206,
+        "kind": "unlock-new-ability",
+        "storyConditionIndex": 5
+      },
+      {
+        "level": 35,
+        "abilityId": 303000131,
+        "kind": "hp-evolution",
+        "storyConditionIndex": 0
+      },
+      {
+        "level": 45,
+        "abilityId": 303000127,
+        "kind": "attack-evolution",
+        "storyConditionIndex": 0
+      }
+    ]
+  }
+}

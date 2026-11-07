@@ -165,7 +165,8 @@
     const id=heroes[Math.floor(Math.random()*heroes.length)];
     const o=config(),skills=buildSkills(star,id);
     const status=ST.generate(id,star,Math.random,{ability731:B.geniusBonus(o.maneLevel,o.emmaLevel)});
-    return {id,star,skills,bondEvents:BD.decide(skills,star,id,Math.random),status};
+    const collabSix=star===6?window.DFCHRecruitCollabBond318?.events(id,skills):null;
+    return {id,star,skills,bondEvents:collabSix||BD.decide(skills,star,id,Math.random),status};
   }
   function hits(candidate,ids){
     if(!candidate||candidate.star===6)return false;
