@@ -1,7 +1,7 @@
 {
   "version": "3.18.0",
   "purpose": "P1-P3 official visual asset provenance & per-batch verification; independent from drawing probabilities",
-  "status": "asset-extraction-pending",
+  "status": "verified-and-deployed",
   "sources": [
     {
       "file": "startup_.bundle",
@@ -30,7 +30,7 @@
         "1aCoHJNu1kIh5iErgUppcAVrtSGishzzV",
         "1lOw3YJGoC725rsGq538OG9XMVwj4TPVc"
       ],
-      "finding": "Original individual asset bundle archive; fetched but extraction/image verification pending"
+      "finding": "Official source located, archive fully extracted and Sprite/Texture2D links confirmed"
     }
   ],
   "pools": [
@@ -38,10 +38,10 @@
       "poolId": 9,
       "key": "delicious_first_half",
       "seriesIndex": 0,
-      "bannerPath": null,
-      "sourceTextureName": null,
-      "sourceAssetBundle": null,
-      "verified": false,
+      "bannerPath": "./images/collab-318/banner-P1.webp",
+      "sourceTextureName": "banner-delicious_first_half",
+      "sourceAssetBundle": "individual_.bundle",
+      "verified": true,
       "expectedSixStarIds": [
         71,
         74,
@@ -53,16 +53,16 @@
         78,
         79
       ],
-      "note": "Do not use generated composite images, portraits or unrelated event banners as official pool art"
+      "note": "Official SpriteAtlas render data; ETC2 texture decoded and cropped to original 720×200, web-optimized WebP copy."
     },
     {
       "poolId": 10,
       "key": "delicious_second_half",
       "seriesIndex": 1,
-      "bannerPath": null,
-      "sourceTextureName": null,
-      "sourceAssetBundle": null,
-      "verified": false,
+      "bannerPath": "./images/collab-318/banner-P2.webp",
+      "sourceTextureName": "banner-delicious_second_half",
+      "sourceAssetBundle": "individual_.bundle",
+      "verified": true,
       "expectedSixStarIds": [
         72,
         73,
@@ -74,16 +74,16 @@
         78,
         79
       ],
-      "note": "Do not use generated composite images, portraits or unrelated event banners as official pool art"
+      "note": "Official SpriteAtlas render data; ETC2 texture decoded and cropped to original 720×200, web-optimized WebP copy."
     },
     {
       "poolId": 11,
       "key": "delicious_final",
       "seriesIndex": 2,
-      "bannerPath": null,
-      "sourceTextureName": null,
-      "sourceAssetBundle": null,
-      "verified": false,
+      "bannerPath": "./images/collab-318/banner-P3.webp",
+      "sourceTextureName": "banner-delicious_final",
+      "sourceAssetBundle": "individual_.bundle",
+      "verified": true,
       "expectedSixStarIds": [
         71,
         72,
@@ -97,7 +97,7 @@
         78,
         79
       ],
-      "note": "Do not use generated composite images, portraits or unrelated event banners as official pool art"
+      "note": "Official SpriteAtlas render data; ETC2 texture decoded and cropped to original 720×200, web-optimized WebP copy."
     }
   ],
   "qualityGates": [
@@ -106,5 +106,44 @@
     "Original orientation, aspect and transparency retained",
     "Only verified image paths are used by Recruit UI",
     "No change to existing nine pools or Bond30"
+  ],
+  "extractedImageCount": 33,
+  "iconMappings": {
+    "303001112": "./images/collab-318/303001112.png",
+    "303001113": "./images/collab-318/303001113.png",
+    "303001114": "./images/collab-318/303001114.png",
+    "303001115": "./images/collab-318/303001115.png",
+    "303001116": "./images/collab-318/303001116.png",
+    "303001117": "./images/collab-318/303001117.png",
+    "303001118": "./images/collab-318/303001118.png",
+    "303001119": "./images/collab-318/303001119.png",
+    "303001120": "./images/collab-318/303001120.png",
+    "303001121": "./images/collab-318/303001121.png",
+    "303001122": "./images/collab-318/303001122.png",
+    "303001123": "./images/collab-318/303001123.png",
+    "303001124": "./images/collab-318/303001124.png",
+    "303001125": "./images/collab-318/303001125.png",
+    "303001126": "./images/collab-318/303001126.png",
+    "303001127": "./images/collab-318/303001127.png",
+    "303001128": "./images/collab-318/303001128.png",
+    "303001129": "./images/collab-318/303001129.png",
+    "303001130": "./images/collab-318/303001130.png",
+    "303001131": "./images/collab-318/303001131.png",
+    "303001132": "./images/collab-318/303001132.png",
+    "303001133": "./images/collab-318/303001133.png",
+    "303001134": "./images/collab-318/303001134.png",
+    "303001135": "./images/collab-318/303001135.png",
+    "303001136": "./images/collab-318/303001136.png",
+    "303001137": "./images/collab-318/303001137.png"
+  },
+  "fiveStarIcons": {
+    "76": "./images/collab-318/hero-76.png",
+    "77": "./images/collab-318/hero-77.png",
+    "78": "./images/collab-318/hero-78.png",
+    "79": "./images/collab-318/hero-79.png"
+  },
+  "unmappedAbilityKeys": [
+    "sab_event_jewel_hunter_4",
+    "sab_quest_master_2"
   ]
 }

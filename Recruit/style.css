@@ -166,3 +166,8 @@
 .status-meter-fill.grade-7{background:linear-gradient(90deg,#975f26,#efd174)}.status-meter-fill.grade-8,.status-meter-fill.grade-9{background:linear-gradient(90deg,#ad7727,#fff0a5)}
 .status-row-ignored{opacity:.62}
 @media(max-width:500px){.candidate-select strong{font-size:13px}.candidate{padding:9px 6px}.status-dialog-head{padding:11px 12px}.status-dialog-body{padding:10px 10px 14px}.status-row{grid-template-columns:24px 31px minmax(0,1fr);gap:6px;padding:8px 7px}.status-grade{font-size:14px;min-width:29px}.status-icon{font-size:17px}.status-value{font-size:12px}}
+
+/* APK 3.18.0 limited collaboration: verified original 720×200 banners */
+.collab-318-pool-banner{display:block;width:100%;max-width:720px;height:auto;aspect-ratio:18/5;object-fit:contain;border-radius:9px;margin:9px 0 14px;box-shadow:0 0 0 1px rgba(255,255,255,.14);}
+.collab-318-pool-banner[hidden]{display:none!important}
+.hero-portrait.sprite[src*="collab-318"]{image-rendering:pixelated;object-fit:contain}

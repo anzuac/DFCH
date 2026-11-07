@@ -15,6 +15,8 @@ for(const [id,name] of Object.entries(officialFiveNames))D.displayNames[id]=name
 const collabSixNames={"303000000":"氣力","303000127":"高級鼓舞 (全員) IV","303000131":"高級聲援（全員）IV","303000506":"魔法屏障","303000511":"殲滅的魔法術 IV","303000515":"魔術研究 IV","303000605":"廚藝精湛 II","303000608":"禁斷的魔法術 II","303000732":"秘境寶石獵人 IV","303000803":"委託的達人","303000805":"地下交易","303000904":"禁斷世界的介入者 III","303000907":"收集家 II","303001005":"氣氛製造者 II","303001010":"無盡的耐力 IV","303001011":"特殊追加射擊","303001012":"五月雨弓術 II","303001015":"大型狩獵 IV","303001023":"無盡的耐力 II","303001061":"強欲Ⅲ","303001066":"吃不飽沒法戰鬥","303001070":"鑑定眼","303001087":"暖心療癒","303001114":"學校有史以來最優秀的才女","303001115":"古代魔法的知識","303001116":"老練的開鎖匠","303001117":"敏銳的五感","303001118":"魔物料理專家","303001119":"營養滿分的魔物料理","303001120":"敏捷的獸人","303001121":"自由自在的貓","303001122":"閃避","303001123":"靈術的才能","303001124":"治癒的承擔者","303001125":"防護屏障"};
 for(const [id,name] of Object.entries(collabSixNames))if(!D.displayNames[id])D.displayNames[id]=name;
 for(const h of five)for(const id of h.fixed)if(!D.displayNames[String(id)])D.displayNames[String(id)]='能力 '+id;
+// Verified APK 3.18.0 Texture2D mappings; do not alter legacy nine-pool icons.
+for(let id=303001112;id<=303001137;id++)D.images[String(id)]='./images/collab-318/'+id+'.png';
 window.DFCHRecruitConfig=Object.freeze({...C,keys,weights,six:sixPools,pickups,publicCeiling,sixFixed:{...C.sixFixed,...fixed},
 groupExclusive:{...C.groupExclusive,...Object.fromEntries(X.pools.map(p=>[p.key,[[303000709,303000722]]]))},
 targetPlayerIndexes:C.targetPlayerIndexes});

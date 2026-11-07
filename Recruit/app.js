@@ -72,10 +72,11 @@
   const portrait=id=>{
     const info=heroInfo(id);
     const isSprite=lowStarPortraitIds.has(Number(id));
-    if(!isSprite&&!info)return null;
-    const img=el('img',isSprite?'hero-portrait sprite':'hero-portrait');
-    img.src=isSprite?'./images/'+id+'.webp':'../assets/heroes/'+encodeURIComponent(info.key)+'.webp';
-    img.alt=isSprite?nameOf(id):(info.name+'（'+info.title+'）');
+    const isCollabFive=Number(id)>=76&&Number(id)<=79;
+    if(!isSprite&&!isCollabFive&&!info)return null;
+    const img=el('img',isSprite||isCollabFive?'hero-portrait sprite':'hero-portrait');
+    img.src=isCollabFive?'./images/collab-318/hero-'+id+'.png':isSprite?'./images/'+id+'.webp':'../assets/heroes/'+encodeURIComponent(info.key)+'.webp';
+    img.alt=isSprite||isCollabFive?nameOf(id):(info.name+'（'+info.title+'）');
     img.loading='lazy';
     img.onerror=()=>img.remove();
     return img;

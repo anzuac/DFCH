@@ -410,8 +410,8 @@
       b.type='button';b.setAttribute('aria-pressed',String(chosen));
       photo.loading='lazy';photo.alt=nameOf(c.id);
       const pref=guides.get(c.id);
-      photo.src=pref?.key?'../assets/heroes/'+encodeURIComponent(pref.key)+'.webp':'./images/'+c.id+'.webp';
-      if(c.id>=76&&c.id<=79)photo.hidden=true; // Official five-star variant sprite pending; do not substitute six-star portrait.
+      photo.src=(c.id>=76&&c.id<=79)?'./images/collab-318/hero-'+c.id+'.png':pref?.key?'../assets/heroes/'+encodeURIComponent(pref.key)+'.webp':'./images/'+c.id+'.webp';
+      if(c.id>=76&&c.id<=79)photo.style.imageRendering='pixelated';
       photo.onerror=()=>photo.remove();
       b.append(photo,el('strong','',nameOf(c.id)),el('small','',c.star+' ★'),
         el('small','',hit?'符合指定能力':'其他候選'));
@@ -425,6 +425,7 @@
     const mapped=BD.decorate(c.skills,c.bondEvents||[],50);
     for(const sk of mapped){
       const skill=el('div','target-skill'+(r.ids.includes(sk.id)?' target-match':''));
+      if(sk.id&&D.images?.[String(sk.id)])skill.append(skillIcon(sk.id,'target-skill-option-icon'));
       skill.append(el('span','',sk.id===null?'空格':(sk.bond?skillName(sk.id)+'＋':skillName(sk.id))),
         el('small','',sk.role+(sk.bond?' · 羈絆 Lv.'+sk.bond.level:'')));
       skillArea.append(skill);
