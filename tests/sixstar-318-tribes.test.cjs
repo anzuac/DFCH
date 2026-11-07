@@ -81,8 +81,8 @@ test('Both web pages load updated six-star race data and skill text versions',()
   assert.match(loader,/sixstar-visible-abilities\.json\?v=3\.18\.3/);
   for(const page of ['index.html','heroes.html']){
     const html=fs.readFileSync(path.join(root,page),'utf8');
-    assert.match(html,/hero-preferences-data\.js\?v=3\.18\.8/);
-    assert.match(html,/hero-preferences-view\.js\?v=2\.9\.4/);
+    assert.match(html,/hero-preferences-data\.js\?v=3\.18\.9/);
+    assert.match(html,/hero-preferences-view\.js\?v=2\.9\.5/);
     assert.match(html,/sixstar-abilities\.js\?v=1\.5\.4/);
   }
 });
