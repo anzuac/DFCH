@@ -1158,6 +1158,8 @@ input,select{border-color:#9fbccc35!important;border-radius:9px!important;backgr
 .hero-preference-card h3 { margin:4px 0;font-size:22px; }
 .hero-title { color:var(--muted);font-size:13px;margin:0; }
 .hero-stars { color:var(--gold);font-size:12px;letter-spacing:2px; }
+.hero-race{display:block;margin-top:7px;font-size:12px;line-height:1.45;letter-spacing:0;color:var(--muted);overflow-wrap:anywhere}
+.heroes-standalone .hero-race{font-size:calc(12px * var(--guide-font-multiplier,1))}
 .gift-group { margin-top:18px; }.gift-group h4 { margin:0 0 8px; }.loved h4 { color:#ffb2c8; }.favorite h4 { color:var(--teal-2); }
 .gift-list { list-style:none;display:flex;flex-wrap:wrap;gap:8px;margin:0;padding:0; }
 .gift-list li { background:#0d1b2780;border:1px solid var(--line);border-radius:8px;padding:7px 10px;font-size:13px;overflow-wrap:anywhere; }
