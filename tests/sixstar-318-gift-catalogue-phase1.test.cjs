@@ -68,6 +68,6 @@ test('the single shared gift panel has a divider, and individual collaboration p
   for(const p of ['index.html','heroes.html']){
     const html=fs.readFileSync(path.join(root,p),'utf8');
     assert.match(html,/id="heroCommonGifts"/);
-    assert.match(html,/hero-preferences-view\.js\?v=2\.9\.3/);
+    assert.match(html,/hero-preferences-view\.js\?v=2\.9\.4/);
   }
 });
