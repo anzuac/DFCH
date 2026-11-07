@@ -49,7 +49,10 @@ const guideFiles = [
 const recruitFiles=[
   'index.html','style.css','recruit-ui-fix.css','tabs.css','target-draw.css','bond.css',
   'config.js','status-data.js','recruit-bonus.js','stats-core.js','ability-stats.js',
-  'bond.js','app.js','stats.js','target-draw.js','tabs.js'
+  'bond.js','app.js','stats.js','target-draw.js','tabs.js',
+  // Public 3.18 collaboration scripts loaded by Recruit and Bond30.
+  'collab-318-core.js','collab-318-adapter.js',
+  'collab-318-bond-official.js','collab-318-visuals.js'
 ].map(file=>'Recruit/'+file);
 
 // Bond30 uses an independent directory; only player-facing files are published.
@@ -58,6 +61,7 @@ const bondFiles = [
   'Bond30/css/style.css',
   'Bond30/js/app.js',
   'Bond30/js/data.js',
+  'Bond30/js/collab-318.js',
   'Bond30/embed-height.js',
 ];
 
@@ -164,7 +168,13 @@ for (const relativePath of imageDirectories) {
 for (const relativePath of bondFiles) {
   const dest = path.join(outputDir, relativePath.replace(/^Bond30\//, 'bond30/'));
   fs.mkdirSync(path.dirname(dest), { recursive: true });
-  fs.copyFileSync(path.join(repoRoot,relativePath),dest);
+  if(relativePath==='Bond30/js/collab-318.js'){
+    // Only the public copy needs lowercase paths; preserve the GitHub source.
+    const source=fs.readFileSync(path.join(repoRoot,relativePath),'utf8');
+    fs.writeFileSync(dest,source.replaceAll('../Recruit/','../recruit/'));
+  } else {
+    fs.copyFileSync(path.join(repoRoot,relativePath),dest);
+  }
 }
 fs.cpSync(
   path.join(repoRoot,'Bond30/assets/icons'),
@@ -176,6 +186,7 @@ let bondHtml=fs.readFileSync(bondHtmlPath,'utf8');
 // Bond30 already includes shared settings, navigation, and localization exactly once.
 if(!bondHtml.includes('public-tool-i18n.js'))throw new Error('Bond30 localization entry missing');
 bondHtml=bondHtml
+ .replaceAll('../Recruit/','../recruit/')
  .replace(/display-settings\.js\?v=[^"]+/g,'display-settings.js?v=3.0.0')
  .replace(/public-nav\.js\?v=[^"]+/g,'public-nav.js?v=3.0.0')
  .replace(/public-nav\.css\?v=[^"]+/g,'public-nav.css?v=3.0.0')
