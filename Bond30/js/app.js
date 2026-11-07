@@ -81,7 +81,17 @@
     ...state.buffs.filter(x => x !== null),
     ...state.chosen.filter(x => x !== null)
   ]);
+  const collabCore = () => window.DFCHRecruitCollab318?.sourcePool(state.pool)?window.DFCHRecruitCollab318:null;
+  const collabAllowed = (id, selected, requireArtifact) => {
+    const core=collabCore();
+    if(!core)return true;
+    return core.allowed(core.byId.get(id),{
+      star:state.star,heroId:Number(state.hero),jobMask:hero()?.job||0,selected,
+      artifactIds:requireArtifact?[]:[301008017,301008020]
+    });
+  };
   const exclusion = x => {
+    if (collabCore()&&!collabAllowed(x.id,[...held()],true))return '不符合 3.18.0 羈絆取得資格';
     if (condition(x.id).cond !== 0) return '羈絆限定排除';
     if (!jobOK(x.id)) return '不適用此職業';
     if (held().has(x.id)) return '已擁有';
@@ -113,7 +123,9 @@
     const h = hero(), extra = requiredExtra();
     $('heroStatus').textContent = !h ? '此池沒有對應英靈。' :
       '已選擇 ' + h.name + '（' + professionName(h.job) + '）' +
-      (state.star === 5 ? '，已配置 ' + fixedSlots().length + ' 項固定能力及 ' + freeSize() + ' 個自由格（共 10 格）。' : extra ? '，已固定「氣力」及「' + nameOf(extra) + '」。' : '。');
+      (state.star === 5 ? '，已配置 ' + fixedSlots().length + ' 項固定能力及 ' + freeSize() + ' 個自由格（共 10 格）。' : extra ? '，已固定「氣力」及「' + nameOf(extra) + '」。' : '。')+
+      (window.DFCHRecruitCollabBond318?.specificFive(state.hero)?
+       ' 本角色專屬羈絆 Lv.'+window.DFCHRecruitCollabBond318.specificFive(state.hero).level+' 進化：'+nameOf(window.DFCHRecruitCollabBond318.specificFive(state.hero).abilityId)+'。':'');
   }
 
   function renderSlots() {
@@ -157,13 +169,14 @@
     const occupied = held();
     candidates.forEach(x => {
       const sameAlreadyHeld = occupied.has(x.id) && selected !== x.id;
-      const notForJob = group === 1 && !jobOK(x.id);
+      const occupiedWithoutCurrent=[...held()].filter(id=>id!==selected);
+      const notForJob = group === 1 && (!jobOK(x.id)||!collabAllowed(x.id,occupiedWithoutCurrent,false));
       const blockedByArtifact = group === 1 && artifactExcluded(x.id);
       const button = make('button', undefined, 'skill' + (blockedByArtifact ? ' suppressed' : '')); button.type = 'button';
       button.disabled = sameAlreadyHeld || notForJob;
       const info = make('span', undefined, 'info');
       info.append(make('strong', nameOf(x.id)), make('small',
-        notForJob ? '不適用此職業' : sameAlreadyHeld ? '已配置於原有能力格' :
+        notForJob ? '不符合職業／星級／角色資格' : sameAlreadyHeld ? '已配置於原有能力格' :
         blockedByArtifact ? '神器設定已啟用 · 仍可手動配置' :
         specialArtifact(x.id) ? '羈絆 30 等不會抽到此能力' : ''));
       button.append(image(x.id, 'icon'), info, make('span', '權重 ' + x.weight, 'weight'));
