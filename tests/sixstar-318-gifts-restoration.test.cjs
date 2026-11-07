@@ -11,7 +11,7 @@ test('3.18.0 bond gifts preserve 23 native shared favorites while documenting co
   assert.equal(data.commonFavorite.length,7);assert.equal(data.nativeCommonFavorite.length,19);
   for(let id=305001028;id<=305001039;id++)assert.ok(data.nativeCommonFavorite.includes(id));
   assert.equal(data.items.length,46);
-  assert.equal(new Set(data.items.map(x=>x.id)).size,44);
+  assert.equal(new Set(data.items.map(x=>x.id)).size,46);
   for(let id=305001028;id<=305001039;id++){
     const item=data.items.find(x=>x.id===id);
     assert.ok(item,'Missing 3.18.0 gift '+id);
