@@ -33,9 +33,27 @@
     const source=info===null||info===undefined?copy.pending:
       info.paidPack?labels.paidPack:pools.length?copy.draw:copy.gift;
     rows.push([copy.source,source]);
-    for(const pool of pools)rows.push([labels.pool,pool.translations[lang]||pool.translations.ja||copy.pending]);
     const block=node('dl',null,'hero-acquisition');
     for(const [label,value] of rows){const row=node('div');row.append(node('dt',label),node('dd',value));block.append(row);}
+    if(pools.length){
+      const row=node('div',null,'hero-pool-row'),value=node('dd');
+      row.append(node('dt',labels.pool));
+      if(pools.length===1){
+        value.textContent=pools[0].translations[lang]||pools[0].translations.ja||copy.pending;
+      }else{
+        // Keep multi-pool heroes compact, while preserving every full pool name.
+        const codes=pools.map(pool=>({9:'P1',10:'P2',11:'P3'})[pool.id]);
+        const short=codes.every(Boolean)?codes.join(' · '):String(pools.length)+' '+labels.pool;
+        const detail=node('details',null,'hero-pool-details'),summary=node('summary',null,'hero-pool-summary');
+        const detailLabel={zh_tw:'詳情',ja:'詳細',en:'Details',ko:'상세'}[lang]||'Details';
+        const list=node('ul',null,'hero-pool-full-list');
+        for(const pool of pools)list.append(node('li',pool.translations[lang]||pool.translations.ja||copy.pending));
+        summary.append(node('span',short,'hero-pool-short'),node('span',detailLabel,'hero-pool-expand-label'));
+        summary.setAttribute('aria-label',labels.pool+'：'+short+'，'+detailLabel);
+        detail.append(summary,list);value.append(detail);
+      }
+      row.append(value);block.append(row);
+    }
     const eligible=proofYes.has(hero.index),ineligible=proofNo.has(hero.index);
     const row=node('div',null,'hero-proof-row'),value=node('dd',null,'hero-proof-state '+(eligible?'hero-proof-yes':ineligible?'hero-proof-no':'hero-proof-unknown'));
     value.append(node('span',eligible?'♥':ineligible?'×':'?','hero-proof-symbol'),node('span',eligible?labels.proofYes:ineligible?labels.proofNo:copy.pending));
