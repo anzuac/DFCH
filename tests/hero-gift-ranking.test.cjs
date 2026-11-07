@@ -48,7 +48,7 @@ test('statue increase uses the same floor-after-product formula as gift cards',(
     }
   }
 });
-test('universal favorite gifts share the same rank for all six-star heroes',()=>{
+test('the seven truly universal gifts share first rank for every six-star hero',()=>{
   for(const id of commonFavorite){
     const result=evaluate(id,heroes,bondGains,false);
     assert.equal(result.rows.length,heroes.length);
