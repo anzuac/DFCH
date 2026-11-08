@@ -38,3 +38,21 @@ test('Cloudflare homepage is built from the guide which includes the 23-hero mod
   assert.match(get('heroes.html'),/sixstar-abilities\.js\?v=1\.5\.1/);
   assert.match(get('heroes.html'),/sixstar-abilities\.css\?v=1\.1\.0/);
 });
+
+function teamManifest(){
+  const match=build.match(/const teamFiles\s*=\s*\[([\s\S]*?)\];/);
+  assert.ok(match,'Cloudflare team file manifest exists');
+  return new Set([...match[1].matchAll(/'([^']+)'/g)].map(x=>x[1]));
+}
+test('Cloudflare Pages publishes every local team skill PNG used by the lineup',()=>{
+  const manifest=teamManifest();
+  const app=get('team/js/app.js');
+  const localPNGs=[...new Set([...app.matchAll(/['"]\.\/assets\/([a-zA-Z0-9-]+\.png)['"]/g)].map(m=>'team/assets/'+m[1]))];
+  assert.ok(localPNGs.length>=5,'Five locally hosted ability icons should be detected');
+  for(const asset of ['team/assets/303001033.png','team/assets/303001115.png'])assert.ok(localPNGs.includes(asset),asset+' referenced by app');
+  for(const asset of localPNGs){
+    assert.ok(fs.existsSync(path.join(root,asset)),asset+' has valid source path');
+    assert.ok(manifest.has(asset),asset+' MUST be in Cloudflare publish whitelist');
+  }
+  assert.match(build,/for \(const relativePath of teamFiles\)/);
+});

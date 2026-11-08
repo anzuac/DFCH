@@ -72,6 +72,8 @@ const teamFiles = [
   'team/js/data.js',
   'team/js/i18n.js',
   'team/embed-height.js',
+  'team/assets/303001033.png',
+  'team/assets/303001115.png',
   'team/assets/abyss-liberator.png',
   'team/assets/greed-iii.png',
   'team/assets/ocean-ruler.png',

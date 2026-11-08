@@ -1,4 +1,4 @@
-# DFCH 英靈編隊 v1.6.3
+# DFCH 英靈編隊 v1.6.4
 
 此資料夾同時供 GitHub Pages 遠征模擬器的第七分頁與 Cloudflare Pages 公開工具使用。
 
@@ -37,3 +37,9 @@
 
 - 「潮騷的加護」和「古代魔法的知識」的已核對原圖以相同 PNG bytes 收入 `team/assets/303001033.png`、`team/assets/303001115.png`，避免跨工具路徑大小寫或部署位置差異造成手機圖片無法載入。
 - 只改兩項圖片來源與 JS 版本快取，原有公式、手機底部資訊列、編隊儲存、語系及其他界面不動。
+
+## v1.6.4｜修正 Cloudflare 技能圖片發布清單
+
+- 經查對，v1.6.3 已將兩張原始 PNG 放入 `team/assets/`，但 Cloudflare Pages 採白名單複製到 `dist-heroes`，`scripts/build-heroes-pages.cjs` 的 `teamFiles` 漏列新圖片，因此公開站無法載入。
+- 已加入 `team/assets/303001033.png`、`team/assets/303001115.png` 至 `teamFiles`；新增回歸測試，逐一核對英靈編隊 JS 引用的本地技能 PNG 皆列入發布清單。
+- 兩張原圖、UI、公式、手機底欄和本機儲存邏輯保持不變。
