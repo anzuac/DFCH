@@ -146,15 +146,37 @@
     return list;
   }
 
+  // Keep both mobile accordion states while changing language or gift bonus settings.
+  const commonGiftExpanded={base:false,collab:false};
+  function commonGiftGroup(key,title,ids){
+    const section=node('section',null,'hero-common-group');
+    section.dataset.group=key;
+    section.classList.toggle('is-open',commonGiftExpanded[key]);
+    const toggle=node('button',null,'hero-common-group-toggle');
+    toggle.type='button';
+    toggle.setAttribute('aria-expanded',String(commonGiftExpanded[key]));
+    toggle.setAttribute('aria-controls','hero-common-'+key+'-items');
+    const arrow=node('span','▾','hero-common-group-chevron');
+    arrow.setAttribute('aria-hidden','true');
+    toggle.append(node('span',title),arrow);
+    const contents=node('div',null,'hero-common-group-content');
+    contents.id='hero-common-'+key+'-items';
+    contents.append(chips(ids));
+    toggle.addEventListener('click',()=>{
+      commonGiftExpanded[key]=!commonGiftExpanded[key];
+      section.classList.toggle('is-open',commonGiftExpanded[key]);
+      toggle.setAttribute('aria-expanded',String(commonGiftExpanded[key]));
+    });
+    section.append(node('p',title,'hero-common-group-title'),toggle,contents);
+    return section;
+  }
   // One unified panel: seven gifts shared by all six-stars, then twelve liked by all native 23.
   function renderCommonGifts(){
     const copy=preferenceCopy[lang]||preferenceCopy.zh_tw;
     $('heroCommonGifts').replaceChildren(
-      node('p',copy.baseHeading,'hero-common-group-title'),
-      chips(data.commonFavorite),
+      commonGiftGroup('base',copy.baseHeading,data.commonFavorite),
       node('hr',null,'hero-common-divider'),
-      node('p',copy.collabHeading,'hero-common-group-title'),
-      chips(data.collabGiftIds||[])
+      commonGiftGroup('collab',copy.collabHeading,data.collabGiftIds||[])
     );
   }
 
