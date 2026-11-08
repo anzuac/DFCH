@@ -4,6 +4,9 @@ const LANG=['zh_tw','zh_cn','ja','en','ko','th','vi'];
 const ACTIVE_LANG=['zh_tw','ja','ko','en'];
 /* Key = original Traditional Chinese display phrase. Official ability and hero names also use DFCHOfficialLabels. */
 const entries={
+ "禁斷":["禁断","禁断","Forbidden","금단","ต้องห้าม","Cấm kỵ"],
+ "貪欲":["贪欲","強欲","Greed","탐욕","โลภ","Tham lam"],
+ "編隊即時機率":["编队实时概率","編成中の確率","Live lineup rates","편성 실시간 확률","อัตราปัจจุบัน","Tỷ lệ đội hình"],
  "囁風之遺灰（待驗證）":["囁風之遺灰（待驗證）","風囁く遺灰（検証待ち）","Whispering Wind Ash (pending verification)","속삭이는 바람의 재 (검증 대기)","Wind Ash (pending verification)","Tro gió (chờ xác minh)"],
  "（待驗證）":["（待验证）","（検証待ち）","(pending verification)","(검증 대기)","(รอการตรวจสอบ)","(chờ xác minh)"],
  "回路組與其他神器":["回路组与其他神器","回路グループとその他の神器","Circuit group and other artifacts","회로 그룹과 다른 유물","กลุ่มวงจรและสิ่งประดิษฐ์อื่น","Nhóm mạch và bảo vật khác"],

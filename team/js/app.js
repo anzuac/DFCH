@@ -11,13 +11,15 @@ const OFFICIAL_SKILL_ICONS={
  '貪欲 II':'../bond30/assets/icons/303000722.png',
  '貪欲 III':'./assets/greed-iii.png',
  '深淵世界的解放者':'./assets/abyss-liberator.png',
- '大海的支配者':'./assets/ocean-ruler.png'
+ '大海的支配者':'./assets/ocean-ruler.png',
+ '潮騷的加護':'../Bond30/assets/icons/303001033.png',
+ '古代魔法的知識':'../Recruit/images/collab-318/303001115.png'
 };
 function canonicalSkillName(name){const text=String(name||'').trim().replace(/[ⅠⅡⅢ]/g,ch=>({'Ⅰ':'I','Ⅱ':'II','Ⅲ':'III'}[ch]));return text.replace(/^(?:強欲|貪欲)\s*(I|II|III)$/,'貪欲 $1')}
 function skillImage(name){const path=OFFICIAL_SKILL_ICONS[canonicalSkillName(name)]||'./assets/abyss-liberator.svg';return location.hostname.endsWith('.github.io')?path.replace('../bond30/','../Bond30/'):path}
-function tracked(name){const key=canonicalSkillName(name);return key==='深淵世界的解放者'||key==='大海的支配者'||/^(禁斷世界(?:的)?介入者\s*(?:I|II|III)|貪欲\s*(?:I|II|III))$/.test(key)}
+function tracked(name){const key=canonicalSkillName(name);return key==='深淵世界的解放者'||key==='大海的支配者'||key==='潮騷的加護'||key==='古代魔法的知識'||/^(禁斷世界(?:的)?介入者\s*(?:I|II|III)|貪欲\s*(?:I|II|III))$/.test(key)}
 function chosenSkills(s,h){if(s.type==='other')return KEYS.filter(k=>s.skills[k]?.selected).map(k=>({name:k,up:!!s.skills[k]?.up})); if(!h)return []; return getSkills(h).filter(x=>tracked(x.name)).map(x=>({name:x.name,up:!!s.skills[x.name]?.up}));}
-function skillTile(name,up,small=false){return `<span class="skilltile ${up?'is-up':''} ${small?'small':''}" title="${enc(name+(up?'+':''))}"><img src="${skillImage(name)}" alt=""><span class="skilltile-label">${enc(name.replace('禁斷世界的介入者','禁斷').replace('禁斷世界介入者','禁斷').replace('深淵世界的解放者','深淵解放者'))}${up?'<b>+</b>':''}</span></span>`}
+function skillTile(name,up,small=false){return `<span class="skilltile ${up?'is-up':''} ${small?'small':''}" title="${enc(name+(up?'+':''))}"><img src="${skillImage(name)}" alt=""><span class="skilltile-label">${enc(name.replace('禁斷世界的介入者','禁斷').replace('禁斷世界介入者','禁斷').replace('深淵世界的解放者','深淵解放者').replace('潮騷的加護','潮騷加護').replace('古代魔法的知識','古代魔法'))}${up?'<b>+</b>':''}</span></span>`}
 const storeKey='hero-layout-phase1-v1';const blank=()=>({type:'',hero:'',skills:{}});let slots=Array.from({length:12},blank);try{const raw=JSON.parse(localStorage.getItem(storeKey));if(Array.isArray(raw)&&raw.length===12)slots=raw.map(s=>({type:s.type||'',hero:s.hero||'',skills:s.skills||{}}));}catch(e){}
 let current=-1,draft=null,fullData=null;
 const $=s=>document.querySelector(s);const enc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -292,6 +294,15 @@ function eventOptionsMarkup(){
   </label>`).join('')}
  </fieldset>`;
 }
+function updateMobileRateBar(d){
+ const bar=$('#mobileRateBar');
+ if(!bar)return;
+ const values={guard:pct(d.total),greed:'+'+pct(d.greedSum),special:'+'+pct(d.specialBossTotal)};
+ for(const [key,value] of Object.entries(values)){
+  const node=bar.querySelector(`[data-mobile-rate="${key}"]`);
+  if(node)node.textContent=value;
+ }
+}
 function renderStats(){
  const moreWasOpen=!!$('#officialStats .greed-more')?.open;
  updateOminousOptions();
@@ -357,6 +368,7 @@ function renderStats(){
   <div class="subheading">貪欲</div><div class="skill-summary">${showSkillRows(d.greed)}</div>
   <div class="subheading">寶箱相關神器</div><div class="skill-summary">${showArtifactRows()}</div>
  </section>`;
+ updateMobileRateBar(d);
  if(moreWasOpen)$('#officialStats .greed-more').open=true;
  $('#baseInput').onchange=e=>{
   const value=Number(e.target.value);

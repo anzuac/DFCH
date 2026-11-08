@@ -441,3 +441,21 @@ html[data-guide-theme="light"] .hero-party-public .greed-result{--hero-cycle:#15
 html[data-guide-theme="light"] .hero-party-public .greed-result.greed-over-limit{--hero-cycle:#925019}
 .hero-party-public .greed-result .greed-hero-value{color:var(--hero-cycle)}
 .hero-party-public .greed-result .greed-meter-hero{--greed-fill:var(--hero-cycle)}
+
+/* v1.6.2: read-only mobile summary follows the viewport while scrolling. */
+.hero-party-public .mobile-rate-bar{display:none}
+@media(max-width:580px){
+ body.hero-party-public{padding-bottom:calc(52px + env(safe-area-inset-bottom,0px))}
+ .hero-party-public .mobile-rate-bar{
+  position:fixed;left:0;right:0;bottom:env(safe-area-inset-bottom,0px);z-index:8;
+  display:grid;grid-template-columns:1fr 1fr 1.2fr;align-items:center;gap:3px;
+  min-height:44px;padding:8px max(10px,env(safe-area-inset-left,0px)) 8px max(10px,env(safe-area-inset-right,0px));
+  background:var(--panel);border-top:1px solid var(--line);box-shadow:0 -5px 20px #0005;
+  color:var(--party-foreground);
+ }
+ .hero-party-public .mobile-rate-item{display:flex;align-items:center;justify-content:center;gap:5px;white-space:nowrap;min-width:0;font-size:calc(11px * var(--guide-font-multiplier,1))}
+ .hero-party-public .mobile-rate-item strong{font-size:calc(12px * var(--guide-font-multiplier,1));font-variant-numeric:tabular-nums;color:var(--party-gold)}
+ .hero-party-public .mobile-rate-item:first-child strong{color:var(--party-accent)}
+ .hero-party-public .mobile-rate-item:last-child strong{color:var(--party-positive)}
+}
+@media(max-width:355px){.hero-party-public .mobile-rate-bar{gap:0;padding-inline:3px}.hero-party-public .mobile-rate-item{font-size:10px;gap:3px}.hero-party-public .mobile-rate-item strong{font-size:11px}}
