@@ -12,8 +12,8 @@ const OFFICIAL_SKILL_ICONS={
  '貪欲 III':'./assets/greed-iii.png',
  '深淵世界的解放者':'./assets/abyss-liberator.png',
  '大海的支配者':'./assets/ocean-ruler.png',
- '潮騷的加護':'../Bond30/assets/icons/303001033.png',
- '古代魔法的知識':'../Recruit/images/collab-318/303001115.png'
+ '潮騷的加護':'./assets/303001033.png',
+ '古代魔法的知識':'./assets/303001115.png'
 };
 function canonicalSkillName(name){const text=String(name||'').trim().replace(/[ⅠⅡⅢ]/g,ch=>({'Ⅰ':'I','Ⅱ':'II','Ⅲ':'III'}[ch]));return text.replace(/^(?:強欲|貪欲)\s*(I|II|III)$/,'貪欲 $1')}
 function skillImage(name){const path=OFFICIAL_SKILL_ICONS[canonicalSkillName(name)]||'./assets/abyss-liberator.svg';return location.hostname.endsWith('.github.io')?path.replace('../bond30/','../Bond30/'):path}
