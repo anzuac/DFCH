@@ -396,6 +396,22 @@ html[data-guide-theme="green"] .hero-party-public{--party-danger:#ffc7cd}
  .hero-party-public .greed-result .greed-artifact-card strong{font-size:calc(15px * var(--guide-font-multiplier,1))}
 }
 
+/* v1.6.0: two primary cards, existing meters, and one compact Wind Ash control. */
+.hero-party-public .greed-featured{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;margin-bottom:15px}
+.hero-party-public .greed-featured .greed-hero{min-width:0;margin:0;padding:11px 9px}
+.hero-party-public .greed-featured .greed-hero-main{display:flex;flex-direction:column;align-items:flex-start;gap:7px}
+.hero-party-public .greed-featured .greed-hero-value{font-size:calc(26px * var(--guide-font-multiplier,1));max-width:100%;overflow-wrap:anywhere;white-space:normal}
+.hero-party-public .greed-special-note{font-size:calc(10px * var(--guide-font-multiplier,1));color:var(--party-secondary);margin:8px 0 0}
+.hero-party-public .greed-meter-special{--greed-fill:var(--party-positive)}
+.hero-party-public .greed-meter-sea{--greed-fill:var(--party-accent)}
+.hero-party-public .greed-meter-wind{--greed-fill:var(--party-gold)}
+.hero-party-public .greed-meter-wind.is-inactive{opacity:.62}
+.hero-party-public .wind-ash-controls{display:flex;align-items:center;justify-content:flex-end;gap:7px;flex-wrap:wrap;min-width:0}
+.hero-party-public .wind-ash-controls .wind-count-label{font-size:calc(11px * var(--guide-font-multiplier,1));color:var(--party-secondary)}
+.hero-party-public .wind-ash-controls #windSoldiersInput{width:76px;max-width:100%;border:1px solid var(--line);background:var(--panel);color:var(--party-foreground);border-radius:7px;padding:6px 5px}
+.hero-party-public .wind-ash-controls #windSoldiersInput:disabled{opacity:.48}
+.hero-party-public .wind-ash-controls #windAshToggle{width:18px;height:18px;flex:none;accent-color:var(--party-gold)}
+@media(max-width:390px){.hero-party-public .artifact-wind{align-items:flex-start;flex-wrap:wrap}.hero-party-public .wind-ash-controls{width:100%;justify-content:flex-start}}
 /* v1.15.9: exclusive events and hero-greed over-limit warning (presentation only). */
 .hero-party-public .event-options{
  display:flex;align-items:center;gap:7px;flex-wrap:wrap;

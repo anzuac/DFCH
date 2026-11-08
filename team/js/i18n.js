@@ -4,6 +4,20 @@ const LANG=['zh_tw','zh_cn','ja','en','ko','th','vi'];
 const ACTIVE_LANG=['zh_tw','ja','ko','en'];
 /* Key = original Traditional Chinese display phrase. Official ability and hero names also use DFCHOfficialLabels. */
 const entries={
+ "特殊 Boss":["特殊 Boss","特殊ボス","Special Boss","특수 보스","Special Boss","Special Boss"],
+ "特殊 Boss 持續秘寶":["特殊 Boss 持續秘寶","特殊ボスの継続秘宝","Special Boss persistent treasure","특수 보스 지속 보물","Special Boss treasure","Kho báu Boss đặc biệt"],
+ "潮騷的加護":["潮騷的加護","潮騒の加護","Blessing of the Waves","파도의 가호","Blessing of the Waves","Phước lành của sóng"],
+ "囁風之遺灰（尚未驗證）":["囁風之遺灰（尚未驗證）","風囁く遺灰（未検証）","Whispering Wind Ash (unverified)","속삭이는 바람의 재 (미검증)","Wind Ash (unverified)","Tro gió (chưa xác minh)"],
+ "囁風之遺灰":["囁風之遺灰","風囁く遺灰","Whispering Wind Ash","속삭이는 바람의 재","Whispering Wind Ash","Tro gió"],
+ "（尚未驗證）":["（尚未驗證）","（未検証）","(unverified)","(미검증)","(unverified)","(chưa xác minh)"],
+ "風攻擊士兵數量":["風攻擊士兵數量","風属性攻撃兵の数","Number of wind-attack soldiers","바람 공격 병사 수","Wind soldiers","Số lính gió"],
+ "風攻擊士兵":["風攻擊士兵","風属性攻撃兵","Wind-attack soldiers","바람 공격 병사","Wind soldiers","Lính hệ gió"],
+ "啟用囁風之遺灰":["啟用囁風之遺灰","風囁く遺灰を有効化","Enable Whispering Wind Ash","속삭이는 바람의 재 활성화","Enable Wind Ash","Bật tro gió"],
+ "關閉":["關閉","オフ","Off","꺼짐","Off","Tắt"],
+ "英靈貪欲、特殊 Boss 與其他獨立額外掉箱效果分開顯示。":["英靈貪欲、特殊 Boss 與其他獨立額外掉箱效果分開顯示。","英霊の貪欲・特殊ボス・独立した宝箱追加効果を個別に表示します。","Hero Greed, Special Boss, and independent extra-chest effects are shown separately.","영령 탐욕, 특수 보스 및 독립 추가 상자 효과를 따로 표시합니다.","Separate Boss chest effects","Hiển thị riêng từng hiệu ứng rương"],
+ "「特殊 Boss」來自古代魔法的知識，作用於特殊 Boss 持續秘寶，與一般寶箱加成不同。":["「特殊 Boss」來自古代魔法的知識，作用於特殊 Boss 持續秘寶，與一般寶箱加成不同。","「特殊ボス」は古代魔法の知識の持続秘宝効果で、通常の追加宝箱とは異なります。","Special Boss uses Ancient Magic Knowledge for persistent treasure, not ordinary bonus chests.","특수 보스 효과는 고대 마법 지식의 지속 보물에 적용되며 일반 추가 상자와 다릅니다.","Special Boss persistent treasure","Kho báu Boss đặc biệt"],
+ "「潮騷的加護」依目前設定的最遠距離計算，單項最高 10%。":["「潮騷的加護」依目前設定的最遠距離計算，單項最高 10%。","潮騒の加護は設定された最大距離で計算し、上限は10%です。","Blessing of the Waves uses the selected maximum distance, capped at 10%.","파도의 가호는 설정된 최대 거리로 계산하며 상한은 10%입니다.","Distance bonus capped at 10%","Hiệu ứng theo khoảng cách tối đa 10%"],
+ "「囁風之遺灰（尚未驗證）」暫依遊戲內說明每名風攻擊士兵 +0.3% 試算，可自行關閉，不代表原生公式已通過實機驗證。":["「囁風之遺灰（尚未驗證）」暫依遊戲內說明每名風攻擊士兵 +0.3% 試算，可自行關閉，不代表原生公式已通過實機驗證。","風囁く遺灰はゲーム内説明に基づく兵士1人あたり+0.3%の暫定試算です。実機検証済みではありません。","Wind Ash uses the in-game text as a provisional estimate (+0.3% per wind soldier); it is not runtime-verified.","바람의 재는 게임 내 설명에 따른 병사당 +0.3% 임시 계산이며 실제 동작은 검증되지 않았습니다.","Wind Ash provisional estimate","Ước tính tạm thời, chưa xác minh"],
  "使用方式與注意事項":["使用方式與注意事項","使い方と注意事項","How to use & important notes","사용 방법 및 주의사항","使用方式與注意事項","使用方式與注意事項"],
  "使用方式":["使用方式","使い方","How to use","사용 방법","使用方式","使用方式"],
  "注意事項":["注意事項","注意事項","Important notes","주의사항","注意事項","注意事項"],

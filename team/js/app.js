@@ -43,7 +43,16 @@ function draw(){
   b.onclick=()=>open(i);$('#grid').appendChild(b);
  });$('#count').textContent=`已編隊 ${n} / 12`;
 }
-function getSkills(h){let remote=fullData?.heroes?.find(x=>x.slug===h.slug);return remote?.skills||h.skills||[]}
+/* Extra independent Boss abilities from the 3.18.0 six-star table. */
+const EXTRA_CHEST_SKILL_RATES={
+ '潮騷的加護':{levels:[1,2,3,4,5,6,7,8,9,10],base:5,full:10,kind:'sea'},
+ '古代魔法的知識':{levels:[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15],base:10,full:15,kind:'specialBoss'}
+};
+const EXTRA_CHEST_OFFLINE={
+ siegfried_water:{name:'潮騷的加護',baseCap:5,fullCap:10,evolveAt:10},
+ marcille:{name:'古代魔法的知識',baseCap:10,fullCap:15,evolveAt:20}
+};
+function getSkills(h){const remote=fullData?.heroes?.find(x=>x.slug===h.slug);const list=remote?.skills||h.skills||[];const extra=EXTRA_CHEST_OFFLINE[h.slug];return extra&&!list.some(x=>x.name===extra.name)?[...list,extra]:list}
 function open(i){current=i;draft=structuredClone(slots[i]);$('#dialogtitle').textContent=`第 ${i+1} 格・英靈設定`;let used=slots.filter((s,j)=>j!==i&&s.type==='six').map(s=>hero(s)?.name);$('#heroSelect').innerHTML='<option value="">－ 尚未選擇 －</option><option value="other">其他（自由技能）</option>';HEROES.forEach(h=>{let o=document.createElement('option');o.value=h.slug;o.textContent=`★6 ${h.name}｜${h.title}`;o.disabled=used.includes(h.name);$('#heroSelect').appendChild(o)});$('#heroSelect').value=draft.type==='other'?'other':draft.hero||'';updateSkills();$('#overlay').classList.remove('hidden')}
 function updateSkills(){const v=$('#heroSelect').value;const isOther=v==='other';$('#skillSection').classList.toggle('hidden',!v);if(!v)return;let h=HEROES.find(x=>x.slug===v);let list=isOther?KEYS.map(name=>({name,baseCap:SKILL_RATES[name].base,fullCap:SKILL_RATES[name].full,evolvable:SKILL_RATES[name].full>SKILL_RATES[name].base})):getSkills(h);$('#skillHeading').textContent=isOther?'自訂能力（可同時選多種）':`${h.name}・固定能力`;$('#skills').innerHTML='';list.forEach((item,idx)=>{let key=item.name, old=draft.skills[key]||{};let selected=isOther?!!old.selected:true;let up=!!old.up;let canUp=isOther?(SKILL_RATES[key]?.full>SKILL_RATES[key]?.base):!!(item.evolveAt!=null?item.evolveAt:item.evolvable);let l=document.createElement('div');l.className='skill';let checkbox=isOther?`<input type="checkbox" data-choose="${idx}" ${selected?'checked':''} aria-label="啟用 ${enc(key)}">`:'';let cap=item.baseCap?`Lv.${up&&canUp?item.fullCap:item.baseCap}${SKILL_RATES[canonicalSkillName(key)]?` · ${SKILL_RATES[canonicalSkillName(key)].levels[(up&&canUp?item.fullCap:item.baseCap)-1]}%`:''}`:'最高等級';l.innerHTML=`<span class="skill-icon">${tracked(key)?`<img src="${skillImage(key)}" alt="">`:(idx+1).toString().padStart(2,'0')}</span>${checkbox}<div class="skillname">${enc(key)}<div class="level">${cap}</div></div><label><input type="checkbox" data-up="${idx}" ${up&&canUp?'checked':''} ${!canUp?'disabled title="此技能無可核實的突破進化"':''}>突破</label>`;let c=l.querySelector('[data-choose]');if(up&&canUp){l.querySelector('.skill-icon').classList.add('is-up')}if(c)c.onchange=()=>{draft.skills[key]={...draft.skills[key],selected:c.checked,up:canUp&&!!draft.skills[key]?.up};l.classList.toggle('off',!c.checked)};l.querySelector('[data-up]').onchange=e=>{draft.skills[key]={selected:isOther?!!draft.skills[key]?.selected:true,up:e.target.checked};updateSkills()};l.classList.toggle('off',!selected);$('#skills').appendChild(l)});$('#note').textContent=isOther?'技能預設為一般最高等級，可突破的技能勾選後會套用突破等級。':fullData?.heroes?.some(x=>x.slug===h.slug)?'有進化能力的技能可勾選突破。':h.skills.length?'此英靈固定技能以現有資料顯示。':'此英靈的完整固定技能需要連線載入。';}
 $('#heroSelect').onchange=()=>{draft.skills={};let v=$('#heroSelect').value;draft.type=v?(v==='other'?'other':'six'):'';draft.hero=v==='other'?'':v;updateSkills()};$('#save').onclick=()=>{let v=$('#heroSelect').value;slots[current]=draft.type?draft:blank();persist();$('#overlay').classList.add('hidden');draw()};$('#remove').onclick=()=>{slots[current]=blank();persist();$('#overlay').classList.add('hidden');draw()};$('#close').onclick=()=>$('#overlay').classList.add('hidden');$('#overlay').addEventListener('click',e=>{if(e.target===$('#overlay'))$('#close').click()});document.addEventListener('keydown',e=>{if(e.key==='Escape')$('#close').click()});$('#clear').onclick=()=>{if(confirm('確定要清空全部 12 格編隊？')){slots=Array.from({length:12},blank);persist();draw()}};
@@ -51,7 +60,7 @@ $('#heroSelect').onchange=()=>{draft.skills={};let v=$('#heroSelect').value;draf
 fetch('../data/sixstar-visible-abilities.json?v=3.18.3',{cache:'no-cache'}).then(r=>{if(!r.ok)throw Error('offline');return r.json()}).then(d=>{if(Array.isArray(d.heroes)){fullData=d;draw();if(current>=0&&!$('#overlay').classList.contains('hidden'))updateSkills();}}).catch(()=>{});
 
 
-function pickedTracked(){let out=[];slots.forEach((s,i)=>{if(!s.type)return;const h=hero(s);const name=s.type==='other'?`第 ${i+1} 格・其他`:`第 ${i+1} 格・${h?.name||'英靈'}`;const chosen=s.type==='other'?KEYS.filter(k=>s.skills[k]?.selected).map(k=>({name:k,up:!!s.skills[k]?.up&&isUpgradeAllowed(s,k)})):getSkills(h||{skills:[]}).filter(x=>tracked(x.name)).map(x=>({name:x.name,up:!!s.skills[x.name]?.up&&isUpgradeAllowed(s,x.name)}));chosen.forEach(k=>out.push({...k,owner:name}));});return out;}
+function pickedTracked(){let out=[];slots.forEach((s,i)=>{if(!s.type)return;const h=hero(s);const name=s.type==='other'?`第 ${i+1} 格・其他`:`第 ${i+1} 格・${h?.name||'英靈'}`;const chosen=s.type==='other'?KEYS.filter(k=>s.skills[k]?.selected).map(k=>({name:k,up:!!s.skills[k]?.up&&isUpgradeAllowed(s,k)})):getSkills(h||{skills:[]}).filter(x=>tracked(x.name)||EXTRA_CHEST_SKILL_RATES[x.name]).map(x=>({name:x.name,up:!!s.skills[x.name]?.up&&isUpgradeAllowed(s,x.name)}));chosen.forEach(k=>out.push({...k,owner:name}));});return out;}
 
 /* Add future event variants here; all options use one radio group and one saved value. */
 const EVENT_OPTIONS=Object.freeze([
@@ -60,7 +69,7 @@ const EVENT_OPTIONS=Object.freeze([
  {factor:2,label:'×200%'}
 ]);
 const calcStoreKey='hero-layout-phase1-v17-calc';
-const calcSettings={base:3,crown:false,stone:false,ring:0,eventMultiplier:1,brokenCircuit:0,mysteriousCircuit:false,desireMirror:0,ominousCircuit:0,ominousDistance:30};
+const calcSettings={base:3,crown:false,stone:false,ring:0,eventMultiplier:1,brokenCircuit:0,mysteriousCircuit:false,desireMirror:0,ominousCircuit:0,ominousDistance:30,windAshEnabled:false,windSoldiers:0};
 try{const v=JSON.parse(localStorage.getItem(calcStoreKey));if(v&&typeof v==='object'){
   if(Number.isFinite(Number(v.base))&&Number(v.base)>=0&&Number(v.base)<=100)calcSettings.base=Number(v.base);
   calcSettings.crown=v.crown===true;calcSettings.stone=v.stone===true;
@@ -73,6 +82,8 @@ try{const v=JSON.parse(localStorage.getItem(calcStoreKey));if(v&&typeof v==='obj
   if(Number.isInteger(v.desireMirror)&&v.desireMirror>=0&&v.desireMirror<=15)calcSettings.desireMirror=v.desireMirror;
   if(Number.isInteger(v.ominousCircuit)&&v.ominousCircuit>=0&&v.ominousCircuit<=10)calcSettings.ominousCircuit=v.ominousCircuit;
   if(Number.isInteger(v.ominousDistance)&&v.ominousDistance>=30&&v.ominousDistance<=1800&&v.ominousDistance%30===0)calcSettings.ominousDistance=v.ominousDistance;
+  calcSettings.windAshEnabled=v.windAshEnabled===true;
+  if(Number.isSafeInteger(v.windSoldiers)&&v.windSoldiers>=0)calcSettings.windSoldiers=v.windSoldiers;
 }}catch(e){}
 function saveCalcSettings(){try{localStorage.setItem(calcStoreKey,JSON.stringify(calcSettings));}catch(e){}}
 const rateDigits=n=>Number(n.toFixed(4)).toLocaleString('zh-TW',{maximumFractionDigits:4});
@@ -90,7 +101,7 @@ function ominousEffect(level,distance){
 function buildCalcData(){
  const picked=pickedTracked().map(x=>{
   const key=canonicalSkillName(x.name).replace('禁斷世界介入者','禁斷世界的介入者');
-  const rule=SKILL_RATES[key];if(!rule)return null;
+  const rule=SKILL_RATES[key]||EXTRA_CHEST_SKILL_RATES[key];if(!rule)return null;
   const lv=x.up&&rule.full>rule.base?rule.full:rule.base;
   const amount=rule.levels[lv-1];
   return {...x,key,lv,amount,kind:rule.kind};
@@ -98,6 +109,8 @@ function buildCalcData(){
  const forbidden=picked.filter(x=>x.kind==='guard');
  const deep=picked.filter(x=>x.kind==='abyss');
  const greed=picked.filter(x=>x.kind==='greed');
+ const specialBoss=picked.filter(x=>x.kind==='specialBoss');
+ const sea=picked.filter(x=>x.kind==='sea');
  const guardSkills=forbidden.reduce((sum,x)=>sum+x.amount,0);
  const deepGuard=deep.reduce((sum,x)=>sum+x.amount,0);
  const guardTotal=guardSkills+deepGuard;
@@ -119,7 +132,13 @@ function buildCalcData(){
  const ominous=calcSettings.ominousCircuit?ominousEffect(calcSettings.ominousCircuit,calcSettings.ominousDistance):ominousEffect(0,calcSettings.ominousDistance);
  const greedArtifactTotal=greedCircuitTotal+greedMirrorTotal+ominous.applied;
  const greedCombined=greedSum+greedArtifactTotal;
- return {forbidden,deep,greed,artifactFactor,abilityFactor,eventFactor,total,greedSum,greedCircuitTotal,greedMirrorTotal,greedArtifactTotal,greedCombined,ominous};
+ // Independent single-roll effects: keep them outside ordinary Greed.
+ const specialBossTotal=specialBoss.reduce((sum,x)=>sum+x.amount,0);
+ const seaLevel=sea.reduce((sum,x)=>sum+x.amount,0);
+ const seaApplied=Math.min(10,Number((seaLevel*calcSettings.ominousDistance/100).toFixed(4)));
+ // Provisional in-game text estimate; not verified through runtime testing.
+ const windAshRate=calcSettings.windAshEnabled?Math.min(100,Number((calcSettings.windSoldiers*0.3).toFixed(4))):0;
+ return {forbidden,deep,greed,artifactFactor,abilityFactor,eventFactor,total,greedSum,greedCircuitTotal,greedMirrorTotal,greedArtifactTotal,greedCombined,ominous,specialBossTotal,seaLevel,seaApplied,windAshRate,windAshEnabled:calcSettings.windAshEnabled};
 }
 function showSkillRows(items){return items.length?items.map(x=>`<div class="statline"><span>${enc(x.owner)} · ${enc(x.key.replace('禁斷世界的介入者','禁斷'))}${x.up?'+':''} Lv.${x.lv}</span><strong>+${pct(x.amount)}</strong></div>`).join(''):'<p class="calc-note">尚未配置相關技能</p>';}
 
@@ -164,7 +183,7 @@ function showArtifactRows(){
 function updateOminousOptions(){
  const level=calcSettings.ominousCircuit;
  const select=$('#ominousDistance');
- select.disabled=level===0;
+ select.disabled=level===0&&!pickedTracked().some(x=>x.name==='潮騷的加護');
  select.classList.remove('cap-exceeded','cap-reached');
  for(const opt of select.options){
   const distance=Number(opt.value);
@@ -215,6 +234,9 @@ function initArtifactSettings(){
  $('#desireMirrorLevel').value=String(calcSettings.desireMirror);
  $('#ominousCircuitLevel').value=String(calcSettings.ominousCircuit);
  $('#ominousDistance').value=String(calcSettings.ominousDistance);
+ $('#windAshToggle').checked=calcSettings.windAshEnabled;
+ $('#windSoldiersInput').value=String(calcSettings.windSoldiers);
+ $('#windSoldiersInput').disabled=!calcSettings.windAshEnabled;
  updateOminousOptions();
  for(const [id,key,kind] of [
   ['crownToggle','crown','checked'],['stoneToggle','stone','checked'],
@@ -229,17 +251,37 @@ function initArtifactSettings(){
    renderStats();
   };
  }
+ $('#windAshToggle').onchange=e=>{
+  calcSettings.windAshEnabled=e.target.checked;
+  $('#windSoldiersInput').disabled=!calcSettings.windAshEnabled;
+  saveCalcSettings();renderStats();
+ };
+ const windInput=$('#windSoldiersInput');
+ const syncWind=commit=>{
+  const raw=windInput.value.trim(),value=Number(raw);
+  if(!/^\d+$/.test(raw)||!Number.isSafeInteger(value)){
+   if(commit){windInput.value=String(calcSettings.windSoldiers);announce('風攻擊士兵數量請輸入非負整數');}
+   return;
+  }
+  calcSettings.windSoldiers=value;saveCalcSettings();
+  const meter=$('#windAshMeter');
+  if(meter){const rate=Math.min(100,Number((value*0.3).toFixed(4)));
+   meter.querySelector('strong').textContent='+'+pct(rate);
+   meter.querySelector('.greed-meter-fill').style.width=rate+'%';}
+ };
+ windInput.oninput=()=>syncWind(false);
+ windInput.onchange=()=>syncWind(true);
 }
 /* Retain raw Greed totals while capping the visual single-trigger meter at 100%. */
 function greedDisplay(value){
  const n=Math.max(0,Number(value)||0);
  return {over:n>100,fill:Math.min(100,n)};
 }
-function greedMeter(label,value,kind){
- const fill=kind==='hero'?greedDisplay(value).fill:Math.min(100,Math.max(0,Number(value)||0));
- return `<div class="greed-meter greed-meter-${kind}">
-  <div class="greed-meter-line"><span>${enc(label)}</span><strong>+${pct(value)}</strong></div>
-  <div class="greed-meter-track" aria-hidden="true"><div class="greed-meter-fill" style="width:${fill}%"></div></div>
+function greedMeter(label,value,kind,disabled=false){
+ const fill=kind==='sea'?Math.min(100,Math.max(0,Number(value)||0)*10):greedDisplay(value).fill;
+ return `<div class="greed-meter greed-meter-${kind}${disabled?' is-inactive':''}"${kind==='wind'?' id="windAshMeter"':''}>
+  <div class="greed-meter-line"><span>${enc(label)}</span><strong>${disabled?'關閉':'+'+pct(value)}</strong></div>
+  <div class="greed-meter-track" aria-hidden="true"><div class="greed-meter-fill" style="width:${disabled?0:fill}%"></div></div>
  </div>`;
 }
 function eventOptionsMarkup(){
@@ -252,6 +294,7 @@ function eventOptionsMarkup(){
 }
 function renderStats(){
  const moreWasOpen=!!$('#officialStats .greed-more')?.open;
+ updateOminousOptions();
  const d=buildCalcData();
  $('#officialStats').innerHTML=`
  <h3>編隊能力</h3>
@@ -268,6 +311,7 @@ function renderStats(){
  </section>
  <section class="statpanel"><h4>貪欲・寶箱加成</h4>
   <div class="greed-result ${greedDisplay(d.greedSum).over?'greed-over-limit':''}">
+   <div class="greed-featured">
    <div class="greed-hero">
     <div class="greed-hero-main">
      <span class="greed-hero-label">英靈貪欲</span>
@@ -275,20 +319,26 @@ function renderStats(){
     </div>
     ${d.greedSum>100?`<p class="greed-excess-note" role="status"><span class="greed-excess-icon" aria-hidden="true">ⓘ</span><span>已超過 100% 門檻（超出 </span><strong>${pct(d.greedSum-100)}</strong><span>）</span></p>`:''}
    </div>
-   <div class="greed-artifacts" aria-label="神器效果">
-    <div class="greed-artifact-card"><span>回路組</span><strong>+${pct(d.greedCircuitTotal)}</strong></div>
-    <div class="greed-artifact-card"><span>欲望之鏡</span><strong>+${pct(d.greedMirrorTotal)}</strong></div>
-    <div class="greed-artifact-card"><span>不祥迴路</span><strong>+${pct(d.ominous.applied)}</strong></div>
+    <div class="greed-hero greed-special">
+     <div class="greed-hero-main"><span class="greed-hero-label">特殊 Boss</span><strong class="greed-hero-value">+${pct(d.specialBossTotal)}</strong></div>
+     <p class="greed-special-note">特殊 Boss 持續秘寶</p>
+    </div>
    </div>
    <div class="greed-bars-title">各組加成</div>
    <div class="greed-bars">
     ${greedMeter('英靈貪欲',d.greedSum,'hero')}
+    ${greedMeter('特殊 Boss',d.specialBossTotal,'special')}
     ${greedMeter('回路組',d.greedCircuitTotal,'circuit')}
     ${greedMeter('欲望之鏡',d.greedMirrorTotal,'mirror')}
     ${greedMeter('不祥迴路',d.ominous.applied,'ominous')}
+    ${greedMeter('潮騷的加護',d.seaApplied,'sea')}
+    ${greedMeter('囁風之遺灰（尚未驗證）',d.windAshRate,'wind',!d.windAshEnabled)}
    </div>
    <details class="greed-more"><summary>詳細說明</summary><div class="greed-more-body">
-    <p>英靈貪欲與神器效果分開顯示，方便查看目前搭配。</p>
+    <p>英靈貪欲、特殊 Boss 與其他獨立額外掉箱效果分開顯示。</p>
+    <p>「特殊 Boss」來自古代魔法的知識，作用於特殊 Boss 持續秘寶，與一般寶箱加成不同。</p>
+    <p>「潮騷的加護」依目前設定的最遠距離計算，單項最高 10%。</p>
+    <p>「囁風之遺灰（尚未驗證）」暫依遊戲內說明每名風攻擊士兵 +0.3% 試算，可自行關閉，不代表原生公式已通過實機驗證。</p>
     <p>「回路組」包含壞掉的回路與不可思議的回路；其他神器分別顯示。</p>
     <p>進度條僅供比較各項寶箱加成，不代表單次掉落機率。</p>
     <p class="greed-rule-note">實際掉落結果請以遊戲內為準。</p>
