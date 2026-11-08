@@ -332,14 +332,21 @@ function renderStats(){
     ${greedMeter('欲望之鏡',d.greedMirrorTotal,'mirror')}
     ${greedMeter('不祥迴路',d.ominous.applied,'ominous')}
     ${greedMeter('潮騷的加護',d.seaApplied,'sea')}
-    ${greedMeter('囁風之遺灰（尚未驗證）',d.windAshRate,'wind',!d.windAshEnabled)}
+    ${greedMeter('囁風之遺灰（待驗證）',d.windAshRate,'wind',!d.windAshEnabled)}
    </div>
    <details class="greed-more"><summary>詳細說明</summary><div class="greed-more-body">
-    <p>英靈貪欲、特殊 Boss 與其他獨立額外掉箱效果分開顯示。</p>
-    <p>「特殊 Boss」來自古代魔法的知識，作用於特殊 Boss 持續秘寶，與一般寶箱加成不同。</p>
-    <p>「潮騷的加護」依目前設定的最遠距離計算，單項最高 10%。</p>
-    <p>「囁風之遺灰（尚未驗證）」暫依遊戲內說明每名風攻擊士兵 +0.3% 試算，可自行關閉，不代表原生公式已通過實機驗證。</p>
-    <p>「回路組」包含壞掉的回路與不可思議的回路；其他神器分別顯示。</p>
+    <p><b>1. 特殊 Boss</b></p>
+    <p>特殊 Boss 是指以一定機率取代一般關卡中原本配置的 Boss 而出現的 Boss 怪物。</p>
+    <p>主要包含以下 Boss 怪物：</p>
+    <ul><li>禁斷的守門人</li><li>深淵的觀測者</li><li>襲擊者</li></ul>
+    <p>※ 除了上述怪物以外，也可能存在其他特殊 Boss。</p>
+    <p><b>2. 潮騷的加護</b></p>
+    <p>「潮騷的加護」依照目前設定的最遠距離與技能等級，計算擊敗 Boss 時額外追加寶箱的機率，最高 10%。</p>
+    <p><b>3. 囁風之遺灰（待驗證）</b></p>
+    <p>風攻擊的士兵每增加一位，擊敗 Boss 時的額外掉落機率提升 0.3%。</p>
+    <p><b>4. 回路組與其他神器</b></p>
+    <p>「回路組」包含「壞掉的回路」與「不可思議的回路」。</p>
+    <p>「欲望之窺視鏡」及「不祥的迴路」分別顯示各自的寶箱加成效果。</p>
     <p>進度條僅供比較各項寶箱加成，不代表單次掉落機率。</p>
     <p class="greed-rule-note">實際掉落結果請以遊戲內為準。</p>
    </div></details>
