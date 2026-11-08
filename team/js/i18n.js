@@ -4,6 +4,8 @@ const LANG=['zh_tw','zh_cn','ja','en','ko','th','vi'];
 const ACTIVE_LANG=['zh_tw','ja','ko','en'];
 /* Key = original Traditional Chinese display phrase. Official ability and hero names also use DFCHOfficialLabels. */
 const entries={
+ "聖杖「安布洛西雅」":["圣杖「安布洛西雅」","聖杖「アンブロシア」","Holy Staff Ambrosia","성장 「암브로시아」","คทาศักดิ์สิทธิ์แอมโบรเซีย","Thánh trượng Ambrosia"],
+ "已持有":["已持有","所持中","Owned","보유 중","มีแล้ว","Đã sở hữu"],
  "禁斷":["禁断","禁断","Forbidden","금단","ต้องห้าม","Cấm kỵ"],
  "貪欲":["贪欲","強欲","Greed","탐욕","โลภ","Tham lam"],
  "編隊即時機率":["编队实时概率","編成中の確率","Live lineup rates","편성 실시간 확률","อัตราปัจจุบัน","Tỷ lệ đội hình"],
