@@ -11,7 +11,7 @@ const SKILL_RATES={
  '貪欲 III':{levels:[5,7,9,11,13,15],base:6,full:6,kind:'greed',description:'Boss 擊破時寶箱再增加一個的機率'},
  '大海的支配者':{levels:[2,4,6,8,10],base:5,full:5,kind:'greed',description:'Boss 擊破時寶箱再增加一個的機率'},
  '深淵世界的解放者':{levels:[2,4,6,8,10,11,12],observer:[1,2,3,4,5,6,7],base:5,full:7,kind:'abyss',description:'禁斷守門人出現機率提升'},
- '古代魔法的知識？':{levels:[1,2],base:2,full:2,kind:'specialBoss',description:'擊敗特殊 Boss 時，持續秘寶有機率額外增加 1 個'}
+ '古代魔法的知識？':{levels:[1,2,3],base:2,full:3,kind:'specialBoss',description:'擊敗特殊 Boss 時，持續秘寶有機率額外增加 1 個'}
 };
 
 

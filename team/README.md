@@ -1,4 +1,4 @@
-# DFCH 英靈編隊 v1.6.7
+# DFCH 英靈編隊 v1.6.8
 
 此資料夾同時供 GitHub Pages 遠征模擬器的第七分頁與 Cloudflare Pages 公開工具使用。
 
@@ -63,3 +63,10 @@
 - 依 3.18.0 遊戲內畫面固定 Lv.2/2，特殊 Boss 額外持續秘寶 +2%；與六星「古代魔法的知識」不同技能，但共用原本特殊 Boss 數值合計，不在貪欲加成計算。
 - 自由技能預設未勾選，不可突破；可與同格其他技能同時勾選，沿用現有 12 格儲存機制。編輯列表與編隊卡片顯示官方 `303001133.png` 技能圖片。
 - `scripts/build-heroes-pages.cjs` 已納入 `team/assets/303001133.png`，避免 Cloudflare Pages 圖片因發布白名單漏列而破圖。
+
+## v1.6.8｜五星變形者「古代魔法的知識？」突破核實
+
+- 依 APK 3.18.0 `UniqueAffectionRewardOverrideTable`，五星瑪露希爾（變形者）羈絆 Lv.23 指定進化技能 `303001133`（Reward ID `411001133`）。
+- `UniqueSoldierAbilityTable` 對應技能：`maxLevel=2`、`evolvedMaxLevelAdded=1`，總上限由 Lv.2 提升至 Lv.3；能力 `360` 的 `initialValue=1`、`diffValue=1`、`evolvedDiffValue=1`，對應 +2% → +3%。
+- 在既有「其他（自由技能）」第七項勾選後可選「突破」；突破前 Lv.2/2 +2%，突破後 Lv.3/3 +3%。兩種狀態皆歸入原本特殊 Boss 總計。
+- 使用原本編隊存檔鍵與技能圖片，不新增角色、不更動其他技能或手機底欄設計。

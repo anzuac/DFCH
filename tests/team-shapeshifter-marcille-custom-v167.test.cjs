@@ -13,12 +13,12 @@ const calc=app.slice(app.indexOf('function buildCalcData(){'),app.indexOf('funct
 const picked=app.slice(app.indexOf('function pickedTracked(){'),app.indexOf('/* Add future event variants here;',app.indexOf('function pickedTracked(){')));
 const factory=new Function('return (()=>{'+skillData+customList+'return {SKILL_RATES,KEYS};})()');
 const {SKILL_RATES,KEYS}=factory();
-test('only one new skill appears in Other custom selection and is fixed at Lv2',()=>{
+test('Other custom skill supports Lv.2 base and Lv.3 after bond Lv.23 evolution',()=>{
  assert.equal(KEYS.length,7);
  assert.equal(KEYS.at(-1),key);
- assert.deepEqual(SKILL_RATES[key].levels,[1,2]);
+ assert.deepEqual(SKILL_RATES[key].levels,[1,2,3]);
  assert.equal(SKILL_RATES[key].base,2);
- assert.equal(SKILL_RATES[key].full,2);
+ assert.equal(SKILL_RATES[key].full,3);
  assert.equal(SKILL_RATES[key].kind,'specialBoss');
  assert.match(app,/const isOther=v==='other'/);
  assert.match(app,/KEYS\.map\(name=>\(\{name,baseCap:SKILL_RATES\[name\]\.base/);
@@ -35,7 +35,7 @@ test('the skill uses its own original icon and Cloudflare publish list',()=>{
 test('custom checked skill participates in the existing Special Boss sum, not ordinary Greed',()=>{
  const slots=[{type:'other',hero:'',skills:{[key]:{selected:true,up:false}}}];
  const pick=new Function('slots','hero','KEYS','isUpgradeAllowed','getSkills','tracked','EXTRA_CHEST_SKILL_RATES',picked+'return pickedTracked();');
- const getPicked=()=>pick(slots,()=>null,KEYS,()=>false,()=>[],()=>false,{},);
+ const getPicked=()=>pick(slots,()=>null,KEYS,(slot,skill)=>SKILL_RATES[skill]?.full>SKILL_RATES[skill]?.base,()=>[],()=>false,{},);
  const selected=getPicked();
  assert.deepEqual(selected.map(x=>x.name),[key]);
  const settings={base:3,crown:false,stone:false,ring:0,eventMultiplier:1,brokenCircuit:0,mysteriousCircuit:false,desireMirror:0,ominousCircuit:0,ominousDistance:30,windAshEnabled:false,windSoldiers:0};
@@ -47,11 +47,19 @@ test('custom checked skill participates in the existing Special Boss sum, not or
  assert.equal(only.total,3);
  const together=evaluateTeam([...selected,{name:'古代魔法的知識',up:true,ambrosiaOwned:true,owner:'六星瑪露希爾'}]);
  assert.equal(together.specialBossTotal,22);
+ slots[0].skills[key].up=true;
+ const evolved=getPicked();
+ assert.equal(evolved[0].up,true);
+ const after=evaluateTeam(evolved);
+ assert.equal(after.specialBossTotal,3);
+ assert.equal(after.greedSum,0);
+ assert.equal(evaluateTeam([...evolved,{name:'古代魔法的知識',up:true,ambrosiaOwned:true,owner:'六星瑪露希爾'}]).specialBossTotal,23);
+ slots[0].skills[key].up=false;
  slots[0].skills[key].selected=false;
  assert.equal(evaluateTeam(getPicked()).specialBossTotal,0);
 });
 test('version cache is refreshed, while saved team data and mobile footer remain',()=>{
- assert.match(html,/v1\.6\.7<\/span>/);
+ assert.match(html,/v1\.6\.8<\/span>/);
  assert.match(html,/app\.js\?v=1\.6\.7/);
  assert.match(html,/data\.js\?v=1\.6\.7/);
  assert.match(app,/const storeKey='hero-layout-phase1-v1'/);
