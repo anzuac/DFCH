@@ -69,7 +69,7 @@ test('Two-column layout and independent meters are styled',()=>{
  assert.match(html,/id="windAshToggle"/);
  assert.match(html,/id="windSoldiersInput"/);
  assert.match(html,/style\.css\?v=1\.6\.6/);
- assert.match(html,/app\.js\?v=1\.6\.6/);
+ assert.match(html,/app\.js\?v=1\.6\.7/);
  assert.match(html,/i18n\.js\?v=1\.6\.5/);
 });
 test('Seven-language entries cover all new player-facing wording',()=>{

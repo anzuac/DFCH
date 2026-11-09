@@ -1,6 +1,6 @@
 if(window.parent!==window)document.body.classList.add("party-embedded");
 /* Team configuration, UI, calculations and persistence. */
-const KEYS=['禁斷世界的介入者 I','禁斷世界的介入者 II','禁斷世界的介入者 III','貪欲 I','貪欲 II','貪欲 III'];
+const KEYS=['禁斷世界的介入者 I','禁斷世界的介入者 II','禁斷世界的介入者 III','貪欲 I','貪欲 II','貪欲 III','古代魔法的知識？'];
 
 /* Published official ability icons. Sources: DFCH / Bond30 and six-star ability assets. */
 const OFFICIAL_SKILL_ICONS={
@@ -13,11 +13,12 @@ const OFFICIAL_SKILL_ICONS={
  '深淵世界的解放者':'./assets/abyss-liberator.png',
  '大海的支配者':'./assets/ocean-ruler.png',
  '潮騷的加護':'./assets/303001033.png',
- '古代魔法的知識':'./assets/303001115.png'
+ '古代魔法的知識':'./assets/303001115.png',
+ '古代魔法的知識？':'./assets/303001133.png'
 };
 function canonicalSkillName(name){const text=String(name||'').trim().replace(/[ⅠⅡⅢ]/g,ch=>({'Ⅰ':'I','Ⅱ':'II','Ⅲ':'III'}[ch]));return text.replace(/^(?:強欲|貪欲)\s*(I|II|III)$/,'貪欲 $1')}
 function skillImage(name){const path=OFFICIAL_SKILL_ICONS[canonicalSkillName(name)]||'./assets/abyss-liberator.svg';return location.hostname.endsWith('.github.io')?path.replace('../bond30/','../Bond30/'):path}
-function tracked(name){const key=canonicalSkillName(name);return key==='深淵世界的解放者'||key==='大海的支配者'||key==='潮騷的加護'||key==='古代魔法的知識'||/^(禁斷世界(?:的)?介入者\s*(?:I|II|III)|貪欲\s*(?:I|II|III))$/.test(key)}
+function tracked(name){const key=canonicalSkillName(name);return key==='深淵世界的解放者'||key==='大海的支配者'||key==='潮騷的加護'||key==='古代魔法的知識'||key==='古代魔法的知識？'||/^(禁斷世界(?:的)?介入者\s*(?:I|II|III)|貪欲\s*(?:I|II|III))$/.test(key)}
 function chosenSkills(s,h){if(s.type==='other')return KEYS.filter(k=>s.skills[k]?.selected).map(k=>({name:k,up:!!s.skills[k]?.up})); if(!h)return []; return getSkills(h).filter(x=>tracked(x.name)).map(x=>({name:x.name,up:!!s.skills[x.name]?.up}));}
 function skillTile(name,up,small=false){return `<span class="skilltile ${up?'is-up':''} ${small?'small':''}" title="${enc(name+(up?'+':''))}"><img src="${skillImage(name)}" alt=""><span class="skilltile-label">${enc(name.replace('禁斷世界的介入者','禁斷').replace('禁斷世界介入者','禁斷').replace('深淵世界的解放者','深淵解放者').replace('潮騷的加護','潮騷加護').replace('古代魔法的知識','古代魔法'))}${up?'<b>+</b>':''}</span></span>`}
 const storeKey='hero-layout-phase1-v1';const blank=()=>({type:'',hero:'',skills:{}});let slots=Array.from({length:12},blank);try{const raw=JSON.parse(localStorage.getItem(storeKey));if(Array.isArray(raw)&&raw.length===12)slots=raw.map(s=>({type:s.type||'',hero:s.hero||'',skills:s.skills||{}}));}catch(e){}
