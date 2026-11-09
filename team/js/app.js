@@ -303,6 +303,17 @@ function updateMobileRateBar(d){
   if(node)node.textContent=value;
  }
 }
+// When the full ability panel is visible, avoid duplicating its rates in the mobile footer.
+function initMobileRateBarVisibility(){
+ const bar=$('#mobileRateBar'),stats=$('#officialStats');
+ if(!bar||!stats||typeof IntersectionObserver==='undefined')return;
+ const observer=new IntersectionObserver(entries=>{
+  const visible=entries.some(entry=>entry.isIntersecting);
+  bar.classList.toggle('is-context-hidden',visible);
+  bar.setAttribute('aria-hidden',String(visible));
+ },{rootMargin:'0px 0px -64px 0px',threshold:0});
+ observer.observe(stats);
+}
 function renderStats(){
  const moreWasOpen=!!$('#officialStats .greed-more')?.open;
  updateOminousOptions();
@@ -332,7 +343,6 @@ function renderStats(){
    </div>
     <div class="greed-hero greed-special">
      <div class="greed-hero-main"><span class="greed-hero-label">特殊 Boss</span><strong class="greed-hero-value">+${pct(d.specialBossTotal)}</strong></div>
-     <p class="greed-special-note">特殊 Boss 持續秘寶</p>
     </div>
    </div>
    <div class="greed-bars-title">各組加成</div>
@@ -412,4 +422,4 @@ document.addEventListener('keydown',e=>{
  }
 });
 
-const oldDraw=draw;draw=function(){oldDraw();renderStats()};initArtifactSettings();draw();
+const oldDraw=draw;draw=function(){oldDraw();renderStats()};initMobileRateBarVisibility();initArtifactSettings();draw();

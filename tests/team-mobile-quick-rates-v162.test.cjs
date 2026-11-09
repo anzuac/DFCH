@@ -37,3 +37,27 @@ test('Image assets are available from the team folder and are valid PNG files',(
   assert.ok(content.length>1000);
  }
 });
+
+test('mobile quick rates are hidden only while the full ability panel is on screen',()=>{
+ assert.match(app,/function initMobileRateBarVisibility\(\)/);
+ assert.match(app,/observer\.observe\(stats\)/);
+ assert.match(app,/initMobileRateBarVisibility\(\);initArtifactSettings\(\);draw\(\)/);
+ assert.match(css,/\.mobile-rate-bar\.is-context-hidden\{display:none\}/);
+ const start=app.indexOf('function initMobileRateBarVisibility(){');
+ const end=app.indexOf('function renderStats(){',start);
+ assert.ok(start>0&&end>start);
+ const classes=new Set(),attrs={},stats={};
+ const bar={classList:{toggle:(name,active)=>active?classes.add(name):classes.delete(name)},setAttribute:(name,value)=>{attrs[name]=String(value)}};
+ let watcher,observed;
+ class FakeObserver{constructor(cb,options){watcher={cb,options}}observe(target){observed=target}}
+ const init=new Function('$','IntersectionObserver',app.slice(start,end)+'return initMobileRateBarVisibility();');
+ init(id=>id==='#mobileRateBar'?bar:id==='#officialStats'?stats:null,FakeObserver);
+ assert.equal(observed,stats);
+ assert.equal(watcher.options.rootMargin,'0px 0px -64px 0px');
+ watcher.cb([{isIntersecting:true}]);
+ assert.ok(classes.has('is-context-hidden'));
+ assert.equal(attrs['aria-hidden'],'true');
+ watcher.cb([{isIntersecting:false}]);
+ assert.ok(!classes.has('is-context-hidden'));
+ assert.equal(attrs['aria-hidden'],'false');
+});

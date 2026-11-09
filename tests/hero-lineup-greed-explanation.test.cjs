@@ -25,6 +25,7 @@ test('Two primary cards and seven independent meters avoid misleading totals',()
  assert.match(result,/英靈貪欲<\/span>\s*<strong class="greed-hero-value">\+15%<\/strong>/);
  assert.match(result,/特殊 Boss<\/span><strong class="greed-hero-value">\+10%<\/strong>/);
  assert.doesNotMatch(result,/greed-artifact-card/);
+ assert.doesNotMatch(result,/特殊 Boss 持續秘寶|greed-special-note/);
  assert.equal((result.match(/class="greed-meter greed-meter-/g)||[]).length,7);
  assert.match(result,/囁風之遺灰（待驗證）/);
  assert.match(result,/潮騷的加護/);
@@ -67,8 +68,8 @@ test('Two-column layout and independent meters are styled',()=>{
  assert.match(css,/--party-foreground/);
  assert.match(html,/id="windAshToggle"/);
  assert.match(html,/id="windSoldiersInput"/);
- assert.match(html,/style\.css\?v=1\.6\.5/);
- assert.match(html,/app\.js\?v=1\.6\.5/);
+ assert.match(html,/style\.css\?v=1\.6\.6/);
+ assert.match(html,/app\.js\?v=1\.6\.6/);
  assert.match(html,/i18n\.js\?v=1\.6\.5/);
 });
 test('Seven-language entries cover all new player-facing wording',()=>{
