@@ -72,10 +72,11 @@ const EVENT_OPTIONS=Object.freeze([
  {factor:2,label:'×200%'}
 ]);
 const calcStoreKey='hero-layout-phase1-v17-calc';
-const calcSettings={base:3,crown:false,stone:false,ring:0,eventMultiplier:1,brokenCircuit:0,mysteriousCircuit:false,desireMirror:0,ominousCircuit:0,ominousDistance:30,windAshEnabled:false,windSoldiers:0};
+const calcSettings={base:3,abyssBase:1,crown:false,stone:false,abyssCrown:false,ring:0,eventMultiplier:1,brokenCircuit:0,mysteriousCircuit:false,desireMirror:0,ominousCircuit:0,ominousDistance:30,windAshEnabled:false,windSoldiers:0};
 try{const v=JSON.parse(localStorage.getItem(calcStoreKey));if(v&&typeof v==='object'){
   if(Number.isFinite(Number(v.base))&&Number(v.base)>=0&&Number(v.base)<=100)calcSettings.base=Number(v.base);
-  calcSettings.crown=v.crown===true;calcSettings.stone=v.stone===true;
+  if(v.abyssBase!==''&&v.abyssBase!=null&&Number.isFinite(Number(v.abyssBase))&&Number(v.abyssBase)>=0&&Number(v.abyssBase)<=100)calcSettings.abyssBase=Number(v.abyssBase);
+  calcSettings.crown=v.crown===true;calcSettings.stone=v.stone===true;calcSettings.abyssCrown=v.abyssCrown===true;
   // Migrate the former checkbox once; an explicit new selection always wins.
   if(EVENT_OPTIONS.some(o=>o.factor===v.eventMultiplier))calcSettings.eventMultiplier=v.eventMultiplier;
   else calcSettings.eventMultiplier=v.event===true?1.5:1;
@@ -129,6 +130,14 @@ function buildCalcData(){
  const beforeEvent=calcSettings.base*artifactFactor*abilityFactor;
  const beforeEventTruncated=truncToOneDecimal(beforeEvent);
  const total=beforeEventTruncated*eventFactor;
+ // Shared 1204+ring and 1202/1205; additional abyss 1211 and Freya 1212 only.
+ const abyssSpecific=deep.reduce((sum,x)=>sum+(SKILL_RATES[x.key]?.observer?.[x.lv-1]||0),0);
+ const abyssSpecificFactor=1+abyssSpecific/100;
+ const abyssArtifactFactor=artifactFactor*(calcSettings.abyssCrown?2:1);
+ const abyssAbilityFactor=abilityFactor*abyssSpecificFactor;
+ const abyssBeforeEvent=calcSettings.abyssBase*abyssArtifactFactor*abyssAbilityFactor;
+ const abyssBeforeEventTruncated=truncToOneDecimal(abyssBeforeEvent);
+ const abyssTotal=abyssBeforeEventTruncated*eventFactor;
  const greedSum=greed.reduce((sum,x)=>sum+x.amount,0);
  const greedCircuitTotal=calcSettings.brokenCircuit+(calcSettings.mysteriousCircuit?30:0);
  const greedMirrorTotal=calcSettings.desireMirror;
@@ -141,17 +150,19 @@ function buildCalcData(){
  const seaApplied=Math.min(10,Number((seaLevel*calcSettings.ominousDistance/100).toFixed(4)));
  // Provisional in-game text estimate; not verified through runtime testing.
  const windAshRate=calcSettings.windAshEnabled?Math.min(100,Number((calcSettings.windSoldiers*0.3).toFixed(4))):0;
- return {forbidden,deep,greed,artifactFactor,abilityFactor,eventFactor,total,greedSum,greedCircuitTotal,greedMirrorTotal,greedArtifactTotal,greedCombined,ominous,specialBossTotal,seaLevel,seaApplied,windAshRate,windAshEnabled:calcSettings.windAshEnabled};
+ return {forbidden,deep,greed,artifactFactor,abilityFactor,eventFactor,total,abyssTotal,abyssArtifactFactor,abyssAbilityFactor,abyssSpecific,greedSum,greedCircuitTotal,greedMirrorTotal,greedArtifactTotal,greedCombined,ominous,specialBossTotal,seaLevel,seaApplied,windAshRate,windAshEnabled:calcSettings.windAshEnabled};
 }
 function showSkillRows(items){return items.length?items.map(x=>`<div class="statline"><span>${enc(x.owner)} · ${enc(x.key.replace('禁斷世界的介入者','禁斷'))}${x.up?'+':''} Lv.${x.lv}</span><strong>+${pct(x.amount)}</strong></div>`).join(''):'<p class="calc-note">尚未配置相關技能</p>';}
 
-function gameRateMarkup(d,forPopup=false){
- const basic=pct(calcSettings.base);
- const artifact='×'+rateDigits(d.artifactFactor*100)+'%';
- const ability='×'+(d.abilityFactor*100).toFixed(1)+'%';
+let activeBossTab='guard';
+function gameRateMarkup(d,forPopup=false,kind='guard'){
+ const abyss=kind==='abyss';
+ const basic=pct(abyss?calcSettings.abyssBase:calcSettings.base);
+ const artifact='×'+rateDigits((abyss?d.abyssArtifactFactor:d.artifactFactor)*100)+'%';
+ const ability='×'+(abyss?rateDigits(d.abyssAbilityFactor*100):(d.abilityFactor*100).toFixed(1))+'%';
  const event='×'+rateDigits(d.eventFactor*100)+'%';
  const content=`<div class="rate-guide"><div class="rate-guide-title">關於出現率</div><div class="rate-guide-body">
-  <p class="rate-guide-intro">禁斷的守門人的出現率，除了秘典的基本出現率外，還會受到神器和能力效果的影響</p>
+  <p class="rate-guide-intro">${abyss?'深淵觀測者':'禁斷的守門人'}的出現率，除了基本出現率外，還會受到神器和英靈能力效果的影響。</p>
   <div class="rate-guide-lines">
    <div class="rate-guide-line"><span class="rate-guide-label">・基本出現率</span><strong class="rate-guide-num">${basic}</strong></div>
    <div class="rate-guide-line"><span class="rate-guide-label">・神器效果</span><strong class="rate-guide-num">${artifact}</strong></div>
@@ -159,13 +170,13 @@ function gameRateMarkup(d,forPopup=false){
    <div class="rate-guide-gap"></div>
    <div class="rate-guide-line"><span class="rate-guide-label">・活動效果</span><strong class="rate-guide-num">${event}</strong></div>
   </div>
-  <div class="rate-guide-total">・總出現率 <strong>${pct(d.total)}</strong></div>
+  <div class="rate-guide-total">・總出現率 <strong>${pct(abyss?d.abyssTotal:d.total)}</strong></div>
   <div class="rate-guide-action"><button type="button" ${forPopup?'id="ratePopupClose"':'id="ratePopupOpen"'}>${forPopup?'OK':'放大檢視'}</button></div>
  </div></div>`;
  return content;
 }
 function updatePopup(){
- const node=$('#ratePopupContent');if(node)node.innerHTML=gameRateMarkup(buildCalcData(),true);
+ const node=$('#ratePopupContent');if(node)node.innerHTML=gameRateMarkup(buildCalcData(),true,activeBossTab);
  const ok=$('#ratePopupClose');if(ok)ok.onclick=closeRatePopup;
 }
 function openRatePopup(){updatePopup();$('#ratePopupOverlay').classList.remove('hidden');$('#ratePopupClose').focus()}
@@ -230,6 +241,7 @@ function initArtifactSettings(){
   $('#ominousDistance').append(opt);
  }
  $('#crownToggle').checked=calcSettings.crown;
+ $('#abyssCrownToggle').checked=calcSettings.abyssCrown;
  $('#stoneToggle').checked=calcSettings.stone;
  $('#ringLevel').value=String(calcSettings.ring);
  $('#brokenCircuitLevel').value=String(calcSettings.brokenCircuit);
@@ -242,7 +254,7 @@ function initArtifactSettings(){
  $('#windSoldiersInput').disabled=!calcSettings.windAshEnabled;
  updateOminousOptions();
  for(const [id,key,kind] of [
-  ['crownToggle','crown','checked'],['stoneToggle','stone','checked'],
+  ['crownToggle','crown','checked'],['stoneToggle','stone','checked'],['abyssCrownToggle','abyssCrown','checked'],
   ['ringLevel','ring','value'],['brokenCircuitLevel','brokenCircuit','value'],
   ['mysteriousCircuitToggle','mysteriousCircuit','checked'],['desireMirrorLevel','desireMirror','value'],
   ['ominousCircuitLevel','ominousCircuit','value'],['ominousDistance','ominousDistance','value']
@@ -254,6 +266,13 @@ function initArtifactSettings(){
    renderStats();
   };
  }
+ for(const [id,key] of [['mobileGuardBaseInput','base'],['mobileAbyssBaseInput','abyssBase']]){
+  const input=$('#'+id);
+  if(input)input.onchange=e=>setBaseRate(key,e.target.value,e.target);
+ }
+ document.querySelectorAll('input[name="mobileEventMultiplier"]').forEach(input=>{
+  input.onchange=e=>{if(e.target.checked)setEventFactor(Number(e.target.value));};
+ });
  $('#windAshToggle').onchange=e=>{
   calcSettings.windAshEnabled=e.target.checked;
   $('#windSoldiersInput').disabled=!calcSettings.windAshEnabled;
@@ -298,7 +317,7 @@ function eventOptionsMarkup(){
 function updateMobileRateBar(d){
  const bar=$('#mobileRateBar');
  if(!bar)return;
- const values={guard:pct(d.total),greed:'+'+pct(d.greedSum),special:'+'+pct(d.specialBossTotal)};
+ const values={guard:pct(d.total),abyss:pct(d.abyssTotal),greed:'+'+pct(d.greedSum),special:'+'+pct(d.specialBossTotal)};
  for(const [key,value] of Object.entries(values)){
   const node=bar.querySelector(`[data-mobile-rate="${key}"]`);
   if(node)node.textContent=value;
@@ -315,22 +334,63 @@ function initMobileRateBarVisibility(){
  },{rootMargin:'0px 0px -64px 0px',threshold:0});
  observer.observe(stats);
 }
+function setBaseRate(key,raw,input){
+ const n=Number(raw);
+ if(String(raw).trim()===''||!Number.isFinite(n)||n<0||n>100){
+  announce('基礎機率請輸入 0 至 100');
+  if(input)input.value=String(calcSettings[key]);
+  return false;
+ }
+ calcSettings[key]=n;saveCalcSettings();renderStats();return true;
+}
+function setEventFactor(value){
+ if(!EVENT_OPTIONS.some(o=>o.factor===value))return;
+ calcSettings.eventMultiplier=value;saveCalcSettings();renderStats();
+}
+function syncMobileBossControls(){
+ for(const [id,key] of [['mobileGuardBaseInput','base'],['mobileAbyssBaseInput','abyssBase']]){
+  const node=$('#'+id);
+  if(node&&document.activeElement!==node)node.value=String(calcSettings[key]);
+ }
+ const crown=$('#abyssCrownToggle');if(crown)crown.checked=calcSettings.abyssCrown;
+ document.querySelectorAll('input[name="mobileEventMultiplier"]').forEach(node=>{
+  node.checked=Number(node.value)===calcSettings.eventMultiplier;
+ });
+}
+function renderBossTab(d){
+ const panel=$('#bossRatePanel'),warning=$('#bossRateWarning');
+ if(panel)panel.innerHTML=gameRateMarkup(d,false,activeBossTab);
+ if(warning){
+  warning.hidden=(activeBossTab==='abyss'?d.abyssTotal:d.total)<=100;
+ }
+ document.querySelectorAll('[data-boss-tab]').forEach(btn=>{
+  const chosen=btn.dataset.bossTab===activeBossTab;
+  btn.setAttribute('aria-selected',String(chosen));btn.tabIndex=chosen?0:-1;
+ });
+ const popupButton=$('#ratePopupOpen');
+ if(popupButton)popupButton.onclick=openRatePopup;
+}
 function renderStats(){
  const moreWasOpen=!!$('#officialStats .greed-more')?.open;
  updateOminousOptions();
  const d=buildCalcData();
  $('#officialStats').innerHTML=`
  <h3>編隊能力</h3>
- <section class="statpanel"><h4>基礎機率</h4>
+ <section class="statpanel boss-config-desktop"><h4>基礎機率</h4>
   <div class="fieldrow"><label for="baseInput">守門人基本出現率</label><span><input type="number" id="baseInput" min="0" max="100" step="0.01" inputmode="decimal" value="${calcSettings.base}" aria-label="守門人基本出現率"> %</span></div>
-  <p class="calc-note">預設 3%，可依照目前關卡調整。</p>
+  <div class="fieldrow"><label for="abyssBaseInput">深淵基本出現率</label><span><input type="number" id="abyssBaseInput" min="0" max="100" step="0.01" inputmode="decimal" value="${calcSettings.abyssBase}" aria-label="深淵基本出現率"> %</span></div>
+  <p class="calc-note">禁斷預設 3%，深淵預設 1%，可自行調整。</p>
  </section>
- <section class="statpanel"><h4>活動</h4>
+ <section class="statpanel boss-config-desktop"><h4>活動</h4>
   ${eventOptionsMarkup()}
  </section>
- <section class="statpanel"><h4>禁斷的守門人</h4>
-  ${gameRateMarkup(d)}
-  ${d.total>100?'<p class="statwarn">計算結果超過 100%，請留意遊戲內可能存在其他限制。</p>':''}
+ <section class="statpanel boss-result-section"><h4>Boss 出現率</h4>
+  <div class="boss-tablist" role="tablist" aria-label="選擇 Boss 出現率">
+   <button type="button" id="bossTabGuard" role="tab" data-boss-tab="guard" aria-controls="bossRatePanel">禁斷守門人</button>
+   <button type="button" id="bossTabAbyss" role="tab" data-boss-tab="abyss" aria-controls="bossRatePanel">深淵觀測者</button>
+  </div>
+  <div id="bossRatePanel" role="tabpanel" aria-labelledby="${activeBossTab==='abyss'?'bossTabAbyss':'bossTabGuard'}">${gameRateMarkup(d,false,activeBossTab)}</div>
+  <p id="bossRateWarning" class="statwarn" ${(activeBossTab==='abyss'?d.abyssTotal:d.total)>100?'':'hidden'}>計算結果超過 100%，請留意遊戲內可能存在其他限制。</p>
  </section>
  <section class="statpanel"><h4>貪欲・寶箱加成</h4>
   <div class="greed-result ${greedDisplay(d.greedSum).over?'greed-over-limit':''}">
@@ -380,19 +440,29 @@ function renderStats(){
   <div class="subheading">寶箱相關神器</div><div class="skill-summary">${showArtifactRows()}</div>
  </section>`;
  updateMobileRateBar(d);
+ syncMobileBossControls();
  if(moreWasOpen)$('#officialStats .greed-more').open=true;
- $('#baseInput').onchange=e=>{
-  const value=Number(e.target.value);
-  if(e.target.value.trim()===''||!Number.isFinite(value)||value<0||value>100){announce('基礎機率請輸入 0 至 100');e.target.value=calcSettings.base;return;}
-  calcSettings.base=value;saveCalcSettings();renderStats();
- };
+ for(const [id,key] of [['baseInput','base'],['abyssBaseInput','abyssBase']]){
+  const input=$('#'+id);
+  if(input)input.onchange=e=>setBaseRate(key,e.target.value,e.target);
+ }
  $('#officialStats').querySelectorAll('input[name="eventMultiplier"]').forEach(input=>{
-  input.onchange=e=>{
-   if(!e.target.checked)return;
-   const value=Number(e.target.value);
-   if(!EVENT_OPTIONS.some(o=>o.factor===value))return;
-   calcSettings.eventMultiplier=value;
-   saveCalcSettings();renderStats();
+  input.onchange=e=>{if(e.target.checked)setEventFactor(Number(e.target.value));};
+ });
+ document.querySelectorAll('[data-boss-tab]').forEach(btn=>{
+  btn.setAttribute('aria-selected',String(btn.dataset.bossTab===activeBossTab));
+  btn.tabIndex=btn.dataset.bossTab===activeBossTab?0:-1;
+  btn.onclick=()=>{
+   activeBossTab=btn.dataset.bossTab;
+   $('#bossRatePanel').setAttribute('aria-labelledby',btn.id);
+   renderBossTab(d);
+  };
+  btn.onkeydown=e=>{
+   if(!['ArrowLeft','ArrowRight'].includes(e.key))return;
+   e.preventDefault();
+   const next=btn.dataset.bossTab==='guard'?'abyss':'guard';
+   const target=document.querySelector('[data-boss-tab="'+next+'"]');
+   if(target){target.click();target.focus();}
   };
  });
  $('#ratePopupOpen').onclick=openRatePopup;

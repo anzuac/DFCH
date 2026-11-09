@@ -32,8 +32,8 @@ test('ownership toggle is limited to Marcille and committed with the slot only o
  assert.match(app,/const blank=\(\)=>\(\{type:'',hero:'',skills:\{\}\}\)/);
 });
 test('edit modal uses accessible button and existing mobile layout',()=>{
- assert.match(html,/v1\.6\.8<\/span>/);
- assert.match(html,/app\.js\?v=1\.6\.8/);
+ assert.match(html,/v1\.6\.9<\/span>/);
+ assert.match(html,/app\.js\?v=1\.6\.9/);
  assert.match(css,/\.ambrosia-toggle:focus-visible/);
  const dict=new Function('return ('+i18n.slice(i18n.indexOf('const entries={')+'const entries='.length,i18n.indexOf(';\nconst langs='))+')')();
  for(const key of ['聖杖「安布洛西雅」','已持有'])assert.equal(dict[key].length,6);

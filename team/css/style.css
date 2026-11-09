@@ -466,3 +466,39 @@ html[data-guide-theme="light"] .hero-party-public .greed-result.greed-over-limit
 
 /* v1.6.6: the mobile quick rates hide automatically while the full ability panel is in view. */
 .hero-party-public .mobile-rate-bar.is-context-hidden{display:none}
+
+/* v1.6.9: independent abyss setup and compact Boss result tabs. */
+.hero-party-public .artifact-abyss .abyss-dot{background:#b9a8ed}
+.hero-party-public .mobile-boss-setting,.hero-party-public .artifact-mobile-common{display:none}
+.hero-party-public .artifact-guard{grid-column:1;grid-row:1}
+.hero-party-public .artifact-greed{grid-column:2;grid-row:1 / span 2}
+.hero-party-public .artifact-abyss{grid-column:1;grid-row:2}
+.hero-party-public .boss-tablist{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;margin:8px 0 10px}
+.hero-party-public .boss-tablist button{min-width:0;border:1px solid var(--line);background:var(--guide-accent-bg);border-radius:8px;padding:10px 5px;color:var(--text);font-weight:700;cursor:pointer}
+.hero-party-public .boss-tablist button[aria-selected="true"]{border-color:var(--party-accent);background:var(--panel);box-shadow:inset 0 0 0 1px var(--party-accent)}
+.hero-party-public .boss-tablist button:focus-visible{outline:2px solid var(--party-accent);outline-offset:2px}
+.hero-party-public .boss-input-unit{display:flex;align-items:center;gap:6px;flex:none}
+.hero-party-public .boss-input-unit input{box-sizing:border-box;width:94px;min-width:0;padding:7px 8px;text-align:right;color:var(--text);background:var(--guide-accent-bg);border:1px solid var(--line);border-radius:8px}
+.hero-party-public #bossRateWarning[hidden]{display:none}
+@media(max-width:700px){
+ .hero-party-public .artifact-setting-grid{grid-template-columns:minmax(0,1fr)}
+ .hero-party-public .artifact-guard,.hero-party-public .artifact-abyss,.hero-party-public .artifact-mobile-common,.hero-party-public .artifact-greed{grid-column:1;grid-row:auto}
+ .hero-party-public .artifact-guard{order:1}
+ .hero-party-public .artifact-abyss{order:2}
+ .hero-party-public .artifact-mobile-common{display:block;order:3}
+ .hero-party-public .artifact-greed{order:4}
+ .hero-party-public .mobile-boss-setting{display:flex}
+ .hero-party-public .boss-config-desktop{display:none}
+ .hero-party-public .artifact-mobile-common .event-options legend{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0)}
+}
+@media(max-width:580px){
+ body.hero-party-public{padding-bottom:calc(62px + env(safe-area-inset-bottom,0px))}
+ .hero-party-public .mobile-rate-bar{grid-template-columns:repeat(4,minmax(0,1fr));min-height:52px;gap:1px;padding:7px max(5px,env(safe-area-inset-left,0px)) 7px max(5px,env(safe-area-inset-right,0px))}
+ .hero-party-public .mobile-rate-item{display:flex;flex-direction:column;gap:2px;line-height:1.25;font-size:calc(10px * var(--guide-font-multiplier,1));white-space:nowrap}
+ .hero-party-public .mobile-rate-item strong{font-size:calc(12px * var(--guide-font-multiplier,1));font-variant-numeric:tabular-nums}
+ .hero-party-public .mobile-rate-item:nth-child(2) strong{color:#cfb7ff}
+}
+@media(max-width:355px){
+ .hero-party-public .mobile-rate-item{font-size:10px}
+ .hero-party-public .mobile-rate-item strong{font-size:11px}
+}

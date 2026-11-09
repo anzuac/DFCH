@@ -15,13 +15,13 @@ test('official verified six-star ability image paths and inclusion in the card f
 });
 test('mobile footer is compact, read-only, and updates from the same calculated values',()=>{
  assert.match(html,/id="mobileRateBar"/);
- for(const key of ['guard','greed','special'])assert.match(html,new RegExp('data-mobile-rate="'+key+'"'));
- assert.match(app,/guard:pct\(d\.total\),greed:'\+'\+pct\(d\.greedSum\),special:'\+'\+pct\(d\.specialBossTotal\)/);
+ for(const key of ['guard','abyss','greed','special'])assert.match(html,new RegExp('data-mobile-rate="'+key+'"'));
+ assert.match(app,/guard:pct\(d\.total\),abyss:pct\(d\.abyssTotal\),greed:'\+'\+pct\(d\.greedSum\),special:'\+'\+pct\(d\.specialBossTotal\)/);
  assert.match(app,/updateMobileRateBar\(d\)/);
  assert.match(css,/\.mobile-rate-bar\{display:none\}/);
  assert.match(css,/@media\(max-width:580px\)/);
  assert.match(css,/position:fixed;left:0;right:0;bottom:env\(safe-area-inset-bottom,0px\)/);
- assert.match(css,/body\.hero-party-public\{padding-bottom:calc\(52px \+ env\(safe-area-inset-bottom,0px\)\)\}/);
+ assert.match(css,/body\.hero-party-public\{padding-bottom:calc\(62px \+ env\(safe-area-inset-bottom,0px\)\)\}/);
 });
 test('existing calculations and settings stay unchanged',()=>{
  assert.match(app,/const total=beforeEventTruncated\*eventFactor/);

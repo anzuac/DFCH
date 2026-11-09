@@ -59,9 +59,9 @@ test('custom checked skill participates in the existing Special Boss sum, not or
  assert.equal(evaluateTeam(getPicked()).specialBossTotal,0);
 });
 test('version cache is refreshed, while saved team data and mobile footer remain',()=>{
- assert.match(html,/v1\.6\.8<\/span>/);
- assert.match(html,/app\.js\?v=1\.6\.7/);
- assert.match(html,/data\.js\?v=1\.6\.7/);
+ assert.match(html,/v1\.6\.9<\/span>/);
+ assert.match(html,/app\.js\?v=1\.6\.9/);
+ assert.match(html,/data\.js\?v=1\.6\.8/);
  assert.match(app,/const storeKey='hero-layout-phase1-v1'/);
  assert.match(app,/const specialBossTotal=specialBoss\.reduce/);
  assert.match(html,/id="mobileRateBar"/);
