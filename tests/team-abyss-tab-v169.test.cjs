@@ -63,7 +63,7 @@ test('mobile fixed footer has four rates and hides beside full stats',()=>{
  assert.match(app,/abyss:pct\(d\.abyssTotal\)/);
  assert.match(css,/grid-template-columns:repeat\(4,minmax\(0,1fr\)\)/);
  assert.match(css,/\.mobile-rate-bar\.is-context-hidden\{display:none\}/);
- assert.match(html,/v1\.6\.9<\/span>/);
+ assert.match(html,/v1\.6\.10<\/span>/);
  assert.match(html,/app\.js\?v=1\.6\.9/);
  assert.match(html,/style\.css\?v=1\.6\.9/);
 });

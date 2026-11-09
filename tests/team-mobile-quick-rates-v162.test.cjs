@@ -15,6 +15,8 @@ test('official verified six-star ability image paths and inclusion in the card f
 });
 test('mobile footer is compact, read-only, and updates from the same calculated values',()=>{
  assert.match(html,/id="mobileRateBar"/);
+ assert.match(html,/<span>特殊 Boss 掉落<\/span><strong data-mobile-rate="special">/);
+ assert.doesNotMatch(html,/<span>特殊 Boss<\/span><strong data-mobile-rate="special">/);
  for(const key of ['guard','abyss','greed','special'])assert.match(html,new RegExp('data-mobile-rate="'+key+'"'));
  assert.match(app,/guard:pct\(d\.total\),abyss:pct\(d\.abyssTotal\),greed:'\+'\+pct\(d\.greedSum\),special:'\+'\+pct\(d\.specialBossTotal\)/);
  assert.match(app,/updateMobileRateBar\(d\)/);
