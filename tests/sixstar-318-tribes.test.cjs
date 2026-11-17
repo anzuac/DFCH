@@ -78,11 +78,19 @@ test('All five tribe-dependent fixed skills have explicitly verified modes and t
 });
 test('Both web pages load updated six-star race data and skill text versions',()=>{
   const loader=fs.readFileSync(path.join(root,'sixstar-abilities.js'),'utf8');
-  assert.match(loader,/sixstar-visible-abilities\.json\?v=3\.18\.3/);
+  assert.match(loader,/sixstar-visible-abilities\.json\?v=3\.18\.5/);
   for(const page of ['index.html','heroes.html']){
     const html=fs.readFileSync(path.join(root,page),'utf8');
     assert.match(html,/hero-preferences-data\.js\?v=3\.18\.9/);
-    assert.match(html,/hero-preferences-view\.js\?v=2\.9\.5/);
-    assert.match(html,/sixstar-abilities\.js\?v=1\.5\.4/);
+    assert.match(html,/hero-preferences-view\.js\?v=2\.9\.6/);
+    assert.match(html,/sixstar-abilities\.js\?v=1\.5\.6/);
   }
+});
+
+test('Recruit and team interfaces share the refreshed skill data and cache versions',()=>{
+  const file=relative=>fs.readFileSync(path.join(root,relative),'utf8');
+  assert.match(file('Recruit/app.js'),/sixstar-visible-abilities\.json\?v=3\.18\.5/);
+  assert.match(file('Recruit/index.html'),/app\.js\?v=3\.18\.11/);
+  assert.match(file('team/js/app.js'),/sixstar-visible-abilities\.json\?v=3\.18\.5/);
+  assert.match(file('team/index.html'),/js\/app\.js\?v=1\.6\.10/);
 });
