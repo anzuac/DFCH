@@ -36,11 +36,11 @@ test('All missing skills use the matched official player descriptions',()=>{
   assert.match(at('bandit_leader_wolf','大胃王 II',20),/100%/);
   assert.match(at('bandit_leader_wolf','大胃王 II',21),/103%/);
   assert.match(at('bandit_leader_wolf','大胃王 II',30),/130%/);
-  assert.match(at('shion','孤高的天才',6),/其他人類種族.*1\.06 倍/);
+  assert.match(at('shion','孤高的天才',6),/其他人類種族.*1\.6 倍/);
   assert.match(at('shion','剎那斬',24),/暴擊傷害.*24%/);
   assert.ok(hero('bandit_leader_wolf').skills.some(s=>s.name==='獸人的嗅覺'));
 });
-test('Six-star percent and per-mille multipliers use normalized final factors',()=>{
+test('Six-star multipliers match in-game effects and native values',()=>{
   const rates=(key,name,re)=>skill(key,name).levelEffects.map((description,i)=>{
     const match=description.match(re);
     assert.ok(match,key+' '+name+' Lv.'+(i+1)+' has a multiplier');
@@ -56,7 +56,11 @@ test('Six-star percent and per-mille multipliers use normalized final factors',(
     assert.deepEqual(rates(key,'禁斷的魔法術 II',attack),[3,4,5,6,6.5,7]);
     assert.ok(ability.levelEffects.every(x=>x.includes('攻擊速度降低 50%')),key+' speed penalty unchanged');
   }
-  assert.deepEqual(rates('shion','孤高的天才',solo),[1.01,1.02,1.03,1.04,1.05,1.06]);
+  assert.deepEqual(rates('shion','孤高的天才',solo),[1.1,1.2,1.3,1.4,1.5,1.6]);
+  assert.equal(at('shion','孤高的天才',2).match(solo)?.[1],'1.2','in-game screenshot: Shion Lv2/6 is 1.2x');
+  const marcille=skill('marcille','學校有史以來最優秀的才女');
+  assert.equal(skill('shion','孤高的天才').tribeRule.abilityType,marcille.tribeRule.abilityType);
+  assert.deepEqual(rates('marcille','學校有史以來最優秀的才女',/提升至\s*(\d+(?:\.\d+)?)\s*倍/),[1.1,1.2,1.3,1.4,1.5,1.6]);
 });
 
 test('Two-element Flaming Aureola levels split holy and fire growth correctly',()=>{
@@ -67,7 +71,7 @@ test('Two-element Flaming Aureola levels split holy and fire growth correctly',(
 });
 test('Main-site and Cloudflare Pages references use the same refreshed ability data',()=>{
   const get=p=>fs.readFileSync(path.join(root,p),'utf8');
-  for(const name of ['index.html','heroes.html'])assert.match(get(name),/sixstar-abilities\.js\?v=1\.5\.6/);
-  assert.match(get('sixstar-abilities.js'),/sixstar-visible-abilities\.json\?v=3\.18\.5/);
+  for(const name of ['index.html','heroes.html'])assert.match(get(name),/sixstar-abilities\.js\?v=1\.5\.7/);
+  assert.match(get('sixstar-abilities.js'),/sixstar-visible-abilities\.json\?v=3\.18\.6/);
   assert.match(get('scripts/build-heroes-pages.cjs'),/'data\/sixstar-visible-abilities\.json'/);
 });
