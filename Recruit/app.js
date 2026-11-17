@@ -618,7 +618,7 @@
       state.history=[];save();renderHistory();
     });
     updateSummary();rates();renderHistory();renderDrawCost();
-    fetch('../data/sixstar-visible-abilities.json?v=3.18.5',{cache:'force-cache'})
+    fetch('../data/sixstar-visible-abilities.json?v=3.18.6',{cache:'force-cache'})
       .then(r=>{if(!r.ok)throw Error('HTTP '+r.status);return r.json();})
       .then(data=>{
         if(!Array.isArray(data.heroes)||!data.icons)throw Error('Invalid hero ability data');
