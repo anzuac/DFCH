@@ -16,7 +16,7 @@ const skill=(key,name)=>{
   return result;
 };
 const at=(key,name,level)=>skill(key,name).levelEffects[level-1];
-test('All 23 heroes have complete, player-readable ability effects for every supported level',()=>{
+test('All 31 heroes have complete, player-readable ability effects for every supported level',()=>{
   assert.equal(data.heroes.length,31);
   assert.equal(data.heroes.reduce((sum,h)=>sum+h.skills.length,0),341);
   for(const h of data.heroes)for(const s of h.skills){
@@ -29,17 +29,36 @@ test('All 23 heroes have complete, player-readable ability effects for every sup
 test('All missing skills use the matched official player descriptions',()=>{
   assert.match(at('valentine_queen','手作的禮物',4),/額外獲得 4 個荊刺寶箱/);
   assert.equal(at('eir','手作的禮物',4),at('valentine_queen','手作的禮物',4));
-  assert.match(at('beyla','神木的聖弓',8),/900 倍.*耐力消耗變為 3 倍/);
-  assert.match(at('akasha','禁斷的魔法術 II',4),/降低 50%.*600 倍/);
-  assert.match(at('akasha','禁斷的魔法術 II',5),/降低 50%.*650 倍/);
+  assert.match(at('beyla','神木的聖弓',8),/9 倍.*耐力消耗變為 3 倍/);
+  assert.match(at('akasha','禁斷的魔法術 II',4),/降低 50%.*6 倍/);
+  assert.match(at('akasha','禁斷的魔法術 II',5),/降低 50%.*6\.5 倍/);
   assert.match(at('randgrid_dagger','流浪的面紗',6),/6 顆每 5 秒再生一次的心臟/);
   assert.match(at('bandit_leader_wolf','大胃王 II',20),/100%/);
   assert.match(at('bandit_leader_wolf','大胃王 II',21),/103%/);
   assert.match(at('bandit_leader_wolf','大胃王 II',30),/130%/);
-  assert.match(at('shion','孤高的天才',6),/其他人類種族.*60 倍/);
+  assert.match(at('shion','孤高的天才',6),/其他人類種族.*1\.06 倍/);
   assert.match(at('shion','剎那斬',24),/暴擊傷害.*24%/);
   assert.ok(hero('bandit_leader_wolf').skills.some(s=>s.name==='獸人的嗅覺'));
 });
+test('Six-star percent and per-mille multipliers use normalized final factors',()=>{
+  const rates=(key,name,re)=>skill(key,name).levelEffects.map((description,i)=>{
+    const match=description.match(re);
+    assert.ok(match,key+' '+name+' Lv.'+(i+1)+' has a multiplier');
+    return Number(match[1]);
+  });
+  const attack=/攻擊力變(?:為|成)\s*(\d+(?:\.\d+)?)\s*倍/;
+  const solo=/提升為\s*(\d+(?:\.\d+)?)\s*倍/;
+  assert.deepEqual(rates('beyla','神木的聖弓',attack),[2,3,4,5,6,7,8,9]);
+  assert.deepEqual(rates('freya','極大魔法吟唱',attack),[4,5,6,7,8,8.5,9]);
+  assert.deepEqual(rates('mithrun','大魔法吟唱',attack),[2,2.5,3,3.5,4,4.2,4.4,4.6,4.8]);
+  for(const key of ['akasha','marcille','thistle']){
+    const ability=skill(key,'禁斷的魔法術 II');
+    assert.deepEqual(rates(key,'禁斷的魔法術 II',attack),[3,4,5,6,6.5,7]);
+    assert.ok(ability.levelEffects.every(x=>x.includes('攻擊速度降低 50%')),key+' speed penalty unchanged');
+  }
+  assert.deepEqual(rates('shion','孤高的天才',solo),[1.01,1.02,1.03,1.04,1.05,1.06]);
+});
+
 test('Two-element Flaming Aureola levels split holy and fire growth correctly',()=>{
   assert.match(at('idunn_xmas','烈焰光環',1),/神聖.*5%；.*火焰.*5%/);
   assert.match(at('idunn_xmas','烈焰光環',10),/神聖.*50%；.*火焰.*50%/);
@@ -48,7 +67,7 @@ test('Two-element Flaming Aureola levels split holy and fire growth correctly',(
 });
 test('Main-site and Cloudflare Pages references use the same refreshed ability data',()=>{
   const get=p=>fs.readFileSync(path.join(root,p),'utf8');
-  for(const name of ['index.html','heroes.html'])assert.match(get(name),/sixstar-abilities\.js\?v=1\.5\.1/);
-  assert.match(get('sixstar-abilities.js'),/sixstar-visible-abilities\.json\?v=3\.18\.1/);
+  for(const name of ['index.html','heroes.html'])assert.match(get(name),/sixstar-abilities\.js\?v=1\.5\.6/);
+  assert.match(get('sixstar-abilities.js'),/sixstar-visible-abilities\.json\?v=3\.18\.5/);
   assert.match(get('scripts/build-heroes-pages.cjs'),/'data\/sixstar-visible-abilities\.json'/);
 });
